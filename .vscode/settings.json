@@ -1,0 +1,21 @@
+{
+  "editor.formatOnSave": true, // 保存时自动格式化
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint", // 指定用 eslint 格式化
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ], // 让 ESLint 也能格式化
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "never", // 保存时不自动格式化，手动选择格式化
+    "source.fixAll.eslint": "never"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "eslint.format.enable": true,
+}

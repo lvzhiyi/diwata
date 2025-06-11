@@ -1,0 +1,76 @@
+<%- include(versionCheckTemplate, { version: '1.0.0'}) %>
+let cc;
+let timer = null;
+export class Application {
+    constructor () {
+        this.settingsPath = '<%= settingsJsonPath %>';
+        this.showFPS = <%= showFPS %>;
+    }
+    init (engine) {
+        cc = engine;
+        cc.game.onPostBaseInitDelegate.add(this.onPostInitBase.bind(this));
+        cc.game.onPostSubsystemInitDelegate.add(this.onPostSystemInit.bind(this));
+        // 监听引擎初始化事件
+        cc.game.on('pre_base_init', () => {
+            this._updateProgress(0.3, '引擎初始化开始');
+        });
+
+        // 监听游戏初始化事件
+        cc.game.on('pre_subsystem_init', () => {
+            this._updateProgress(0.5, '游戏系统初始化完成');
+        });
+
+        // 监听游戏初始化事件
+        cc.game.on('game_inited', () => {
+            this._updateProgress(0.8, '游戏初始化完成');
+        });
+    }
+
+    _updateProgress(targetProgress, text) {
+        if(window.ccEngineProgress){
+            window.ccEngineProgress(targetProgress);
+        }
+    }
+
+    onPostInitBase () {
+        // cc.settings.overrideSettings('assets', 'server', '');
+        // do custom logic
+    }
+
+    onPostSystemInit () {
+        // do custom logic
+    }
+
+
+    preLoadInitScene () {
+        cc.director.preloadScene('main',() => {
+            this._updateProgress(0.9, '游戏初始化完成');
+            cc.game.run();
+            setTimeout(() => {
+                this._updateProgress(1, '游戏初始化完成');
+            },1000);
+        });
+    }
+
+
+
+    start () {
+        console.log('start game');
+        console.time('start game');
+        console.time('cocos engine init');
+        return cc.game.init({
+            debugMode: <%= debugMode %> ? cc.DebugMode.INFO : cc.DebugMode.ERROR,
+            settingsPath: this.settingsPath,
+            overrideSettings: {
+                // assets: {
+                //     preloadBundles: [{ bundle: 'main', version: 'xxx' }],
+                // }
+                profiling: {
+                    showFPS: this.showFPS,
+                }
+            }
+        }).then(() => {
+            this.preLoadInitScene();
+        });
+    }
+}

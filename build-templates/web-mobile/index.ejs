@@ -1,0 +1,316 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+
+    <title><%= projectName %></title>
+
+    <!--http://www.html5rocks.com/en/mobile/mobifying/-->
+    <meta
+      name="viewport"
+      content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true"
+    />
+
+    <!--https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html-->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- force webkit on 360 -->
+    <meta name="renderer" content="webkit" />
+    <meta name="force-rendering" content="webkit" />
+    <!-- force edge on IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <!-- force full screen on some browser -->
+    <meta name="full-screen" content="yes" />
+    <meta name="x5-fullscreen" content="true" />
+    <meta name="360-fullscreen" content="true" />
+
+    <!--fix fireball/issues/3568 -->
+    <!--<meta name="browsermode" content="application">-->
+    <meta name="x5-page-mode" content="app" />
+
+    <!--<link rel="apple-touch-icon" href=".png" />-->
+    <!--<link rel="apple-touch-icon-precomposed" href=".png" />-->
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <style>
+      html {
+        -ms-touch-action: none;
+      }
+
+      body,
+      canvas,
+      div {
+        display: block;
+        outline: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -khtml-user-select: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      }
+
+      /* Remove spin of input type number */
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+      }
+
+      body {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border: 0;
+        margin: 0;
+
+        cursor: default;
+        color: #888;
+        background-color: #333;
+
+        text-align: center;
+        font-family: Helvetica, Verdana, Arial, sans-serif;
+
+        display: flex;
+        flex-direction: column;
+      }
+
+      canvas {
+        background-color: rgba(0, 0, 0, 0);
+      }
+
+      #GameDiv,
+      #Cocos3dGameContainer,
+      #GameCanvas {
+        width: 100%;
+        height: 100%;
+      }
+
+      :root {
+        --safe-top: env(safe-area-inset-top);
+        --safe-right: env(safe-area-inset-right);
+        --safe-bottom: env(safe-area-inset-bottom);
+        --safe-left: env(safe-area-inset-left);
+      }
+    </style>
+    <script>
+      (function () {
+        function initBaseSize() {
+          // 设计稿宽度
+          var designWidth = 750;
+          // 设计稿高度
+          var designHeight = 1334;
+          // 屏幕宽度
+          var innerWidth = window.innerWidth;
+          // 屏幕高度
+          var innerHeight = window.innerHeight;
+          // 宽度缩放比例
+          var scaleX = innerWidth / designWidth;
+          // 高度缩放比例
+          var scaleY = innerHeight / designHeight;
+          var minScale = Math.min(scaleX, scaleY);
+          var contentWidth = innerWidth * 0.8;
+          // 背景图原始宽度
+          var bgOriginWidth = 1688;
+          // 背景图原始高度
+          var bgOriginHeight = 3654;
+          // 宽度缩放比例
+          var scaleX = innerWidth / designWidth;
+          // 高度缩放比例
+          var scaleY = innerHeight / designHeight;
+          var minScale = Math.min(scaleX, scaleY);
+          // 缩放后的背景图宽度
+          var bgWidth = bgOriginWidth * minScale;
+          // 缩放后的背景图高度
+          var bgHeight = bgOriginHeight * minScale;
+          document.documentElement.style.setProperty('--window-width', innerWidth + 'px');
+          document.documentElement.style.setProperty('--window-content-width', contentWidth + 'px');
+          document.documentElement.style.setProperty('--render-ui-scale', minScale);
+          document.documentElement.style.setProperty(
+            '--bg-size',
+            bgWidth + 'px ' + bgHeight + 'px'
+          );
+          // 设计稿尺寸是 1125 * 2436, 以1rem = 100px 为基准
+          // 然后屏幕的全屏就等于1125 / 100 = 11.25rem
+          // 然后根据屏幕的实际大小，设置根节点的fontSize
+          var rem = minScale * 100;
+          document.documentElement.style.setProperty('font-size', rem + 'px');
+        }
+
+        initBaseSize();
+        window.onresize = function () {
+          initBaseSize();
+        };
+
+        window.ccEngineProgress = (progress) => {
+          document.getElementById('progress-val').style.width = progress * 1.72 + 'rem';
+        };
+        console.time('Game init total time');
+      })();
+
+      // 记录页面开始加载的时间
+      window.loadStartTime = performance.now();
+    </script>
+    <style type="text/css">
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .loading-page {
+        position: absolute;
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        /* background-image: url(./images/loading_bg.jpeg); */
+        background-color: black;
+        z-index: 2;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: var(--bg-size);
+      }
+
+      .loading-page-logo {
+        position: absolute;
+        top: 4.87rem;
+        left: 50%;
+        transform: translate(-50%, 0);
+        width: 2.37rem;
+        font-size: 0;
+      }
+
+      .loading-page-progress {
+        width: 1.72rem;
+        height: 0.1rem;
+        position: relative;
+        margin: 0 auto;
+        margin-top: 0.5rem;
+      }
+
+      .progress-back {
+        height: 0.1rem;
+        border-radius: 0.1rem;
+        background-color: #574b2f;
+      }
+
+      .progress-val {
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        height: 0.1rem;
+        border-radius: 0.1rem;
+        background-color: #efa300;
+        width: 0px;
+        transition: all 100ms;
+      }
+
+      .loading-page-logo img {
+        width: 100%;
+        height: auto;
+      }
+
+      .fade-in {
+        opacity: 0;
+        animation: fadeOut 1s ease-out forwards;
+      }
+
+      @keyframes fadeOut {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      !(function (c, b, d, a) {
+        c[a] || (c[a] = {});
+        c[a] = {
+          pid: '1hlahoc4rpc@f0c51339f82eca8',
+          endpoint: 'https://1hlahoc4rpc-default-sea.rum.aliyuncs.com',
+          // 设置环境信息，参考值：'prod' | 'gray' | 'pre' | 'daily' | 'local'
+          env: 'qat',
+          // 设置路由模式， 参考值：'history' | 'hash'
+          spaMode: 'history',
+          collectors: {
+            // 页面性能指标监听开关，默认开启
+            perf: true,
+            // WebVitals指标监听开关，默认开启
+            webVitals: true,
+            // Ajax监听开关，默认开启
+            api: true,
+            // 静态资源开关，默认开启
+            staticResource: true,
+            // JS错误监听开关，默认开启
+            jsError: true,
+            // 控制台错误监听开关，默认开启
+            consoleError: true,
+            // 用户行为监听开关，默认开启
+            action: true,
+          },
+          // 链路追踪配置开关，默认关闭
+          tracing: true,
+        };
+        with (b)
+          with (body)
+            with (insertBefore(createElement('script'), firstChild))
+              setAttribute('crossorigin', '', (src = d));
+      })(window, document, 'https://sdk.rum.aliyuncs.com/v2/browser-sdk.js', '__rum');
+    </script>
+    <div class="loading-page" id="loading-page">
+      <div class="loading-page-logo">
+        <img src="./images/logo.ico" alt="logo" />
+        <div class="loading-page-progress">
+          <div class="progress-back"></div>
+          <div class="progress-val" id="progress-val"></div>
+        </div>
+      </div>
+    </div>
+    <div id="GameDiv" cc_exact_fit_screen="true">
+      <div id="Cocos3dGameContainer">
+        <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
+      </div>
+    </div>
+    <%- include(cocosTemplate, {}) %>
+    <script>
+      (function () {
+        var loadingPage = document.getElementById('loading-page');
+        window.showProgressBar = function showProgressBar() {
+          loadingPage.style.display = 'block';
+        };
+        window.hideLoadingPage = function hideLoadingPage() {
+          loadingPage.style.opacity = 0;
+          loadingPage.style.perspective = '1000px';
+          loadingPage.style.transition = 'all 0.2s ease-out';
+          loadingPage.addEventListener('transitionend', function () {
+            loadingPage.style.display = 'none';
+          });
+        };
+      })();
+
+      if (window.location.hostname.includes('.com')) {
+        // 重写 console 对象, 屏蔽所有 console 方法
+        Object.defineProperty(console, 'log', {
+          get: function () {
+            return function () {
+              // 空函数，什么都不做
+            };
+          },
+        });
+      }
+    </script>
+  </body>
+</html>

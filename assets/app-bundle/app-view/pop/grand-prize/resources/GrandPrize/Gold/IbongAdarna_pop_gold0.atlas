@@ -1,0 +1,146 @@
+
+IbongAdarna_pop.png
+size: 92,1664
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+pop/eff_goldcoin/JB01
+  rotate: false
+  xy: 2, 999
+  size: 88, 89
+  orig: 88, 89
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB02
+  rotate: false
+  xy: 2, 1185
+  size: 88, 93
+  orig: 88, 93
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB03
+  rotate: false
+  xy: 2, 1568
+  size: 88, 94
+  orig: 88, 94
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB04
+  rotate: false
+  xy: 2, 1472
+  size: 88, 94
+  orig: 88, 94
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB05
+  rotate: false
+  xy: 2, 819
+  size: 88, 87
+  orig: 88, 87
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB06
+  rotate: false
+  xy: 2, 647
+  size: 88, 81
+  orig: 88, 81
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB07
+  rotate: false
+  xy: 2, 201
+  size: 87, 67
+  orig: 87, 67
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB08
+  rotate: false
+  xy: 2, 67
+  size: 86, 63
+  orig: 86, 63
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB09
+  rotate: false
+  xy: 2, 340
+  size: 87, 68
+  orig: 87, 68
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB10
+  rotate: false
+  xy: 2, 487
+  size: 88, 76
+  orig: 88, 76
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB11
+  rotate: false
+  xy: 2, 908
+  size: 88, 89
+  orig: 88, 89
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB12
+  rotate: false
+  xy: 2, 1090
+  size: 88, 93
+  orig: 88, 93
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB13
+  rotate: false
+  xy: 2, 1376
+  size: 88, 94
+  orig: 88, 94
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB14
+  rotate: false
+  xy: 2, 1280
+  size: 88, 94
+  orig: 88, 94
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB15
+  rotate: false
+  xy: 2, 730
+  size: 88, 87
+  orig: 88, 87
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB16
+  rotate: false
+  xy: 2, 565
+  size: 88, 80
+  orig: 88, 80
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB17
+  rotate: false
+  xy: 2, 132
+  size: 87, 67
+  orig: 87, 67
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB18
+  rotate: false
+  xy: 2, 2
+  size: 86, 63
+  orig: 86, 63
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB19
+  rotate: false
+  xy: 2, 270
+  size: 87, 68
+  orig: 87, 68
+  offset: 0, 0
+  index: -1
+pop/eff_goldcoin/JB20
+  rotate: false
+  xy: 2, 410
+  size: 88, 75
+  orig: 88, 75
+  offset: 0, 0
+  index: -1

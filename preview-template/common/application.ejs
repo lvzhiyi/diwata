@@ -1,0 +1,44 @@
+<%- include(versionCheckTemplate, { version: '1.0.0'}) %>
+let cc;
+let timer = null;
+let currentPercent = 50;
+export class Application {
+    constructor () {
+        this.settingsPath = '<%= settingsJsonPath %>';
+        this.showFPS = <%= showFPS %>;
+    }
+    init (engine) {
+        cc = engine;
+        cc.game.onPostBaseInitDelegate.add(this.onPostInitBase.bind(this));
+        cc.game.onPostSubsystemInitDelegate.add(this.onPostSystemInit.bind(this));
+    }
+
+    onPostInitBase () {
+        // cc.settings.overrideSettings('assets', 'server', '');
+        // do custom logic
+    }
+
+    onPostSystemInit () {
+        // do custom logic
+    }
+
+    start () {
+        console.log('start game');
+        return cc.game.init({
+            debugMode: <%= debugMode %> ? cc.DebugMode.INFO : cc.DebugMode.ERROR,
+            settingsPath: this.settingsPath,
+            overrideSettings: {
+                // assets: {
+                //      preloadBundles: [{ bundle: 'main', version: 'xxx' }],
+                // }
+                profiling: {
+                    showFPS: this.showFPS,
+                }
+            }
+        }).then(() => {
+            clearInterval(timer);
+            currentPercent = 100;
+            cc.game.run();
+        });
+    }
+}

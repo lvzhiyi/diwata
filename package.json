@@ -1,0 +1,57 @@
+{
+  "version": "3.8",
+  "name": "%{projectName}%",
+  "uuid": "ab72af5f-29c4-446f-8911-e4a0a6e3b139",
+  "creator": {
+    "version": "3.8.5"
+  },
+  "devDependencies": {
+    "@types/md5": "^2.3.5",
+    "@eslint/js": "^9.25.1",
+    "@stylistic/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.32.0",
+    "@typescript-eslint/parser": "^8.32.0",
+    "eslint": "^9.26.0",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-indent-class-properties": "^1.0.3",
+    "eslint-plugin-prettier": "^5.2.6",
+    "globals": "^16.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "cli": "npx --registry=https://registry.npmmirror.com @gamex/cc-cli@latest",
+    "upgrade": "npm run cli upgrade 快捷指令:升级框架",
+    "package": "npm run cli package 快捷指令:管理扩展",
+    "pkg:add": "node ./extensions/pkg add",
+    "pkg:remove": "node ./extensions/pkg remove",
+    "pkg:update": "node ./extensions/pkg update",
+    "build:web": "sh build-sh/build_web.sh",
+    "lint": "eslint 'assets/**/*.{js,ts}' --fix",
+    "lint:check": "eslint 'assets/**/*.{js,ts}'",
+    "lint:staged": "lint-staged --verbose --debug",
+    "check:cocos": "node scripts/check-cocos.js",
+    "check:cocos:staged": "node scripts/check-cocos.js --staged",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "assets/**/*.{js,ts}": [
+      "eslint --fix"
+    ]
+  },
+  "cocosConfig": {
+    "exclude": [
+      "assets/common/**",
+      "assets/activity/**"
+    ]
+  },
+  "dependencies": {
+    "@sentry/browser": "^9.8.0",
+    "@sentry/tracing": "^7.120.3",
+    "dayjs": "^1.11.13",
+    "md5": "^2.3.0",
+    "pako": "^2.1.0"
+  }
+}

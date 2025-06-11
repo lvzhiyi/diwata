@@ -1,0 +1,55 @@
+
+sp_freespin.png
+size: 460,528
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Xuanzhuanguang
+  rotate: true
+  xy: 275, 178
+  size: 217, 185
+  orig: 217, 185
+  offset: 0, 0
+  index: -1
+diban
+  rotate: false
+  xy: 0, 0
+  size: 173, 51
+  orig: 173, 51
+  offset: 0, 0
+  index: -1
+guang
+  rotate: false
+  xy: 0, 133
+  size: 273, 262
+  orig: 273, 262
+  offset: 0, 0
+  index: -1
+hengguang
+  rotate: false
+  xy: 0, 53
+  size: 253, 78
+  orig: 253, 78
+  offset: 0, 0
+  index: -1
+icon
+  rotate: false
+  xy: 255, 8
+  size: 110, 109
+  orig: 110, 109
+  offset: 0, 0
+  index: -1
+spins
+  rotate: false
+  xy: 275, 119
+  size: 135, 57
+  orig: 135, 57
+  offset: 0, 0
+  index: -1
+text_freespins
+  rotate: false
+  xy: 0, 397
+  size: 439, 131
+  orig: 439, 131
+  offset: 0, 0
+  index: -1

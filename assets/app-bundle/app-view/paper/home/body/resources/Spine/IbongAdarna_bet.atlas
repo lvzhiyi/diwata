@@ -1,0 +1,27 @@
+
+IbongAdarna_bet.png
+size: 184,305
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+light/light_dian_10
+  rotate: false
+  xy: 2, 127
+  size: 176, 176
+  orig: 200, 200
+  offset: 12, 12
+  index: -1
+light/star1
+  rotate: false
+  xy: 127, 68
+  size: 55, 57
+  orig: 64, 65
+  offset: 4, 4
+  index: -1
+light/star_light_2
+  rotate: false
+  xy: 2, 2
+  size: 123, 123
+  orig: 123, 123
+  offset: 0, 0
+  index: -1
