@@ -13,6 +13,9 @@ export class Roll extends Component {
 
     @property(CCInteger)
     private itemHeight: number = 163;
+
+    @property(CCInteger)
+    private itemCount: number = 5;
     
     private nodePool: NodePool = new NodePool();
 
@@ -71,6 +74,7 @@ export class Roll extends Component {
       rowIndex: number,
       columnIndex: number
     }[]) {
+      console.log('rollList', rollList);
       this.rollList = rollList;
       this.rollRemoveData = rollRemoveData;
     }
@@ -89,7 +93,11 @@ export class Roll extends Component {
      * 初始化符号
      */
     initSymbols() {
-      for (let i = 0; i < 5; i++) {
+      const itemCount = this.itemCount ?? 5;
+      const rollHeight = (this.itemCount - 1) * this.itemHeight;
+      const firstSymbolY = rollHeight / 2 + this.itemHeight / 2;
+  
+      for (let i = 0; i < itemCount; i++) {
         let symbolId = this.randomSymbolId();
 
         // 初始化面板不随机出symbolId为3001
@@ -98,7 +106,8 @@ export class Roll extends Component {
         }
 
         const symbol = this.createSymbol(symbolId);
-        symbol.setPosition(0, (2 - i) * this.itemHeight + this.itemHeight / 2, 0);
+        const symbolY = firstSymbolY - this.itemHeight * i;
+        symbol.setPosition(0, symbolY, 0);
         this.node.addChild(symbol);
       }
     }
@@ -200,7 +209,7 @@ export class Roll extends Component {
         });
 
       this.rollTween = tween(parentNode);
-      this.rollTween.repeat(4, going).then(end).start();
+      this.rollTween.repeat(this.itemCount - 1, going).then(end).start();
     }
 
     /**
@@ -249,8 +258,12 @@ export class Roll extends Component {
       const lastNode = children[lastIndex];
       this.nodePool.put(lastNode);
       this.node.removeChild(lastNode);
+      let  resultSymbol =   resultSymbols?.shift();
 
-      const resultSymbol = resultSymbols?.shift() || null;
+      // 如果resultSymbols为空，则再往前进行一次shift
+      if(resultSymbol == null && resultSymbols?.length > 0){
+        resultSymbol = resultSymbols?.shift();
+      }
 
       // 如果resultSymbols不为空，则创建symbolId，否则随机一个symbolId
       let SymbolNode = this.createSymbol(this.randomSymbolId());
@@ -460,7 +473,7 @@ export class Roll extends Component {
      * 添加顶部多余符号
      */
     addTopExcessSymbol() {
-      if (this.node.children.length === 4) {
+      if (this.node.children.length === this.itemCount - 1) {
         const node = this.nodePool.get();
         node.getComponent(Symbol).initSymbol(this.randomSymbolId());
         this.node.insertChild(node, 0);
@@ -533,7 +546,7 @@ export class Roll extends Component {
      * symbol变为super wild
      */
     async symbolChangeToSuperWild() {
-      const centerRoll = this.node.parent.children[2];
+      const centerRoll = this.node.parent.parent.children[2];
       centerRoll.children[2].getComponent(Symbol).changeToSuperWild();
 
       return Promise.resolve();

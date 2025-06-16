@@ -1,4 +1,4 @@
-import { Label, Node, Prefab, SpriteFrame, _decorator, sp } from 'cc';
+import { Label, Node, Prefab, SpriteFrame, _decorator, debug, sp } from 'cc';
 import BaseAppInit from '../../../extensions/app/assets/base/BaseAppInit';
 import { app } from '../../app/app';
 import Core from 'db://app/Core';
@@ -14,6 +14,7 @@ import { initARMS } from '../../common/script/extra/armsSDK/init';
 import CheckNetCtrl from '../../common/script/extra/CheckNetCtrl';
 import { ErrorType } from '../../common/script/extra/https/Constant';
 import { HTTP_STATUS_CODES } from '../../common/script/extra/Request';
+import { game } from 'cc';
 
 const { ccclass, property } = _decorator;
 @ccclass('AppInit')
