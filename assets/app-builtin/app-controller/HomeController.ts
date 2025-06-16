@@ -7,7 +7,7 @@ import GameProcessCtrl, { GameState } from '../../common/script/extra/GameProces
 import { sys } from 'cc';
 
 // TODO 测试用
-const useMock = false;
+const useMock = true;
 
 export class HomeController extends BaseController<
   HomeController,
@@ -155,26 +155,15 @@ export class HomeController extends BaseController<
               totalRewardMultiple: null,
               wheel: [
                 [
-                  {
-                    symbolId: '1003',
-                    symbolGoldBorder: false
-                  },
-                  {
-                    symbolId: '1003',
-                    symbolGoldBorder: false
-                  },
+                  null,
+                  null,
                   {
                     symbolId: '1006',
                     symbolGoldBorder: false
                   },
-                  {
-                    symbolId: '1008',
-                    symbolGoldBorder: false
-                  },
-                  {
-                    symbolId: '1007',
-                    symbolGoldBorder: false
-                  }
+                  null,
+                  null,
+                  
                 ],
                 [
                   {
@@ -241,11 +230,49 @@ export class HomeController extends BaseController<
                     symbolId: '1001',
                     symbolGoldBorder: false
                   }
+                ],
+                [
+                  {
+                    symbolId: '3001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: true
+                  },
+                  {
+                    symbolId: '3001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  }
+                ],
+                [
+                  null,
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: true
+                  },
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  null
                 ]
               ],
               rewardSymbolIndexSet: null,
               rewardLineList: null,
-              freeWheelFlag: 1,
+              freeWheelFlag: 0,
               gameRecordIds: [
                 '1930113666783715330',
                 '1930113666787909637',

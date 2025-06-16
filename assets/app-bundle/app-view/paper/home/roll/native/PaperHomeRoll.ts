@@ -65,7 +65,11 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
   initRoll() {
     this.MaskBoxNode.children.forEach((child: Node) => {
-      this.Rolls.push(child);
+      const childRoll = child.getChildByName('Roll');
+
+      if (childRoll) {
+        this.Rolls.push(childRoll);
+      }
     });
   }
 
