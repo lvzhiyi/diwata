@@ -7,10 +7,8 @@ import { PopGrandPrize } from '../../../../pop/grand-prize/native/PopGrandPrize'
 import { RewardSubTypeEnum } from 'db://assets/basePlate/middleWare/enums/bet';
 import { PopFreeSpinResult } from '../../../../pop/free-spin-result/native/PopFreeSpinResult';
 import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsController';
-import { PopWheel } from '../../../../pop/wheel/native/PopWheel';
-import { ToastView } from 'db://assets/basePlate/middleWare/commonUI/ToastView';
-import { RewardLineBox } from './expansion/RewardLineBox';
 import { ToastManager } from 'db://assets/res-native/script/ToastManager';
+import { RewardLineBox } from './expansion/RewardLineBox';
 
 const { ccclass, property } = _decorator;
 
@@ -164,14 +162,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   async startRemoveSymbol() {
     const rollsScript = this.Rolls.map(roll => roll.getComponent(Roll));
-
-    /**
-     * 如果本回合命中jackpot，则展示jackpot弹窗
-     */
-    if (this.checkIsJackpot()) {
-      await this.showJackpotWheelPop();
-    }
-
+    
     /**
      * 设置当前回合数据
      * -- 设置当前回合数据
@@ -615,22 +606,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   private checkIsJackpot() {
     return this.resultData.resultDetail.jackpotRewardGameRecordId && this.resultList[this.roundIndex].id === this.resultData.resultDetail.jackpotRewardGameRecordId;
-  }
-
-  /**
-   * 展示jackpot轮盘弹窗
-   */
-  private async showJackpotWheelPop() {
-    return new Promise<void>(resolve => {
-      app.manager.ui.show<PopWheel>({
-        name: 'PopWheel',
-        data: {
-          betRecordId: this.resultData.betRecordId,
-          gameRecordId: this.resultData.resultDetail.jackpotRewardGameRecordId,
-        },
-        onHide: () => resolve(),
-      });
-    });
   }
 
   /**

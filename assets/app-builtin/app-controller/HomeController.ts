@@ -270,6 +270,320 @@ export class HomeController extends BaseController<
                   null
                 ]
               ],
+              rewardSymbolIndexSet: [
+                {
+                  rowIndex: 2,
+                  columnIndex: 1
+                },
+                {
+                  rowIndex: 3,
+                  columnIndex: 0
+                },
+                {
+                  rowIndex: 0,
+                  columnIndex: 1
+                },
+                {
+                  rowIndex: 3,
+                  columnIndex: 2
+                }
+              ],
+              rewardLineList: null,
+              freeWheelFlag: 0,
+              gameRecordIds: [
+                '1930113666783715330',
+                '1930113666787909637',
+                '1930113666792103937',
+                '1930113666792103943',
+                '1930113666792103946',
+                '1930113666796298241',
+                '1930113666796298242',
+                '1930113666796298243',
+                '1930113666796298244',
+                '1930113666796298249'
+              ],
+              accumulateReachMaxMultiple: false
+            },
+            {
+              id: '1930113666783715329',
+              rewardType: 'NONE',
+              rewardSubType: 'none',
+              totalRewardAmount: 0,
+              totalRewardMultiple: null,
+              wheel: [
+                [
+                  null,
+                  null,
+                  {
+                    symbolId: '1006',
+                    symbolGoldBorder: false
+                  },
+                  null,
+                  null,
+                  
+                ],
+                [
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1008',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '3001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  }
+                ],
+                [
+                  {
+                    symbolId: '1005',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1003',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1003',
+                    symbolGoldBorder: false
+                  }
+                ],
+                [
+                  {
+                    symbolId: '3001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: true
+                  },
+                  {
+                    symbolId: '3001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  }
+                ],
+                [
+                  {
+                    symbolId: '3001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: true
+                  },
+                  {
+                    symbolId: '3001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  }
+                ],
+                [
+                  null,
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: true
+                  },
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  null
+                ]
+              ],
+              rewardSymbolIndexSet: [
+                {
+                  rowIndex: 2,
+                  columnIndex: 1
+                },
+                {
+                  rowIndex: 3,
+                  columnIndex: 0
+                },
+                {
+                  rowIndex: 0,
+                  columnIndex: 1
+                },
+                {
+                  rowIndex: 3,
+                  columnIndex: 2
+                }
+              ],
+              rewardLineList: null,
+              freeWheelFlag: 0,
+              gameRecordIds: [
+                '1930113666783715330',
+                '1930113666787909637',
+                '1930113666792103937',
+                '1930113666792103943',
+                '1930113666792103946',
+                '1930113666796298241',
+                '1930113666796298242',
+                '1930113666796298243',
+                '1930113666796298244',
+                '1930113666796298249'
+              ],
+              accumulateReachMaxMultiple: false
+            },
+            {
+              id: '1930113666783715329',
+              rewardType: 'NONE',
+              rewardSubType: 'none',
+              totalRewardAmount: 0,
+              totalRewardMultiple: null,
+              wheel: [
+                [
+                  null,
+                  null,
+                  {
+                    symbolId: '1006',
+                    symbolGoldBorder: false
+                  },
+                  null,
+                  null,
+                  
+                ],
+                [
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1008',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '3001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  }
+                ],
+                [
+                  {
+                    symbolId: '1005',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1003',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1003',
+                    symbolGoldBorder: false
+                  }
+                ],
+                [
+                  {
+                    symbolId: '3001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: true
+                  },
+                  {
+                    symbolId: '3001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  }
+                ],
+                [
+                  {
+                    symbolId: '3001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: true
+                  },
+                  {
+                    symbolId: '3001',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: false
+                  }
+                ],
+                [
+                  null,
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolGoldBorder: true
+                  },
+                  {
+                    symbolId: '1007',
+                    symbolGoldBorder: false
+                  },
+                  null
+                ]
+              ],
               rewardSymbolIndexSet: null,
               rewardLineList: null,
               freeWheelFlag: 0,

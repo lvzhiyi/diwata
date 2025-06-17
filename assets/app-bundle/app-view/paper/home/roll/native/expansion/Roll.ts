@@ -299,6 +299,7 @@ export class Roll extends Component {
       let fallDownCount = 0;
 
       for (let i = this.node.children.length - 1; i >= 0; i--) {
+        console.log('this.node', this.node.children.length);
         const symbolNode = this.node.children[i];
         const currentSymbolObj = this.rollList[i];
         // 当需要消除时，如果当前symbol没有金边，则需要消除
@@ -376,7 +377,8 @@ export class Roll extends Component {
      */
     async addNewSymbolToTop(nextRoundList: SymbolItem[]) {
       const length = nextRoundList.length - this.symbolAnimationData.length;
-  
+      console.log('length', nextRoundList.length, this.symbolAnimationData.length);
+
       for (let i = length - 1; i >= 0; i--) {
         const { symbolId, symbolGoldBorder } = nextRoundList[i] || {};
         let newSymbolId = symbolId;
@@ -397,8 +399,6 @@ export class Roll extends Component {
           symbolId,
           symbolGoldBorder
         });
-          
-        symbolNode.setPosition(0, this.firstSymbolY + this.itemHeight * (length - i - 1), 0);
           
         this.node.insertChild(symbolNode, 0);
       }
