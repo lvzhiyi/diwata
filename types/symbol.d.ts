@@ -1,11 +1,12 @@
+
 /**
  * symbol元素
  */
 declare interface SymbolItem {
   /** 元素ID */
   symbolId: string;
-  /** 元素金边 */
-  symbolGoldBorder: boolean;
+  /** 元素类型 */
+  symbolType: SymbolTypeEnum;
 }
 
 /**
@@ -19,6 +20,24 @@ declare interface SymbolPosition {
 }
 
 /**
+ * symbol动画数据
+ */
+declare interface ISymbolAnimationData {
+  /** symbol节点 */
+  symbolNode: any;
+  /** 是否需要消除 */
+  isNeedRemove: boolean;
+  /** 下坠次数 */
+  fallDownCount: number;
+  /** 符号ID */
+  symbolId: string;
+  /** 符号类型 */
+  symbolType: string;
+  /** 是否已经播放了scatter增加次数动画 */
+  isPlayScatterAddTimeAnimation: boolean;
+}
+
+/**
  * symbol大小
  * 1,2,3
  */
@@ -29,3 +48,8 @@ declare type SymbolSize = 1 | 2 | 3;
 declare type SymbolSizeMap = {
   [key: string]: number;
 };
+/**
+ * symbol类型枚举
+ */
+declare type SymbolTypeEnum = 'NORMAL' | 'SWORD'  | 'BOW' | 'OVERLAP';
+

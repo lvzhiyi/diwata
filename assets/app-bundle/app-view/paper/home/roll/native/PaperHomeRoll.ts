@@ -1,4 +1,4 @@
-import { _decorator, Label, Node } from 'cc';
+import { _decorator, Label, Node, UITransform, Vec3, Widget } from 'cc';
 import BaseView from 'db://app/base/BaseView';
 import { Roll } from './expansion/Roll';
 import { calculateWithBase, delay } from 'db://assets/common/script/extra/Utils/common';
@@ -7,8 +7,8 @@ import { PopGrandPrize } from '../../../../pop/grand-prize/native/PopGrandPrize'
 import { RewardSubTypeEnum } from 'db://assets/basePlate/middleWare/enums/bet';
 import { PopFreeSpinResult } from '../../../../pop/free-spin-result/native/PopFreeSpinResult';
 import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsController';
-import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { RewardLineBox } from './expansion/RewardLineBox';
+import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 
 const { ccclass, property } = _decorator;
 
@@ -17,8 +17,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   @property({ type: Node, tooltip: 'MaskBox节点' })
   private MaskBoxNode: Node = null;
 
-  @property({ type: Node, tooltip: 'JackpotTitle' })
-  private JackpotTitleNode: Node = null;
+  @property({ type: Node, tooltip: 'containnerNode' })
+  private containerNode: Node = null;
 
   @property({ type: Node, tooltip: 'Freespin免费轮次数' })
   private FreespinTimesNode: Node = null;
@@ -28,6 +28,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
   @property({ type: Node, tooltip: 'RewardLineBox' })
   private RewardLineBox: Node = null;
+
+  @property({ type: Node, tooltip: 'Reward Box' })
+  private RewardBox: Node = null;
 
   private Rolls: Node[] = [];
 
@@ -48,9 +51,20 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     this.initEvents();
 
-    // app.manager.ui.show<PopWheel>({ name: 'PopWheel' });
+    this.onResizeScreen();
+  }
 
-    // app.manager.ui.show<PopJackpotRecord>({ name: 'PopJackpotRecord' });
+  /** *屏幕适配**/
+  onResizeScreen() {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const screenScale =  screenHeight / screenWidth;
+
+    if (screenScale < 1.78) {
+      this.RewardBox.getComponent(Widget).bottom = 185;
+    }
+
+    console.log('screenWidth', screenWidth, screenHeight);
   }
 
   initData() {
@@ -84,7 +98,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   async startGame() {
     console.log('startGame');
 
-    this.changeTipsContent('Good Lucky');
+    if (this.totalRewardAmount === 0) {
+      this.changeTipsContent('Good Lucky');
+    }
     
     // 初始化数据
     this.initData();
@@ -119,7 +135,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.Rolls.forEach((roll: Node, rollIndex: number) => {
       setTimeout(() => {
         this.stopSingleRoll(roll, rollIndex);
-      }, rollIndex * 200);
+      }, rollIndex * (app.manager.global.quikeMode ? 0 : 200));
     });
   }
 
@@ -135,6 +151,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // roll滚动完成回调
     const onRollComplete = () => {
       if (this.isAllRollsStopped()) {
+        this.handleSwordAndStick();
         this.scheduleOnce(() => {
           this.startRemoveSymbol();
         }, 0.1);
@@ -148,11 +165,20 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   /**
+   * 处理是否中了wild需要把其中一个元素变成先变成剑或者棒子
+   */
+  private async handleSwordAndStick() {
+    const rollsScript = this.Rolls.map(roll => roll.getComponent(Roll));
+    await Promise.all(rollsScript.map(roll => roll.showSwordSymbol()));
+  }
+
+  /**
    * 核心消除逻辑
    * 开始本回合消除
-   * 1. 获取所有滚轴的script
-   * 2. 设置roundIndex
+   * 
+   * 2. 设置当前回合数据
    * 3. 初始化Symbol动画数据
+   * 处理是否需要展示剑和棒子
    * 4. 处理消除数据
    * 5. symbol变为wild
    * 6. 移除Symbol
@@ -162,7 +188,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   async startRemoveSymbol() {
     const rollsScript = this.Rolls.map(roll => roll.getComponent(Roll));
-    
+
     /**
      * 设置当前回合数据
      * -- 设置当前回合数据
@@ -177,6 +203,13 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     ));
 
     /**
+     * 处理是否需要展示剑和棒子
+    */
+    const hasShowSwordAndStick = await Promise.all(rollsScript.map(roll => roll.showSwordSymbol()));
+
+    if (hasShowSwordAndStick.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 2000);
+
+    /**
      * 初始化Symbol动画数据
      */ 
     await Promise.all(rollsScript.map(roll => roll.initSymbolAnimationData()));
@@ -184,34 +217,32 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     /**
      * 处理消除数据
      */
-    const symbolAnimationData = await Promise.all(rollsScript.map(roll => roll.dealRemoveData()));
+    let symbolAnimationData = await Promise.all(rollsScript.map(roll => roll.dealRemoveData()));
     console.log('初步处理消除数据', symbolAnimationData);
+
+    /**
+     * 免费轮中命中scatter+1增加次数
+     */
+    const isFreeRoundHitScatterAddTimes = await this.freeRoundIsHitScatterAddTimes(symbolAnimationData);
+
+    if (isFreeRoundHitScatterAddTimes) {
+      await delay(app.manager.global.quikeMode ? 500 : 1000);
+    }
 
     /**
      * symbol变为wild
      */
     const hasSymbolChangeToWilds = await Promise.all(rollsScript.map(roll => roll.symbolChangeToWild()));
-
-    if (hasSymbolChangeToWilds.some(item => item)) await delay(1000);
-
-    /**
-     * 如果是变超级wild，则修改除super wild外的其余symbol为下一轮的高级symbol 
-     */
-    if (this.isChangeToSuperWild()) {
-      // 修改除super wild外的其余symbol为下一轮的高级symbol 
-      await Promise.all(
-        rollsScript.map((roll, rollIndex) => roll.changeOtherSymbolExceptWild(this.resultList[this.roundIndex]?.wheel.map((item: any) => item[rollIndex]) || [] ))
-      );
-
-      await delay(1000);
-    }
+   
+    console.log('symbol变为wild-数据', hasSymbolChangeToWilds);
+    if (hasSymbolChangeToWilds.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 1500);
 
     /**
      * 开始闪烁动画
      */
     const hasStartLightAnimations = await Promise.all(rollsScript.map(roll => roll.startLightAnimation()));
 
-    if (hasStartLightAnimations.some(item => item)) await delay(1000);
+    if (hasStartLightAnimations.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 1000);
 
     /**
      * 如果当前回合达到最大倍率，则结束本回合消除
@@ -226,10 +257,11 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 结束闪烁动画
      */
     await Promise.all(rollsScript.map(roll => roll.endLightAnimation()));
-
+    
     /**
      * 移除Symbol
      */
+    console.log('开始移除Symbol-数据');
     await Promise.all(rollsScript.map(roll => roll.removeSymbol()));
 
     /**
@@ -260,7 +292,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 添加新Symbol到顶部
      * -- 传入下一回合roll的数据
      */
-    await Promise.all(rollsScript.map((roll, rollIndex) =>
+    console.log('消除后的消除数据', symbolAnimationData);
+
+    symbolAnimationData = await Promise.all(rollsScript.map((roll, rollIndex) =>
       roll.addNewSymbolToTop(this.resultList[this.roundIndex + 1]?.wheel.map((item: any) => item[rollIndex]) || [])
     ));
 
@@ -269,15 +303,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      */
     const hasFallDownSymbols = await Promise.all(rollsScript.map(roll => roll.fallDownSymbol()));
 
-    if (hasFallDownSymbols.some(item => item)) await delay(1000);
+    if (hasFallDownSymbols.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 1000);
 
     /**
-     * 更新免费轮次数
+     * 是否命中免费轮
      */
-    const isUpdateFreeSpinTimes = await this.updateFreeSpinTimes();
+    const isNormalRoundHitFreeSpin = await this.normalRoundHitFreeSpin();
 
-    if (isUpdateFreeSpinTimes) {
-      await delay(1000);
+    if (isNormalRoundHitFreeSpin) {
+      await delay(app.manager.global.quikeMode ? 500 : 1000);
     }
 
     /**
@@ -312,6 +346,17 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
        */
 
       /**
+       * 如果当前轮命中最大倍率，则设置tips内容
+       * 免费轮总金额为 app.manager.global.freeSpinTotalAmount
+       * 普通轮总金额为 this.resultData.totalPayoutAmount
+       */
+      if (this.currentRoundIsMaxMultiple()) {
+        this.totalRewardAmount = app.controller.slots.isFreeSpin ? app.manager.global.freeSpinTotalAmount : this.resultData.totalPayoutAmount;
+        this.changeTipsContent(`WIN ₱ ${calculateWithBase(this.totalRewardAmount)}`);
+        await delay(50);
+      }
+
+      /**
        * 大奖弹窗
        * 免费轮的结束轮，并且当前轮达到最大倍率，不展示大奖弹窗
        */
@@ -322,14 +367,14 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       /**
        * 如果免费轮的结束轮，则展示免费轮总金额弹窗
        */
-      if (this.isFreeSpinEnd()) {
+      if (this.isFreeSpinEnd()) { 
         await this.showPopFreeSpinResult();
         // 重置免费轮数据
         app.manager.global.setGameRecordIds([]);
         app.manager.global.setGameRecordIndex(0);
         // 设置为非免费轮
         app.controller.slots.freeSpinChange(false);
-      }
+      } 
 
       /**
        * 结束游戏
@@ -359,6 +404,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         return;
       }
 
+      // 重置累计中奖金额
+      this.resetTotalRewardAmount();
+
       // 如果购买了免费轮次数，并且没有消耗完，则开始下一轮游戏
       if (app.manager.global.quantity > 0) {
         this.startBuyFreeSpinGame();
@@ -387,7 +435,14 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     await Promise.all(rollsScript.map(roll => roll.addTopExcessSymbol()));
     // 初始化数据
     await Promise.all(rollsScript.map(roll => roll.initData()));
+    // 结束游戏
+    app.controller.home.endGame();
+  }
 
+  /**
+   * 重置累计中奖金额
+   */
+  private resetTotalRewardAmount() {
     // 重置tips内容
     if (this.totalRewardAmount === 0) {
       this.changeTipsContent('PLACE YOUR BETS!');
@@ -395,9 +450,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       // 重置总中奖金额
       this.totalRewardAmount = 0;
     }
-    
-    // 结束游戏
-    app.controller.home.endGame();
   }
 
   /**
@@ -459,14 +511,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   /**
-   * 判断本回合是否变超级wild
-   * @returns 是否是超级wild
-   */
-  private isChangeToSuperWild() {
-    return this.resultList[this.roundIndex]?.wheel.some((roll: any) => roll.some((item: any) => item?.symbolId === '4007'));
-  }
-
-  /**
    * 开始免费轮中的下一轮
    */
   private startFreeSpinGame() {
@@ -517,7 +561,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 显示免费轮Node，隐藏JackpotNode
    */
   private showFreeSpinTimes() {
-    this.JackpotTitleNode.active = false;
     this.FreespinTimesNode.active = true;
   }
 
@@ -525,7 +568,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 隐藏免费轮Node，展示JackpotNode
    */
   private hideFreeSpinTimes() {
-    this.JackpotTitleNode.active = true;
     this.FreespinTimesNode.active = false;
   }
 
@@ -601,14 +643,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   /**
-   * 当前回合是否命中jackpot
-   * @returns 是否命中jackpot
-   */
-  private checkIsJackpot() {
-    return this.resultData.resultDetail.jackpotRewardGameRecordId && this.resultList[this.roundIndex].id === this.resultData.resultDetail.jackpotRewardGameRecordId;
-  }
-
-  /**
    * 获取中奖线
    * @returns 中奖线
    */
@@ -617,28 +651,69 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   };
 
   /**
-   * 更新免费轮次数
-   * 如果当前是免费轮，则展示freespin增加的次数，并用toast提示
-   * 如果当前是普通轮，则展示freespin次数设置为10
+   * 普通轮中，本回合是否命中免费轮
    */
-  private updateFreeSpinTimes() {
+  private normalRoundHitFreeSpin() {
     const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
 
-    if (gameRecordIds.length > 0) {
-      if (app.controller.slots.isFreeSpin) {
-        app.manager.global.setFreeSpinTimes(app.manager.global.freeSpinTimes + gameRecordIds.length);
-        app.manager.global.setGameRecordIds([...app.manager.global.gameRecordIds, ...gameRecordIds]);
-        ToastManager.inst.show('FREE SPIN + ' + gameRecordIds.length + ' TIMES');
-        this.updateFreeSpinTimesNodeString();
-      } else {
-        app.manager.global.setFreeSpinTimes(10);
-        app.manager.global.setGameRecordIds([...gameRecordIds]);
-      }
+    // 如果当前不是免费轮，并且本回合有免费轮游戏ids，则命中免费轮
+    if (!app.controller.slots.isFreeSpin && gameRecordIds.length > 0) {
+      app.manager.global.setFreeSpinTimes(10);
+      app.manager.global.setGameRecordIds([...gameRecordIds]);
 
       return Promise.resolve(true);
-    } 
+    }
 
     return Promise.resolve(false);
+  }
+
+  /**
+   * 免费轮中，是否命中scatter增加次数
+   * scatterAddTimes和gameRecordIds正常情况下是相等的，如果免费轮中提前达到最大金额，则命中scatter+1时，gameRecordIds会返回空，
+   * 所以不能用gameRecordIds的长度来判断是否命中scatter增加次数
+   */
+  private async freeRoundIsHitScatterAddTimes(symbolAnimationDatas: ISymbolAnimationData[][]) {
+    const scatterAddTimes = await this.freeSpinScatterAddTimes(symbolAnimationDatas);
+
+    const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
+
+    // 如果当前不是免费轮，或者scatter增加次数小于等于0，则不命中scatter增加次数
+    if (!app.controller.slots.isFreeSpin || scatterAddTimes <= 0) {
+      return Promise.resolve(false);
+    }
+
+    app.manager.global.setFreeSpinTimes(app.manager.global.freeSpinTimes + scatterAddTimes);
+    app.manager.global.setGameRecordIds([...app.manager.global.gameRecordIds, ...gameRecordIds]);
+
+    // 获取freeSpinTimes节点位置
+    const targetPosition = this.FreespinTimesNode.getWorldPosition().clone();
+    const rollsScript = this.Rolls.map(roll => roll.getComponent(Roll));
+    // 播放scatter增加次数动画
+    await Promise.all(rollsScript.map(roll => roll.playScatterAddTimeAnimation(targetPosition)));
+      
+    // 更新免费轮次数Node展示
+    this.updateFreeSpinTimesNodeString();
+
+    return Promise.resolve(true);
+  }
+
+  /**
+   * 免费轮中，计算scatter增加次数
+   * @param symbolAnimationDatas 
+   * @returns 
+   */
+  private freeSpinScatterAddTimes(symbolAnimationDatas: ISymbolAnimationData[][]): number {
+    let count = 0;
+    
+    for (const innerArray of symbolAnimationDatas) {
+      for (const item of innerArray) {
+        if (item.symbolId === '3002' && !item.isPlayScatterAddTimeAnimation) {
+          count++;
+        }
+      }
+    }
+    
+    return count;
   }
 
   onDestroy() {

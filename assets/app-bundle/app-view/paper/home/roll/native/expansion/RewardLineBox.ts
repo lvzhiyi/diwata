@@ -50,12 +50,12 @@ export class RewardLineBox extends Component {
     await delay(1000);
 
     const runTween = tween(this.content).by(0.3, { position: new Vec3(0, this.ITEM_HEIGHT, 0) }).delay(1.3).call(() => {
-      const rewardLineNode = instantiate(this.rewardLinePrefab);
-      const lastY = this.content.children[this.content.children.length - 1].getPosition().y;
-      rewardLineNode.setPosition(new Vec3(0, lastY - this.ITEM_HEIGHT, 0));
+      const firstNode = this.content.children[0];
+      const lastY = firstNode?.getPosition().y || 0;
+      firstNode.setPosition(new Vec3(0, lastY - this.content.children.length * this.ITEM_HEIGHT, 0));
 
-      this.content.removeChild(this.content.children[0]);
-      this.content.addChild(rewardLineNode);
+      firstNode.removeFromParent();
+      this.content.addChild(firstNode);
     });
 
     this.rewardLineTween = tween(this.content).repeatForever(runTween).start();
