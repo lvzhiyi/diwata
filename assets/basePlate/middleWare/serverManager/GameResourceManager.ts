@@ -11,7 +11,13 @@ export const SPINE_RESOURCE_NAMES: { [key: string]: string } = {
   LAMANG_WILD: 'bianhuan',
   // scatter动画
   LAMANG_ICON_SCATTER: 'LamAng_icon_scatter',
+  // 剑被劈中的动画
+  LAMANG_SWORD_HIT: 'wheelhalo',
+  // 棒子爆炸的动画
+  LAMANG_BOW_EXPLODE: 'bz',
+
   MFL: 'mfl',
+
 };
 
 @ccclass('GameResourceManager')
@@ -43,18 +49,17 @@ export class GameResourceManager {
     // 预加载所有 ICon 图片
     preloadLocalICons() {
       return new Promise<void>((resolve) => {
-        const imagePath = 'Images/icons/rollIcon/rollIcon';
-        resources.load(imagePath, SpriteAtlas, (err, atlas) => {
+        const imagePath = 'icons/symbols';
+        resources.loadDir(imagePath, SpriteFrame, (err, spriteFrames) => {
           if (err) {
-            console.error(`Error loading ${atlas}:`, err);
-            // 继续处理其他动画
+            console.error(`Error loading images from ${imagePath}:`, err);
             resolve();
           } else {
-            this.iconTextures = atlas.spriteFrames;
-            console.log('atlas', this.iconTextures, atlas.getSpriteFrame('1001'));
-  
+            spriteFrames.forEach((spriteFrame) => {
+              this.iconTextures[spriteFrame.name] = spriteFrame;
+            });
+            console.log('所有本地icon已经预加载完成', this.iconTextures);
             resolve();
-            console.log('所有本地icon动画已经预加载完成');
           }
         });
       });

@@ -161,13 +161,17 @@ export class HomeController extends BaseController<
                     symbolId: '1006',
                     symbolType: 'NORMAL'
                   },
+                  {
+                    symbolId: '1006',
+                    symbolType: 'NORMAL'
+                  },
                   null,
                   null,
                   
                 ],
                 [
                   {
-                    symbolId: '1007',
+                    symbolId: '1004',
                     symbolType: 'NORMAL'
                   },
                   {
@@ -175,17 +179,21 @@ export class HomeController extends BaseController<
                     symbolType: 'SWORD'
                   },
                   {
-                    symbolId: '3001',
-                    symbolType: 'NORMAL'
+                    symbolId: '4001',
+                    symbolType: 'BOW'
                   },
                   {
                     symbolId: '4001',
-                    symbolType: 'NORMAL'
+                    symbolType: 'BOW'
                   },
                   {
                     symbolId: '1001',
                     symbolType: 'NORMAL'
-                  }
+                  },
+                  {
+                    symbolId: '1004',
+                    symbolType: 'NORMAL'
+                  },
                 ],
                 [
                   {
@@ -207,11 +215,15 @@ export class HomeController extends BaseController<
                   {
                     symbolId: '1003',
                     symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1003',
+                    symbolType: 'NORMAL'
                   }
                 ],
                 [
                   {
-                    symbolId: '3001',
+                    symbolId: '1005',
                     symbolType: 'NORMAL'
                   },
                   {
@@ -220,36 +232,18 @@ export class HomeController extends BaseController<
                   },
                   {
                     symbolId: '4001',
-                    symbolType: 'NORMAL'
+                    symbolType: 'BOW'
                   },
                   {
-                    symbolId: '3001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  }
-                ],
-                [
-                  {
-                    symbolId: '3001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'SWORD'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '3001',
+                    symbolId: '1005',
                     symbolType: 'NORMAL'
                   },
                   {
                     symbolId: '1001',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1003',
                     symbolType: 'NORMAL'
                   }
                 ],
@@ -264,11 +258,15 @@ export class HomeController extends BaseController<
                     symbolType: 'NORMAL'
                   },
                   {
-                    symbolId: '1007',
+                    symbolId: '1005',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1001',
                     symbolType: 'NORMAL'
                   },
                   null
-                ]
+                ],
               ],
               rewardSymbolIndexSet: [
                 {
@@ -276,7 +274,7 @@ export class HomeController extends BaseController<
                   columnIndex: 1
                 },
                 {
-                  rowIndex: 3,
+                  rowIndex: 2,
                   columnIndex: 0
                 },
                 {
@@ -284,7 +282,7 @@ export class HomeController extends BaseController<
                   columnIndex: 1
                 },
                 {
-                  rowIndex: 3,
+                  rowIndex: 2,
                   columnIndex: 2
                 }
               ],
@@ -318,9 +316,39 @@ export class HomeController extends BaseController<
                     symbolId: '1006',
                     symbolType: 'NORMAL'
                   },
+                  {
+                    symbolId: '1006',
+                    symbolType: 'NORMAL'
+                  },
                   null,
                   null,
                   
+                ],
+                [
+                  {
+                    symbolId: '1004',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'SWORD'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'BOW'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'BOW'
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1004',
+                    symbolType: 'NORMAL'
+                  },
                 ],
                 [
                   {
@@ -328,19 +356,23 @@ export class HomeController extends BaseController<
                     symbolType: 'NORMAL'
                   },
                   {
-                    symbolId: '1008',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '3001',
-                    symbolType: 'NORMAL'
+                    symbolId: '4001',
+                    symbolType: 'SWORD'
                   },
                   {
                     symbolId: '1001',
                     symbolType: 'NORMAL'
                   },
                   {
-                    symbolId: '1001',
+                    symbolId: '1007',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1003',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1003',
                     symbolType: 'NORMAL'
                   }
                 ],
@@ -350,82 +382,46 @@ export class HomeController extends BaseController<
                     symbolType: 'NORMAL'
                   },
                   {
+                    symbolId: '4001',
+                    symbolType: 'SWORD'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'BOW'
+                  },
+                  {
+                    symbolId: '1005',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolType: 'NORMAL'
+                  },
+                  {
                     symbolId: '1003',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1003',
-                    symbolType: 'NORMAL'
-                  }
-                ],
-                [
-                  {
-                    symbolId: '3001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1007',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '3001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  }
-                ],
-                [
-                  {
-                    symbolId: '3001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1007',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '3001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1001',
                     symbolType: 'NORMAL'
                   }
                 ],
                 [
                   null,
                   {
-                    symbolId: '1007',
-                    symbolType: 'NORMAL'
+                    symbolId: '4001',
+                    symbolType: 'SWORD'
                   },
                   {
                     symbolId: '1001',
                     symbolType: 'NORMAL'
                   },
                   {
-                    symbolId: '1007',
+                    symbolId: '1005',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1001',
                     symbolType: 'NORMAL'
                   },
                   null
-                ]
+                ],
               ],
               rewardSymbolIndexSet: null,
               rewardLineList: null,
@@ -444,6 +440,7 @@ export class HomeController extends BaseController<
               ],
               accumulateReachMaxMultiple: false
             }
+            
           ],
           jackpotRewardGameRecordId: null
         }

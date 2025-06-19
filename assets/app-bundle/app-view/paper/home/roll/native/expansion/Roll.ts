@@ -1,6 +1,9 @@
-import { _decorator, CCInteger, Component, instantiate, Node, NodePool, Prefab, Tween, tween, Vec3 } from 'cc';
+/* eslint-disable max-len */
+import { _decorator, CCInteger, Component, instantiate, Node, NodePool, Prefab, sp, Tween, tween, UITransform, Vec3 } from 'cc';
 import { Symbol } from './Symbol';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
+import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
+import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 
 const { ccclass, property } = _decorator;
 
@@ -20,6 +23,9 @@ export class Roll extends Component {
     private nodePool: NodePool = new NodePool();
 
     private rollTween: Tween | null = null;
+
+    // 剑动画
+    private swordAnimationNode: Node = null;
 
     // 游戏是否正在滚动中
     public isRolling: boolean = false;
@@ -64,6 +70,7 @@ export class Roll extends Component {
       columnIndex: number
     }[]) {
       this.rollList = rollList;
+      console.log('rollList-数据', this.rollList);
       this.rollRemoveData = rollRemoveData;
     }
 
@@ -280,26 +287,56 @@ export class Roll extends Component {
     }
 
     /**
-     * 处理是否需要展示剑
+     * 展示剑的动画
+    */
+    showSwordAnimation(): Promise<boolean> {
+      return this.addRollSwordAnimation();
+    }
+
+    /**
+     * 处理是否需要展示剑,并把剑的节点返回用于储存
      */
-    showSwordSymbol(): Promise<boolean> {
+    showSwordSymbol(): Promise<Node> {
       let swordCount = 0;
       this.node.children.forEach((child, index) => {
         const symbol = child.getComponent(Symbol);
 
-        if (symbol.currentSymbolItem.symbolId === '4001' && symbol.currentSymbolItem.symbolType === 'SWORD') {
-          swordCount++;
+        if(symbol.currentSymbolItem) {
+          if (symbol.currentSymbolItem.symbolId === '4001' && (symbol.currentSymbolItem.symbolType === SymbolType.SWORD || symbol.currentSymbolItem.symbolType === SymbolType.OVERLAP)) {
+            swordCount++;
+          }
         }
       });
+      let hasShowSwordNode = null;
 
       // 如果剑的数量等于符号数量，则展示剑,随机任意一个节点变成剑的符号
       if (swordCount === this.node.children.length) {
         const randomIndex = Math.floor(Math.random() * this.node.children.length);
-        const symbol = this.node.children[randomIndex].getComponent(Symbol);
+        const symbolNode = this.node.children[randomIndex];
+        const symbol = symbolNode.getComponent(Symbol);
         symbol.initSymbol('3001', 'SWORD');
+        hasShowSwordNode = symbolNode;
       }
 
-      return Promise.resolve(swordCount > 0);
+      return Promise.resolve(hasShowSwordNode);
+    }
+
+    /**
+     * 处理是否需要展示棒子,并把棒子的节点返回用于储存
+     */
+    showBowSymbol(): Promise<Node[]> {
+      let showBowNode: Node[] = [];
+      this.node.children.forEach((child, index) => {
+        const symbol = child.getComponent(Symbol);
+
+        if(symbol.currentSymbolItem) {
+          if (symbol.currentSymbolItem.symbolId === '4001' && symbol.currentSymbolItem.symbolType === SymbolType.BOW) {
+            showBowNode.push(child);
+          }
+        }
+      });
+
+      return Promise.resolve(showBowNode);
     }
 
     /**
@@ -307,11 +344,12 @@ export class Roll extends Component {
      */
     dealRemoveData() {
       let fallDownCount = 0;
-
+      console.log('当前roll个数-数据', this.node.children.length);
+ 
       for (let i = this.node.children.length - 1; i >= 0; i--) {
         const symbolNode = this.node.children[i];
         // console.log('this.rollList-数据', symbolNode.getComponent(Symbol).getSymbolId(), this.node.children.length);
-        const currentSymbolObj = symbolNode.getComponent(Symbol).currentSymbolItem;
+        const currentSymbolObj = symbolNode.getComponent(Symbol).currentSymbolItem || null;
         // 当需要消除时，如果当前symbol没有金边，则需要消除
         const isNeedRemove = this.rollRemoveData.some(remove => remove.rowIndex === i);
         this.symbolAnimationData.unshift({ 
@@ -335,6 +373,8 @@ export class Roll extends Component {
      * 开始闪烁动画
      */
     async startLightAnimation() {
+      console.log('开始闪烁动画-数据', );
+
       return await Promise.all(this.rollRemoveData.map(async item => {
         const { rowIndex } = item;
 
@@ -359,7 +399,7 @@ export class Roll extends Component {
     removeSymbol() {
       return new Promise(resolve => {
         const removeSymbolNodeList: Node[] = [];
-
+        console.log('this.symbolAnimationData过滤前-数据', this.symbolAnimationData.length);
         this.symbolAnimationData.forEach(item => {
           const { symbolNode, isNeedRemove } = item;
   
@@ -386,13 +426,12 @@ export class Roll extends Component {
      * 添加symbol节点到顶部，添加smybol数据到顶部，用于下坠
      */
     async addNewSymbolToTop(nextRoundList: SymbolItem[]) {
-      nextRoundList = nextRoundList.filter(item => item !== null);
+      let  nextRoundNewList = nextRoundList.filter(item => (item !== null && item !== undefined));
       // nextRoundList是新一轮的数据，symbolAnimationData是当前回合的剩余数据 相减就是需要添加的数据
-      const length = nextRoundList.length - this.symbolAnimationData.length;
-      console.log('需要添加的symbol数量-数据', length);
+      const length = nextRoundNewList.length - this.symbolAnimationData.length;
 
       for (let i = length - 1; i >= 0; i--) {
-        const { symbolId, symbolType } = nextRoundList[i] || {};
+        const { symbolId, symbolType } = nextRoundNewList[i] || {};
         let newSymbolId = symbolId;
 
         // 如果symbolId为super wild，则随机一个symbolId
@@ -496,10 +535,15 @@ export class Roll extends Component {
       let hasChangeWild = false;
       // 收集所有异步操作的Promise
       const promises = this.symbolAnimationData.map((item, index) => {
-        if (item.symbolId === '4001') {
-          hasChangeWild = true;
+        const itemSymbol = item.symbolNode.getComponent(Symbol);
+        const itemSymbolId = itemSymbol.getSymbolId();
 
-          return this.symbolChangeToSingleWild(index);
+        if(itemSymbol.currentSymbolItem) {
+          if (itemSymbol.currentSymbolItem.symbolId === '4001' && itemSymbolId !== '4001') {
+            hasChangeWild = true;
+
+            return this.symbolChangeToSingleWild(index);
+          }
         }
     
         return Promise.resolve();
@@ -523,33 +567,59 @@ export class Roll extends Component {
     }
 
     /**
-     * 注意，这里需要将中间的三个roll传入进来，因为在setSiblingIndex后，roll的顺序会变化，在roll内部没法根据this.parent.children来准确获取中间三个roll
-     * 
-     * symbol变为大wild，大wild占三格，只会显示在第二、三、四格内
-     */ 
-    // async symbolChangeToBigWild(index: number) {
-    //   const rollNodes = this.node.parent.children;
-    //   const leftNodeScript = rollNodes[1].children[index].getComponent(Symbol);
-    //   const centerNodeScript = rollNodes[2].children[index].getComponent(Symbol);
-    //   const rightNodeScript = rollNodes[3].children[index].getComponent(Symbol);
+     * 给当前的roll 添加剑wild
+     */
+    addRollSwordAnimation(): Promise<boolean> {
+      return new Promise<boolean>(async (resolve) => {
+        // 获取当前symbol的位置
+        const originalPos = this.node.getWorldPosition().clone();
+        // 创建一个动画节点，用于播放wild动画
+        this.swordAnimationNode = new Node('Animation');
+        this.swordAnimationNode.addComponent(UITransform);
+        this.swordAnimationNode.getComponent(UITransform).setContentSize(this.node.getComponent(UITransform).contentSize);
+        this.swordAnimationNode.layer = this.node.layer;
+        this.swordAnimationNode.setParent(this.node.parent.parent.parent);
+        this.swordAnimationNode.setWorldPosition(originalPos);
+        console.log('添加剑动画节点-数据', this.swordAnimationNode.position, originalPos);
+        // 播放wild动画，动画完成后删除动画，并在wildNode设置图片
+        await this.playSwordAnimation(this.swordAnimationNode, 'mfl',);
 
-    //   // 销毁金边
-    //   await this.node.children[index].getComponent(Symbol).changeToBigWild(leftNodeScript, centerNodeScript, rightNodeScript);
+        resolve(true);
+      });
+    }
 
-    //   return Promise.resolve();
-    // }
+    /**
+     * 播放、动画，动画完成后删除动画，
+     */
+    async playSwordAnimation(aniNode: Node, animationName: string,) {
+      return new Promise<void>(async (resolve) => {
+        try {
+          // 添加动画
+          const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
+          skeleton.premultipliedAlpha = false;
+          skeleton.skeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.MFL);
+          skeleton.setAnimation(0, animationName, true);
+          console.log('播放动画-数据', animationName);
+          skeleton.setCompleteListener(() => {
+            this.destoryWildAnimationNode();
+            resolve();
+          });
+        } catch (error) {
+          console.error('加载spine/动画失败', error);
+          this.destoryWildAnimationNode();
+          resolve();
+        }
+      });
+    }
 
-    // /**
-    //  * symbol变为super wild
-    //  */
-    // async symbolChangeToSuperWild() {
-    //   return Promise.resolve();
-    //   const centerRoll = this.node.parent.children[2];
-
-    //   await centerRoll.children[2].getComponent(Symbol).changeToSuperWild();
-
-    //   return Promise.resolve();
-    // }
+    /**
+     * 销毁动画Node
+     */
+    destoryWildAnimationNode() {
+      this.swordAnimationNode?.getComponent(sp.Skeleton)?.destroy();
+      this.swordAnimationNode?.destroy();
+      this.swordAnimationNode = null;
+    }
 
     /**
      * 播放scatter增加次数动画

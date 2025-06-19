@@ -54,10 +54,12 @@ export class Symbol extends Component {
 
     /// 赋值数据对象 , fromServer 是否从服务器获取数据
     initSymbol(symbolId: string, symbolType: SymbolTypeEnum = 'NORMAL', fromServer: boolean = false) {
-      this.currentSymbolItem = {
-        symbolId: symbolId,
-        symbolType: symbolType,
-      };
+      if(fromServer) {
+        this.currentSymbolItem = {
+          symbolId: symbolId,
+          symbolType: symbolType,
+        };
+      }
 
       if (this.mapSymbols.size === 0) {
         this.initSprites();
@@ -101,6 +103,27 @@ export class Symbol extends Component {
         await this.playWildAnimation(this.wildAnimationNode, 'bianhuan', this.iconNode, '4001');
 
         resolve();
+      });
+    }
+
+    /**
+     * 给普通元素添加执行棒子爆炸动画
+     */
+    async changeToBowAnimation(): Promise<boolean> {
+      return new Promise<boolean>(async (resolve) => {
+        // 获取当前symbol的位置
+        const originalPos = this.node.getWorldPosition().clone();
+        // 创建一个动画节点，用于播放wild动画
+        this.wildAnimationNode = new Node('Animation');
+        this.wildAnimationNode.addComponent(UITransform);
+        this.wildAnimationNode.getComponent(UITransform).setContentSize(this.iconNode.getComponent(UITransform).contentSize);
+        this.wildAnimationNode.layer = this.node.layer;
+        this.wildAnimationNode.setParent(this.parentNode);
+        this.wildAnimationNode.setWorldPosition(originalPos);
+
+        // 播放wild动画，动画完成后删除动画，
+        await this.playBowExplodeAnimation(this.wildAnimationNode, 'bz');
+        resolve(true);
       });
     }
 
@@ -283,6 +306,30 @@ export class Symbol extends Component {
           console.log('播放wild动画-数据', animationName);
           skeleton.setCompleteListener(() => {
             iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
+            this.destoryWildAnimationNode();
+            resolve();
+          });
+        } catch (error) {
+          console.error('加载spine/LamAng_wild动画失败', error);
+          this.destoryWildAnimationNode();
+          resolve();
+        }
+      });
+    }
+
+    /**
+     * 播放爆炸动画，动画完成后删除动画，、
+     */
+    async playBowExplodeAnimation(aniNode: Node, animationName: string,) {
+      return new Promise<void>(async (resolve) => {
+        try {
+          // 添加动画
+          const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
+          skeleton.premultipliedAlpha = false;
+          skeleton.skeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.LAMANG_BOW_EXPLODE);
+          skeleton.setAnimation(0, animationName, false);
+          console.log('播放棒子动画-数据', animationName);
+          skeleton.setCompleteListener(() => {
             this.destoryWildAnimationNode();
             resolve();
           });

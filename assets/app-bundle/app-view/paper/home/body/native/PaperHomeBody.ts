@@ -27,6 +27,7 @@ import CpPostMessage from 'db://assets/common/script/extra/tmBridge/cpPostMessag
 import {  preventRapidClickDecorator, showInsufficientCreditAlert } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { BetTypes } from 'db://assets/basePlate/middleWare/enums/bet';
+import { GameResourceManager } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 
 const { ccclass, property } = _decorator;
 
@@ -94,6 +95,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       'Bet ₱ ' + numberToMoney(app.manager.global.betCount);
     this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.manager.global.vipLevel - 1];
     this.onResizeScreen();
+    GameResourceManager.instance.preloadLocalICons();
   }
 
   /** *屏幕适配**/
