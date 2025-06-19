@@ -1,14 +1,15 @@
-import { _decorator, Component, Node, Vec3 } from 'cc';
+import { _decorator, Vec3 } from 'cc';
 import { app } from 'db://assets/app/app';
 import { ApiPath, ErrorType } from 'db://assets/common/script/extra/https/Constant';
 import { http, HTTP_STATUS_CODES } from 'db://assets/common/script/extra/Request';
 import { createAuthHeaders, createWSAuthString, getRealServerTime } from 'db://assets/common/script/extra/Utils/common';
-import { getApiHost, getGameEnv, getWsHost, showErrorPop, showServerMaintenanceTip } from '../../core/baseUtil/BaseCommonUtil';
+import { showErrorPop, showServerMaintenanceTip } from '../../core/baseUtil/BaseCommonUtil';
 import CpPostMessage from 'db://assets/common/script/extra/tmBridge/cpPostMessage';
 import { GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
 import { PackageFacade } from 'db://assets/common/script/PackageFacade';
 import { GameMrgEvent } from 'db://assets/common/script/extra/GameMrsEvent';
 import { GameDataMgrEventsType } from 'db://assets/common/script/data/ActivityDataMgr';
+import { Environment, getApiUrl, getGameEnv, getWebSocketUrl } from 'db://assets/common/script/extra/config/envConfig';
 
 const { ccclass } = _decorator;
 
@@ -289,8 +290,8 @@ class ServerHookManager {
 
     const env = getGameEnv();
     const wenv = getGameEnv();
-    let hostUrl = getApiHost(env as keyof typeof app.config.env);
-    let wshostUrl = getWsHost(wenv as keyof typeof app.config.wsenv);
+    let hostUrl = getApiUrl(env as Environment);
+    let wshostUrl = getWebSocketUrl(wenv as Environment);
     // 外部必配字段
     const realServerTime = getRealServerTime();
     const wsSignature = createWSAuthString(realServerTime);
