@@ -51,3 +51,19 @@ export enum RewardSubTypeEnum {
   /** 惊人奖励 */
   SENSATIONAL = 'sensational',
 }
+
+/**
+ * 符号类型枚举
+ */
+export  enum SymbolType {
+  /** 普通符号 */
+  NORMAL = 'NORMAL',
+  /** 剑 */
+  SWORD = 'SWORD',
+ 
+  /** 棒子符号 */
+  BOW = 'BOW',
+  /** 重叠符号棒子和剑 */
+  OVERLAP = 'OVERLAP',
+
+}

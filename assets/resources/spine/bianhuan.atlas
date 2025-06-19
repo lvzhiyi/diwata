@@ -1,0 +1,97 @@
+
+bianhuan.png
+size: 2765,1009
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+01
+  rotate: true
+  xy: 2376, 122
+  size: 118, 111
+  orig: 640, 640
+  offset: 261, 255
+  index: -1
+02
+  rotate: false
+  xy: 2444, 675
+  size: 319, 332
+  orig: 640, 640
+  offset: 179, 148
+  index: -1
+03
+  rotate: true
+  xy: 2376, 242
+  size: 356, 375
+  orig: 640, 640
+  offset: 159, 125
+  index: -1
+04
+  rotate: true
+  xy: 2040, 600
+  size: 407, 402
+  orig: 640, 640
+  offset: 126, 118
+  index: -1
+05
+  rotate: false
+  xy: 956, 2
+  size: 479, 477
+  orig: 640, 640
+  offset: 83, 79
+  index: -1
+06
+  rotate: false
+  xy: 492, 2
+  size: 462, 462
+  orig: 640, 640
+  offset: 89, 89
+  index: -1
+07
+  rotate: false
+  xy: 1070, 507
+  size: 500, 500
+  orig: 640, 640
+  offset: 70, 70
+  index: -1
+08
+  rotate: false
+  xy: 542, 481
+  size: 526, 526
+  orig: 640, 640
+  offset: 57, 57
+  index: -1
+09
+  rotate: true
+  xy: 2, 466
+  size: 541, 538
+  orig: 640, 640
+  offset: 50, 50
+  index: -1
+10
+  rotate: true
+  xy: 1909, 64
+  size: 468, 465
+  orig: 640, 640
+  offset: 99, 85
+  index: -1
+11
+  rotate: true
+  xy: 1572, 534
+  size: 473, 466
+  orig: 640, 640
+  offset: 97, 86
+  index: -1
+12
+  rotate: true
+  xy: 1437, 27
+  size: 478, 470
+  orig: 640, 640
+  offset: 94, 85
+  index: -1
+dca
+  rotate: true
+  xy: 2, 6
+  size: 458, 488
+  orig: 468, 501
+  offset: 3, 12
+  index: -1

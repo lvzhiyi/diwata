@@ -159,7 +159,11 @@ export class HomeController extends BaseController<
                   null,
                   {
                     symbolId: '1006',
-                    symbolGoldBorder: false
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1006',
+                    symbolType: 'NORMAL'
                   },
                   null,
                   null,
@@ -167,108 +171,257 @@ export class HomeController extends BaseController<
                 ],
                 [
                   {
+                    symbolId: '1004',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'SWORD'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'BOW'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'BOW'
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1004',
+                    symbolType: 'NORMAL'
+                  },
+                ],
+                [
+                  {
                     symbolId: '1007',
-                    symbolGoldBorder: false
+                    symbolType: 'NORMAL'
                   },
                   {
-                    symbolId: '1008',
-                    symbolGoldBorder: false
-                  },
-                  {
-                    symbolId: '3001',
-                    symbolGoldBorder: false
+                    symbolId: '4001',
+                    symbolType: 'SWORD'
                   },
                   {
                     symbolId: '1001',
-                    symbolGoldBorder: false
+                    symbolType: 'NORMAL'
                   },
                   {
-                    symbolId: '1001',
-                    symbolGoldBorder: false
+                    symbolId: '1007',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1003',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1003',
+                    symbolType: 'NORMAL'
                   }
                 ],
                 [
                   {
                     symbolId: '1005',
-                    symbolGoldBorder: false
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'SWORD'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'BOW'
+                  },
+                  {
+                    symbolId: '1005',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolType: 'NORMAL'
                   },
                   {
                     symbolId: '1003',
-                    symbolGoldBorder: false
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolGoldBorder: false
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolGoldBorder: false
-                  },
-                  {
-                    symbolId: '1003',
-                    symbolGoldBorder: false
-                  }
-                ],
-                [
-                  {
-                    symbolId: '3001',
-                    symbolGoldBorder: false
-                  },
-                  {
-                    symbolId: '1007',
-                    symbolGoldBorder: false
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolGoldBorder: true
-                  },
-                  {
-                    symbolId: '3001',
-                    symbolGoldBorder: false
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolGoldBorder: false
-                  }
-                ],
-                [
-                  {
-                    symbolId: '3001',
-                    symbolGoldBorder: false
-                  },
-                  {
-                    symbolId: '1007',
-                    symbolGoldBorder: false
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolGoldBorder: true
-                  },
-                  {
-                    symbolId: '3001',
-                    symbolGoldBorder: false
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolGoldBorder: false
+                    symbolType: 'NORMAL'
                   }
                 ],
                 [
                   null,
                   {
-                    symbolId: '1007',
-                    symbolGoldBorder: false
+                    symbolId: '4001',
+                    symbolType: 'SWORD'
                   },
                   {
                     symbolId: '1001',
-                    symbolGoldBorder: true
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1005',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolType: 'NORMAL'
+                  },
+                  null
+                ],
+              ],
+              rewardSymbolIndexSet: [
+                {
+                  rowIndex: 2,
+                  columnIndex: 1
+                },
+                {
+                  rowIndex: 2,
+                  columnIndex: 0
+                },
+                {
+                  rowIndex: 0,
+                  columnIndex: 1
+                },
+                {
+                  rowIndex: 2,
+                  columnIndex: 2
+                }
+              ],
+              rewardLineList: null,
+              freeWheelFlag: 0,
+              gameRecordIds: [
+                '1930113666783715330',
+                '1930113666787909637',
+                '1930113666792103937',
+                '1930113666792103943',
+                '1930113666792103946',
+                '1930113666796298241',
+                '1930113666796298242',
+                '1930113666796298243',
+                '1930113666796298244',
+                '1930113666796298249'
+              ],
+              accumulateReachMaxMultiple: false
+            },
+            {
+              id: '1930113666783715329',
+              rewardType: 'NONE',
+              rewardSubType: 'none',
+              totalRewardAmount: 0,
+              totalRewardMultiple: null,
+              wheel: [
+                [
+                  null,
+                  null,
+                  {
+                    symbolId: '1006',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1006',
+                    symbolType: 'NORMAL'
+                  },
+                  null,
+                  null,
+                  
+                ],
+                [
+                  {
+                    symbolId: '1004',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'SWORD'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'BOW'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'BOW'
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1004',
+                    symbolType: 'NORMAL'
+                  },
+                ],
+                [
+                  {
+                    symbolId: '1007',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'SWORD'
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolType: 'NORMAL'
                   },
                   {
                     symbolId: '1007',
-                    symbolGoldBorder: false
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1003',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1003',
+                    symbolType: 'NORMAL'
+                  }
+                ],
+                [
+                  {
+                    symbolId: '1005',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'SWORD'
+                  },
+                  {
+                    symbolId: '4001',
+                    symbolType: 'BOW'
+                  },
+                  {
+                    symbolId: '1005',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1003',
+                    symbolType: 'NORMAL'
+                  }
+                ],
+                [
+                  null,
+                  {
+                    symbolId: '4001',
+                    symbolType: 'SWORD'
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1005',
+                    symbolType: 'NORMAL'
+                  },
+                  {
+                    symbolId: '1001',
+                    symbolType: 'NORMAL'
                   },
                   null
-                ]
+                ],
               ],
               rewardSymbolIndexSet: null,
               rewardLineList: null,
@@ -287,6 +440,7 @@ export class HomeController extends BaseController<
               ],
               accumulateReachMaxMultiple: false
             }
+            
           ],
           jackpotRewardGameRecordId: null
         }

@@ -73,8 +73,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 139,
-      "height": 652
+      "width": 119,
+      "height": 476
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -103,7 +103,7 @@
       "__uuid__": "1743fda5-aacc-4d9f-9fa7-1febd8786006",
       "__expectedType__": "cc.Prefab"
     },
-    "itemHeight": 163,
+    "itemHeight": 119,
     "itemCount": 5,
     "_id": ""
   },

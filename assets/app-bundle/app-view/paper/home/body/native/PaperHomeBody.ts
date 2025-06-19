@@ -12,6 +12,7 @@ import {
   Tween,
   tween,
   UITransform,
+  Vec3,
 } from 'cc';
 import BaseView from '../../../../../../../extensions/app/assets/base/BaseView';
 import { app } from '../../../../../../app/app';
@@ -26,6 +27,7 @@ import CpPostMessage from 'db://assets/common/script/extra/tmBridge/cpPostMessag
 import {  preventRapidClickDecorator, showInsufficientCreditAlert } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { BetTypes } from 'db://assets/basePlate/middleWare/enums/bet';
+import { GameResourceManager } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 
 const { ccclass, property } = _decorator;
 
@@ -92,6 +94,19 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     this.betLable.getComponent(Label).string =
       'Bet ₱ ' + numberToMoney(app.manager.global.betCount);
     this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.manager.global.vipLevel - 1];
+    this.onResizeScreen();
+    GameResourceManager.instance.preloadLocalICons();
+  }
+
+  /** *屏幕适配**/
+  onResizeScreen() {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const screenScale =  screenHeight / screenWidth;
+
+    if (screenScale < 1.78) {
+      this.bottomView.setScale(new Vec3(0.85, 0.85, 1));
+    }
   }
 
   protected beforeShow(next: (error?: string) => void, data?: any): any {
