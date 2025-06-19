@@ -1,4 +1,4 @@
-import { Label, Node, Prefab, SpriteFrame, _decorator, debug, sp } from 'cc';
+import { Label, Node, Prefab, SpriteFrame, _decorator, sp } from 'cc';
 import BaseAppInit from '../../../extensions/app/assets/base/BaseAppInit';
 import { app } from '../../app/app';
 import Core from 'db://app/Core';
@@ -6,7 +6,7 @@ import { GlobalMgr } from '../../common/script/extra/GlobalMgr';
 import { calculateWithBase, getRuntimeEnv, getUrlParameters, } from '../../common/script/extra/Utils/common';
 import { getUserCredit, login } from '../../basePlate/middleWare/services/user';
 import { ProgressBar } from '../../basePlate/middleWare/commonUI/ProgressBar/ProgressBar';
-import { getApiHost, getGameEnv, loadBundle, loadResource, showErrorPop } from '../../basePlate/core/baseUtil/BaseCommonUtil';
+import { loadBundle, loadResource, showErrorPop } from '../../basePlate/core/baseUtil/BaseCommonUtil';
 import { DEBUG } from 'cc/env';
 import eventTrack from '../../common/script/extra/eventTrack';
 import { serverHookManager } from '../../basePlate/middleWare/serverManager/ServerHookManager';
@@ -14,7 +14,7 @@ import { initARMS } from '../../common/script/extra/armsSDK/init';
 import CheckNetCtrl from '../../common/script/extra/CheckNetCtrl';
 import { ErrorType } from '../../common/script/extra/https/Constant';
 import { HTTP_STATUS_CODES } from '../../common/script/extra/Request';
-import { game } from 'cc';
+import { Environment, getApiUrl, getGameEnv } from '../../common/script/extra/config/envConfig';
 
 const { ccclass, property } = _decorator;
 @ccclass('AppInit')
@@ -258,7 +258,7 @@ export class AppInit extends BaseAppInit {
    */
   private _initGameInternal() {
     const env = getGameEnv();
-    const hostUrl = getApiHost(env as keyof typeof app.config.env);
+    const hostUrl = getApiUrl(env as Environment);
     this._initParams();
     this._initRuntimeEnv();
     serverHookManager.initApiBaseUrl(hostUrl);
@@ -380,7 +380,7 @@ export class AppInit extends BaseAppInit {
       qat: '1hlahoc4rpc@f3b191fb36fbb85',
       test: '1hlahoc4rpc@f3b191fb36fbb85',
     };
-    const pid = pidMap[env] || 'default_pid';
+    const pid = pidMap[env as Environment] || 'default_pid';
     initARMS({
       pid: pid,
       endpoint: 'https://1hlahoc4rpc-default-sea.rum.aliyuncs.com',

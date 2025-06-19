@@ -1,54 +1,8 @@
-import { _decorator, Component, Node } from 'cc';
-import { BUILD } from 'cc/env';
+import { _decorator } from 'cc';
 import dayjs from 'dayjs';
-import { PopErrorPop } from 'db://assets/app-bundle/app-view/pop/error-pop/native/PopErrorPop';
 import { app } from 'db://assets/app/app';
 import { ErrorType, SERVER_MAINTENANCE_TIP_TEMPLATES } from 'db://assets/common/script/extra/https/Constant';
 import CpPostMessage from 'db://assets/common/script/extra/tmBridge/cpPostMessage';
-
-const { ccclass, property } = _decorator;
-
-/**
- * 获取游戏的环境类型
- * @param presetEnv 本地开发环境时的预设环境变量
- * @returns {EnvType} 游戏的环境类型
- */
-export const getGameEnv = (presetEnv = app.config.app.LOCAL_ENV) => {
-  const hostname = window.location.hostname;
-
-  switch (true) {
-    case BUILD && hostname.indexOf('.net') > -1:
-      return 'qat';
-    case BUILD && hostname.indexOf('.info') > -1:
-      return 'info';
-    case BUILD && hostname.indexOf('.org') > -1:
-      return 'uat';
-    case BUILD && hostname.indexOf('.com') > -1:
-      return 'prod';
-    default:
-      return 'dev';
-  }
-};
-
-/**
-* 获取接口请求的基础 URL
-* @param {keyof typeof API_HOST_URLS} env 环境类型
-* @returns {string} 基础 URL
-*/
-export const getApiHost = (env: keyof typeof app.config.env): string => {
-  return app.config.env[env];
-};
-  
-/**
-   * 获取ws接口请求的基础 URL
-   * @param {keyof typeof API_HOST_URLS} env 环境类型
-   * @returns {string} 基础 URL
-   */
-export const getWsHost = (wsenv: keyof typeof app.config.wsenv): string => {
-  const wsModel = app.config.wsenv;
-
-  return wsModel[wsenv];
-};
 
 /**
 * 通用的资源加载方法，支持缓存
@@ -85,7 +39,7 @@ export const loadResource = <T>(
 export const loadBundle = (bundle: any) => {
   console.log('执行loadBundle开始', bundle);
 
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<void>((resolve) => {
     app.manager.ui.load(bundle, () => {
       console.log('执行loadBundle完成', bundle);
       resolve();

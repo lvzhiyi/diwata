@@ -27,7 +27,7 @@ export default class App implements IModel<App> {
     MAIN_SCENE = 'Game';
 
     /** 本地开发环境要使用接口环境 */
-    LOCAL_ENV = 'dev';
+    LOCAL_ENV = 'qat';
 
     /**
      * 用来做网络环境测试的文件地址，用来测试网络速度
