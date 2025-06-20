@@ -168,7 +168,6 @@ export class Roll extends Component {
      */
     stopRolling(rollList: SymbolItem[], onComplete?: () => void) {
       this.rollList = rollList;
-      console.log('stopRolling-数据', this.rollList);
       this.onRollComplete = onComplete;
     }
 
@@ -288,31 +287,31 @@ export class Roll extends Component {
     }
 
     /**
+     * 当前roll是否存在剑
+     */
+    currentRollHaveSword(): boolean {
+      return this.rollList.every(item => {
+        return item.symbolId === SymbolType.SWORD || item.symbolId === SymbolType.OVERLAP;
+      });
+    }
+
+    /**
      * 处理是否需要展示剑,并把剑的节点返回用于储存
      */
     showSwordSymbol(): Promise<Node> {
-      let swordCount = 0;
-      this.node.children.forEach((child, index) => {
-        const symbol = child.getComponent(Symbol);
-
-        if(symbol.currentSymbolItem) {
-          if (symbol.currentSymbolItem.symbolId === SymbolType.SWORD || symbol.currentSymbolItem.symbolId === SymbolType.OVERLAP) {
-            swordCount++;
-          }
-        }
-      });
-      let hasShowSwordNode = null;
+      let hasShowSwordNode = this.currentRollHaveSword()  ;
 
       // 如果剑的数量等于符号数量，则展示剑,随机任意一个节点变成剑的符号
-      if (swordCount === this.node.children.length) {
+      if (hasShowSwordNode) {
         const randomIndex = Math.floor(Math.random() * this.node.children.length);
         const symbolNode = this.node.children[randomIndex];
         const symbol = symbolNode.getComponent(Symbol);
         symbol.initSymbol('4010');
-        hasShowSwordNode = symbolNode;
+
+        return Promise.resolve(symbolNode);
       }
 
-      return Promise.resolve(hasShowSwordNode);
+      return Promise.resolve(null);
     }
 
     /**
@@ -338,20 +337,21 @@ export class Roll extends Component {
      */
     dealRemoveData() {
       let fallDownCount = 0;
-      console.log('当前roll个数-数据', this.node.children);
- 
+      // 当前roll是否存在剑则把所有元素变成剑
+      const haveSword = this.currentRollHaveSword();
+      console.log('当前roll是否存在剑-数据', haveSword);
+
       for (let i = this.node.children.length - 1; i >= 0; i--) {
         const symbolNode = this.node.children[i];
-        // console.log('this.rollList-数据', symbolNode.getComponent(Symbol).getSymbolId(), this.node.children.length);
         const currentSymbolObj:any = symbolNode.getComponent(Symbol)?.currentSymbolItem || null;
-        // 当需要消除时，如果当前symbol没有金边，则需要消除
+        // 当需要消除时，如果当前symbol
         const isNeedRemove = this.rollRemoveData.some(remove => remove.rowIndex === i);
         this.symbolAnimationData.unshift({ 
           symbolNode,
           isNeedRemove,
           fallDownCount,
-          symbolId: currentSymbolObj?.symbolId,
-          symbolType: currentSymbolObj?.symbolType,
+          symbolId: haveSword ? SymbolType.SWORD : currentSymbolObj?.symbolId,
+          symbolType: haveSword ? SymbolType.SWORD : currentSymbolObj?.symbolType,
           isPlayScatterAddTimeAnimation: false
         });
 
@@ -519,16 +519,14 @@ export class Roll extends Component {
     async symbolChangeToWild() {
       let hasChangeWild = false;
       // 收集所有异步操作的Promise
+      console.log('symbol变为wild-数据', this.symbolAnimationData);
       const promises = this.symbolAnimationData.map((item, index) => {
-        const itemSymbol = item.symbolNode.getComponent(Symbol);
-        const itemSymbolId = itemSymbol.getSymbolId();
+        const itemSymbolId = item.symbolId;
+        
+        if (SYMBOL_WILD_IDS.indexOf(itemSymbolId) !== -1 ) {
+          hasChangeWild = true;
 
-        if(itemSymbol.currentSymbolItem) {
-          if (SYMBOL_WILD_IDS.indexOf(itemSymbol.currentSymbolItem.symbolId) !== -1   && itemSymbolId !== '4001') {
-            hasChangeWild = true;
-
-            return this.symbolChangeToSingleWild(index);
-          }
+          return this.symbolChangeToSingleWild(index);
         }
     
         return Promise.resolve();
