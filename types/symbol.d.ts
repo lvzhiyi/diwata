@@ -6,7 +6,7 @@ declare interface SymbolItem {
   /** 元素ID */
   symbolId: string;
   /** 元素类型 */
-  symbolType: SymbolTypeEnum;
+  symbolType?: SymbolTypeEnum;
 }
 
 /**
@@ -51,5 +51,5 @@ declare type SymbolSizeMap = {
 /**
  * symbol类型枚举
  */
-declare type SymbolTypeEnum = 'NORMAL' | 'SWORD'  | 'BOW' | 'OVERLAP';
+declare type SymbolTypeEnum = 'NORMAL'| '4010'  | '4011' | '4001';
 

@@ -1,6 +1,5 @@
-/* eslint-disable max-len */
 import { _decorator, CCInteger, Component, instantiate, Node, NodePool, Prefab, sp, Tween, tween, UITransform, Vec3 } from 'cc';
-import { Symbol } from './Symbol';
+import { Symbol, SYMBOL_WILD_IDS } from './Symbol';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
@@ -69,7 +68,7 @@ export class Roll extends Component {
       rowIndex: number,
       columnIndex: number
     }[]) {
-      this.rollList = rollList;
+      this.rollList = rollList.filter((item: any) => item !== null);
       console.log('rollList-数据', this.rollList);
       this.rollRemoveData = rollRemoveData;
     }
@@ -169,6 +168,7 @@ export class Roll extends Component {
      */
     stopRolling(rollList: SymbolItem[], onComplete?: () => void) {
       this.rollList = rollList;
+      console.log('stopRolling-数据', this.rollList);
       this.onRollComplete = onComplete;
     }
 
@@ -181,7 +181,6 @@ export class Roll extends Component {
       const parentNode = this.node;
 
       Tween.stopAllByTarget(parentNode);
-
       // 反转结果symbols，需要从下往上添加symbol
       const reverseReslutSymbols = reslutSymbols?.reverse();
 
@@ -202,7 +201,7 @@ export class Roll extends Component {
         });
 
       this.rollTween = tween(parentNode);
-      this.rollTween.repeat(this.itemCount - 1, going).then(end).start();
+      this.rollTween.repeat(reverseReslutSymbols.length, going).then(end).start();
     }
 
     /**
@@ -210,7 +209,7 @@ export class Roll extends Component {
      * @param symbolId 符号ID
      * @returns 符号节点
      */
-    private createSymbol(symbolId: string, symbolType: SymbolTypeEnum = 'NORMAL') {
+    private createSymbol(symbolId: string, symbolType: SymbolTypeEnum = 'NORMAL', fromServer: boolean = false) {
       let symbol;
 
       if (this.nodePool.size() > 0) {
@@ -219,7 +218,7 @@ export class Roll extends Component {
         symbol = instantiate(this.symbolPrefab);
       }
 
-      symbol.getComponent(Symbol).initSymbol(symbolId, symbolType);
+      symbol.getComponent(Symbol).initSymbol(symbolId, symbolType, fromServer);
 
       return symbol;
     }
@@ -253,11 +252,6 @@ export class Roll extends Component {
       this.node.removeChild(lastNode);
 
       let  resultSymbol =   resultSymbols?.shift();
-
-      // 如果resultSymbols为空，则再往前进行一次shift
-      if(resultSymbol == null && resultSymbols?.length > 0){
-        resultSymbol = resultSymbols?.shift();
-      }
 
       // 如果resultSymbols不为空，则创建symbolId，否则随机一个symbolId
       let SymbolNode = this.createSymbol(this.randomSymbolId(),);
@@ -302,7 +296,7 @@ export class Roll extends Component {
         const symbol = child.getComponent(Symbol);
 
         if(symbol.currentSymbolItem) {
-          if (symbol.currentSymbolItem.symbolId === '4001' && (symbol.currentSymbolItem.symbolType === SymbolType.SWORD || symbol.currentSymbolItem.symbolType === SymbolType.OVERLAP)) {
+          if (symbol.currentSymbolItem.symbolId === SymbolType.SWORD || symbol.currentSymbolItem.symbolId === SymbolType.OVERLAP) {
             swordCount++;
           }
         }
@@ -314,7 +308,7 @@ export class Roll extends Component {
         const randomIndex = Math.floor(Math.random() * this.node.children.length);
         const symbolNode = this.node.children[randomIndex];
         const symbol = symbolNode.getComponent(Symbol);
-        symbol.initSymbol('3001', 'SWORD');
+        symbol.initSymbol('4010');
         hasShowSwordNode = symbolNode;
       }
 
@@ -330,7 +324,7 @@ export class Roll extends Component {
         const symbol = child.getComponent(Symbol);
 
         if(symbol.currentSymbolItem) {
-          if (symbol.currentSymbolItem.symbolId === '4001' && symbol.currentSymbolItem.symbolType === SymbolType.BOW) {
+          if (symbol.currentSymbolItem.symbolId  === SymbolType.BOW) {
             showBowNode.push(child);
           }
         }
@@ -344,12 +338,12 @@ export class Roll extends Component {
      */
     dealRemoveData() {
       let fallDownCount = 0;
-      console.log('当前roll个数-数据', this.node.children.length);
+      console.log('当前roll个数-数据', this.node.children);
  
       for (let i = this.node.children.length - 1; i >= 0; i--) {
         const symbolNode = this.node.children[i];
         // console.log('this.rollList-数据', symbolNode.getComponent(Symbol).getSymbolId(), this.node.children.length);
-        const currentSymbolObj = symbolNode.getComponent(Symbol).currentSymbolItem || null;
+        const currentSymbolObj:any = symbolNode.getComponent(Symbol)?.currentSymbolItem || null;
         // 当需要消除时，如果当前symbol没有金边，则需要消除
         const isNeedRemove = this.rollRemoveData.some(remove => remove.rowIndex === i);
         this.symbolAnimationData.unshift({ 
@@ -432,16 +426,7 @@ export class Roll extends Component {
 
       for (let i = length - 1; i >= 0; i--) {
         const { symbolId, symbolType } = nextRoundNewList[i] || {};
-        let newSymbolId = symbolId;
-
-        // 如果symbolId为super wild，则随机一个symbolId
-        if (symbolId && symbolId !== '4007') {
-          newSymbolId = symbolId;
-        } else {
-          newSymbolId = this.randomSymbolId();
-        }
-
-        const symbolNode = this.createSymbol(newSymbolId, symbolType);
+        const symbolNode = this.createSymbol(symbolId, symbolType, true);
         symbolNode.setPosition(0, this.firstSymbolY + this.itemHeight * (length - i - 1), 0);
         this.symbolAnimationData.unshift({
           symbolNode,
@@ -539,7 +524,7 @@ export class Roll extends Component {
         const itemSymbolId = itemSymbol.getSymbolId();
 
         if(itemSymbol.currentSymbolItem) {
-          if (itemSymbol.currentSymbolItem.symbolId === '4001' && itemSymbolId !== '4001') {
+          if (SYMBOL_WILD_IDS.indexOf(itemSymbol.currentSymbolItem.symbolId) !== -1   && itemSymbolId !== '4001') {
             hasChangeWild = true;
 
             return this.symbolChangeToSingleWild(index);

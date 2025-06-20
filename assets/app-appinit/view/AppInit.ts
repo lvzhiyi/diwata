@@ -152,7 +152,7 @@ export class AppInit extends BaseAppInit {
         birthday:'01-01-1990',
         channelId:'1050',
         nickName:'cpTest10010',
-        gameId:'zhumeng004',
+        gameId:'zhumeng006',
         pId:'50',
         playerId:'cpTest10010',
         playerName:'cpTest10010',

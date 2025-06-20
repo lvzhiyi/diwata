@@ -56,14 +56,12 @@ export enum RewardSubTypeEnum {
  * 符号类型枚举
  */
 export  enum SymbolType {
-  /** 普通符号 */
-  NORMAL = 'NORMAL',
   /** 剑 */
-  SWORD = 'SWORD',
+  SWORD = '4010',
  
   /** 棒子符号 */
-  BOW = 'BOW',
+  BOW = '4011',
   /** 重叠符号棒子和剑 */
-  OVERLAP = 'OVERLAP',
+  OVERLAP = '4001',
 
 }
