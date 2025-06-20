@@ -4,8 +4,8 @@ import { loadResource } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 
-const SYMBOL_NORMAL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008'];
-
+const SYMBOL_NORMAL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010'];
+export const SYMBOL_WILD_IDS = ['4001', '4010', '4011'];
 const { ccclass, property } = _decorator;
 
 @ccclass('Symbol')
@@ -65,10 +65,11 @@ export class Symbol extends Component {
         this.initSprites();
       }
       /// 从服务器获取数据时，4001的symbolId需要特殊处理，随机一个normal的symbolId
-      if(fromServer && symbolId === '4001') {
+      if(fromServer && SYMBOL_WILD_IDS.indexOf(symbolId) !== -1) {
         const randomIndex = Math.floor(Math.random() * SYMBOL_NORMAL_IDS.length);
         const randomSymbolId = SYMBOL_NORMAL_IDS[randomIndex];
-        this.iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(`${randomSymbolId}`);
+        const spriteFrame = this.mapSymbols.get(`${randomSymbolId}`);
+        this.iconNode.getComponent(Sprite).spriteFrame = spriteFrame;
       } else {
         this.iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(`${symbolId}`);
       }
@@ -128,42 +129,6 @@ export class Symbol extends Component {
     }
 
     /**
-     * 变为大wild
-     */
-    async changeToBigWild(leftNodeScript: Symbol, centerNodeScript: Symbol, rightNodeScript: Symbol) {
-      if (this.wildNode) {
-        // 如果wildNode存在，则不进行操作
-        return;
-      }
-
-      return new Promise<void>(async (resolve) => {
-        const originalPos = centerNodeScript.node.getWorldPosition().clone();
-        const layer = this.node.layer;
-        const parent = this.parentNode.parent.parent;
-
-        // 创建一个wild节点，用于放置wild图片
-        this.wildNode = new Node('BigWild');
-        this.wildNode.layer = layer;
-        this.wildNode.setParent(parent);
-        this.wildNode.setWorldPosition(originalPos);
-
-        // 创建一个动画节点，用于播放wild动画
-        this.wildAnimationNode = new Node('Animation');
-        this.wildAnimationNode.layer = layer;
-        this.wildAnimationNode.setParent(parent);
-        this.wildAnimationNode.setWorldPosition(originalPos);
-
-        // 播放wild动画，动画完成后删除动画，并在wildNode设置图片
-        await this.playWildAnimation(this.wildAnimationNode, 'show1', this.wildNode, '4006');
-
-        // bigwild动画后隐藏symbol
-        this.bigWildHideSymbol(leftNodeScript, centerNodeScript, rightNodeScript);
-
-        resolve();
-      });
-    }
-
-    /**
      * bigwild动画后隐藏symbol
      */
     bigWildHideSymbol(leftNodeScript: Symbol, centerNodeScript: Symbol, rightNodeScript: Symbol) {
@@ -171,47 +136,6 @@ export class Symbol extends Component {
       leftNodeScript.initSymbol('', );
       centerNodeScript.initSymbol('', );
       rightNodeScript.initSymbol('', );
-    }
-
-    /**
-     * 变为super wild
-     */
-    async changeToSuperWild() {
-      if (this.wildNode) {
-        // 如果wildNode存在，则不进行操作
-        return;
-      }
-      
-      return new Promise<void>(async (resolve) => {
-        const originalPos = this.node.getWorldPosition().clone();
-        const layer = this.node.layer;
-        const parent = this.parentNode.parent.parent;
-
-        originalPos.y += this.node.getComponent(UITransform).contentSize.height / 2;
-
-        // 创建一个wild节点，用于放置wild图片
-        this.wildNode = new Node('SuperWild');
-        this.wildNode.layer = layer;
-        this.wildNode.setParent(parent);
-        this.wildNode.setWorldPosition(originalPos);
-
-        originalPos.x -= 0.5;
-        originalPos.y += 99;
-
-        // 创建一个动画节点，用于播放wild动画
-        this.wildAnimationNode = new Node('Animation');
-        this.wildAnimationNode.layer = layer;
-        this.wildAnimationNode.setParent(parent);
-        this.wildAnimationNode.setWorldPosition(originalPos);
-
-        // 播放wild动画，动画完成后删除动画，并在wildNode设置图片
-        await this.playWildAnimation(this.wildAnimationNode, 'show2', this.wildNode, '4007');
-
-        // superwild动画后隐藏symbol
-        this.superWildHideSymbol();
-
-        resolve();
-      });
     }
 
     /**

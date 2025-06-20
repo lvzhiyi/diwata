@@ -36,9 +36,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   @property({ type: Node, tooltip: 'Reward Box' })
   private RewardBox: Node = null;
 
-  @property({ type: SpriteFrame, tooltip: 'Reward Box' })
-  private RewardBoxSpriteFrame: SpriteFrame = null;
-
   private Rolls: Node[] = [];
 
   // 当前回合index，默认为0，每次消除后+1
@@ -160,9 +157,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   private stopSingleRoll(roll: Node, rollIndex: number) {
     // 获取当前roll的symbol列表
-    const rollList = this.resultList[this.roundIndex].wheel.map((item: any) => item[rollIndex]);
+    let rollList = this.resultList[this.roundIndex].wheel.map((item: any) => item[rollIndex]);
+    rollList = rollList.filter((item: any) => item !== null);
 
-    // roll滚动完成回调
+    // roll滚动完成回调局部函数回调
     const onRollComplete = () => {
       if (this.isAllRollsStopped()) {
         this.handleSwordAndStick().then(hasShowSwordAndStick => {
@@ -212,7 +210,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       const randomIndex = Math.floor(Math.random() * bowTempArr.length);
       const symbolNode = bowTempArr[randomIndex];
       const symbol = symbolNode.getComponent(Symbol);
-      symbol.initSymbol('4007', 'BOW');
+      symbol.initSymbol('4011', );
       bowTempArr.map((node) => {
         this.changeWildData.push({
           node,
@@ -236,17 +234,17 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     for (let [index, itemMap] of this.changeWildData.entries()) {
       // 元素之间添加1秒间隔（第一个除外）
-          
+      if (itemMap.hasShow) {
+        continue;
+      }
       // 根据类型播放不同动画
       if (itemMap.type === SymbolType.SWORD) {
-        if (itemMap.hasShow) return;
         await this.homeRollTool.showSwordHaloAnimation(
           itemMap.rollNode, 
           this.overLayNode
         );
         itemMap.hasShow = true;
       } else if (itemMap.type === SymbolType.BOW) {
-        if (itemMap.hasShow) return;
         await itemMap.node.getComponent(Symbol).changeToBowAnimation();
         itemMap.hasShow = true;
       }
@@ -298,7 +296,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      */
     let symbolAnimationData = await Promise.all(rollsScript.map(roll => roll.dealRemoveData()));
     console.log('初步处理消除数据', symbolAnimationData);
-
+    
     /**
      * symbol变为wild
      */
@@ -384,6 +382,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       await delay(app.manager.global.quikeMode ? 500 : 1000);
     }
 
+    this.changeWildData = [];
     /**
      * 结束本回合消除
      */
@@ -407,9 +406,13 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     if (this.hasNextRound()) {
       // 更新到下一个回合
       this.updateNextRound();
-    
-      // 继续消除
-      this.startRemoveSymbol();
+      console.log('========开启下一轮的数据========', this.roundIndex);
+      // 处理当前回合是否需要展示剑和棒子的动画
+      this.handleSwordAndStick().then(hasShowSwordAndStick => {
+        this.scheduleOnce(() => {
+          this.startRemoveSymbol();
+        }, hasShowSwordAndStick ? 1.5 : 0.1);
+      });
     } else {
       /** 
        * 结束游戏
