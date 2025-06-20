@@ -11,7 +11,7 @@ export default class App implements IModel<App> {
     APP_SECRET =
         'MIIEowIBAAKCAQEAmP8M8b1C12VA9hB3iIHjvQYnda1QovLp+zKTbY2WRRAIGPfT';
 
-    GAME_ID = 'zhumeng004';
+    GAME_ID = 'zhumeng006';
 
     DREAMCRAFT = 'dreamcraft';
 

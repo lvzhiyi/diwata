@@ -26,8 +26,6 @@ declare interface BetResultDetail {
   allWheelRewardSubType: RewardSubType;
   /** 中奖结果列表 */
   resultList: BetResultItem[];
-  /** 奖池中奖id */
-  jackpotRewardGameRecordId: string;
 }
 
 /**

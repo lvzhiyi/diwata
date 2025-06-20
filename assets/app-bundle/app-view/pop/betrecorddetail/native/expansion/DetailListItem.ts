@@ -103,11 +103,6 @@ export class DetailListItem extends Component {
 
             _itemCard.getComponent(UITransform).width = this.getElementW(element);
             _col.addChild(_itemCard);
-
-            // 如果元素是4007，则不显示,外面用superWildNode显示
-            if(element.name === '4007') {
-              superWildCol = i;
-            }
           }
         }
 

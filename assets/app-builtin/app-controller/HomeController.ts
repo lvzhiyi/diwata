@@ -7,7 +7,7 @@ import GameProcessCtrl, { GameState } from '../../common/script/extra/GameProces
 import { sys } from 'cc';
 
 // TODO 测试用
-const useMock = true;
+const useMock = false;
 
 export class HomeController extends BaseController<
   HomeController,
@@ -137,144 +137,114 @@ export class HomeController extends BaseController<
       };
 
       this.betResult = {
-        betRecordId: '1930113666783715328',
-        gameId: 'zhumeng004',
+        betRecordId: '1935893957962104832',
+        gameId: 'zhumeng006',
         betType: 'NORMAL_BET',
         betSubType: 'NORMAL_BET',
-        credit: 59196538529380,
-        overallRewardAmount: 0,
-        totalPayoutAmount: 3747900,
+        credit: 5539873954205297582,
+        overallRewardAmount: 708000,
+        totalPayoutAmount: 708000,
         resultDetail: {
-          allWheelRewardSubType: 'none',
+          allWheelRewardSubType: 'sensational',
           resultList: [
             {
-              id: '1930113666783715329',
-              rewardType: 'NONE',
-              rewardSubType: 'none',
-              totalRewardAmount: 0,
-              totalRewardMultiple: null,
+              rewardType: 'MULTIPLE',
+              rewardSubType: 'sensational',
+              totalRewardAmount: 708000,
+              totalRewardMultiple: 1.0,
               wheel: [
                 [
-                  null,
-                  null,
-                  {
-                    symbolId: '1006',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1006',
-                    symbolType: 'NORMAL'
-                  },
-                  null,
-                  null,
-                  
+                  { symbolId: '1003' },
+                  { symbolId: '4011' },
+                  { symbolId: '4001' },
+                  { symbolId: '4011' },
+                  { symbolId: '4011' },
+                  { symbolId: '1006' }
                 ],
                 [
-                  {
-                    symbolId: '1004',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'SWORD'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'BOW'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'BOW'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1004',
-                    symbolType: 'NORMAL'
-                  },
+                  { symbolId: '1005' },
+                  { symbolId: '4011' },
+                  { symbolId: '4011' },
+                  { symbolId: '1004' },
+                  { symbolId: '4011' },
+                  { symbolId: '1009' }
                 ],
                 [
-                  {
-                    symbolId: '1007',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'SWORD'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1007',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1003',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1003',
-                    symbolType: 'NORMAL'
-                  }
-                ],
-                [
-                  {
-                    symbolId: '1005',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'SWORD'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'BOW'
-                  },
-                  {
-                    symbolId: '1005',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1003',
-                    symbolType: 'NORMAL'
-                  }
+                  { symbolId: '1001' },
+                  { symbolId: '1004' },
+                  { symbolId: '1009' },
+                  { symbolId: '1003' },
+                  { symbolId: '1003' },
+                  { symbolId: '1004' }
                 ],
                 [
                   null,
-                  {
-                    symbolId: '4001',
-                    symbolType: 'SWORD'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1005',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
+                  { symbolId: '4011' },
+                  { symbolId: '4011' },
+                  { symbolId: '1005' },
+                  { symbolId: '1008' },
                   null
                 ],
+                [
+                  null,
+                  null,
+                  { symbolId: '4011' },
+                  { symbolId: '4011' },
+                  null,
+                  null
+                ]
               ],
               rewardSymbolIndexSet: [
                 {
-                  rowIndex: 2,
+                  rowIndex: 4,
+                  columnIndex: 2
+                },
+                {
+                  rowIndex: 4,
+                  columnIndex: 3
+                },
+                {
+                  rowIndex: 3,
                   columnIndex: 1
                 },
                 {
+                  rowIndex: 3,
+                  columnIndex: 2
+                },
+                {
+                  rowIndex: 3,
+                  columnIndex: 3
+                },
+                {
                   rowIndex: 2,
+                  columnIndex: 0
+                },
+                {
+                  rowIndex: 2,
+                  columnIndex: 3
+                },
+                {
+                  rowIndex: 2,
+                  columnIndex: 4
+                },
+                {
+                  rowIndex: 1,
+                  columnIndex: 0
+                },
+                {
+                  rowIndex: 1,
+                  columnIndex: 1
+                },
+                {
+                  rowIndex: 1,
+                  columnIndex: 2
+                },
+                {
+                  rowIndex: 1,
+                  columnIndex: 4
+                },
+                {
+                  rowIndex: 0,
                   columnIndex: 0
                 },
                 {
@@ -282,167 +252,110 @@ export class HomeController extends BaseController<
                   columnIndex: 1
                 },
                 {
-                  rowIndex: 2,
+                  rowIndex: 0,
                   columnIndex: 2
+                },
+                {
+                  rowIndex: 0,
+                  columnIndex: 3
+                },
+                {
+                  rowIndex: 0,
+                  columnIndex: 4
                 }
               ],
-              rewardLineList: null,
-              freeWheelFlag: 0,
-              gameRecordIds: [
-                '1930113666783715330',
-                '1930113666787909637',
-                '1930113666792103937',
-                '1930113666792103943',
-                '1930113666792103946',
-                '1930113666796298241',
-                '1930113666796298242',
-                '1930113666796298243',
-                '1930113666796298244',
-                '1930113666796298249'
+              rewardLineList: [
+                {
+                  symbolId: '1005',
+                  multiple: 1.0,
+                  odds: 0.8,
+                  rewardLineType: 'FIVE',
+                  rewardLineSubType: 'COMMON',
+                  rewardLineCount: 72,
+                  rewardAmount: 288000,
+                  betAmount: 5000
+                },
+                {
+                  symbolId: '1003',
+                  multiple: 1.0,
+                  odds: 0.6,
+                  rewardLineType: 'FIVE',
+                  rewardLineSubType: 'COMMON',
+                  rewardLineCount: 108,
+                  rewardAmount: 324000,
+                  betAmount: 5000
+                },
+                {
+                  symbolId: '1001',
+                  multiple: 1.0,
+                  odds: 0.4,
+                  rewardLineType: 'FIVE',
+                  rewardLineSubType: 'COMMON',
+                  rewardLineCount: 48,
+                  rewardAmount: 96000,
+                  betAmount: 5000
+                }
               ],
-              accumulateReachMaxMultiple: false
+              freeWheelFlag: 0,
+              gameRecordIds: [],
+              accumulateReachMaxMultiple: false,
+              id: ''
             },
             {
-              id: '1930113666783715329',
               rewardType: 'NONE',
               rewardSubType: 'none',
               totalRewardAmount: 0,
-              totalRewardMultiple: null,
+              totalRewardMultiple: 1.0,
               wheel: [
                 [
-                  null,
-                  null,
-                  {
-                    symbolId: '1006',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1006',
-                    symbolType: 'NORMAL'
-                  },
-                  null,
-                  null,
-                  
+                  { symbolId: '1007' },
+                  { symbolId: '1005' },
+                  { symbolId: '1010' },
+                  { symbolId: '4010' },
+                  { symbolId: '1001' },
+                  { symbolId: '1006' }
                 ],
                 [
-                  {
-                    symbolId: '1004',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'SWORD'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'BOW'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'BOW'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1004',
-                    symbolType: 'NORMAL'
-                  },
+                  { symbolId: '1001' },
+                  { symbolId: '1007' },
+                  { symbolId: '1004' },
+                  { symbolId: '4010' },
+                  { symbolId: '1007' },
+                  { symbolId: '1009' }
                 ],
                 [
-                  {
-                    symbolId: '1007',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'SWORD'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1007',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1003',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1003',
-                    symbolType: 'NORMAL'
-                  }
-                ],
-                [
-                  {
-                    symbolId: '1005',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'SWORD'
-                  },
-                  {
-                    symbolId: '4001',
-                    symbolType: 'BOW'
-                  },
-                  {
-                    symbolId: '1005',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1003',
-                    symbolType: 'NORMAL'
-                  }
+                  { symbolId: '1003' },
+                  { symbolId: '1003' },
+                  { symbolId: '1001' },
+                  { symbolId: '4010' },
+                  { symbolId: '1002' },
+                  { symbolId: '1004' }
                 ],
                 [
                   null,
-                  {
-                    symbolId: '4001',
-                    symbolType: 'SWORD'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1005',
-                    symbolType: 'NORMAL'
-                  },
-                  {
-                    symbolId: '1001',
-                    symbolType: 'NORMAL'
-                  },
+                  { symbolId: '1004' },
+                  { symbolId: '1010' },
+                  { symbolId: '4010' },
+                  { symbolId: '1008' },
                   null
                 ],
+                [
+                  null,
+                  null,
+                  { symbolId: '1009' },
+                  { symbolId: '4010' },
+                  null,
+                  null
+                ]
               ],
               rewardSymbolIndexSet: null,
               rewardLineList: null,
               freeWheelFlag: 0,
-              gameRecordIds: [
-                '1930113666783715330',
-                '1930113666787909637',
-                '1930113666792103937',
-                '1930113666792103943',
-                '1930113666792103946',
-                '1930113666796298241',
-                '1930113666796298242',
-                '1930113666796298243',
-                '1930113666796298244',
-                '1930113666796298249'
-              ],
-              accumulateReachMaxMultiple: false
+              gameRecordIds: [],
+              accumulateReachMaxMultiple: false,
+              id: ''
             }
-            
           ],
-          jackpotRewardGameRecordId: null
         }
       };
       this.freeWheelFlag = 0;
