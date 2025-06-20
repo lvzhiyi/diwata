@@ -39,7 +39,7 @@ export class PopAutosetting extends BaseView {
     // 当前点击的金额按钮
     private amountButton: Node;
 
-    protected onLoad(): void {
+    protected onEnable(): void {
       this.SelectTotalSpins.on(Node.EventType.TOUCH_END, () => this.clickSelectNode('totalSpins', this.SelectTotalSpins), this);
       this.SelectSingleWin.on(Node.EventType.TOUCH_END, () => this.clickSelectNode('singleWin', this.SelectSingleWin), this);
       this.SelectBalanceLess.on(Node.EventType.TOUCH_END, () => this.clickSelectNode('balanceLess', this.SelectBalanceLess), this);
