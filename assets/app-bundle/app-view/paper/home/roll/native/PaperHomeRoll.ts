@@ -163,11 +163,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // roll滚动完成回调局部函数回调
     const onRollComplete = () => {
       if (this.isAllRollsStopped()) {
-        this.handleSwordAndStick().then(hasShowSwordAndStick => {
-          this.scheduleOnce(() => {
-            this.startRemoveSymbol();
-          }, hasShowSwordAndStick ? 1.5 : 0.1);
-        });
+        this.startRemoveSymbol();
       }
     };
 
@@ -280,8 +276,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         this.resultList[this.roundIndex].rewardSymbolIndexSet?.filter((item: any) => item.columnIndex === rollIndex) || []
       )
     ));
+    // 处理是否需要展示剑和棒子
+    await this.handleSwordAndStick();
 
-    // 调用同步等待函数
+    // 调用同步动画等待函数
     await this.playSequentialAnimations();
 
     if (this.changeWildData.length > 0) await delay(app.manager.global.quikeMode ? 500 : 1500);
@@ -408,11 +406,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       this.updateNextRound();
       console.log('========开启下一轮的数据========', this.roundIndex);
       // 处理当前回合是否需要展示剑和棒子的动画
-      this.handleSwordAndStick().then(hasShowSwordAndStick => {
-        this.scheduleOnce(() => {
-          this.startRemoveSymbol();
-        }, hasShowSwordAndStick ? 1.5 : 0.1);
-      });
+      this.startRemoveSymbol();
     } else {
       /** 
        * 结束游戏

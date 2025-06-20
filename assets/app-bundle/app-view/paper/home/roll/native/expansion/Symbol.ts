@@ -101,7 +101,7 @@ export class Symbol extends Component {
         this.wildAnimationNode.setWorldPosition(originalPos);
 
         // 播放wild动画，动画完成后删除动画，并在wildNode设置图片
-        await this.playWildAnimation(this.wildAnimationNode, 'bianhuan', this.iconNode, '4001');
+        await this.playWildAnimation(this.wildAnimationNode, 'bianhuan', this.iconNode, '5001');
 
         resolve();
       });
