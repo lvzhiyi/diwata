@@ -167,7 +167,7 @@ export class RouletteWheel extends Component {
     // 以底部中心为原点，弧形向上弯曲
     const x = Math.sin(radian) * this.ARC_RADIUS;
     // 整体向下移动100像素
-    const y = Math.cos(radian) * this.ARC_RADIUS - 200;
+    const y = Math.cos(radian) * this.ARC_RADIUS;
     
     item.setPosition(x, y, 0);
     
