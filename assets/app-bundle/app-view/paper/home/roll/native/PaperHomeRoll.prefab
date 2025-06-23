@@ -4432,7 +4432,7 @@
     "_top": 0,
     "_bottom": 0,
     "_horizontalCenter": 0,
-    "_verticalCenter": 300,
+    "_verticalCenter": 100,
     "_isAbsLeft": true,
     "_isAbsRight": true,
     "_isAbsTop": true,
@@ -4476,7 +4476,7 @@
     "value": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 261.769,
+      "y": 100,
       "z": 0
     }
   },
