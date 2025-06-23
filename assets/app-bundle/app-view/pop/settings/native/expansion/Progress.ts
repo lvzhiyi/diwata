@@ -18,7 +18,7 @@ export class Progress extends Component {
   }
 
   sub(event: Event, type: 'voice' | 'music') {
-    console.log(type, 'sub');
+    console.log(type, 'sub', app.manager.global.music);
 
     if (type === 'voice') {
       app.manager.global.setVoice(app.manager.global.voice - 25);

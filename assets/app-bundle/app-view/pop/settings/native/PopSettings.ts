@@ -36,7 +36,7 @@ export class PopSettings extends BaseView {
     @property(Node)
     private AutoSettingBtn: Node;
 
-    protected onLoad(): void {
+    protected onEnable(): void {
       this.initVoiceMusic();
 
       this.registerListener();
