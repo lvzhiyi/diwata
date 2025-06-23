@@ -239,6 +239,8 @@ export class GlobalManager extends BaseManager {
   public get voice() {
     if (sys.localStorage.getItem('voice')) {
       this._voice = parseInt(sys.localStorage.getItem('voice') || '100');
+    }else{
+      this._voice = 100;
     }
 
     return this._voice;
@@ -246,6 +248,7 @@ export class GlobalManager extends BaseManager {
 
   public setVoice(val: number) {
     if (val > 100 || val < 0) return;
+    console.log('setVoice', val); 
     this._voice = val;
     sys.localStorage.setItem('voice', val.toString());
     app.manager.event.emit('voiceChange', val);
@@ -254,6 +257,8 @@ export class GlobalManager extends BaseManager {
   public get music() {
     if (sys.localStorage.getItem('music')) {
       this._music = parseInt(sys.localStorage.getItem('music') || '100');
+    }else{
+      this._music = 100;
     }
 
     return this._music;

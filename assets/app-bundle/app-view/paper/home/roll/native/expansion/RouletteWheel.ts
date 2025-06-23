@@ -1,4 +1,5 @@
 import { _decorator, Component, Node, Label, tween, UITransform, view, instantiate, Prefab, Vec3, Sprite, Color, input, Input, EventTouch, math } from 'cc';
+import { app } from 'db://assets/app/app';
 
 const { ccclass, property } = _decorator;
 
@@ -39,10 +40,11 @@ export class RouletteWheel extends Component {
   private isTouching: boolean = false;
 
   protected onLoad(): void {
+    app.manager.event.on('multipleIndexChange', this.multipleIndexChange, this);
     this.initData();
     this.createItems();
     this.updateItemsPosition();
-    this.registerTouchEvents();
+    // this.registerTouchEvents();
     this.setupViewClipping();
   }
 
@@ -311,13 +313,49 @@ export class RouletteWheel extends Component {
    */
   public jumpToData(targetData: number): void {
     const targetIndex = this.dataList.findIndex(data => data === targetData);
-
-    if (targetIndex !== -1) {
-      const targetRotation = -targetIndex * this.DATA_ANGLE_STEP;
-      this.animateToRotation(targetRotation);
+    
+    if (targetIndex === -1) {
+      return;
     }
+
+    // 获取当前中心item的数据值
+    const currentData = this.getCurrentData();
+    const currentIndex = this.dataList.findIndex(data => data === currentData);
+    
+    if (currentIndex === -1) {
+      console.warn('无法获取当前数据');
+
+      return;
+    }
+
+    // 如果已经在目标位置，不需要旋转
+    if (targetData === currentData) {
+      return;
+    }
+
+    // 根据数值大小关系决定旋转方向
+    let rotationSteps: number;
+
+    if (targetData > currentData) {
+      // 目标值更大，逆时针旋转
+      rotationSteps = -(targetIndex - currentIndex);
+    } else {
+      // 目标值更小，顺时针旋转
+      rotationSteps = currentIndex - targetIndex;
+    }
+    
+    // 计算目标旋转角度
+    const targetRotation = this.currentRotation + (rotationSteps * this.DATA_ANGLE_STEP);
+    
+    console.log(`从${currentData}跳转到${targetData}，旋转步骤：${rotationSteps}（${rotationSteps > 0 ? '顺时针' : '逆时针'}）`);
+    
+    this.animateToRotation(targetRotation);
   }
     
+  public multipleIndexChange(index: number): void {
+    this.jumpToData(this.dataList[index]);
+  }
+
   update(deltaTime: number) {
     // 可以在这里添加其他更新逻辑
   }
