@@ -290,6 +290,18 @@ export class Roll extends Component {
      * 当前roll是否存在剑
      */
     currentRollHaveSword(): boolean {
+      // 如果当前实际展示的元素已经是wild，则不展示剑
+      const isAllWild = this.node.children.every(child => {
+        const symbol = child.getComponent(Symbol);
+        const symbolId = symbol.getSymbolId() || '';
+
+        return symbolId === SymbolType.WILD;
+      });
+
+      if (isAllWild) {
+        return false;
+      }
+
       return this.rollList.every(item => {
         return item.symbolId === SymbolType.SWORD || item.symbolId === SymbolType.OVERLAP;
       });
@@ -321,9 +333,10 @@ export class Roll extends Component {
       let showBowNode: Node[] = [];
       this.node.children.forEach((child, index) => {
         const symbol = child.getComponent(Symbol);
+        const symbolId = symbol.getSymbolId() || '';
 
         if(symbol.currentSymbolItem) {
-          if (symbol.currentSymbolItem.symbolId  === SymbolType.BOW) {
+          if (symbol.currentSymbolItem.symbolId  === SymbolType.BOW && symbolId !== SymbolType.WILD) {
             showBowNode.push(child);
           }
         }

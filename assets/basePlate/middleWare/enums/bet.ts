@@ -64,4 +64,6 @@ export  enum SymbolType {
   /** 重叠符号棒子和剑 */
   OVERLAP = '4001',
 
+  WILD = '5001'
+
 }

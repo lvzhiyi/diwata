@@ -145,154 +145,82 @@ export class HomeController extends BaseController<
         overallRewardAmount: 708000,
         totalPayoutAmount: 708000,
         resultDetail: {
-          allWheelRewardSubType: 'sensational',
+          allWheelRewardSubType: 'other',
           resultList: [
             {
-              rewardType: 'MULTIPLE',
-              rewardSubType: 'sensational',
-              totalRewardAmount: 708000,
+              rewardType: 'SINGLE',
+              rewardSubType: 'other',
+              totalRewardAmount: 1000,
               totalRewardMultiple: 1.0,
               wheel: [
                 [
-                  { symbolId: '1003' },
-                  { symbolId: '4011' },
-                  { symbolId: '4001' },
-                  { symbolId: '4011' },
-                  { symbolId: '4011' },
-                  { symbolId: '1006' }
+                  { symbolId: '1004' },
+                  { symbolId: '1001' },
+                  { symbolId: '1006' },
+                  { symbolId: '1006' },
+                  { symbolId: '4010' },
+                  { symbolId: '1005' }
                 ],
                 [
                   { symbolId: '1005' },
-                  { symbolId: '4011' },
-                  { symbolId: '4011' },
-                  { symbolId: '1004' },
-                  { symbolId: '4011' },
-                  { symbolId: '1009' }
-                ],
-                [
-                  { symbolId: '1001' },
-                  { symbolId: '1004' },
                   { symbolId: '1009' },
-                  { symbolId: '1003' },
-                  { symbolId: '1003' },
+                  { symbolId: '1006' },
+                  { symbolId: '1004' },
+                  { symbolId: '4010' },
                   { symbolId: '1004' }
                 ],
                 [
+                  { symbolId: '1001' },
+                  { symbolId: '1001' },
+                  { symbolId: '1009' },
+                  { symbolId: '1003' },
+                  { symbolId: '4010' },
+                  { symbolId: '1002' }
+                ],
+                [
                   null,
-                  { symbolId: '4011' },
-                  { symbolId: '4011' },
+                  { symbolId: '1010' },
                   { symbolId: '1005' },
-                  { symbolId: '1008' },
+                  { symbolId: '1003' },
+                  { symbolId: '4010' },
                   null
                 ],
                 [
                   null,
                   null,
-                  { symbolId: '4011' },
-                  { symbolId: '4011' },
+                  { symbolId: '1001' },
+                  { symbolId: '1004' },
                   null,
                   null
                 ]
               ],
               rewardSymbolIndexSet: [
                 {
+                  rowIndex: 2,
+                  columnIndex: 1
+                },
+                {
                   rowIndex: 4,
                   columnIndex: 2
                 },
                 {
-                  rowIndex: 4,
-                  columnIndex: 3
-                },
-                {
-                  rowIndex: 3,
-                  columnIndex: 1
-                },
-                {
-                  rowIndex: 3,
-                  columnIndex: 2
-                },
-                {
-                  rowIndex: 3,
-                  columnIndex: 3
-                },
-                {
-                  rowIndex: 2,
-                  columnIndex: 0
-                },
-                {
-                  rowIndex: 2,
-                  columnIndex: 3
-                },
-                {
-                  rowIndex: 2,
-                  columnIndex: 4
-                },
-                {
-                  rowIndex: 1,
-                  columnIndex: 0
-                },
-                {
-                  rowIndex: 1,
-                  columnIndex: 1
-                },
-                {
-                  rowIndex: 1,
-                  columnIndex: 2
-                },
-                {
-                  rowIndex: 1,
-                  columnIndex: 4
-                },
-                {
-                  rowIndex: 0,
-                  columnIndex: 0
-                },
-                {
                   rowIndex: 0,
                   columnIndex: 1
                 },
                 {
-                  rowIndex: 0,
-                  columnIndex: 2
-                },
-                {
-                  rowIndex: 0,
-                  columnIndex: 3
-                },
-                {
-                  rowIndex: 0,
-                  columnIndex: 4
+                  rowIndex: 2,
+                  columnIndex: 0
                 }
               ],
               rewardLineList: [
                 {
-                  symbolId: '1005',
-                  multiple: 1.0,
-                  odds: 0.8,
-                  rewardLineType: 'FIVE',
-                  rewardLineSubType: 'COMMON',
-                  rewardLineCount: 72,
-                  rewardAmount: 288000,
-                  betAmount: 5000
-                },
-                {
-                  symbolId: '1003',
-                  multiple: 1.0,
-                  odds: 0.6,
-                  rewardLineType: 'FIVE',
-                  rewardLineSubType: 'COMMON',
-                  rewardLineCount: 108,
-                  rewardAmount: 324000,
-                  betAmount: 5000
-                },
-                {
                   symbolId: '1001',
                   multiple: 1.0,
-                  odds: 0.4,
-                  rewardLineType: 'FIVE',
+                  odds: 0.1,
+                  rewardLineType: 'THREE',
                   rewardLineSubType: 'COMMON',
-                  rewardLineCount: 48,
-                  rewardAmount: 96000,
+                  rewardLineCount: 2,
+                  rewardAmount: 1000,
                   betAmount: 5000
                 }
               ],
@@ -308,42 +236,42 @@ export class HomeController extends BaseController<
               totalRewardMultiple: 1.0,
               wheel: [
                 [
-                  { symbolId: '1007' },
-                  { symbolId: '1005' },
+                  { symbolId: '1002' },
                   { symbolId: '1010' },
+                  { symbolId: '1009' },
+                  { symbolId: '1006' },
                   { symbolId: '4010' },
-                  { symbolId: '1001' },
-                  { symbolId: '1006' }
+                  { symbolId: '1005' }
                 ],
                 [
-                  { symbolId: '1001' },
-                  { symbolId: '1007' },
+                  { symbolId: '1004' },
+                  { symbolId: '1010' },
+                  { symbolId: '1006' },
                   { symbolId: '1004' },
                   { symbolId: '4010' },
-                  { symbolId: '1007' },
-                  { symbolId: '1009' }
-                ],
-                [
-                  { symbolId: '1003' },
-                  { symbolId: '1003' },
-                  { symbolId: '1001' },
-                  { symbolId: '4010' },
-                  { symbolId: '1002' },
                   { symbolId: '1004' }
                 ],
                 [
-                  null,
-                  { symbolId: '1004' },
-                  { symbolId: '1010' },
+                  { symbolId: '1005' },
+                  { symbolId: '1009' },
+                  { symbolId: '1006' },
+                  { symbolId: '1003' },
                   { symbolId: '4010' },
-                  { symbolId: '1008' },
+                  { symbolId: '1002' }
+                ],
+                [
+                  null,
+                  { symbolId: '1010' },
+                  { symbolId: '1009' },
+                  { symbolId: '1003' },
+                  { symbolId: '4010' },
                   null
                 ],
                 [
                   null,
                   null,
-                  { symbolId: '1009' },
-                  { symbolId: '4010' },
+                  { symbolId: '1005' },
+                  { symbolId: '1004' },
                   null,
                   null
                 ]
@@ -355,8 +283,8 @@ export class HomeController extends BaseController<
               accumulateReachMaxMultiple: false,
               id: ''
             }
-          ],
-        }
+          ]
+        },
       };
       this.freeWheelFlag = 0;
       app.manager.global.setCreditCount(
