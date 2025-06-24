@@ -53,25 +53,24 @@ export interface IJackpotReward {
 }
 
 /**
- * 将服务端返回的4行5列的数据结构，转换成5列4行的数据结构
+ * 将服务端返回的5行6列的数据结构，转换成6列5行的数据结构
  * @param rowList
  */
 export const transformRowListToColumnList = (rowList: SymbolItem[][]) => {
-  const transposedBottom: SymbolItem[][] = Array.from({ length: 5 }, () => Array(4).fill(null));
+  const transposedBottom: SymbolItem[][] = Array.from({ length: 6 }, () => Array(5).fill(null));
   
   // 先检查是否有4006的wild进行每一行重新排列
   for (let row = 0; row < rowList.length; row++) {
-    const rowArray = rowList[row];
+    const rowArray = rowList?.[row];
     rowList[row] = adjustWildOrder(rowArray);
   }
 
-  // 遍历 4 行
-  for (let row = 0; row < rowList.length; row++) {
-    // 遍历 5 列
-    for (let col = 0; col < rowList[row].length; col++) {
-      // 从第二行开始，每一行都遍历6列
+  // 遍历 5 行
+  for (let row = 0; row < rowList?.length; row++) {
+    // 遍历 6 列
+    for (let col = 0; col < rowList?.[row]?.length; col++) {
       // 服务端返回的是从上到下，从左到右的顺序，而实际需要的是从左到右，从下到上的顺序，所以需要进行转换一下
-      const item = rowList[row][col];
+      const item = rowList?.[row]?.[col];
       transposedBottom[col][row] = item;
     }
   }

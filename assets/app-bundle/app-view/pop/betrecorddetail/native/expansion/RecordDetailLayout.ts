@@ -131,13 +131,13 @@ export class RecordDetailLayout extends Component {
       const otherList = element.wheel;
 
       const _otherList = transformRowListToColumnList(otherList);
-      const imgSprites = _otherList.map(item => {
+      const imgSprites = _otherList.map((item: any) => {
         return item.map((spinItem: any) => {
           if (spinItem) {
             return this.mapIdToSpriteFrame(spinItem.symbolId,);
           }
 
-          return this.emptyCard;
+          return null;
         });
       });
       // this.insertItem(element, maxRewardLineCount, imgSprites, this.cards, _otherList);
@@ -218,6 +218,7 @@ export class RecordDetailLayout extends Component {
   */
   public onBackClick() {
     // EventTrackManager.inst.trackExitBetRecordDetail(this.id);
+    console.log('onBackClick', this.id);
     app.manager.ui.hide<PopBetrecorddetail>({ name: 'PopBetrecorddetail' });
   }
 }
