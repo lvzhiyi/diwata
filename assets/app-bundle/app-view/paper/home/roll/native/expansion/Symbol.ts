@@ -1,6 +1,7 @@
 import { _decorator, Component, Node, sp, Sprite, SpriteFrame, tween, UITransform, Vec2, Vec3 } from 'cc';
 import { app } from 'db://assets/app/app';
 import { loadResource } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
+import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 
@@ -88,7 +89,12 @@ export class Symbol extends Component {
     /**
      * 把普通元素变成wild
      */
-    changeToSingleWild() {
+    changeToSingleWild(): Promise<void> {
+      // 如果当前symbol已经是wild，则不进行操作
+      if(this.getSymbolId() === SymbolType.WILD) {
+        return Promise.resolve();
+      }
+
       return new Promise<void>(async (resolve) => {
         // 获取当前symbol的位置
         const originalPos = this.node.getWorldPosition().clone();
