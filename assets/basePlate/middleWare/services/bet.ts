@@ -71,6 +71,12 @@ export const transformRowListToColumnList = (rowList: SymbolItem[][]) => {
     for (let col = 0; col < rowList?.[row]?.length; col++) {
       // 服务端返回的是从上到下，从左到右的顺序，而实际需要的是从左到右，从下到上的顺序，所以需要进行转换一下
       const item = rowList?.[row]?.[col];
+      
+      // 将4001、4011、4010替换为5001
+      if (item && (item.symbolId === '4001' || item.symbolId === '4011' || item.symbolId === '4010')) {
+        item.symbolId = '5001';
+      }
+      
       transposedBottom[col][row] = item;
     }
   }
