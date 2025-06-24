@@ -50,8 +50,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   // 总中奖金额
   private totalRewardAmount: number = 0;
 
-  // 需要执行的wild变化的数据,node：棒子的节点，type：类型，rollNode：滚轴节点，hasShow：是否展示过动画
-  private changeWildData: {node: Node, type: SymbolType, rollNode?: Node, hasShow?: boolean}[] = [];
+  // 需要执行的wild变化的数据,node：棒子的节点，type：类型，rollNode：滚轴节点，hasShow：是否展示过动画,RollIndex：滚轴索引
+  private changeWildData: {node: Node, type: SymbolType, rollNode?: Node, hasShow?: boolean, rollIndex?: number}[] = [];
 
   // 动画管理工具类
   private homeRollTool: HomeRollTool = null;
@@ -188,7 +188,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
           node,
           type: SymbolType.SWORD,
           rollNode: this.Rolls[index],
-          hasShow: false
+          hasShow: false,
+          rollIndex: index
         });
       }
     });
@@ -196,7 +197,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     let bowTempArr :Node[] = [];
     hasShowBowNode.map((nodeArr:[], index) => {
       if (nodeArr.length > 0) {
-        bowTempArr.push(...nodeArr);
+        nodeArr.map((node) => {
+          this.changeWildData.push({
+            node,
+            type: SymbolType.BOW,
+            hasShow: false,
+            rollIndex: index
+          });
+          bowTempArr.push(node);
+        });
       }
     });
 
@@ -207,13 +216,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       const symbolNode = bowTempArr[randomIndex];
       const symbol = symbolNode.getComponent(Symbol);
       symbol.initSymbol('4011', );
-      bowTempArr.map((node) => {
-        this.changeWildData.push({
-          node,
-          type: SymbolType.BOW,
-          hasShow: false
-        });
-      });
     }
 
     console.log('changeWildData-数据', this.changeWildData);
@@ -226,7 +228,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     */
    
   public async playSequentialAnimations(): Promise<void> {
-    if (this.changeWildData.length === 0) return Promise.resolve();
+    if (this.changeWildData.length === 0 || app.manager.global.quikeMode) return Promise.resolve();
+    // 先根据rollIndex排序
+    this.changeWildData.sort((a, b) => a.rollIndex - b.rollIndex);
 
     for (let [index, itemMap] of this.changeWildData.entries()) {
       // 元素之间添加1秒间隔（第一个除外）
