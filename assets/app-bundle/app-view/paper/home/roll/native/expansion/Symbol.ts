@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, sp, Sprite, SpriteFrame, tween, UITransform, Vec2, Vec3 } from 'cc';
+import { _decorator, Component, Material, Node, sp, Sprite, SpriteFrame, tween, UITransform, Vec2, Vec3 } from 'cc';
 import { app } from 'db://assets/app/app';
 import { loadResource } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
@@ -17,6 +17,9 @@ export class Symbol extends Component {
     @property({ type: [SpriteFrame], tooltip: 'symbol icon' })
     private symbolIcons: SpriteFrame[] = [];
 
+    @property({ type: [SpriteFrame], tooltip: 'symbol icon' })
+    private symbolBlurIcons: SpriteFrame[] = [];
+
     @property({ type: SpriteFrame, tooltip: 'gold side icon' })
     private goldSideIcon: SpriteFrame = null;
 
@@ -24,6 +27,8 @@ export class Symbol extends Component {
     private scatterAddOneSpriteFrame: SpriteFrame = null;
 
     private mapSymbols: Map<string, SpriteFrame> = new Map();
+
+    private mapBlurSymbols: Map<string, SpriteFrame> = new Map();
 
     private parentNode: Node;
 
@@ -51,6 +56,10 @@ export class Symbol extends Component {
       this.symbolIcons.forEach((spriteFrame) => {
         this.mapSymbols.set(spriteFrame.name, spriteFrame);
       });
+
+      this.symbolBlurIcons.forEach((spriteFrame) => {
+        this.mapBlurSymbols.set(spriteFrame.name, spriteFrame);
+      });
     }
 
     /// 赋值数据对象 , fromServer 是否从服务器获取数据
@@ -74,6 +83,18 @@ export class Symbol extends Component {
       } else {
         this.iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(`${symbolId}`);
       }
+    }
+
+    initBlurSymbol(symbolId: string, symbolType: SymbolTypeEnum = 'NORMAL') {
+      if (this.mapBlurSymbols.size === 0) {
+        this.initSprites();
+      }
+
+      this.iconNode.getComponent(Sprite).spriteFrame = this.mapBlurSymbols.get(`${symbolId}`);
+    }
+
+    getIconNode() {
+      return this.iconNode;
     }
 
     getSymbolId() {
@@ -132,6 +153,40 @@ export class Symbol extends Component {
         await this.playBowExplodeAnimation(this.wildAnimationNode, 'bz');
         resolve(true);
       });
+    }
+
+    /**
+     * 在滚动开始时为所有符号添加模糊效果
+     */
+    private addBlurToAllSymbols(node: Node): void {
+      const sprite = node.getComponent(Sprite);
+
+      if (sprite) {
+        // 创建模糊材质
+        const blurMaterial = new Material();
+        blurMaterial.initialize({
+          // 使用内置模糊效果
+          effectName: 'builtin-blur', 
+          // 模糊半径
+          defines: { BLUR_RADIUS: 5.0, }
+        });
+        // 设置模糊材质
+        sprite.customMaterial =  blurMaterial;
+      }
+    }
+
+    /**
+     * 停止滚动时移除所有符号的模糊效果
+     */
+    private removeBlurFromAllSymbols(node: Node): void {
+      const sprite = node.getComponent(Sprite);
+
+      if (sprite.customMaterial) {
+        // 恢复原有状态和材质
+        // 移除材质
+        sprite.customMaterial.destroy();
+        sprite.customMaterial = null;
+      }
     }
 
     /**

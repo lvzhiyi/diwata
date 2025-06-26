@@ -284,7 +284,11 @@ export class AppInit extends BaseAppInit {
    * 配置活动系统入口的信息
   */
   private async configureActivityEntry() {
-    await serverHookManager.configureActivityEntry();
+    // IGO不初始化成就系统
+    if (app.store.user.isInitActivityModule) {
+      // 配置活动系统的入口配置信息
+      await serverHookManager.configureActivityEntry();
+    }
   }
 
   /**

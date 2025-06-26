@@ -11,7 +11,7 @@ export class BackgroundMask extends Component {
 
   start() {
     screen.on('window-resize', this.onWindowResize, this);
-    // this.adjustBlurSize();
+    this.adjustBlurSize();
   }
 
   onWindowResize() {
@@ -49,6 +49,8 @@ export class BackgroundMask extends Component {
     const material = sprite.customMaterial;
 
     if (!material) {
+      console.log('material is null');
+
       return;
     }
 
