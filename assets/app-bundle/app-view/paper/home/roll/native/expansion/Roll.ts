@@ -126,11 +126,15 @@ export class Roll extends Component {
     startRollingAnimation() {
       const parentNode = this.node;
 
+      // 先向上移动20像素
+      const initialMove = tween(parentNode)
+        .by(0.1, { position: new Vec3(0, 20, 0) }, { easing: 'quartOut' });
+
       const start = tween(parentNode)
-        .by(0.15, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quartIn' })
+        .by(0.15, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'linear' })
         .call(() => this.updateNode());
       const going = tween(parentNode)
-        .by(0.06, { position: new Vec3(0, -this.itemHeight, 0) })
+        .by(0.03, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintIn' })
         .call(() => {
           this.updateNode();
 
@@ -141,24 +145,7 @@ export class Roll extends Component {
         });
 
       this.rollTween = tween(parentNode);
-      this.rollTween.then(start).repeatForever(going).start();
-    }
-
-    /**
-     * 最外层小wild跟随滚动
-     */
-    wildFollowRolling() {
-      this.node.children.forEach(child => {
-        const wildNode = child.getComponent(Symbol)?.getWildNode();
-
-        if (wildNode) {
-          const start = tween(wildNode)
-            .by(0.25, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quartIn' });
-          const going = tween(wildNode)
-            .by(0.05, { position: new Vec3(0, -this.itemHeight, 0) });
-          tween(wildNode).then(start).repeatForever(going).start();
-        }
-      });
+      this.rollTween.then(initialMove).then(start).repeatForever(going).start();
     }
 
     /**
@@ -182,12 +169,15 @@ export class Roll extends Component {
       Tween.stopAllByTarget(parentNode);
       // 反转结果symbols，需要从下往上添加symbol
       const reverseReslutSymbols = reslutSymbols?.reverse();
-
+    
+      // 先向下移动20像素
+      const initialMove = tween(parentNode)
+        .by(0.1, { position: new Vec3(0, -20, 0) }, { easing: 'quartIn' });
       const going = tween(parentNode)
-        .by(0.05, { position: new Vec3(0, -this.itemHeight, 0) })
+        .by(0.06, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintOut' })
         .call(() => this.updateNode(reverseReslutSymbols));
       const end = tween(parentNode)
-        .by(0.25, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'bounceOut' })
+        .by(0.35, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintOut' })
         .call(() => { 
           this.updateNode(); 
           this.isRolling = false;
@@ -200,7 +190,7 @@ export class Roll extends Component {
         });
 
       this.rollTween = tween(parentNode);
-      this.rollTween.repeat(reverseReslutSymbols.length, going).then(end).start();
+      this.rollTween.then(initialMove).repeat(reverseReslutSymbols.length, going).then(end).start();
     }
 
     /**

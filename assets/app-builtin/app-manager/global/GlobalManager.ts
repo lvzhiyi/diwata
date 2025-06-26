@@ -57,6 +57,9 @@ export class GlobalManager extends BaseManager {
   // 投注金额
   private _betCount: number = 2;
 
+  // 临时记录的bet
+  private _tempBetCount: number = 0;
+
   // 购买次数
   private _quantity: number = 0;
 
@@ -168,6 +171,14 @@ export class GlobalManager extends BaseManager {
     sys.localStorage.setItem('betCount_' + this.playerId, val.toString());
     this._betCount = val;
     app.manager.event.emit('betCountChange', val);
+  }
+
+  public get tempBetCount() {
+    return this._tempBetCount;
+  }
+
+  public setTempBetCount(val: number) {
+    this._tempBetCount = val;
   }
 
   public get quantity() {
