@@ -1,4 +1,4 @@
-import { _decorator, CCInteger, Component, instantiate, Node, NodePool, Prefab, sp, Tween, tween, UITransform, Vec3 } from 'cc';
+import { _decorator, CCInteger, Component, instantiate, Material, Node, NodePool, Prefab, sp, Sprite, Tween, tween, UITransform, Vec3 } from 'cc';
 import { Symbol, SYMBOL_WILD_IDS } from './Symbol';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
@@ -6,7 +6,7 @@ import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate
 
 const { ccclass, property } = _decorator;
 
-const SYMBOL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '3001'];
+const SYMBOL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010', '3001'];
 
 @ccclass('Roll')
 export class Roll extends Component {
@@ -127,10 +127,10 @@ export class Roll extends Component {
       const parentNode = this.node;
 
       const start = tween(parentNode)
-        .by(0.25, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quartIn' })
+        .by(0.15, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quartIn' })
         .call(() => this.updateNode());
       const going = tween(parentNode)
-        .by(0.05, { position: new Vec3(0, -this.itemHeight, 0) })
+        .by(0.06, { position: new Vec3(0, -this.itemHeight, 0) })
         .call(() => {
           this.updateNode();
 
@@ -208,7 +208,7 @@ export class Roll extends Component {
      * @param symbolId 符号ID
      * @returns 符号节点
      */
-    private createSymbol(symbolId: string, symbolType: SymbolTypeEnum = 'NORMAL', fromServer: boolean = false) {
+    private createSymbol(symbolId: string, symbolType: SymbolTypeEnum = 'NORMAL', fromServer: boolean = false, isBlur: boolean = false) {
       let symbol;
 
       if (this.nodePool.size() > 0) {
@@ -217,7 +217,11 @@ export class Roll extends Component {
         symbol = instantiate(this.symbolPrefab);
       }
 
-      symbol.getComponent(Symbol).initSymbol(symbolId, symbolType, fromServer);
+      if(isBlur) {
+        symbol.getComponent(Symbol).initBlurSymbol(symbolId, symbolType);
+      } else {
+        symbol.getComponent(Symbol).initSymbol(symbolId, symbolType, fromServer);
+      }
 
       return symbol;
     }
@@ -251,10 +255,10 @@ export class Roll extends Component {
       this.node.removeChild(lastNode);
 
       let  resultSymbol =   resultSymbols?.shift();
-
+      
       // 如果resultSymbols不为空，则创建symbolId，否则随机一个symbolId
-      let SymbolNode = this.createSymbol(this.randomSymbolId(),);
-
+      let SymbolNode = this.createSymbol(this.randomSymbolId(), 'NORMAL', false, resultSymbols?.length > 0 ? false : true);
+     
       if (children.length > 0) { 
         const firstChildPos = children[0].position.clone();
           

@@ -282,12 +282,6 @@ class ServerHookManager {
     * 配置活动系统入口的信息
    */
   public async configureActivityEntry() {
-    GlobalMgr.instance.showActivity = false;
-
-    if(GlobalMgr.instance.showActivity === false) {
-      return;
-    }
-
     const env = getGameEnv();
     const wenv = getGameEnv();
     let hostUrl = getApiUrl(env as Environment);
@@ -311,7 +305,7 @@ class ServerHookManager {
     GlobalMgr.instance.playerName = app.manager.global.playerName;
     GlobalMgr.instance.userLevel = app.manager.global.getUserInfo().vipLevel;
     await PackageFacade.instance.init({
-      activityIDs: [1, 2, 3, 4, 5, 6],
+      activityIDs: [1, 2, 3, 4, 5, 6, 7],
       httpHeadUrl: hostUrl,
       token: token,
       gameID: GlobalMgr.instance.gameId,
@@ -328,6 +322,12 @@ class ServerHookManager {
         vipLevel: GlobalMgr.instance.userLevel,
         uid: GlobalMgr.instance.playerId,
       },
+      igoBaseParam: {
+        accessToken: app.store.user.userParams.accessToken,
+        channelId: app.store.user.userParams.channelId,
+        pId: app.store.user.userParams.pId,
+        playerName: GlobalMgr.instance.playerName,
+      }
     });
     console.time('preloadEntry');
     await PackageFacade.instance.preloadEntry();
