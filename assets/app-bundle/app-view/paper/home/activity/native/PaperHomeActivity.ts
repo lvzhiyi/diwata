@@ -9,10 +9,11 @@ import { ActivityDataMgr } from 'db://assets/common/script/data/ActivityDataMgr'
 import { serverHookManager } from 'db://assets/basePlate/middleWare/serverManager/ServerHookManager';
 import { getUserCredit } from 'db://assets/basePlate/middleWare/services/user';
 import { HTTP_STATUS_CODES } from 'db://assets/common/script/extra/Request';
+import { HomeController } from 'db://assets/app-builtin/app-controller/HomeController';
 
 const { ccclass, property } = _decorator;
 @ccclass('PaperHomeActivity')
-export class PaperHomeActivity extends BaseView {
+export class PaperHomeActivity extends BaseView.BindController(HomeController) {
     @property({ type: Node, tooltip: 'ActivityEntry' })
     private activityEntry: Node = null;
 
@@ -23,7 +24,7 @@ export class PaperHomeActivity extends BaseView {
     onShow(params: any) {
       if (app.store.user.isInitActivityModule) {
         // 监听是否点击了星卡消费
-        ActivityEventMgr.instance.on(ActivityEventMgrEventsType.useGoods, this.starCardUse, this);
+        ActivityEventMgr.instance.on(ActivityEventMgrEventsType.useGoods, this.onUseStarCard, this);
         // 余额变动通知
         ActivityEventMgr.instance.on(
           ActivityEventMgrEventsType.otherMessage,
@@ -56,9 +57,34 @@ export class PaperHomeActivity extends BaseView {
       });
     }
 
-    /** *星卡消费 */
-    starCardUse(data: any) {
-      console.log('starCardUse', data);
+    /**
+   * 消费星卡
+   * @param starCardData 星卡的数据
+   */
+    public onUseStarCard(starCardData: any) {
+      if (starCardData == null) {
+        return;
+      }
+
+      const betAmout = starCardData.bet;
+  
+      if (betAmout > 0) {
+        // 临时记录修改投注金额变化
+        let tempBetCount = app.manager.global.betCount;
+        app.manager.global.setTempBetCount(tempBetCount);
+        app.manager.global.setBetCount(betAmout);
+        this.betCountChange(betAmout);
+      }
+
+      // 发生一次购买免费轮
+      // this.controller.onUseStarCard(data);
+    }
+
+    /**
+   * 关闭免费轮结算弹窗
+   */
+    public closeSettlementDialog() {
+      app.controller.slots.closeFreeSpinSettlementDialog();
     }
 
     /** 更新余额的通知 */
@@ -162,7 +188,7 @@ export class PaperHomeActivity extends BaseView {
     }
 
     /**
-   * 投注金额变化处理
+   * 投注金额变化UI处理
    * @param val 新的投注金额
    */
     private betCountChange(val: number) {
