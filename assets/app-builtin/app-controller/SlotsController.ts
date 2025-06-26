@@ -74,6 +74,13 @@ export class SlotsController extends BaseController<
 
     app.controller.home.getBetResult(app.manager.global.betCount, BetTypes.buy, BetSubTypes.buySpinNormal);
   }
+
+  /**
+   * 关闭免费轮结算弹窗
+   */
+  public closeFreeSpinSettlementDialog() {
+    app.manager.ui.hide({ name: 'PopFreeSpinResult' });
+  }
   
   /**
    * 免费轮投注

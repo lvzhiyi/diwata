@@ -1,4 +1,4 @@
-import { _decorator, CCInteger, Component, instantiate, Node, NodePool, Prefab, sp, Tween, tween, UITransform, Vec3 } from 'cc';
+import { _decorator, CCInteger, Component, instantiate, Material, Node, NodePool, Prefab, sp, Sprite, Tween, tween, UITransform, Vec3 } from 'cc';
 import { Symbol, SYMBOL_WILD_IDS } from './Symbol';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
@@ -6,7 +6,7 @@ import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate
 
 const { ccclass, property } = _decorator;
 
-const SYMBOL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '3001'];
+const SYMBOL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010', '3001'];
 
 @ccclass('Roll')
 export class Roll extends Component {
@@ -126,11 +126,15 @@ export class Roll extends Component {
     startRollingAnimation() {
       const parentNode = this.node;
 
+      // 先向上移动20像素
+      const initialMove = tween(parentNode)
+        .by(0.1, { position: new Vec3(0, 20, 0) }, { easing: 'quartOut' });
+
       const start = tween(parentNode)
-        .by(0.25, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quartIn' })
+        .by(0.15, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'linear' })
         .call(() => this.updateNode());
       const going = tween(parentNode)
-        .by(0.05, { position: new Vec3(0, -this.itemHeight, 0) })
+        .by(0.03, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintIn' })
         .call(() => {
           this.updateNode();
 
@@ -141,24 +145,7 @@ export class Roll extends Component {
         });
 
       this.rollTween = tween(parentNode);
-      this.rollTween.then(start).repeatForever(going).start();
-    }
-
-    /**
-     * 最外层小wild跟随滚动
-     */
-    wildFollowRolling() {
-      this.node.children.forEach(child => {
-        const wildNode = child.getComponent(Symbol)?.getWildNode();
-
-        if (wildNode) {
-          const start = tween(wildNode)
-            .by(0.25, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quartIn' });
-          const going = tween(wildNode)
-            .by(0.05, { position: new Vec3(0, -this.itemHeight, 0) });
-          tween(wildNode).then(start).repeatForever(going).start();
-        }
-      });
+      this.rollTween.then(initialMove).then(start).repeatForever(going).start();
     }
 
     /**
@@ -182,12 +169,15 @@ export class Roll extends Component {
       Tween.stopAllByTarget(parentNode);
       // 反转结果symbols，需要从下往上添加symbol
       const reverseReslutSymbols = reslutSymbols?.reverse();
-
+    
+      // 先向下移动20像素
+      const initialMove = tween(parentNode)
+        .by(0.1, { position: new Vec3(0, -20, 0) }, { easing: 'quartIn' });
       const going = tween(parentNode)
-        .by(0.05, { position: new Vec3(0, -this.itemHeight, 0) })
+        .by(0.06, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintOut' })
         .call(() => this.updateNode(reverseReslutSymbols));
       const end = tween(parentNode)
-        .by(0.25, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'bounceOut' })
+        .by(0.35, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintOut' })
         .call(() => { 
           this.updateNode(); 
           this.isRolling = false;
@@ -200,7 +190,7 @@ export class Roll extends Component {
         });
 
       this.rollTween = tween(parentNode);
-      this.rollTween.repeat(reverseReslutSymbols.length, going).then(end).start();
+      this.rollTween.then(initialMove).repeat(reverseReslutSymbols.length, going).then(end).start();
     }
 
     /**
@@ -208,7 +198,7 @@ export class Roll extends Component {
      * @param symbolId 符号ID
      * @returns 符号节点
      */
-    private createSymbol(symbolId: string, symbolType: SymbolTypeEnum = 'NORMAL', fromServer: boolean = false) {
+    private createSymbol(symbolId: string, symbolType: SymbolTypeEnum = 'NORMAL', fromServer: boolean = false, isBlur: boolean = false) {
       let symbol;
 
       if (this.nodePool.size() > 0) {
@@ -217,7 +207,11 @@ export class Roll extends Component {
         symbol = instantiate(this.symbolPrefab);
       }
 
-      symbol.getComponent(Symbol).initSymbol(symbolId, symbolType, fromServer);
+      if(isBlur) {
+        symbol.getComponent(Symbol).initBlurSymbol(symbolId, symbolType);
+      } else {
+        symbol.getComponent(Symbol).initSymbol(symbolId, symbolType, fromServer);
+      }
 
       return symbol;
     }
@@ -251,10 +245,10 @@ export class Roll extends Component {
       this.node.removeChild(lastNode);
 
       let  resultSymbol =   resultSymbols?.shift();
-
+      
       // 如果resultSymbols不为空，则创建symbolId，否则随机一个symbolId
-      let SymbolNode = this.createSymbol(this.randomSymbolId(),);
-
+      let SymbolNode = this.createSymbol(this.randomSymbolId(), 'NORMAL', false, resultSymbols?.length > 0 ? false : true);
+     
       if (children.length > 0) { 
         const firstChildPos = children[0].position.clone();
           

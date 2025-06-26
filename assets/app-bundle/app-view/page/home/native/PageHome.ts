@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { _decorator, sp, Sprite, SpriteFrame, Node, sys } from 'cc';
+import { _decorator, sp, Sprite, SpriteFrame, Node, sys, Material, RenderTexture, UITransform, Camera, Color, director, Canvas, Vec2 } from 'cc';
 import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { IMiniViewNames } from '../../../../../app-builtin/app-admin/executor';
 import { HomeController } from '../../../../../app-builtin/app-controller/HomeController';
@@ -26,6 +26,11 @@ export class PageHome extends BaseView.BindController(SlotsController) {
 
   private blurBgNode: Node | null = null;
 
+  /**
+     * 正在使用的 RenderTexture
+     */
+  protected renderTexture: RenderTexture = null;
+
   // 初始化的相关逻辑写在这
   onLoad() {
     this.onControllerEvent();
@@ -41,6 +46,10 @@ export class PageHome extends BaseView.BindController(SlotsController) {
       },
       this
     );
+  }
+
+  protected start(): void {
+   
   }
 
   // 监听所有事件
@@ -99,6 +108,14 @@ export class PageHome extends BaseView.BindController(SlotsController) {
 
   showPopBetamout() {
     app.manager.ui.show<PopBetamout>({ name: 'PopBetamout' });
+  }
+
+  /**
+     * 生命周期：销毁
+     */
+  protected onDestroy(): void {
+    // 销毁不用的 RenderTexture
+    this.renderTexture && this.renderTexture.destroy();
   }
 
   // 界面打开时的相关逻辑写在这(onShow可被多次调用-它与onHide不成对)
