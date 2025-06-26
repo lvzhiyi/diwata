@@ -124,8 +124,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 启动所有滚轴旋转
    */
   private startAllRolls() {
-    this.Rolls.forEach(roll => {
-      roll.getComponent(Roll).startRolling();
+    this.Rolls.forEach((roll: Node, rollIndex: number) => {
+      setTimeout(() => {
+        roll.getComponent(Roll).startRolling();
+      }, rollIndex * (app.manager.global.quikeMode ? 0 : 200));
     });
   }
 
