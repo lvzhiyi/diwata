@@ -56,6 +56,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   // 动画管理工具类
   private homeRollTool: HomeRollTool = null;
 
+  // 是否是免费轮
+  private isFreeSpin: boolean = false;
+
   onLoad() {
     this.homeRollTool = new HomeRollTool();
     this.initRoll();
@@ -80,7 +83,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
   initData() {
     this.roundIndex = 0;
-    app.manager.global.setMultipleIndex(0);
+    app.manager.global.setMultipleIndex(this.isFreeSpin ? 3 : 0);
 
     // 重置中奖线
     this.RewardLineBox.getComponent(RewardLineBox).reset();
@@ -570,7 +573,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 更新到下一个倍率
    */
   private updateNextMultiple() {
-    if (app.manager.global.multipleIndex >= 3) return;
+    if (app.manager.global.multipleIndex >= 10) return;
     app.manager.global.setMultipleIndex(app.manager.global.multipleIndex + 1);
   }
 
@@ -625,6 +628,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 2. 如果免费轮状态为false，则隐藏免费轮次数
    */
   private startFreeSpinChange(isFreeSpin: boolean) {
+    this.isFreeSpin = isFreeSpin;
     isFreeSpin ? this.showFreeSpinTimes() : this.hideFreeSpinTimes();
   }
 

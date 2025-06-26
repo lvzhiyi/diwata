@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Label, tween, UITransform, view, instantiate, Prefab, Vec3, Sprite, Color, input, Input, EventTouch, math } from 'cc';
+import { _decorator, Component, Node, Label, tween, UITransform, view, instantiate, Prefab, Vec3, Sprite, Color, input, Input, EventTouch, math, SpriteFrame } from 'cc';
 import { app } from 'db://assets/app/app';
 
 const { ccclass, property } = _decorator;
@@ -11,6 +11,12 @@ export class RouletteWheel extends Component {
   @property(Node)
   private ItemNode: Node = null;
 
+  @property(SpriteFrame)
+  private chooseSprite: SpriteFrame = null;
+
+  @property(SpriteFrame)
+  private unChooseSprite: SpriteFrame = null;
+
   // swiper相关属性
   private items: Node[] = [];
 
@@ -21,18 +27,17 @@ export class RouletteWheel extends Component {
   private isAnimating: boolean = false;
   
   // 弧形参数
-  // 弧形半径
-  private readonly ARC_RADIUS = 350;
-
-  // 总弧度135度
-  private readonly ARC_DEGREE = 135;
+  // 圆形半径 (直径580/2)
+  private readonly CIRCLE_RADIUS = 290;
 
   // 可视区域宽度
-  private readonly VIEW_WIDTH = 750;
+  private readonly VIEW_WIDTH = 530;
 
-  // 数据间的角度间隔（整个圆周分配给所有数据）
-  // 360度 / 11个数据项
-  private readonly DATA_ANGLE_STEP = 360 / 11;
+  // 根据弦长530和半径290计算弧度角度: 2*arcsin(530/(2*290)) ≈ 132度
+  private readonly ARC_ANGLE = 132;
+
+  // item间距设置为360度/11个item，实现无缝循环
+  private readonly ITEM_SPACING = 360 / 11;
   
   // 触摸相关
   private startTouchX: number = 0;
@@ -44,8 +49,7 @@ export class RouletteWheel extends Component {
     this.initData();
     this.createItems();
     this.updateItemsPosition();
-    // this.registerTouchEvents();
-    this.setupViewClipping();
+    this.registerTouchEvents();
   }
 
   /**
@@ -70,14 +74,15 @@ export class RouletteWheel extends Component {
       return;
     }
 
-    // 只创建和数据量相等的item数量
+    // 创建所有数据对应的item
     const totalItems = this.dataList.length;
     
     for (let i = 0; i < totalItems; i++) {
       const item = instantiate(this.ItemNode);
       item.setParent(this.wheelNode);
-      //   // 设置item的label文本
-      const label = item.getChildByName('text').getComponent(Label);
+      
+      // 设置item的label文本
+      const label = item.getChildByName('text')?.getComponent(Label);
 
       if (label) {
         label.string = `x${this.dataList[i]}`;
@@ -92,20 +97,6 @@ export class RouletteWheel extends Component {
   }
 
   /**
-   * 设置可视区域裁剪
-   */
-  private setupViewClipping(): void {
-    // 设置wheelNode的可视区域
-    const uiTransform = this.wheelNode.getComponent(UITransform);
-
-    if (uiTransform) {
-      uiTransform.width = this.VIEW_WIDTH;
-      // 设置合适的高度
-      uiTransform.height = 400; 
-    }
-  }
-
-  /**
    * 更新所有item的位置
    */
   private updateItemsPosition(): void {
@@ -114,9 +105,8 @@ export class RouletteWheel extends Component {
     for (let i = 0; i < totalItems; i++) {
       const item = this.items[i];
       
-      // 计算当前item的角度位置
-      // 每个数据项在圆周上均匀分布，加上当前旋转偏移
-      const itemAngle = (i * this.DATA_ANGLE_STEP) + this.currentRotation;
+      // 计算当前item的角度位置（基于整体旋转）
+      const itemAngle = (i * this.ITEM_SPACING) + this.currentRotation;
       
       // 检查item是否在可视范围内
       const normalizedAngle = this.normalizeAngle(itemAngle);
@@ -125,6 +115,7 @@ export class RouletteWheel extends Component {
       if (isVisible) {
         item.active = true;
         this.setItemPosition(item, normalizedAngle);
+        this.setItemSelectedState(item, normalizedAngle);
       } else {
         item.active = false;
       }
@@ -148,11 +139,9 @@ export class RouletteWheel extends Component {
    * 判断item是否在可视范围内
    */
   private isItemVisible(angle: number): boolean {
-    // 可视范围：-67.5度到+67.5度（总共135度）
-    // 67.5度
-    const halfArc = this.ARC_DEGREE / 2;
-    
-    // 判断是否在-67.5到+67.5度范围内
+    // 66度
+    const halfArc = this.ARC_ANGLE / 2;
+
     return Math.abs(angle) <= halfArc;
   }
 
@@ -163,31 +152,46 @@ export class RouletteWheel extends Component {
     // 将角度转换为弧度
     const radian = (angle * Math.PI) / 180;
     
-    // 计算上半圆弧形位置
-    // 以底部中心为原点，弧形向上弯曲
-    const x = Math.sin(radian) * this.ARC_RADIUS;
-    // 整体向下移动100像素
-    const y = Math.cos(radian) * this.ARC_RADIUS;
+    // 计算弧形位置 (上半圆弧)
+    const x = Math.sin(radian) * this.CIRCLE_RADIUS;
+    const y = Math.cos(radian) * this.CIRCLE_RADIUS;
     
     item.setPosition(x, y, 0);
     
-    // 根据距离中心的角度调整缩放和透明度
-    const distanceFromCenter = Math.abs(angle);
-    const maxDistance = this.ARC_DEGREE / 2;
-    const distanceRatio = Math.min(distanceFromCenter / maxDistance, 1);
-    
-    // 缩放：中心最大(1.0)，边缘最小(0.6)
-    const scale = 1.0 - (distanceRatio * 0.4);
-    item.setScale(scale, scale, 1);
-    
-    // 透明度：中心最亮(255)，边缘较暗(150)
-    const opacity = 255 - (distanceRatio * 105);
-    const sprite = item.getComponent(Sprite);
+    // 让item旋转垂直对应圆心的角度
+    // 在弧形上，每个点的切线方向就是垂直于半径的方向
+    item.setRotationFromEuler(0, 0, -angle);
+  }
 
-    if (sprite) {
-      const color = sprite.color.clone();
-      color.a = opacity;
-      sprite.color = color;
+  /**
+   * 设置item的选中状态
+   */
+  private setItemSelectedState(item: Node, angle: number): void {
+    // 安全地获取或添加Sprite组件
+    let sprite = item.getComponent(Sprite);
+
+    if (!sprite) {
+      sprite = item.addComponent(Sprite);
+    }
+
+    // 判断是否为中心item（角度接近0度）
+    // 容错范围
+    const isSelected = Math.abs(angle) <= 16;
+    
+    if (isSelected) {
+      // 选中状态，使用chooseSprite，保持原始大小
+      if (this.chooseSprite) {
+        sprite.spriteFrame = this.chooseSprite;
+      }
+
+      item.setScale(1.0, 1.0, 1.0);
+    } else {
+      // 未选中状态，使用unChooseSprite，缩放为0.8倍
+      if (this.unChooseSprite) {
+        sprite.spriteFrame = this.unChooseSprite;
+      }
+
+      item.setScale(0.8, 0.8, 1.0);
     }
   }
 
@@ -203,22 +207,13 @@ export class RouletteWheel extends Component {
 
   private onTouchStart(event: EventTouch): void {
     if (this.isAnimating) return;
-    
     this.isTouching = true;
     this.startTouchX = event.getLocationX();
   }
 
   private onTouchMove(event: EventTouch): void {
     if (!this.isTouching || this.isAnimating) return;
-    
     // 可以添加实时拖拽效果
-    const currentX = event.getLocationX();
-    const deltaX = currentX - this.startTouchX;
-    
-    // 实时旋转效果（可选）
-    // const rotationDelta = (deltaX / this.VIEW_WIDTH) * this.ARC_DEGREE;
-    // this.currentRotation = this.currentRotation + rotationDelta * 0.1;
-    // this.updateItemsPosition();
   }
 
   private onTouchEnd(event: EventTouch): void {
@@ -233,11 +228,10 @@ export class RouletteWheel extends Component {
 
     if (Math.abs(deltaX) > minSwipeDistance) {
       if (deltaX > 0) {
-        // 向右滑动，逆时针旋转
+        // 向右滑动
         this.rotateToNext(1);
-        // this.jumpToData(this.dataList[0]);
       } else {
-        // 向左滑动，顺时针旋转
+        // 向左滑动
         this.rotateToNext(-1);
       }
     }
@@ -245,13 +239,13 @@ export class RouletteWheel extends Component {
 
   /**
    * 旋转到下一个位置
-   * @param direction 方向：1为顺时针，-1为逆时针
    */
   public rotateToNext(direction: number): void {
     if (this.isAnimating) return;
     
-    // 每次旋转一个item的角度
-    const targetRotation = this.currentRotation + (direction * this.DATA_ANGLE_STEP);
+    // 计算目标旋转角度
+    const targetRotation = this.currentRotation + (direction * this.ITEM_SPACING);
+    
     this.animateToRotation(targetRotation);
   }
 
@@ -276,33 +270,18 @@ export class RouletteWheel extends Component {
         // 标准化旋转角度，避免角度过大
         this.currentRotation = ((targetRotation % 360) + 360) % 360;
         
-        // 打印当前中心item的值
         const currentData = this.getCurrentData();
-        console.log('滑动完成后的中心item值:', currentData);
+        console.log('当前选中的倍数:', currentData);
       })
       .start();
-  }
-
-  /**
-   * 向左滑动（顺时针旋转）
-   */
-  public swipeLeft(): void {
-    this.rotateToNext(1);
-  }
-
-  /**
-   * 向右滑动（逆时针旋转）
-   */
-  public swipeRight(): void {
-    this.rotateToNext(-1);
   }
 
   /**
    * 获取当前中心item的数据
    */
   public getCurrentData(): number {
-    // 根据当前旋转角度计算中心item
-    const centerItemIndex = Math.round(-this.currentRotation / this.DATA_ANGLE_STEP);
+    // 基于当前旋转角度计算中心item
+    const centerItemIndex = Math.round(-this.currentRotation / this.ITEM_SPACING);
     const dataIndex = ((centerItemIndex % this.dataList.length) + this.dataList.length) % this.dataList.length;
 
     return this.dataList[dataIndex];
@@ -313,47 +292,42 @@ export class RouletteWheel extends Component {
    */
   public jumpToData(targetData: number): void {
     const targetIndex = this.dataList.findIndex(data => data === targetData);
-    
-    if (targetIndex === -1) {
-      return;
-    }
+    if (targetIndex === -1) return;
 
-    // 获取当前中心item的数据值
     const currentData = this.getCurrentData();
     const currentIndex = this.dataList.findIndex(data => data === currentData);
+    if (currentIndex === -1) return;
+
+    if (targetData === currentData) return;
+
+    // 计算两个方向的旋转步数
+    let directSteps = targetIndex - currentIndex;
+    const totalItems = this.dataList.length;
     
-    if (currentIndex === -1) {
-      console.warn('无法获取当前数据');
+    // 计算通过循环的步数
+    let wrapSteps: number;
 
-      return;
-    }
-
-    // 如果已经在目标位置，不需要旋转
-    if (targetData === currentData) {
-      return;
-    }
-
-    // 根据数值大小关系决定旋转方向
-    let rotationSteps: number;
-
-    if (targetData > currentData) {
-      // 目标值更大，逆时针旋转
-      rotationSteps = -(targetIndex - currentIndex);
+    if (directSteps > 0) {
+      // 目标在右边，也可以向左循环
+      wrapSteps = directSteps - totalItems;
     } else {
-      // 目标值更小，顺时针旋转
-      rotationSteps = currentIndex - targetIndex;
+      // 目标在左边，也可以向右循环  
+      wrapSteps = directSteps + totalItems;
     }
+    
+    // 选择步数更少（绝对值更小）的路径
+    const rotationSteps = Math.abs(directSteps) <= Math.abs(wrapSteps) ? directSteps : wrapSteps;
     
     // 计算目标旋转角度
-    const targetRotation = this.currentRotation + (rotationSteps * this.DATA_ANGLE_STEP);
+    const targetRotation = this.currentRotation - (rotationSteps * this.ITEM_SPACING);
     
-    console.log(`从${currentData}跳转到${targetData}，旋转步骤：${rotationSteps}（${rotationSteps > 0 ? '顺时针' : '逆时针'}）`);
-    
+    // 使用动画跳转
     this.animateToRotation(targetRotation);
   }
     
   public multipleIndexChange(index: number): void {
-    this.jumpToData(this.dataList[index]);
+    const safeIndex = ((index % this.dataList.length) + this.dataList.length) % this.dataList.length;
+    this.jumpToData(this.dataList[safeIndex]);
   }
 
   update(deltaTime: number) {
