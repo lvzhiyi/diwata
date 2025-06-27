@@ -67,7 +67,7 @@ export class SlotsController extends BaseController<
   }
 
   /**
-   * 购买免费轮投注
+   * 购买免费轮按钮点击
    */
   betBuyFreeSpin() {
     app.controller.home.gameStart();
@@ -83,7 +83,7 @@ export class SlotsController extends BaseController<
   }
   
   /**
-   * 免费轮投注
+   * 免费轮期间的投注
    */
   betFreeSpin() {
     app.controller.home.gameStart();

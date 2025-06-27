@@ -5,6 +5,9 @@ import { doBet } from '../../basePlate/middleWare/services/bet';
 import { HTTP_STATUS_CODES } from '../../common/script/extra/Request';
 import GameProcessCtrl, { GameState } from '../../common/script/extra/GameProcessCtrl';
 import { sys } from 'cc';
+import { mockFailedData, mockSuccessData } from '../../basePlate/core/baseUtil/mockDataUtils';
+import { ToastView } from '../../basePlate/middleWare/commonUI/ToastView';
+import { ActivityEventMgr, ActivityEventMgrEventsType } from '../../common/script/ActivityEventMgr';
 
 // TODO 测试用
 const useMock = false;
@@ -15,6 +18,7 @@ export class HomeController extends BaseController<
     Refresh: (a: number) => boolean;
     GameStart: () => void;
     GameOver: (betResult: BetResult) => void;
+    IsAutoPlay: (betResult: BetResult) => void;
     EnableButton: () => void;
     DisableButton: () => void;
     ClickScreen: () => void;
@@ -28,17 +32,9 @@ export class HomeController extends BaseController<
   private credit: number = 0;
 
   /**
-   * 本次jackpot中奖金额，如果存在则需要在游戏结束时添加到余额中
-   */
-  private jackpotAmount: number = 0;
-
-  /**
    * 是否处于游戏结束状态
    */
   private isEndGame = true;
-
-  // TODO 测试用
-  private freeWheelFlag = 1;
 
   /**
    * 自动投注类型
@@ -55,9 +51,9 @@ export class HomeController extends BaseController<
       return;
     }
 
+    console.log('游戏开始事件');
     this.emit(HomeController.Event.DisableButton);
     GameProcessCtrl.gameState = GameState.GameStarting;
-    console.log('游戏开始事件');
     app.manager.global.setIsGoing(true);
     this.isEndGame = false;
     app.controller.slots.startRolling();
@@ -70,8 +66,8 @@ export class HomeController extends BaseController<
     console.log('游戏结束事件');
     GameProcessCtrl.gameState = GameState.GameEnded;
 
-    // 普通轮且没有命中免费轮
-    if ((!this.checkIsFreeRound(this.betResult) && !app.controller.slots.isFreeSpin)) {
+    // 普通轮且没有命中免费轮，或达到最大倍数
+    if ((!this.checkIsFreeRound(this.betResult) && !app.controller.slots.isFreeSpin) || this.checkIsMaxMultiple(this.betResult)) {
       // 结束游戏
       this.emit(HomeController.Event.GameOver, this.betResult);
 
@@ -81,21 +77,39 @@ export class HomeController extends BaseController<
       }
 
       // 更改余额
-      app.manager.global.setCreditCount(calculateWithBase(this.credit + this.jackpotAmount, true));
-
-      this.jackpotAmount = 0;
+      app.manager.global.setCreditCount(calculateWithBase(this.credit, true));
     } else if (this.isFreeSpinLastRound()) {
       // 免费轮最后一轮
       // 更改余额
-      app.manager.global.setCreditCount(calculateWithBase(this.credit + this.jackpotAmount, true));
-
-      this.jackpotAmount = 0;
+      app.manager.global.setCreditCount(calculateWithBase(this.credit, true));
+    } else if(app.manager.global.startAutoPlay && this.checkIsFreeRound(this.betResult)) {
+      // 自动模式，命中免费轮，检查是否继续自动执行
+      this.emit(HomeController.Event.IsAutoPlay, this.betResult);
     }
 
     this.setClickScreenFlase();
     this.betResult = null;
 
     app.manager.global.setIsGoing(false);
+  }
+
+  /**
+   * 消费星卡
+   * @param starCardData 星卡的数据
+   */
+  public onUseStarCard(starCardData: any) {
+    if (starCardData == null) {
+      return;
+    }
+  
+    this.autoPlayType = BetTypes.buy;
+    const betAmount = starCardData.bet;
+    // 关闭结算弹窗
+    app.controller.slots.closeFreeSpinSettlementDialog();
+    // 改变游戏状态
+    app.controller.slots.freeSpinChange(true);
+    // 发起购买免费轮
+    this.buyBonusBetResult(betAmount, BetTypes.buy, BetSubTypes.buySpinNormal, starCardData);
   }
 
   /**
@@ -125,168 +139,20 @@ export class HomeController extends BaseController<
   /**
    * 获取投注结果
    * @param amount 投注金额
+   * @param betType 投注类型
+   * @param betSubType 投注子类型
+   * @param starCardData 星卡数据
+   * @param isFreeSpin 是否是使用free spin
+   * @param compainId 活动ID
    */
-  async getBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes) {
+  async getBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, starCardData?: any, isFreeSpin?: boolean, compainId?: string) {
     app.controller.slots.setBetType(betType, betSubType);
     
     if (useMock) {
-      await delay(2000);
+      await delay(1000);
 
-      const symbolObj = (symbolId: string, symbolGoldBorder: boolean) => {
-        return { symbolId, symbolGoldBorder };
-      };
+      this.betResult = mockSuccessData;
 
-      this.betResult = {
-        betRecordId: '1935893957962104832',
-        gameId: 'zhumeng006',
-        betType: 'NORMAL_BET',
-        betSubType: 'NORMAL_BET',
-        credit: 5539873954205297582,
-        overallRewardAmount: 708000,
-        totalPayoutAmount: 708000,
-        resultDetail: {
-          allWheelRewardSubType: 'other',
-          resultList: [
-            {
-              rewardType: 'SINGLE',
-              rewardSubType: 'other',
-              totalRewardAmount: 1000,
-              totalRewardMultiple: 1.0,
-              wheel: [
-                [
-                  { symbolId: '1004' },
-                  { symbolId: '1001' },
-                  { symbolId: '1006' },
-                  { symbolId: '1006' },
-                  { symbolId: '4010' },
-                  { symbolId: '1005' }
-                ],
-                [
-                  { symbolId: '1005' },
-                  { symbolId: '1009' },
-                  { symbolId: '1006' },
-                  { symbolId: '1004' },
-                  { symbolId: '4010' },
-                  { symbolId: '1004' }
-                ],
-                [
-                  { symbolId: '1001' },
-                  { symbolId: '1001' },
-                  { symbolId: '1009' },
-                  { symbolId: '1003' },
-                  { symbolId: '4010' },
-                  { symbolId: '1002' }
-                ],
-                [
-                  null,
-                  { symbolId: '1010' },
-                  { symbolId: '1005' },
-                  { symbolId: '1003' },
-                  { symbolId: '4010' },
-                  null
-                ],
-                [
-                  null,
-                  null,
-                  { symbolId: '1001' },
-                  { symbolId: '1004' },
-                  null,
-                  null
-                ]
-              ],
-              rewardSymbolIndexSet: [
-                {
-                  rowIndex: 2,
-                  columnIndex: 1
-                },
-                {
-                  rowIndex: 4,
-                  columnIndex: 2
-                },
-                {
-                  rowIndex: 0,
-                  columnIndex: 1
-                },
-                {
-                  rowIndex: 2,
-                  columnIndex: 0
-                }
-              ],
-              rewardLineList: [
-                {
-                  symbolId: '1001',
-                  multiple: 1.0,
-                  odds: 0.1,
-                  rewardLineType: 'THREE',
-                  rewardLineSubType: 'COMMON',
-                  rewardLineCount: 2,
-                  rewardAmount: 1000,
-                  betAmount: 5000
-                }
-              ],
-              freeWheelFlag: 0,
-              gameRecordIds: [],
-              accumulateReachMaxMultiple: false,
-              id: ''
-            },
-            {
-              rewardType: 'NONE',
-              rewardSubType: 'none',
-              totalRewardAmount: 0,
-              totalRewardMultiple: 1.0,
-              wheel: [
-                [
-                  { symbolId: '1002' },
-                  { symbolId: '1010' },
-                  { symbolId: '1009' },
-                  { symbolId: '1006' },
-                  { symbolId: '4010' },
-                  { symbolId: '1005' }
-                ],
-                [
-                  { symbolId: '1004' },
-                  { symbolId: '1010' },
-                  { symbolId: '1006' },
-                  { symbolId: '1004' },
-                  { symbolId: '4010' },
-                  { symbolId: '1004' }
-                ],
-                [
-                  { symbolId: '1005' },
-                  { symbolId: '1009' },
-                  { symbolId: '1006' },
-                  { symbolId: '1003' },
-                  { symbolId: '4010' },
-                  { symbolId: '1002' }
-                ],
-                [
-                  null,
-                  { symbolId: '1010' },
-                  { symbolId: '1009' },
-                  { symbolId: '1003' },
-                  { symbolId: '4010' },
-                  null
-                ],
-                [
-                  null,
-                  null,
-                  { symbolId: '1005' },
-                  { symbolId: '1004' },
-                  null,
-                  null
-                ]
-              ],
-              rewardSymbolIndexSet: null,
-              rewardLineList: null,
-              freeWheelFlag: 0,
-              gameRecordIds: [],
-              accumulateReachMaxMultiple: false,
-              id: ''
-            }
-          ]
-        },
-      };
-      this.freeWheelFlag = 0;
       app.manager.global.setCreditCount(
         app.manager.global.creditCount - app.manager.global.betCount
       );
@@ -297,14 +163,30 @@ export class HomeController extends BaseController<
       return;
     }
 
+    if(betType === BetTypes.buy) {
+      this.buyBonusBetResult(amount, betType, betSubType, starCardData);
+    } else {
+      this.getNormalBetResult(amount, betType, betSubType, isFreeSpin, compainId);
+    }
+  }
+
+  /**
+  * 获取普通投注结果
+ */
+  async getNormalBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, isFreeSpin?: boolean, compainId?: string) {
     const betAmount = calculateWithBase(amount, false);
-    const payAmount = calculateWithBase(amount * (betType === BetTypes.buy ? app.config.app.BUY_FREE_SPIN_TIMES_RATIO : 1), false);
+    const payAmount = calculateWithBase(amount * 1, false);
 
     const res = await doBet({
       gameId: app.config.app.GAME_ID,
       betType,
       betSubType,
-      betDetail: {
+      betDetail: isFreeSpin ? {
+        betAmount,
+        payAmount,
+        useFreeSpin: isFreeSpin,
+        campaignId: compainId,
+      } : {
         betAmount,
         payAmount,
       },
@@ -316,16 +198,93 @@ export class HomeController extends BaseController<
       );
       this.credit = res.data.credit;
       this.betResult = res.data;
-      await delay(500);
+      await delay(app.manager.global.quikeMode ? 0 : 500);
       app.controller.slots.stopRolling(this.betResult);
     } else {
-      this.betResult = null;
+      this.credit = calculateWithBase(app.manager.global.creditCount, false);
+      this.betResult = mockFailedData;
       console.log('获取投注结果失败', res);
+      app.controller.slots.stopRolling(this.betResult);
     }
   }
 
   /**
-   * 获取免费轮投注结果
+   * 花钱购买免费轮或者使用星卡
+  */
+  async buyBonusBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, starCardData?: any) {
+    const isUseStarCard = !!starCardData; 
+    let res: ApiResponse<BetResult> = null;
+    let betData: any = null;
+    const _betAmount = calculateWithBase(isUseStarCard ? starCardData.bet ?? 0 : amount, false);
+    // 购买金额，购买金额是投注金额的100倍
+    const payAmount = isUseStarCard ? _betAmount : _betAmount * app.config.app.BUY_FREE_SPIN_TIMES_RATIO;
+
+    if (starCardData != null) {
+      betData = {
+        gameId: app.config.app.GAME_ID,
+        betType: betType,
+        betSubType: betSubType,
+        betDetail: {
+          payAmount,
+          betAmount: _betAmount,
+          useStarCard: true,
+          rewardConfigId: starCardData.rewardConfigId,
+          rewardId: starCardData.reward_id
+        },
+      };
+    } else {
+      betData = {
+        gameId: app.config.app.GAME_ID,
+        betType: betType,
+        betSubType: betSubType,
+        betDetail: {
+          betAmount: _betAmount,
+          payAmount,
+        },
+      };
+    }
+    try {
+      res = await doBet(betData);
+    } catch (error) {
+      res = {
+        code: '500',
+        msg: error.message ?? 'buy free spin failed',
+        success: false,
+        data: null,
+      };
+    }
+
+    if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data) {
+      app.manager.global.setCreditCount(
+        app.manager.global.creditCount - (app.manager.global.betCount * (betType === BetTypes.buy ? app.config.app.BUY_FREE_SPIN_TIMES_RATIO : 1))
+      );
+      this.credit = res.data.credit;
+      this.betResult = res.data;
+      await delay(app.manager.global.quikeMode ? 0 : 500);
+
+      if (isUseStarCard) {
+        // 星卡使用成功
+        ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.useGoodsSuccess);
+      }
+
+      app.controller.slots.stopRolling(this.betResult);
+    } else {
+      this.credit = calculateWithBase(app.manager.global.creditCount, false);
+      this.betResult = mockFailedData;
+      ToastView.showCommonToast('Bet failed');
+
+      // 星卡使用失败
+      if (isUseStarCard) {
+        // 购买失败，复原星卡使用状态
+        ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.hideStarCard, null);
+      }
+      
+      app.controller.slots.stopRolling(this.betResult);
+    }
+  }
+
+  /**
+   * 查询免费轮期间的投注结果
    */
   async getBetFreeSpinResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, betRecordId: string) {
     this.autoPlayType = betType;
@@ -345,11 +304,12 @@ export class HomeController extends BaseController<
 
     if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data) {
       this.betResult = res.data;
-      await delay(500);
+      await delay(app.manager.global.quikeMode ? 0 : 500);
       app.controller.slots.stopRolling(this.betResult);
     } else {
-      this.betResult = null;
+      this.betResult = mockFailedData;
       console.log('获取投注结果失败', res);
+      app.controller.slots.stopRolling(this.betResult);
     }
   }
 
@@ -370,9 +330,11 @@ export class HomeController extends BaseController<
   }
 
   /**
-   * 设置本次获得的jackpot中奖金额
+   * 检查是否达到最大倍数
    */
-  setJackpotAmount(amount: number) {
-    this.jackpotAmount = amount;
+  checkIsMaxMultiple(result: BetResult) {
+    const resultList = result.resultDetail.resultList;
+
+    return resultList.some(item => item.accumulateReachMaxMultiple);
   }
 }

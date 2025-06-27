@@ -125,18 +125,26 @@ export const doBet = async (data: {
   betType: BetTypes;
   /** 投注子类型 */
   betSubType: BetSubTypes;
-  /** 投注信息 */
-  betDetail: {
-    /** 游戏记录Id */
-    gameRecordId?: string;
+   /** 投注信息 */
+   betDetail: {
     /** 投注记录Id */
     betRecordId?: string;
     /** 投注金额 */
     betAmount: number;
     /** 购买金额 */
     payAmount: number;
-    /** 免费轮投注Id */
-    freeSpinsId?: string;
+    /** 免费轮游戏记录Id */
+    gameRecordId?: string;
+    /** 是否使用星卡 */
+    useStarCard?: boolean;
+    /** 星卡奖励配置Id */
+    rewardConfigId?: string;
+    /** 星卡奖励Id */
+    rewardId?: string;
+    /** 活动ID */
+    campaignId?: string;
+    /** 是否使用freespin */
+    useFreeSpin?: boolean;
   };
 }) => {
   const res = await http.post<BetResult>(ApiPath.bet, data);

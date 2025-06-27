@@ -77,7 +77,7 @@ export class PaperHomeActivity extends BaseView.BindController(HomeController) {
       }
 
       // 发生一次购买免费轮
-      // this.controller.onUseStarCard(data);
+      this.controller.onUseStarCard(starCardData);
     }
 
     /**
