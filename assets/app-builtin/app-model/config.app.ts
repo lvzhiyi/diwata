@@ -21,7 +21,7 @@ export default class App implements IModel<App> {
     GAME_VER = '1.0.0';
 
     /** 购买免费轮次数的倍数 */
-    BUY_FREE_SPIN_TIMES_RATIO = 35;
+    BUY_FREE_SPIN_TIMES_RATIO = 75;
 
     /** 游戏主场景 */
     MAIN_SCENE = 'Game';

@@ -17,7 +17,7 @@ export enum BetSubTypes {
   /** 正常投注中的免费轮 */
   normalFreeSpin = 'FREE_SPINS_NORMAL_BET',
 
-  /** 购买免费轮中的正常轮 */
+  /** 购买免费轮投注次数  */
   buySpinNormal = 'BUY_BET',
   /** 购买免费轮中的免费轮 */
   buySpinFreeSpin = 'FREE_SPINS_BUY_BET',

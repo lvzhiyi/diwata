@@ -20,7 +20,7 @@ export class ToastView extends Component {
 
     // 新的toast
     public static async showCommonToast(message: string) {
-      const toastNode = await GameResourceManager.getInstance().getWeakToastNode();
+      const toastNode = await GameResourceManager.instance.getWeakToastNode();
 
       toastNode.getComponent(WeakToast).showToast(message, 2000);
     }
