@@ -379,10 +379,6 @@
       {
         "__uuid__": "0c9ee8aa-b66d-4e29-bba5-cdb0c5818bd9@f9941",
         "__expectedType__": "cc.SpriteFrame"
-      },
-      {
-        "__uuid__": "58029746-84da-4cb8-a4dd-56113690c047@f9941",
-        "__expectedType__": "cc.SpriteFrame"
       }
     ],
     "goldSideIcon": {
