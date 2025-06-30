@@ -203,7 +203,7 @@ export class HomeController extends BaseController<
     } else {
       this.credit = calculateWithBase(app.manager.global.creditCount, false);
       this.betResult = mockFailedData;
-      console.log('获取投注结果失败', res);
+      ToastView.showCommonToast('Unstable Network,Bet failed');
       app.controller.slots.stopRolling(this.betResult);
     }
   }
@@ -271,7 +271,7 @@ export class HomeController extends BaseController<
     } else {
       this.credit = calculateWithBase(app.manager.global.creditCount, false);
       this.betResult = mockFailedData;
-      ToastView.showCommonToast('Bet failed');
+      ToastView.showCommonToast('Unstable Network,Bet failed');
 
       // 星卡使用失败
       if (isUseStarCard) {
@@ -308,7 +308,7 @@ export class HomeController extends BaseController<
       app.controller.slots.stopRolling(this.betResult);
     } else {
       this.betResult = mockFailedData;
-      console.log('获取投注结果失败', res);
+      ToastView.showCommonToast('Unstable Network,Bet failed');
       app.controller.slots.stopRolling(this.betResult);
     }
   }

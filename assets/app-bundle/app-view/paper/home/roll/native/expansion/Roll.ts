@@ -77,7 +77,7 @@ export class Roll extends Component {
      * 初始化节点池
      */
     initNodePool() {
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < this.itemCount ; i++) {
         const node = instantiate(this.symbolPrefab);
         this.nodePool.put(node);
       }
