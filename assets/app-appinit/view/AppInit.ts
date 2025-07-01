@@ -262,7 +262,7 @@ export class AppInit extends BaseAppInit {
     this._initParams();
     this._initRuntimeEnv();
     serverHookManager.initApiBaseUrl(hostUrl);
-    serverHookManager.initHttpResponseErrorInterceptor();
+    // serverHookManager.initHttpResponseErrorInterceptor();
   }
 
   /**
