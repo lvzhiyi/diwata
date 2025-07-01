@@ -929,7 +929,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -557,
+      "y": -547,
       "z": 0
     },
     "_lrot": {
@@ -1811,7 +1811,7 @@
     "_left": 0,
     "_right": 0,
     "_top": 0,
-    "_bottom": -10,
+    "_bottom": 0,
     "_horizontalCenter": 0,
     "_verticalCenter": 0,
     "_isAbsLeft": true,
@@ -1823,7 +1823,7 @@
     "_originalWidth": 0,
     "_originalHeight": 0,
     "_alignMode": 2,
-    "_lockFlags": 0,
+    "_lockFlags": 4,
     "_id": ""
   },
   {
@@ -2914,7 +2914,7 @@
     "fileId": "b7N0/OPrZIbboFaohUh31o"
   },
   {
-    "__type__": "sp.Skeleton",
+    "__type__": "cc.Sprite",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -2935,28 +2935,28 @@
       "b": 255,
       "a": 255
     },
-    "_skeletonData": {
-      "__uuid__": "28dc2f5e-c542-4a7d-8647-27384c2e8324",
-      "__expectedType__": "sp.SkeletonData"
+    "_spriteFrame": {
+      "__uuid__": "154548a7-a5c7-4989-a9bc-39703e7739ca@f9941",
+      "__expectedType__": "cc.SpriteFrame"
     },
-    "defaultSkin": "default",
-    "defaultAnimation": "rollBetBtn1",
-    "_premultipliedAlpha": false,
-    "_timeScale": 1,
-    "_preCacheMode": 0,
-    "_cacheMode": 0,
-    "_sockets": [],
-    "_useTint": false,
-    "_debugMesh": false,
-    "_debugBones": false,
-    "_debugSlots": false,
-    "_enableBatch": false,
-    "loop": true,
+    "_type": 0,
+    "_fillType": 0,
+    "_sizeMode": 0,
+    "_fillCenter": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_fillStart": 0,
+    "_fillRange": 0,
+    "_isTrimmedMode": true,
+    "_useGrayscale": false,
+    "_atlas": null,
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "c4AyHtSGxLZp+GXCBK8Wj/"
+    "fileId": "c1UQj9ENJMrp2uxfipP/dO"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -4828,10 +4828,7 @@
       "__uuid__": "1917d709-f7c3-4101-8ecb-9bc6353fb7e7@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
-    "buyBonusBtnSprite": {
-      "__uuid__": "c664bfd4-c274-455f-899c-3157bedbe580@f9941",
-      "__expectedType__": "cc.SpriteFrame"
-    },
+    "buyBonusBtnSprite": null,
     "freespinBtn": {
       "__id__": 190
     },

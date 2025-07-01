@@ -80,7 +80,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
   initData() {
     this.roundIndex = 0;
-    app.manager.global.setMultipleIndex(this.isFreeSpin ? 3 : 0);
+    app.manager.global.setMultipleIndex(app.controller.slots.isFreeSpin ? 3 : 0);
   }
 
   initRoll() {
@@ -149,7 +149,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.Rolls.forEach((roll: Node, rollIndex: number) => {
       setTimeout(() => {
         roll.getComponent(Roll).startRolling();
-      }, rollIndex * (app.manager.global.quikeMode ? 0 : 200));
+      }, rollIndex * (app.manager.global.quikeMode ? 0 : 100));
     });
   }
 
@@ -170,7 +170,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.Rolls.forEach((roll: Node, rollIndex: number) => {
       setTimeout(() => {
         this.stopSingleRoll(roll, rollIndex);
-      }, rollIndex * (app.manager.global.quikeMode ? 0 : 200));
+      }, rollIndex * (app.manager.global.quikeMode ? 0 : 100));
     });
   }
 
@@ -524,6 +524,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     await Promise.all(rollsScript.map(roll => roll.addTopExcessSymbol()));
     // 初始化数据
     await Promise.all(rollsScript.map(roll => roll.initData()));
+    
+    app.manager.global.setMultipleIndex(app.controller.slots.isFreeSpin ? 3 : 0);
     // 结束游戏
     app.controller.home.endGame();
   }

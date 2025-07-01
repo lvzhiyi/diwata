@@ -204,6 +204,8 @@
       "__id__": 0
     },
     "fileId": "94P4xAxi5IZqWGXXEjVFv0",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -375,8 +377,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 90,
-      "height": 30
+      "width": 70.79,
+      "height": 90
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -414,11 +416,11 @@
     "_string": "x1",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 29,
-    "_fontSize": 30,
+    "_actualFontSize": 50,
+    "_fontSize": 50,
     "_fontFamily": "Arial",
     "_lineHeight": 90,
-    "_overflow": 2,
+    "_overflow": 0,
     "_enableWrapText": true,
     "_font": {
       "__uuid__": "99045e37-a5ef-4ce2-81cf-49d334d08b4b",
@@ -732,6 +734,8 @@
       "__id__": 0
     },
     "fileId": "762HJf9LREbKFztX6ggAMd",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {

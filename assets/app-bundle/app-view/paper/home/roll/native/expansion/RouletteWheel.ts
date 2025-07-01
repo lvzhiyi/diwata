@@ -47,7 +47,6 @@ export class RouletteWheel extends Component {
     this.createItems();
     this.updateItemsPosition();
     // 启用触摸滑动
-    this.registerTouchEvents();
     this.setupViewClipping();
   }
 
@@ -82,6 +81,19 @@ export class RouletteWheel extends Component {
       const label = item.getChildByName('text').getComponent(Label);
 
       if (label) {
+        // 根据数值大小动态设置字体大小
+        const value = this.dataList[i];
+
+        if (value < 10) {
+          label.fontSize = 42;
+        } else if (value < 100) {
+          label.fontSize = 30;
+        } else if (value < 1000) {
+          label.fontSize = 24;
+        } else {
+          label.fontSize = 18;
+        }
+
         label.string = `x${this.dataList[i]}`;
         label.node.active = true;
       }
@@ -131,9 +143,11 @@ export class RouletteWheel extends Component {
       if (!sprite) continue;
 
       if (i === selectedIndex) {
-        this.items[i].setScale(1.1, 1.1, 1);
+        this.items[i].setScale(1.2, 1.2, 1);
+        this.items[i].getChildByName('text').getComponent(Label).isBold = true;
         if (this.chooseSprite) sprite.spriteFrame = this.chooseSprite;
       } else {
+        this.items[i].getChildByName('text').getComponent(Label).isBold = false;
         this.items[i].setScale(1, 1, 1);
         if (this.unChooseSprite) sprite.spriteFrame = this.unChooseSprite;
       }
@@ -158,51 +172,6 @@ export class RouletteWheel extends Component {
     item.eulerAngles = new Vec3(0, 0, -angle);
     
     // 若需按距离中心调整透明度或缩放，可在此处添加逻辑
-  }
-
-  /**
-   * 注册触摸事件
-   */
-  private registerTouchEvents(): void {
-    this.node.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
-    this.node.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
-    this.node.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
-    this.node.on(Input.EventType.TOUCH_CANCEL, this.onTouchEnd, this);
-  }
-
-  private onTouchStart(event: EventTouch): void {
-    if (this.isAnimating) return;
-    
-    this.isTouching = true;
-    this.startTouchX = event.getLocationX();
-  }
-
-  private onTouchMove(event: EventTouch): void {
-    if (!this.isTouching || this.isAnimating) return;
-    
-    // 如需实时拖拽，可在此处实现
-  }
-
-  private onTouchEnd(event: EventTouch): void {
-    if (!this.isTouching || this.isAnimating) return;
-    
-    this.isTouching = false;
-    const endTouchX = event.getLocationX();
-    const deltaX = endTouchX - this.startTouchX;
-    
-    // 判断滑动方向和距离
-    const minSwipeDistance = 50;
-
-    if (Math.abs(deltaX) > minSwipeDistance) {
-      if (deltaX > 0) {
-        // 向右滑动，逆时针旋转
-        this.rotateToNext(1);
-        // this.jumpToData(this.dataList[0]);
-      } else {
-        // 向左滑动，顺时针旋转
-        this.rotateToNext(-1);
-      }
-    }
   }
 
   /**

@@ -148,13 +148,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     app.manager.event.on('startAutoPlayChange', this.startAutoPlayChange, this);
     // 监听自动模式按钮点击
     app.manager.event.on('clickAllwaysAutoPlay', this.clickAllwaysAutoModeBtn, this);
-
-    // 注册全局事件监听
-    app.manager.event.on('creditCountChange', this.creditCountChange, this);
-    // 监听freespin状态变化
-    // app.manager.event.on('freespin:state', this.freespinStateChange, this);
-
-    // app.manager.event.on('start-button:animation', this.playStartBtnAnimation, this);
   }
 
   // 界面关闭时的相关逻辑写在这(已经关闭的界面不会触发onHide)

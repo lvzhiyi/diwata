@@ -36,7 +36,7 @@ export class SlotsController extends BaseController<
    * @param serverResults 服务器结果
    */
   async stopRolling(betResult: BetResult) {
-    this.betRecordId = betResult.betRecordId;
+    this.betRecordId = betResult.betRecordId ?? '';
     
     this.emit(SlotsController.Event.StopRolling, betResult);
   }
@@ -47,6 +47,10 @@ export class SlotsController extends BaseController<
   freeSpinChange(isFreeSpin: boolean) {
     this.isFreeSpin = isFreeSpin;
     this.emit(SlotsController.Event.FreeSpinChange, isFreeSpin);
+
+    if(!isFreeSpin){
+      this.resetBetAmount();
+    }
   }
 
   /**
@@ -94,6 +98,18 @@ export class SlotsController extends BaseController<
     } else {
       // 购买免费轮投注
       app.controller.home.getBetFreeSpinResult(app.manager.global.betCount, BetTypes.buy, BetSubTypes.buySpinFreeSpin, this.betRecordId);
+    }
+  }
+
+  /**
+   * 复原投注金额
+   */
+  resetBetAmount() {
+    const tempBetCount = app.manager.global.tempBetCount;
+
+    if(tempBetCount){
+      app.manager.global.setBetCount(tempBetCount);
+      app.manager.event.emit('betCountChange', tempBetCount);
     }
   }
 }
