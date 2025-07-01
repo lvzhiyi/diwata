@@ -10,6 +10,7 @@ import { serverHookManager } from 'db://assets/basePlate/middleWare/serverManage
 import { getUserCredit } from 'db://assets/basePlate/middleWare/services/user';
 import { HTTP_STATUS_CODES } from 'db://assets/common/script/extra/Request';
 import { HomeController } from 'db://assets/app-builtin/app-controller/HomeController';
+import { freeSpinManager } from './expansion/FreeSpinManager';
 
 const { ccclass, property } = _decorator;
 @ccclass('PaperHomeActivity')
@@ -18,7 +19,9 @@ export class PaperHomeActivity extends BaseView.BindController(HomeController) {
     private activityEntry: Node = null;
 
     // 初始化的相关逻辑写在这
-    onLoad() { }
+    onLoad() { 
+      
+    }
 
     // 界面打开时的相关逻辑写在这(onShow可被多次调用-它与onHide不成对)
     onShow(params: any) {
@@ -31,8 +34,10 @@ export class PaperHomeActivity extends BaseView.BindController(HomeController) {
           this.otherMessage,
           this
         );
-        ActivityEventMgr.instance.on(ActivityEventMgrEventsType.useFreeSpin, this.onStartFreespin, this);
-        ActivityEventMgr.instance.on(ActivityEventMgrEventsType.cancelUseFreeSpin, this.onCancelFreespin, this);
+        // ActivityEventMgr.instance.on(ActivityEventMgrEventsType.useFreeSpin, this.onStartFreespin, this);
+        // ActivityEventMgr.instance.on(ActivityEventMgrEventsType.cancelUseFreeSpin, this.onCancelFreespin, this);
+        freeSpinManager.init();
+
         this.setupStarCardPostion();
         PackageFacade.instance.showEntryDialog();
       }
@@ -77,7 +82,7 @@ export class PaperHomeActivity extends BaseView.BindController(HomeController) {
       }
 
       // 发生一次购买免费轮
-      // this.controller.onUseStarCard(data);
+      this.controller.onUseStarCard(starCardData);
     }
 
     /**
@@ -109,11 +114,11 @@ export class PaperHomeActivity extends BaseView.BindController(HomeController) {
    * @param data 包含免费游玩次数、投注金额、总奖励的数据对象
    */
     private onStartFreespin(data: { count: number; freeBet: number, totalAward: number; campaignId: string }) {
-    // console.log('处理freespin模式开始事件', data);
+      console.log('处理freespin模式开始事件', data);
       const {
         count, freeBet, campaignId, totalAward,
       } = data;
-      // this.onFreespinEnableChange(true, count, freeBet, campaignId);
+      this.onFreespinEnableChange(true, count, freeBet, campaignId);
       // this.freespinRewardAmount = totalAward;
     }
 

@@ -19,12 +19,7 @@ export class GlobalManager extends BaseManager {
 
     if (storedBetCount) {
       const betCountValue = parseFloat(storedBetCount || '2');
-      const isExMode = sys.localStorage.getItem('exMode') === 'true';
       this.setBetCount(betCountValue);
-
-      if (isExMode) {
-        this.setExMode(false);
-      }
     }
   }
 
@@ -122,9 +117,6 @@ export class GlobalManager extends BaseManager {
   // 是否正在进行中
   private _isGoing: boolean = false;
 
-  // ex模式
-  private _exMode: boolean = false;
-
   // 倍率索引
   private _multipleIndex: number = 0;
 
@@ -156,6 +148,28 @@ export class GlobalManager extends BaseManager {
     app.manager.event.emit('creditCountChange', val);
   }
 
+  /** 是否赠送的免费游玩模式 */
+  private _isFreespinMode: boolean = false;
+
+  /** 赠送的免费游玩模式投注金额 */
+  private _freespinBetAmount: number = 0;
+
+  /** 是否赠送的免费游玩模式 */
+  public get isFreespinMode(): boolean {
+    return this._isFreespinMode;
+  }
+  /** 设置是否赠送的免费游玩模式 */
+  
+  public setIsFreespinMode(bool: boolean): void {
+    app.manager.event.emit('freespin:state', bool);
+    this._isFreespinMode = bool;
+  }
+  
+  /** 设置freespin投注金额 */
+  public setFreespinBetAmount(val: number): void {
+    this._freespinBetAmount = val;
+  }
+  
   public get betCount() {
     const betCount = sys.localStorage.getItem('betCount_' + this.playerId);
     console.log('betCount', betCount);  
@@ -164,7 +178,7 @@ export class GlobalManager extends BaseManager {
       return parseFloat(betCount);
     }
 
-    return this._betCount;
+    return this._isFreespinMode ? this._freespinBetAmount : this._betCount;
   }
 
   public setBetCount(val: number) {
@@ -318,22 +332,6 @@ export class GlobalManager extends BaseManager {
   public setIsGoing(bool: boolean) {
     this._isGoing = bool;
     app.manager.event.emit('isGoingChange', bool);
-  }
-
-  public get exMode() {
-    return this._exMode;
-  }
-  
-  public setExMode(bool: boolean) {
-    this._exMode = bool;
-    app.manager.event.emit('exModeChange', bool);
-    sys.localStorage.setItem('exMode', bool.toString());
-
-    if (bool) {
-      this.setBetCount(this.betCount * 1.5);
-    } else {
-      this.setBetCount(this.betCount / 1.5);
-    }
   }
 
   public get gameType() {
