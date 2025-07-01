@@ -24,6 +24,7 @@ npm-debug.log
 /web-template/node_modules/
 /assets/activity/
 /assets/common/
+/assets/common.diff
 
 #/////////////////////////////////////////////////////////////////////////////
 # Logs and databases

@@ -1,4 +1,4 @@
-import { _decorator, Button, Component, NodeEventType, Vec3, tween, Tween, UIOpacity, TweenEasing, Enum } from 'cc';
+import { _decorator, Button, Component, NodeEventType, Vec3, tween, Tween, UIOpacity, TweenEasing, Enum, CCFloat, CCBoolean, CCString } from 'cc';
 
 const { ccclass, property } = _decorator;
 
@@ -28,34 +28,34 @@ export class AdvancedButtonBreath extends Component {
   })
   private breathType: number = BreathType.SCALE;
 
-  @property({ tooltip: '呼吸动画的最小缩放值' })
+  @property({ type: CCFloat, tooltip: '呼吸动画的最小缩放值' })
   private minScale: number = 0.9;
 
-  @property({ tooltip: '呼吸动画的最大缩放值' })
+  @property({ type: CCFloat, tooltip: '呼吸动画的最大缩放值' })
   private maxScale: number = 1.1;
 
-  @property({ tooltip: '呼吸动画的最小透明度值' })
+  @property({ type: CCFloat, tooltip: '呼吸动画的最小透明度值' })
   private minOpacity: number = 150;
 
-  @property({ tooltip: '呼吸动画的最大透明度值' })
+  @property({ type: CCFloat, tooltip: '呼吸动画的最大透明度值' })
   private maxOpacity: number = 255;
 
-  @property({ tooltip: '呼吸动画的旋转角度范围' })
+  @property({ type: CCFloat, tooltip: '呼吸动画的旋转角度范围' })
   private rotationRange: number = 5;
 
-  @property({ tooltip: '呼吸动画的持续时间（秒）' })
+  @property({ type: CCFloat, tooltip: '呼吸动画的持续时间（秒）' })
   private duration: number = 1.0;
 
-  @property({ tooltip: '是否在触摸时暂停呼吸动画' })
+  @property({ type: CCBoolean, tooltip: '是否在触摸时暂停呼吸动画' })
   private pauseOnTouch: boolean = true;
 
-  @property({ tooltip: '是否自动开始呼吸动画' })
+  @property({ type: CCBoolean, tooltip: '是否自动开始呼吸动画' })
   private autoStart: boolean = true;
 
-  @property({ tooltip: '是否循环播放' })
+  @property({ type: CCBoolean, tooltip: '是否循环播放' })
   private loop: boolean = true;
 
-  @property({ tooltip: '缓动函数类型' })
+  @property({ type: CCString, tooltip: '缓动函数类型' })
   private easing: string = 'sineInOut';
 
   private button: Button = null;

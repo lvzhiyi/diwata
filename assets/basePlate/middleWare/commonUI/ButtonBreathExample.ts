@@ -26,6 +26,7 @@ export class ButtonBreathExample extends Component {
   private combinedBreathButton: Node = null;
 
   private simpleBreath: ButtonBreath = null;
+
   private advancedBreath: AdvancedButtonBreath = null;
 
   start() {
@@ -39,6 +40,7 @@ export class ButtonBreathExample extends Component {
     // 简单呼吸动画示例
     if (this.simpleBreathButton) {
       this.simpleBreath = this.simpleBreathButton.getComponent(ButtonBreath);
+
       if (!this.simpleBreath) {
         this.simpleBreath = this.simpleBreathButton.addComponent(ButtonBreath);
       }
@@ -50,6 +52,7 @@ export class ButtonBreathExample extends Component {
     // 缩放呼吸动画示例
     if (this.scaleBreathButton) {
       this.advancedBreath = this.scaleBreathButton.getComponent(AdvancedButtonBreath);
+
       if (!this.advancedBreath) {
         this.advancedBreath = this.scaleBreathButton.addComponent(AdvancedButtonBreath);
       }
@@ -66,6 +69,7 @@ export class ButtonBreathExample extends Component {
     // 透明度呼吸动画示例
     if (this.opacityBreathButton) {
       const opacityBreath = this.opacityBreathButton.getComponent(AdvancedButtonBreath);
+
       if (!opacityBreath) {
         const breath = this.opacityBreathButton.addComponent(AdvancedButtonBreath);
         // 通过属性面板设置 breathType 为 OPACITY
@@ -83,6 +87,7 @@ export class ButtonBreathExample extends Component {
     // 旋转呼吸动画示例
     if (this.rotationBreathButton) {
       const rotationBreath = this.rotationBreathButton.getComponent(AdvancedButtonBreath);
+
       if (!rotationBreath) {
         const breath = this.rotationBreathButton.addComponent(AdvancedButtonBreath);
         breath['breathType'] = 'rotation';
@@ -97,6 +102,7 @@ export class ButtonBreathExample extends Component {
     // 组合呼吸动画示例
     if (this.combinedBreathButton) {
       const combinedBreath = this.combinedBreathButton.getComponent(AdvancedButtonBreath);
+
       if (!combinedBreath) {
         const breath = this.combinedBreathButton.addComponent(AdvancedButtonBreath);
         breath['breathType'] = 'combined';

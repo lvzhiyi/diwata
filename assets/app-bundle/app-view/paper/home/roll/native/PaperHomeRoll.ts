@@ -57,6 +57,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   // 动画管理工具类
   private homeRollTool: HomeRollTool = null;
 
+  // 是否是免费轮
+  private isFreeSpin: boolean = false;
+
   onLoad() {
     this.homeRollTool = new HomeRollTool();
     this.initRoll();
@@ -77,7 +80,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
   initData() {
     this.roundIndex = 0;
-    app.manager.global.setMultipleIndex(0);
+    app.manager.global.setMultipleIndex(app.controller.slots.isFreeSpin ? 3 : 0);
   }
 
   initRoll() {
@@ -521,6 +524,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     await Promise.all(rollsScript.map(roll => roll.addTopExcessSymbol()));
     // 初始化数据
     await Promise.all(rollsScript.map(roll => roll.initData()));
+    
+    app.manager.global.setMultipleIndex(app.controller.slots.isFreeSpin ? 3 : 0);
     // 结束游戏
     app.controller.home.endGame();
   }
@@ -585,7 +590,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 更新到下一个倍率
    */
   private updateNextMultiple() {
-    if (app.manager.global.multipleIndex >= 3) return;
+    if (app.manager.global.multipleIndex >= 10) return;
     app.manager.global.setMultipleIndex(app.manager.global.multipleIndex + 1);
   }
 
@@ -640,6 +645,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 2. 如果免费轮状态为false，则隐藏免费轮次数
    */
   private startFreeSpinChange(isFreeSpin: boolean) {
+    this.isFreeSpin = isFreeSpin;
     isFreeSpin ? this.showFreeSpinTimes() : this.hideFreeSpinTimes();
   }
 

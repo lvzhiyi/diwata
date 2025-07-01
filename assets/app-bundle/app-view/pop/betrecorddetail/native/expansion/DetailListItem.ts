@@ -32,10 +32,6 @@ export class DetailListItem extends Component {
   @property(Node)
   private imageBox: Node;
 
-  // 大的wild占6个位置
-  @property(Node)
-  private superWildNode: Node;
-
   @property(Prefab)
   private Col: Prefab;
 
@@ -81,27 +77,28 @@ export class DetailListItem extends Component {
     this.odd.string = `${item.multiple || 1}X`;
 
     if (imgSprite) {
-      // 渲染底部列表
-      const boxList = imgSprite;
-      var superWildCol = -1;
+      // 过滤掉null值的二维数组
+      const boxList = imgSprite.map(row => row.filter(item => item !== null));
 
       for (let i = 0; i < boxList.length; i++) {
         const _col = instantiate(this.Col);
 
         for (let j = 0; j < boxList[i].length; j++) {
           const element = boxList[i][j];
-          const dataElement = otherList[i][j] || null;
       
           if (element) {
             const _itemCard = instantiate(this.ItemCard);
-            _itemCard.getComponent(Sprite).spriteFrame = element;
-            const itemCard = _itemCard.getComponent(RecordItemCard);
+            
+            // 安全地获取或添加Sprite组件
+            let sprite = _itemCard.getComponent(Sprite);
 
-            if (itemCard) {
-              itemCard.initValue(dataElement);
+            if (!sprite) {
+              sprite = _itemCard.addComponent(Sprite);
             }
 
-            _itemCard.getComponent(UITransform).width = this.getElementW(element);
+            sprite.spriteFrame = element;
+
+            // _itemCard.getComponent(UITransform).width = 52;
             _col.addChild(_itemCard);
           }
         }
@@ -112,39 +109,12 @@ export class DetailListItem extends Component {
 
       this.imageBox.getComponent(Layout).updateLayout();
     }
-    // 有超级大的superwild
-    if(superWildCol !== -1) {
-      this.superWildNode.active = true;
-      this.superWildNode.getComponent(UITransform).anchorY = this.getAnChorY(superWildCol);
-    }else {
-      this.superWildNode.active = false;
-    }
     
     // 中奖线
    
     this.rewardLineList.getComponent(UITransform).height = maxRewardLineCount * 60 + 10;
     this.addRewardItems(item.rewardLineList, cards);
     this.node.getComponent(UITransform).height = maxRewardLineCount * 60 + 380;
-  }
-
-  getElementW(element: SpriteFrame) {
-    if(element.name === '4006') {
-      return 52 * 3;
-    }
-
-    return 52;
-  }
-
-  getAnChorY(col: number) {
-    if(col === 0) {
-      return 0;
-    }
-
-    if(col === 1 || col === 2) {
-      return 0.5;
-    }
-
-    return 1;
   }
 
   addRewardItems(data: BetRewardLineItem[], cards: SpriteFrame[]) {
@@ -162,7 +132,14 @@ export class DetailListItem extends Component {
       if (RewardIconNode) {
         const tranform = RewardIconNode.getComponent(UITransform);
         tranform.setContentSize(45, 50);
-        const sprite = RewardIconNode.getComponent(Sprite);
+        
+        // 安全地获取或添加Sprite组件
+        let sprite = RewardIconNode.getComponent(Sprite);
+
+        if (!sprite) {
+          sprite = RewardIconNode.addComponent(Sprite);
+        }
+        
         // 加载图标资源
         const findIcon = cards.find((item) => {
           return item.name.indexOf(itemData.symbolId) !== -1;

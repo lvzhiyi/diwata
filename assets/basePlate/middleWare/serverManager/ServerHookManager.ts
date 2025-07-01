@@ -121,7 +121,7 @@ class ServerHookManager {
       }
       // 非接口错误，并且是投注接口，就显示登录弹窗
       if (httpError.type !== 'api' && path === ApiPath.bet) {
-        this.showLoginDialog();
+        // this.showLoginDialog();
 
         return;
       }
@@ -304,15 +304,12 @@ class ServerHookManager {
     GlobalMgr.instance.playerId = app.manager.global.playerId;
     GlobalMgr.instance.playerName = app.manager.global.playerName;
     GlobalMgr.instance.userLevel = app.manager.global.getUserInfo().vipLevel;
-    await PackageFacade.instance.init({
+    PackageFacade.instance.init({
       activityIDs: [1, 2, 3, 4, 5, 6, 7],
       httpHeadUrl: hostUrl,
       token: token,
       gameID: GlobalMgr.instance.gameId,
-      effect: {
-        audioClip: null,
-        volume: parseFloat(localStorage.getItem('audioSFXVolume') || '1')
-      },
+      effect: false,
       gameEnv: getGameEnv(),
       listener: GameMrgEvent.instance.getEventTarget(),
       moveToPos: new Vec3(),
@@ -329,11 +326,19 @@ class ServerHookManager {
         playerName: GlobalMgr.instance.playerName,
       }
     });
-    console.time('preloadEntry');
-    await PackageFacade.instance.preloadEntry();
-    console.timeEnd('preloadEntry');
-    // 设置默认成就系统的音效音量
-    PackageFacade.instance.getCommonEventTarget().emit(GameDataMgrEventsType.updateVolume, parseFloat(localStorage.getItem('audioSFXVolume') || '1'));
+
+    try {
+      await PackageFacade.instance.preloadEntry();
+      // //设置默认成就系统的音效音量
+      PackageFacade.instance
+        .getCommonEventTarget()
+        .emit(
+          GameDataMgrEventsType.updateVolume,
+          parseFloat(localStorage.getItem('effectVolumeScale') || '1')
+        );
+    } catch (error) {
+      console.error('configureActivityEntry error', error);
+    }
   }
 }
 

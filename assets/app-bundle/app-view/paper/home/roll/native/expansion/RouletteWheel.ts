@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Label, tween, UITransform, view, instantiate, Prefab, Vec3, Sprite, Color, input, Input, EventTouch, math } from 'cc';
+import { _decorator, Component, Node, Label, tween, UITransform, view, instantiate, Prefab, Vec3, Sprite, Color, input, Input, EventTouch, math, sp, SpriteFrame } from 'cc';
 import { app } from 'db://assets/app/app';
 
 const { ccclass, property } = _decorator;
@@ -11,6 +11,12 @@ export class RouletteWheel extends Component {
   @property(Node)
   private ItemNode: Node = null;
 
+  @property(SpriteFrame)
+  private chooseSprite: SpriteFrame = null;
+
+  @property(SpriteFrame)
+  private unChooseSprite: SpriteFrame = null;
+
   // swiper相关属性
   private items: Node[] = [];
 
@@ -21,18 +27,14 @@ export class RouletteWheel extends Component {
   private isAnimating: boolean = false;
   
   // 弧形参数
-  // 弧形半径
-  private readonly ARC_RADIUS = 350;
+  // 圆环半径 (直径 780)
+  private readonly ARC_RADIUS = 395;
 
-  // 总弧度135度
-  private readonly ARC_DEGREE = 135;
-
-  // 可视区域宽度
+  // 触摸区域宽度，用于换算滑动距离到旋转角度
   private readonly VIEW_WIDTH = 750;
 
-  // 数据间的角度间隔（整个圆周分配给所有数据）
-  // 360度 / 11个数据项
-  private readonly DATA_ANGLE_STEP = 360 / 11;
+  // 数据间角度步长，运行时根据数据量计算
+  private DATA_ANGLE_STEP: number = 0;
   
   // 触摸相关
   private startTouchX: number = 0;
@@ -44,7 +46,7 @@ export class RouletteWheel extends Component {
     this.initData();
     this.createItems();
     this.updateItemsPosition();
-    // this.registerTouchEvents();
+    // 启用触摸滑动
     this.setupViewClipping();
   }
 
@@ -52,12 +54,11 @@ export class RouletteWheel extends Component {
    * 初始化数据：x1, x2, x4, x8, ..., x1024
    */
   private initData(): void {
-    this.dataList = [];
+    // 固定数据序列
+    this.dataList = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 1, 2, 512, 1024];
 
-    for (let i = 0; i <= 10; i++) {
-      const data = Math.pow(2, i);
-      this.dataList.push(data);
-    }
+    // 根据数据数量动态计算角度步长
+    this.DATA_ANGLE_STEP = 360 / this.dataList.length;
   }
 
   /**
@@ -80,6 +81,19 @@ export class RouletteWheel extends Component {
       const label = item.getChildByName('text').getComponent(Label);
 
       if (label) {
+        // 根据数值大小动态设置字体大小
+        const value = this.dataList[i];
+
+        if (value < 10) {
+          label.fontSize = 42;
+        } else if (value < 100) {
+          label.fontSize = 30;
+        } else if (value < 1000) {
+          label.fontSize = 24;
+        } else {
+          label.fontSize = 18;
+        }
+
         label.string = `x${this.dataList[i]}`;
         label.node.active = true;
       }
@@ -114,46 +128,30 @@ export class RouletteWheel extends Component {
     for (let i = 0; i < totalItems; i++) {
       const item = this.items[i];
       
-      // 计算当前item的角度位置
       // 每个数据项在圆周上均匀分布，加上当前旋转偏移
       const itemAngle = (i * this.DATA_ANGLE_STEP) + this.currentRotation;
       
-      // 检查item是否在可视范围内
-      const normalizedAngle = this.normalizeAngle(itemAngle);
-      const isVisible = this.isItemVisible(normalizedAngle);
-      
-      if (isVisible) {
-        item.active = true;
-        this.setItemPosition(item, normalizedAngle);
+      item.active = true;
+      this.setItemPosition(item, itemAngle);
+    }
+
+    // 更新选中 / 未选中精灵
+    const selectedIndex = ((Math.round(-this.currentRotation / this.DATA_ANGLE_STEP) % this.dataList.length) + this.dataList.length) % this.dataList.length;
+
+    for (let i = 0; i < totalItems; i++) {
+      const sprite = this.items[i].getComponent(Sprite);
+      if (!sprite) continue;
+
+      if (i === selectedIndex) {
+        this.items[i].setScale(1.2, 1.2, 1);
+        this.items[i].getChildByName('text').getComponent(Label).isBold = true;
+        if (this.chooseSprite) sprite.spriteFrame = this.chooseSprite;
       } else {
-        item.active = false;
+        this.items[i].getChildByName('text').getComponent(Label).isBold = false;
+        this.items[i].setScale(1, 1, 1);
+        if (this.unChooseSprite) sprite.spriteFrame = this.unChooseSprite;
       }
     }
-  }
-
-  /**
-   * 将角度标准化到-180到180范围
-   */
-  private normalizeAngle(angle: number): number {
-    let normalized = ((angle % 360) + 360) % 360;
-
-    if (normalized > 180) {
-      normalized -= 360;
-    }
-
-    return normalized;
-  }
-
-  /**
-   * 判断item是否在可视范围内
-   */
-  private isItemVisible(angle: number): boolean {
-    // 可视范围：-67.5度到+67.5度（总共135度）
-    // 67.5度
-    const halfArc = this.ARC_DEGREE / 2;
-    
-    // 判断是否在-67.5到+67.5度范围内
-    return Math.abs(angle) <= halfArc;
   }
 
   /**
@@ -163,84 +161,17 @@ export class RouletteWheel extends Component {
     // 将角度转换为弧度
     const radian = (angle * Math.PI) / 180;
     
-    // 计算上半圆弧形位置
-    // 以底部中心为原点，弧形向上弯曲
+    // 圆心在节点原点，顺时针方向为正
     const x = Math.sin(radian) * this.ARC_RADIUS;
-    // 整体向下移动100像素
     const y = Math.cos(radian) * this.ARC_RADIUS;
     
     item.setPosition(x, y, 0);
     
-    // 根据距离中心的角度调整缩放和透明度
-    const distanceFromCenter = Math.abs(angle);
-    const maxDistance = this.ARC_DEGREE / 2;
-    const distanceRatio = Math.min(distanceFromCenter / maxDistance, 1);
+    // 让 item 随圆环旋转，保持朝向一致
+    // 这里选择让文字始终朝向圆心外侧，因此旋转角度取 -angle
+    item.eulerAngles = new Vec3(0, 0, -angle);
     
-    // 缩放：中心最大(1.0)，边缘最小(0.6)
-    const scale = 1.0 - (distanceRatio * 0.4);
-    item.setScale(scale, scale, 1);
-    
-    // 透明度：中心最亮(255)，边缘较暗(150)
-    const opacity = 255 - (distanceRatio * 105);
-    const sprite = item.getComponent(Sprite);
-
-    if (sprite) {
-      const color = sprite.color.clone();
-      color.a = opacity;
-      sprite.color = color;
-    }
-  }
-
-  /**
-   * 注册触摸事件
-   */
-  private registerTouchEvents(): void {
-    this.node.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
-    this.node.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
-    this.node.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
-    this.node.on(Input.EventType.TOUCH_CANCEL, this.onTouchEnd, this);
-  }
-
-  private onTouchStart(event: EventTouch): void {
-    if (this.isAnimating) return;
-    
-    this.isTouching = true;
-    this.startTouchX = event.getLocationX();
-  }
-
-  private onTouchMove(event: EventTouch): void {
-    if (!this.isTouching || this.isAnimating) return;
-    
-    // 可以添加实时拖拽效果
-    const currentX = event.getLocationX();
-    const deltaX = currentX - this.startTouchX;
-    
-    // 实时旋转效果（可选）
-    // const rotationDelta = (deltaX / this.VIEW_WIDTH) * this.ARC_DEGREE;
-    // this.currentRotation = this.currentRotation + rotationDelta * 0.1;
-    // this.updateItemsPosition();
-  }
-
-  private onTouchEnd(event: EventTouch): void {
-    if (!this.isTouching || this.isAnimating) return;
-    
-    this.isTouching = false;
-    const endTouchX = event.getLocationX();
-    const deltaX = endTouchX - this.startTouchX;
-    
-    // 判断滑动方向和距离
-    const minSwipeDistance = 50;
-
-    if (Math.abs(deltaX) > minSwipeDistance) {
-      if (deltaX > 0) {
-        // 向右滑动，逆时针旋转
-        this.rotateToNext(1);
-        // this.jumpToData(this.dataList[0]);
-      } else {
-        // 向左滑动，顺时针旋转
-        this.rotateToNext(-1);
-      }
-    }
+    // 若需按距离中心调整透明度或缩放，可在此处添加逻辑
   }
 
   /**

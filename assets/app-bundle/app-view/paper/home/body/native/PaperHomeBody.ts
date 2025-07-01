@@ -18,7 +18,7 @@ import BaseView from '../../../../../../../extensions/app/assets/base/BaseView';
 import { app } from '../../../../../../app/app';
 import { HomeController } from '../../../../../../app-builtin/app-controller/HomeController';
 import { PopSettings } from '../../../../pop/settings/native/PopSettings';
-import { calculateWithBase, getViewportSize, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
+import { calculateWithBase, getViewportSize, numberToMoney, wrapSpineCompleteListener } from 'db://assets/common/script/extra/Utils/common';
 import { GameUtilTool } from 'db://assets/common/script/extra/GameUtilTool';
 import { ActivityEventMgr, ActivityEventMgrEventsType } from 'db://assets/common/script/ActivityEventMgr';
 import { PackageFacade } from 'db://assets/common/script/PackageFacade';
@@ -28,6 +28,7 @@ import {  preventRapidClickDecorator, showInsufficientCreditAlert } from 'db://a
 import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { BetTypes } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { freeSpinManager } from '../../activity/native/expansion/FreeSpinManager';
 
 const { ccclass, property } = _decorator;
 
@@ -67,9 +68,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   @property({ type: [SpriteFrame], tooltip: 'vipIcon' })
   private vipIcons: SpriteFrame[] = [];
 
-  @property({ type: Node, tooltip: 'betAmount按钮Ex状态的剪头' })
-  private betAmoutExArrow: Node = null;
-
   @property({ type: Node, tooltip: 'betAmount按钮' })
   private betAmountIcon: Node = null;
 
@@ -84,6 +82,18 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
 
   @property({ type: Node, tooltip: '底部视图' })
   private bottomView: Node = null;
+
+  @property({ type: SpriteFrame, tooltip: 'freespin按钮图片' })
+  private freespinBtnSprite: SpriteFrame = null;
+
+  @property({ type: SpriteFrame, tooltip: 'BuyBonus按钮图片' })
+  private buyBonusBtnSprite: SpriteFrame = null;
+
+  @property({ type: Node, tooltip: 'freespin按钮' })
+  private freespinBtn: Node = null;
+
+  @property({ type: Node, tooltip: 'freespin次数label' })
+  private freeSpinTimesNode: Node = null;
 
   private homeBodyUtil: HomeBodyUtil = new HomeBodyUtil();
 
@@ -149,13 +159,28 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     this.controller.off(HomeController.Event.EnableButton, this.enabledPlayButton, this);
     app.manager.event.off('creditCountChange', this.creditCountChange, this);
     app.manager.event.off('betCountChange', this.betCountChange, this);
-    app.manager.event.off('exModeChange', this.exModeChangeListener, this);
     app.manager.event.off('allwaysAutoPlayChange', this.autoModeChangeListener, this);
     app.manager.event.off('quikeModeChange', this.quikeModeChangeListener, this);
     app.manager.event.off('startAutoPlayChange', this.startAutoPlayChange, this);
 
     return result;
   }
+
+  // /**
+  //  * 播放开始按钮动画
+  //  * @param mode 动画模式
+  //  * @param loop 是否循环
+  //  */
+  // private async playStartBtnAnimation(mode: 'rollBetBtn1' | 'rollBetBtn2' | 'rollBetBtn3', loop: boolean = false) {
+  //   const spine = this.startBtn.getComponent(sp.Skeleton);
+  
+  //   if (spine.animation !== mode) {
+  //     spine.clearTracks();
+  //   }
+  
+  //   spine.setAnimation(0, mode, loop);
+  //   await wrapSpineCompleteListener(spine);
+  // }
 
   /**
    * 余额变化
@@ -171,20 +196,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
    */
   betCountChange(val: number) {
     this.betLable.getComponent(Label).string = 'BET ₱' + numberToMoney(val);
-  }
-
-  /**
-   * ex模式变化
-   * @param val
-   */
-  exModeChangeListener(val: boolean) {
-    this.betAmoutExArrow.active = val;
-
-    this.betAmoutSpine.node.active = val;
-
-    if (val) {
-      this.betAmoutSpine.setAnimation(0, 'action', false);
-    }
   }
 
   /**
@@ -247,11 +258,29 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     app.manager.global.setQuikeMode(!app.manager.global.quikeMode);
   }
 
+  // /**
+  //  * 监听freespin状态变化
+  //  * @param val
+  //  */
+  // freespinStateChange(val: boolean) {
+  //   this.freespinBtn.getComponent(Sprite).spriteFrame = val ? this.freespinBtnSprite : this.buyBonusBtnSprite;
+
+  //   if(val){
+  //     this.betAmoutSpine.node.active = true;
+  //     this.betAmoutSpine.setAnimation(0, 'action', false);
+  //   }else{
+  //     this.betAmoutSpine.node.active = false;
+  //   }
+  // }
+
   /// 点击免费轮购买
   clickBuyBonus() {
     if (this.canClickBuyBonus()) {
-      app.manager.ui.show({ name: 'PopBuybonus' });
-    } 
+      if(app.manager.global.isFreespinMode){
+      }else{
+        app.manager.ui.show({ name: 'PopBuybonus' });
+      }
+    }
   }
 
   // 防止快速点击

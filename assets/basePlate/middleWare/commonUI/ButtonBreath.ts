@@ -1,4 +1,4 @@
-import { _decorator, Button, Component, NodeEventType, Vec3, tween, Tween } from 'cc';
+import { _decorator, Button, Component, NodeEventType, Vec3, tween, Tween, CCFloat, CCBoolean } from 'cc';
 
 const { ccclass, property } = _decorator;
 
@@ -8,31 +8,37 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('ButtonBreath')
 export class ButtonBreath extends Component {
-  @property({ tooltip: '呼吸动画的最小缩放值' })
+  @property({ type:CCFloat,  tooltip: '呼吸动画的最小缩放值' })
   private minScale: number = 0.9;
 
-  @property({ tooltip: '呼吸动画的最大缩放值' })
+  @property({ type:CCFloat, tooltip: '呼吸动画的最大缩放值' })
   private maxScale: number = 1.1;
 
-  @property({ tooltip: '呼吸动画的持续时间（秒）' })
+  @property({ type: CCFloat, tooltip: '呼吸动画的持续时间（秒）' })
   private duration: number = 1.0;
 
-  @property({ tooltip: '是否在触摸时暂停呼吸动画' })
+  @property({ type: CCBoolean, tooltip: '是否在触摸时暂停呼吸动画' })
   private pauseOnTouch: boolean = true;
 
-  @property({ tooltip: '是否自动开始呼吸动画' })
+  @property({ type: CCBoolean, tooltip: '是否自动开始呼吸动画' })
   private autoStart: boolean = true;
 
   private button: Button = null;
+
   private originalScale: Vec3 = new Vec3(1, 1, 1);
+
   private breathTween: Tween<Node> = null;
+
   private isBreathing: boolean = false;
+
   private isPaused: boolean = false;
 
   start() {
     this.button = this.getComponent(Button);
+
     if (!this.button) {
       console.warn('ButtonBreath component must be attached to a node with Button component');
+
       return;
     }
 
@@ -96,6 +102,7 @@ export class ButtonBreath extends Component {
     if (!this.isBreathing) return;
     
     this.isPaused = true;
+
     if (this.breathTween) {
       this.breathTween.pause();
     }
@@ -108,6 +115,7 @@ export class ButtonBreath extends Component {
     if (!this.isBreathing || !this.isPaused) return;
     
     this.isPaused = false;
+
     if (this.breathTween) {
       this.breathTween.resume();
     }

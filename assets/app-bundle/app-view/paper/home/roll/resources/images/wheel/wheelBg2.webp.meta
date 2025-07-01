@@ -1,0 +1,160 @@
+{
+  "ver": "1.0.27",
+  "importer": "image",
+  "imported": true,
+<<<<<<<< HEAD:assets/app-bundle/app-view/paper/home/roll/resources/images/wheel/wheelBg2.webp.meta
+  "uuid": "d55840d2-9c16-424c-bfe7-3a6207b98420",
+========
+  "uuid": "ef79c1a3-58ca-49cf-9090-4086d34cf5bc",
+>>>>>>>> origin/develop:assets/app-bundle/app-view/paper/home/roll/resources/Home_reward_bg.png.meta
+  "files": [
+    ".json",
+    ".webp"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+<<<<<<<< HEAD:assets/app-bundle/app-view/paper/home/roll/resources/images/wheel/wheelBg2.webp.meta
+      "uuid": "d55840d2-9c16-424c-bfe7-3a6207b98420@6c48a",
+      "displayName": "wheelBg2",
+========
+      "uuid": "ef79c1a3-58ca-49cf-9090-4086d34cf5bc@6c48a",
+      "displayName": "Home_reward_bg",
+>>>>>>>> origin/develop:assets/app-bundle/app-view/paper/home/roll/resources/Home_reward_bg.png.meta
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+<<<<<<<< HEAD:assets/app-bundle/app-view/paper/home/roll/resources/images/wheel/wheelBg2.webp.meta
+        "imageUuidOrDatabaseUri": "d55840d2-9c16-424c-bfe7-3a6207b98420",
+========
+        "imageUuidOrDatabaseUri": "ef79c1a3-58ca-49cf-9090-4086d34cf5bc",
+>>>>>>>> origin/develop:assets/app-bundle/app-view/paper/home/roll/resources/Home_reward_bg.png.meta
+        "isUuid": true,
+        "visible": false,
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+<<<<<<<< HEAD:assets/app-bundle/app-view/paper/home/roll/resources/images/wheel/wheelBg2.webp.meta
+      "uuid": "d55840d2-9c16-424c-bfe7-3a6207b98420@f9941",
+      "displayName": "wheelBg2",
+========
+      "uuid": "ef79c1a3-58ca-49cf-9090-4086d34cf5bc@f9941",
+      "displayName": "Home_reward_bg",
+>>>>>>>> origin/develop:assets/app-bundle/app-view/paper/home/roll/resources/Home_reward_bg.png.meta
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0.5,
+        "trimX": 0,
+        "trimY": 0,
+        "width": 612,
+        "height": 95,
+        "rawWidth": 612,
+        "rawHeight": 96,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [
+            -306,
+            -47.5,
+            0,
+            306,
+            -47.5,
+            0,
+            -306,
+            47.5,
+            0,
+            306,
+            47.5,
+            0
+          ],
+          "indexes": [
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          "uv": [
+            0,
+            96,
+            612,
+            96,
+            0,
+            1,
+            612,
+            1
+          ],
+          "nuv": [
+            0,
+            0.010416666666666666,
+            1,
+            0.010416666666666666,
+            0,
+            1,
+            1,
+            1
+          ],
+          "minPos": [
+            -306,
+            -47.5,
+            0
+          ],
+          "maxPos": [
+            306,
+            47.5,
+            0
+          ]
+        },
+        "isUuid": true,
+<<<<<<<< HEAD:assets/app-bundle/app-view/paper/home/roll/resources/images/wheel/wheelBg2.webp.meta
+        "imageUuidOrDatabaseUri": "d55840d2-9c16-424c-bfe7-3a6207b98420@6c48a",
+========
+        "imageUuidOrDatabaseUri": "ef79c1a3-58ca-49cf-9090-4086d34cf5bc@6c48a",
+>>>>>>>> origin/develop:assets/app-bundle/app-view/paper/home/roll/resources/Home_reward_bg.png.meta
+        "atlasUuid": ""
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "hasAlpha": true,
+    "fixAlphaTransparencyArtifacts": false,
+<<<<<<<< HEAD:assets/app-bundle/app-view/paper/home/roll/resources/images/wheel/wheelBg2.webp.meta
+    "redirect": "d55840d2-9c16-424c-bfe7-3a6207b98420@6c48a"
+========
+    "redirect": "ef79c1a3-58ca-49cf-9090-4086d34cf5bc@6c48a"
+>>>>>>>> origin/develop:assets/app-bundle/app-view/paper/home/roll/resources/Home_reward_bg.png.meta
+  }
+}
