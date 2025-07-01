@@ -129,7 +129,7 @@ export class Roll extends Component {
         .by(0.15, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quadIn' })
         .call(() => this.updateNode());
       const going = tween(parentNode)
-        .by(0.03, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quadIn' })
+        .by(0.04, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quadIn' })
         .call(() => {
           this.updateNode();
 

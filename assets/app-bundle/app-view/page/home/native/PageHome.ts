@@ -56,7 +56,7 @@ export class PageHome extends BaseView.BindController(SlotsController) {
   protected onControllerEvent() {
     this.controller.on(SlotsController.Event.FreeSpinChange, (a: boolean) => {
       console.log('freeSpinChange', a);
-
+     
       if (a) {
         this.blurBgNode.getComponent(Sprite).spriteFrame = this.FreeSpinBg;
         this.homeBgNode.getComponent(Sprite).spriteFrame = this.FreeSpinBg;

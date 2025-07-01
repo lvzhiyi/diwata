@@ -130,8 +130,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     app.manager.event.on('creditCountChange', this.creditCountChange, this);
     /// 监听投注金额变化
     app.manager.event.on('betCountChange', this.betCountChange, this);
-    // 监听ex模式变化
-    app.manager.event.on('exModeChange', this.exModeChangeListener, this);
     // 监听自动模式变化
     app.manager.event.on('allwaysAutoPlayChange', this.autoModeChangeListener, this);
     // 监听快速模式变化
@@ -140,10 +138,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     app.manager.event.on('startAutoPlayChange', this.startAutoPlayChange, this);
     // 监听自动模式按钮点击
     app.manager.event.on('clickAllwaysAutoPlay', this.clickAllwaysAutoModeBtn, this);
-
-    // 注册全局事件监听
-    app.manager.event.on('creditCountChange', this.creditCountChange, this);
-    app.manager.event.on('betCountChange', this.betCountChange, this);
   }
 
   // 界面关闭时的相关逻辑写在这(已经关闭的界面不会触发onHide)
