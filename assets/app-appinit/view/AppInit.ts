@@ -51,13 +51,6 @@ export class AppInit extends BaseAppInit {
     window?.hideLoadingPage?.();
   }
 
-  // BaseAppInit中使用start方法作为初始化入口，如果重写start方法，请注意调用父类方法
-  protected startInit() { 
-    super.startInit();
-    // 预加载资源
-    this._preloadResources();
-  }
-
   /**
    * 初始化完成
    */
@@ -81,6 +74,9 @@ export class AppInit extends BaseAppInit {
    * 用户初始化
    */
   async onUserInit() {
+    // 预加载资源
+    this._preloadResources();
+
     try {
       await this.loginUser();
       await this._getUserCredit();

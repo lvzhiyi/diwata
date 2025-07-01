@@ -1,6 +1,6 @@
 import BaseController from 'db://app/base/BaseController';
 import { app } from 'db://assets/app/app';import { calculateWithBase, delay } from '../../common/script/extra/Utils/common';
-import { BetSubTypes, BetTypes, RewardSubTypeEnum, RewardType } from '../../basePlate/middleWare/enums/bet';
+import { BetSubTypes, BetTypes,  } from '../../basePlate/middleWare/enums/bet';
 import { doBet } from '../../basePlate/middleWare/services/bet';
 import { HTTP_STATUS_CODES } from '../../common/script/extra/Request';
 import GameProcessCtrl, { GameState } from '../../common/script/extra/GameProcessCtrl';
@@ -101,6 +101,8 @@ export class HomeController extends BaseController<
     if (starCardData == null) {
       return;
     }
+
+    console.log('消费星卡', starCardData);
   
     this.autoPlayType = BetTypes.buy;
     const betAmount = starCardData.bet;
@@ -108,6 +110,7 @@ export class HomeController extends BaseController<
     app.controller.slots.closeFreeSpinSettlementDialog();
     // 改变游戏状态
     app.controller.slots.freeSpinChange(true);
+    this.gameStart();
     // 发起购买免费轮
     this.buyBonusBetResult(betAmount, BetTypes.buy, BetSubTypes.buySpinNormal, starCardData);
   }
@@ -265,6 +268,7 @@ export class HomeController extends BaseController<
       if (isUseStarCard) {
         // 星卡使用成功
         ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.useGoodsSuccess);
+        // 复原投注金额
       }
 
       app.controller.slots.stopRolling(this.betResult);
@@ -309,6 +313,9 @@ export class HomeController extends BaseController<
     } else {
       this.betResult = mockFailedData;
       ToastView.showCommonToast('Unstable Network,Bet failed');
+      app.controller.slots.resetBetAmount();
+      // 免费中的子轮其中一个中断后，设置为非免费轮，修改状态
+      app.controller.slots.freeSpinChange(false);
       app.controller.slots.stopRolling(this.betResult);
     }
   }

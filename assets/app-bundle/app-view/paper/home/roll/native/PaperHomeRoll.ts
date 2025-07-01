@@ -146,7 +146,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.Rolls.forEach((roll: Node, rollIndex: number) => {
       setTimeout(() => {
         roll.getComponent(Roll).startRolling();
-      }, rollIndex * (app.manager.global.quikeMode ? 0 : 200));
+      }, rollIndex * (app.manager.global.quikeMode ? 0 : 100));
     });
   }
 
@@ -167,7 +167,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.Rolls.forEach((roll: Node, rollIndex: number) => {
       setTimeout(() => {
         this.stopSingleRoll(roll, rollIndex);
-      }, rollIndex * (app.manager.global.quikeMode ? 0 : 200));
+      }, rollIndex * (app.manager.global.quikeMode ? 0 : 100));
     });
   }
 

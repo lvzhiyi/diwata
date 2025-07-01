@@ -10,10 +10,11 @@ import { serverHookManager } from 'db://assets/basePlate/middleWare/serverManage
 import { getUserCredit } from 'db://assets/basePlate/middleWare/services/user';
 import { HTTP_STATUS_CODES } from 'db://assets/common/script/extra/Request';
 import { HomeController } from 'db://assets/app-builtin/app-controller/HomeController';
+import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsController';
 
 const { ccclass, property } = _decorator;
 @ccclass('PaperHomeActivity')
-export class PaperHomeActivity extends BaseView.BindController(HomeController) {
+export class PaperHomeActivity extends BaseView.BindController(SlotsController) {
     @property({ type: Node, tooltip: 'ActivityEntry' })
     private activityEntry: Node = null;
 
@@ -33,6 +34,11 @@ export class PaperHomeActivity extends BaseView.BindController(HomeController) {
         );
         ActivityEventMgr.instance.on(ActivityEventMgrEventsType.useFreeSpin, this.onStartFreespin, this);
         ActivityEventMgr.instance.on(ActivityEventMgrEventsType.cancelUseFreeSpin, this.onCancelFreespin, this);
+        this.controller.on(SlotsController.Event.FreeSpinChange, (a: boolean) => {
+          this.onFreeSpinStateChange(a);
+
+          return true;
+        });
         this.setupStarCardPostion();
         PackageFacade.instance.showEntryDialog();
       }
@@ -77,7 +83,7 @@ export class PaperHomeActivity extends BaseView.BindController(HomeController) {
       }
 
       // 发生一次购买免费轮
-      this.controller.onUseStarCard(starCardData);
+      app.controller.home.onUseStarCard(starCardData);
     }
 
     /**
@@ -192,7 +198,7 @@ export class PaperHomeActivity extends BaseView.BindController(HomeController) {
    * @param val 新的投注金额
    */
     private betCountChange(val: number) {
-      // this.updateBetDisplay(val);
+      app.manager.event.emit('betCountChange', val);
     }
 
     // 界面关闭时的相关逻辑写在这(已经关闭的界面不会触发onHide)

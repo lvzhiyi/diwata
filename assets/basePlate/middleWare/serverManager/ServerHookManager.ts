@@ -121,7 +121,7 @@ class ServerHookManager {
       }
       // 非接口错误，并且是投注接口，就显示登录弹窗
       if (httpError.type !== 'api' && path === ApiPath.bet) {
-        // this.showLoginDialog();
+        this.showLoginDialog();
 
         return;
       }

@@ -6,7 +6,7 @@ import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate
 
 const { ccclass, property } = _decorator;
 
-const SYMBOL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010', '3001'];
+const SYMBOL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010',];
 
 @ccclass('Roll')
 export class Roll extends Component {
@@ -125,16 +125,11 @@ export class Roll extends Component {
      */
     startRollingAnimation() {
       const parentNode = this.node;
-
-      // 先向上移动20像素
-      const initialMove = tween(parentNode)
-        .by(0.1, { position: new Vec3(0, 20, 0) }, { easing: 'quartOut' });
-
       const start = tween(parentNode)
-        .by(0.15, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'linear' })
+        .by(0.15, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quadIn' })
         .call(() => this.updateNode());
       const going = tween(parentNode)
-        .by(0.03, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintIn' })
+        .by(0.04, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quadIn' })
         .call(() => {
           this.updateNode();
 
@@ -145,7 +140,7 @@ export class Roll extends Component {
         });
 
       this.rollTween = tween(parentNode);
-      this.rollTween.then(initialMove).then(start).repeatForever(going).start();
+      this.rollTween.then(start).repeatForever(going).start();
     }
 
     /**
@@ -171,8 +166,8 @@ export class Roll extends Component {
       const reverseReslutSymbols = reslutSymbols?.reverse();
     
       // 先向下移动20像素
-      const initialMove = tween(parentNode)
-        .by(0.1, { position: new Vec3(0, -20, 0) }, { easing: 'quartIn' });
+      // const initialMove = tween(parentNode)
+      //   .by(0.1, { position: new Vec3(0, -20, 0) }, { easing: 'quartIn' });
       const going = tween(parentNode)
         .by(0.06, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintOut' })
         .call(() => this.updateNode(reverseReslutSymbols));
@@ -190,7 +185,7 @@ export class Roll extends Component {
         });
 
       this.rollTween = tween(parentNode);
-      this.rollTween.then(initialMove).repeat(reverseReslutSymbols.length, going).then(end).start();
+      this.rollTween.repeat(reverseReslutSymbols.length, going).then(end).start();
     }
 
     /**
