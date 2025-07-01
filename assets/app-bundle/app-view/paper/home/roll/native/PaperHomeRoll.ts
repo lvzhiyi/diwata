@@ -1,17 +1,18 @@
-import { _decorator, Color, Label, Node, Sprite, SpriteFrame, UITransform, Vec3, Widget } from 'cc';
+import { _decorator, Color, Label, Node, RichText, Sprite, SpriteFrame, UITransform, Vec3, Widget } from 'cc';
 import BaseView from 'db://app/base/BaseView';
 import { Roll } from './expansion/Roll';
 import { Symbol } from './expansion/Symbol';
 import { calculateWithBase, delay } from 'db://assets/common/script/extra/Utils/common';
 import { app } from 'db://assets/app/app';
 import { PopGrandPrize } from '../../../../pop/grand-prize/native/PopGrandPrize';
-import { RewardSubTypeEnum, SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
+import { BetTypes, RewardSubTypeEnum, SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { PopFreeSpinResult } from '../../../../pop/free-spin-result/native/PopFreeSpinResult';
 import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsController';
 import { RewardLineBox } from './expansion/RewardLineBox';
 import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { HomeRollTool } from './expansion/HomeRollTool';
 import { GameResourceManager } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { preventRapidClickDecorator } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 
 const { ccclass, property } = _decorator;
 
@@ -27,14 +28,14 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   @property({ type: Node, tooltip: 'Freespin免费轮次数' })
   private FreespinTimesNode: Node = null;
 
+  @property({ type: Node, tooltip: '' })
+  private freespinView: Node = null;
+
+  @property({ type: Node, tooltip: '' })
+  private buyBonusView: Node = null;
+
   @property({ type: Node, tooltip: 'Tips Node' })
   private TipsNode: Node = null;
-
-  @property({ type: Node, tooltip: 'RewardLineBox' })
-  private RewardLineBox: Node = null;
-
-  @property({ type: Node, tooltip: 'Reward Box' })
-  private RewardBox: Node = null;
 
   private Rolls: Node[] = [];
 
@@ -74,19 +75,12 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const screenHeight = window.innerHeight;
     const screenScale =  screenHeight / screenWidth;
 
-    if (screenScale < 1.78) {
-      this.RewardBox.getComponent(Widget).bottom = 185;
-    }
-
     console.log('screenWidth', screenWidth, screenHeight);
   }
 
   initData() {
     this.roundIndex = 0;
     app.manager.global.setMultipleIndex(this.isFreeSpin ? 3 : 0);
-
-    // 重置中奖线
-    this.RewardLineBox.getComponent(RewardLineBox).reset();
   }
 
   initRoll() {
@@ -104,6 +98,31 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.controller.on(SlotsController.Event.StartRolling, this.startGame, this);
     this.controller.on(SlotsController.Event.StopRolling, this.stopGame, this);
     app.manager.event.on('buyFreeSpinTimes', this.buyFreeSpinTimes, this);
+  }
+
+  /**
+   * 点击免费轮购买
+   * */ 
+  clickBuyBonus() {
+    if (this.canClickBuyBonus()) {
+      app.manager.ui.show({ name: 'PopBuybonus' });
+    } 
+  }
+
+  // 防止快速点击
+  @preventRapidClickDecorator(1000)
+  canClickBuyBonus() {
+    if (app.manager.global.isGoing || this.freespinView.active) {
+      if (app.controller.slots.betType === BetTypes.buy) {
+        ToastManager.inst.show('The purchased free game is in use, and this function is temporarily unavailable');
+      } else {
+        ToastManager.inst.show('Game Playing');
+      }
+
+      return false;
+    }
+  
+    return true;
   }
 
   /**
@@ -346,14 +365,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     if (currentRoundTotalRewardAmount > 0) {
       this.totalRewardAmount += currentRoundTotalRewardAmount;
-      this.changeTipsContent(`WIN ₱ ${calculateWithBase(this.totalRewardAmount)}`);
-    }
-
-    /**
-     * 显示中奖线Toast
-     */
-    if (this.getRewardLine().length > 0) {
-      this.RewardLineBox.getComponent(RewardLineBox).init(this.getRewardLine());
+      
+      this.changeTipsContent(`<color=#FF50E4><b>WIN</b></color> <color=#FFFFFF>₱ ${calculateWithBase(this.totalRewardAmount)}</color>`, true);
     }
 
     /**
@@ -428,7 +441,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
        */
       if (this.currentRoundIsMaxMultiple()) {
         this.totalRewardAmount = app.controller.slots.isFreeSpin ? app.manager.global.freeSpinTotalAmount : this.resultData.totalPayoutAmount;
-        this.changeTipsContent(`WIN ₱ ${calculateWithBase(this.totalRewardAmount)}`);
+        this.changeTipsContent(`<color=#FF50E4><b>WIN</b></color> <color=#FFFFFF>₱ ${calculateWithBase(this.totalRewardAmount)}</color>`, true);
         await delay(50);
       }
 
@@ -601,7 +614,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   private updateFreeSpinTimesNodeString() {
     const newFreeSpinNumber = app.manager.global.freeSpinTimes - app.manager.global.gameRecordIndex - 1;
-    this.FreespinTimesNode.getComponent(Label).string = `FREE SPIN ${newFreeSpinNumber}`;
+    this.FreespinTimesNode.getComponent(Label).string = `${newFreeSpinNumber}`;
   }
 
   /**
@@ -635,17 +648,21 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   /**
-   * 显示免费轮Node，隐藏JackpotNode
+   * 显示免费轮Node，
    */
   private showFreeSpinTimes() {
     this.FreespinTimesNode.active = true;
+    this.freespinView.active = true;
+    this.buyBonusView.active = false;
   }
 
   /**
-   * 隐藏免费轮Node，展示JackpotNode
+   * 隐藏免费轮Node，
    */
   private hideFreeSpinTimes() {
     this.FreespinTimesNode.active = false;
+    this.freespinView.active = false;
+    this.buyBonusView.active = true;
   }
 
   /**
@@ -707,8 +724,12 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   /**
    * 修改Tips内容
    */
-  private changeTipsContent(str: string) {
-    this.TipsNode.getComponent(Label).string = str;
+  private changeTipsContent(str: string, needRichText: boolean = false) {
+    if(needRichText){
+      this.TipsNode.getComponent(RichText).string = str;
+    }else{
+      this.TipsNode.getComponent(RichText).string = `<color=#FFFFFF>${str}</color>`;
+    }
   } 
 
   /**
