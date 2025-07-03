@@ -54,7 +54,7 @@ export class PageHome extends BaseView.BindController(SlotsController) {
 
   // 监听所有事件
   protected onControllerEvent() {
-    this.controller.on(SlotsController.Event.FreeSpinChange, (a: boolean) => {
+    this.controller.on(SlotsController.Event.FreeBonusSpinChange, (a: boolean) => {
       console.log('freeSpinChange', a);
      
       if (a) {

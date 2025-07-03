@@ -104,6 +104,12 @@ class FreeSpinManager {
     ActivityEventMgr.instance.on(ActivityEventMgrEventsType.useFreeSpin, this.onStartFreespin, this);
     ActivityEventMgr.instance.on(ActivityEventMgrEventsType.cancelUseFreeSpin, this.onCancelFreespin, this);
     ActivityEventMgr.instance.on(ActivityEventMgrEventsType.endFreeSpin, this.onCancelFreespin, this);
+    // 成就freeSpin活动过期
+    app.manager.event.on('freeSpinActivityIdInvalid', this.onFreeSpinActivityIdInvalid, this);
+    // 监听自动按钮
+    app.manager.event.on('allwaysAutoPlayChange', this.autoModeChangeListener, this);
+    // 监听freeSpin金额累计
+    app.manager.event.on('freeSpin:addAmount', this.updateFreespinRewardAmount, this);
 
     if (PackageFacade.instance.useFreeSpin()) {
       this.holdFreespinEvent();
@@ -116,6 +122,14 @@ class FreeSpinManager {
    */
   private changeSideEntryDialogState(isActive: boolean) {
     PackageFacade.instance.setEntryDialogActive(isActive);
+  }
+
+  /**
+   * 自动模式变化
+   * @param val
+   */
+  autoModeChangeListener(val: boolean) {
+    this.isAutoGameEnabled = val;
   }
 
   /**
@@ -207,11 +221,13 @@ class FreeSpinManager {
     app.manager.global.setFreespinBetAmount(betAmount);
     // 设置活动ID
     this.freespinCampaignId = campaignId;
+    // 显示freespin按钮
+    this.updateFreeSpinBtnState(true);
     // 更新freespin次数
     this.updateFreespinTimes(freespinTimes);
     // 更新投注金额显示
-    this.updateBetDisplay(betAmount);
-    // 播放开始按钮动画
+    this.betCountChange(betAmount);
+    // 播放开始按钮动画展示FreeSpin
     this.playFreespinStartBtnAnimation();
     // 更新freespin次数显示状态
     this.updateFreespinTimesVisible(true);
@@ -239,17 +255,20 @@ class FreeSpinManager {
     this.freespinTimes = 0;
     
     // 更新投注金额显示
-    this.updateBetDisplay(app.manager.global.betCount);
+    this.betCountChange(app.manager.global.betCount);
     // 启用投注金额按钮
     this.updateBetAmountButtonState(true);
     // 更新freespin次数显示状态
     this.updateFreespinTimesVisible(false);
+    // 隐藏freespin按钮
+    this.updateFreeSpinBtnState(false);
     // 恢复开始按钮动画
     this.restoreStartBtnAnimation();
+    // 显示freespin累计中奖金额
     this.showFreespinTotalRewardAmount();
   }
 
-  /**
+  /**  
    * 停止freespin模式
    */
   private stopFreespin() {
@@ -273,10 +292,7 @@ class FreeSpinManager {
    */
   private showFreespinTotalRewardAmount() {
     // 通过事件系统通知UI显示累计奖励
-    app.manager.event.emit('freespin:showTotalReward', {
-      amount: MoneyUtil.internalToDisplayWithComma(this.freespinRewardAmount),
-      offset: v3(0, -290, 0)
-    });
+    app.manager.event.emit('freespin:showTotalReward', this.freespinRewardAmount);
   }
 
   /**
@@ -293,6 +309,7 @@ class FreeSpinManager {
    */
   private updateFreespinTimes(freespinTimes: number) {
     this.freespinTimes = freespinTimes;
+    app.manager.event.emit('freespin:times', freespinTimes);
 
     if (this.freespinTimes <= 0) {
       this.stopFreespin();
@@ -310,16 +327,15 @@ class FreeSpinManager {
    * 播放开启freespin模式时，开始按钮动画
    */
   private async playFreespinStartBtnAnimation() {
-    await this.playStartBtnAnimation('rollBetBtn2', false);
-    await this.playStartBtnAnimation('rollBetBtn3', true);
-    console.log('playFreespinStartBtnAnimation end');
+    await this.playStartBtnAnimation('action', false);
+    await this.playStartBtnAnimation('idle1', true);
   }
 
   /**
    * 恢复开始按钮动画动画成普通模式动画
    */
   private async restoreStartBtnAnimation() {
-    await this.playStartBtnAnimation('rollBetBtn1', true);
+    await this.playStartBtnAnimation('idle', true);
   }
 
   /**
@@ -327,7 +343,14 @@ class FreeSpinManager {
    * @param enabled 是否启用
    */
   private updateBetAmountButtonState(enabled: boolean) {
-    app.manager.event.emit('bet-amount-button:state', enabled);
+    app.controller.home.changeBetAmountButtonState(enabled);
+  }
+
+  /**
+   * 更新FreeSpin 按钮的隐藏和展示
+  */
+  private updateFreeSpinBtnState(enabled: boolean) {
+    app.manager.event.emit('freespin:buttonState', enabled);
   }
 
   /**
@@ -335,7 +358,7 @@ class FreeSpinManager {
    * @param enabled 是否启用
    */
   private updateStartButtonState(enabled: boolean) {
-    app.manager.event.emit('start-button:state', enabled);
+    app.controller.home.changeStartButtonState(enabled);
   }
 
   /**
@@ -343,23 +366,23 @@ class FreeSpinManager {
    * @param enabled 是否启用
    */
   private updateAutoButtonEnableState(enabled: boolean) {
-    app.manager.event.emit('auto-button:state', enabled);
+    app.controller.home.changeAutoPlayButtonState(enabled);
   }
 
   /**
-   * 更新投注金额显示
-   * @param amount 投注金额
+   * 投注金额变化UI处理
+   * @param val 新的投注金额
    */
-  private updateBetDisplay(amount: number) {
-    app.manager.event.emit('bet-display:update', amount);
+  private betCountChange(val: number) {
+    app.manager.event.emit('betCountChange', val);
   }
 
   /**
-   * 开始或停止自动游戏
+   * 停止自动游戏
    */
   private startOrStopAutoGame() {
     this.isAutoGameEnabled = !this.isAutoGameEnabled;
-    app.manager.event.emit('auto-game:toggle', this.isAutoGameEnabled);
+    app.manager.event.emit('stopAllwaysAutoPlay');
   }
 
   /**
@@ -368,7 +391,7 @@ class FreeSpinManager {
    * @param loop 是否循环播放
    */
   private async playStartBtnAnimation(animationName: string, loop: boolean) {
-    app.manager.event.emit('start-button:animation', { animationName, loop });
+    app.manager.event.emit('start-button:animation',  animationName, loop );
   }
 }
 

@@ -1,17 +1,19 @@
 import BaseController from 'db://app/base/BaseController';
 import { app } from '../../app/app';
 import { BetSubTypes, BetTypes } from '../../basePlate/middleWare/enums/bet';
+import { freeSpinManager } from '../../app-bundle/app-view/paper/home/activity/native/expansion/FreeSpinManager';
 
 export class SlotsController extends BaseController<
   SlotsController,
   {
     StartRolling: () => void;
     StopRolling: (serverResults: BetResult) => void;
-    FreeSpinChange: (isFreeSpin: boolean) => void;
+    FreeBonusSpinChange: (isFreeBonusSpin: boolean) => void;
+    GameOver: (betResult: BetResult) => void;
   }
 >() {
   // 是否是免费轮
-  isFreeSpin = false;
+  isFreeBonusSpin = false;
 
   private betRecordId: string = '';
 
@@ -42,13 +44,21 @@ export class SlotsController extends BaseController<
   }
 
   /**
+   * 游戏结束
+   * @param betResult 游戏结果
+   */
+  gameOver(betResult: BetResult) {
+    this.emit(SlotsController.Event.GameOver, betResult);
+  }
+
+  /**
    * 改变免费轮状态
    */
-  freeSpinChange(isFreeSpin: boolean) {
-    this.isFreeSpin = isFreeSpin;
-    this.emit(SlotsController.Event.FreeSpinChange, isFreeSpin);
+  freeBonusSpinChange(isFreeBonusSpin: boolean) {
+    this.isFreeBonusSpin = isFreeBonusSpin;
+    this.emit(SlotsController.Event.FreeBonusSpinChange, isFreeBonusSpin);
 
-    if(!isFreeSpin){
+    if(!isFreeBonusSpin){
       this.resetBetAmount();
     }
   }
@@ -67,7 +77,7 @@ export class SlotsController extends BaseController<
   betNormal() {
     app.controller.home.gameStart();
 
-    app.controller.home.getBetResult(app.manager.global.betCount, BetTypes.normal, BetSubTypes.normal);
+    app.controller.home.getBetResult(app.manager.global.betCount, BetTypes.normal, BetSubTypes.normal, app.manager.global.isFreespinMode, freeSpinManager.freespinCampaignId);
   }
 
   /**

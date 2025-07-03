@@ -8,6 +8,8 @@ import { sys } from 'cc';
 import { mockFailedData, mockSuccessData } from '../../basePlate/core/baseUtil/mockDataUtils';
 import { ToastView } from '../../basePlate/middleWare/commonUI/ToastView';
 import { ActivityEventMgr, ActivityEventMgrEventsType } from '../../common/script/ActivityEventMgr';
+import { GlobalMgr } from '../../common/script/extra/GlobalMgr';
+import { MoneyUtil } from '../../basePlate/core/baseUtil/MoneyUtil';
 
 // TODO 测试用
 const useMock = false;
@@ -19,8 +21,18 @@ export class HomeController extends BaseController<
     GameStart: () => void;
     GameOver: (betResult: BetResult) => void;
     IsAutoPlay: (betResult: BetResult) => void;
+    // 启用投注金额，开始按钮，自动按钮
     EnableButton: () => void;
+    // 禁用投注金额，开始按钮，自动按钮
     DisableButton: () => void;
+    // 投注金额按钮状态
+    BetAmountButtonState: (state: boolean) => void;
+    // 自动投注按钮状态
+    AutoPlayButtonState: (state: boolean) => void;
+    // 开始按钮状态
+    StartButtonState: (state: boolean) => void;
+    // 成就freeSpin活动过期
+    FreeSpinActivityIdInvalid: () => void;
     ClickScreen: () => void;
   }
 >() {
@@ -55,6 +67,8 @@ export class HomeController extends BaseController<
     this.emit(HomeController.Event.DisableButton);
     GameProcessCtrl.gameState = GameState.GameStarting;
     app.manager.global.setIsGoing(true);
+    // 活动系统需要游戏的状态
+    GlobalMgr.instance.isGameing = true;
     this.isEndGame = false;
     app.controller.slots.startRolling();
   }
@@ -65,9 +79,11 @@ export class HomeController extends BaseController<
   async gameOver() {
     console.log('游戏结束事件');
     GameProcessCtrl.gameState = GameState.GameEnded;
+    GlobalMgr.instance.isGameing = false;
+    app.controller.slots.gameOver(this.betResult);
 
     // 普通轮且没有命中免费轮，或达到最大倍数
-    if ((!this.checkIsFreeRound(this.betResult) && !app.controller.slots.isFreeSpin) || this.checkIsMaxMultiple(this.betResult)) {
+    if ((!this.checkIsFreeRound(this.betResult) && !app.controller.slots.isFreeBonusSpin) || this.checkIsMaxMultiple(this.betResult)) {
       // 结束游戏
       this.emit(HomeController.Event.GameOver, this.betResult);
 
@@ -78,7 +94,7 @@ export class HomeController extends BaseController<
 
       // 更改余额
       app.manager.global.setCreditCount(calculateWithBase(this.credit, true));
-    } else if (this.isFreeSpinLastRound()) {
+    } else if (this.isFreeBonusSpinLastRound()) {
       // 免费轮最后一轮
       // 更改余额
       app.manager.global.setCreditCount(calculateWithBase(this.credit, true));
@@ -109,7 +125,7 @@ export class HomeController extends BaseController<
     // 关闭结算弹窗
     app.controller.slots.closeFreeSpinSettlementDialog();
     // 改变游戏状态
-    app.controller.slots.freeSpinChange(true);
+    app.controller.slots.freeBonusSpinChange(true);
     this.gameStart();
     // 发起购买免费轮
     this.buyBonusBetResult(betAmount, BetTypes.buy, BetSubTypes.buySpinNormal, starCardData);
@@ -148,7 +164,7 @@ export class HomeController extends BaseController<
    * @param isFreeSpin 是否是使用free spin
    * @param compainId 活动ID
    */
-  async getBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, starCardData?: any, isFreeSpin?: boolean, compainId?: string) {
+  async getBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, isFreeSpin?: boolean, compainId?: string) {
     app.controller.slots.setBetType(betType, betSubType);
     
     if (useMock) {
@@ -165,10 +181,11 @@ export class HomeController extends BaseController<
 
       return;
     }
-
+    // 消费免费轮
     if(betType === BetTypes.buy) {
-      this.buyBonusBetResult(amount, betType, betSubType, starCardData);
+      this.buyBonusBetResult(amount, betType, betSubType);
     } else {
+      // 普通投注
       this.getNormalBetResult(amount, betType, betSubType, isFreeSpin, compainId);
     }
   }
@@ -178,7 +195,7 @@ export class HomeController extends BaseController<
  */
   async getNormalBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, isFreeSpin?: boolean, compainId?: string) {
     const betAmount = calculateWithBase(amount, false);
-    const payAmount = calculateWithBase(amount * 1, false);
+    const payAmount = isFreeSpin ? 0 : betAmount;
 
     const res = await doBet({
       gameId: app.config.app.GAME_ID,
@@ -196,9 +213,15 @@ export class HomeController extends BaseController<
     });
 
     if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data) {
-      app.manager.global.setCreditCount(
-        app.manager.global.creditCount - (app.manager.global.betCount * (betType === BetTypes.buy ? app.config.app.BUY_FREE_SPIN_TIMES_RATIO : 1))
-      );
+      if(isFreeSpin == false) {
+        app.manager.global.setCreditCount(
+          app.manager.global.creditCount - (app.manager.global.betCount * (betType === BetTypes.buy ? app.config.app.BUY_FREE_SPIN_TIMES_RATIO : 1))
+        );
+      } else {
+        // 通知freeSpin金额进行累计
+        app.manager.event.emit('freeSpin:addAmount', MoneyUtil.internalToDisplay(res.data.totalPayoutAmount));
+      }
+
       this.credit = res.data.credit;
       this.betResult = res.data;
       await delay(app.manager.global.quikeMode ? 0 : 500);
@@ -315,7 +338,7 @@ export class HomeController extends BaseController<
       ToastView.showCommonToast('Unstable Network,Bet failed');
       app.controller.slots.resetBetAmount();
       // 免费中的子轮其中一个中断后，设置为非免费轮，修改状态
-      app.controller.slots.freeSpinChange(false);
+      app.controller.slots.freeBonusSpinChange(false);
       app.controller.slots.stopRolling(this.betResult);
     }
   }
@@ -332,8 +355,8 @@ export class HomeController extends BaseController<
   /**
    * 是否是免费轮最后一轮
    */
-  isFreeSpinLastRound() {
-    return app.controller.slots.isFreeSpin && app.manager.global.gameRecordIndex === app.manager.global.gameRecordIds.length;
+  isFreeBonusSpinLastRound() {
+    return app.controller.slots.isFreeBonusSpin && app.manager.global.gameRecordIndex === app.manager.global.gameRecordIds.length;
   }
 
   /**
@@ -343,5 +366,26 @@ export class HomeController extends BaseController<
     const resultList = result.resultDetail.resultList;
 
     return resultList.some(item => item.accumulateReachMaxMultiple);
+  }
+
+  /**
+   * 改变投注金额按钮状态
+   */
+  changeBetAmountButtonState(state: boolean) {
+    this.emit(HomeController.Event.BetAmountButtonState, state);
+  }
+
+  /**
+   * 改变自动投注按钮状态
+   */
+  changeAutoPlayButtonState(state: boolean) {
+    this.emit(HomeController.Event.AutoPlayButtonState, state);
+  }
+
+  /**
+   * 改变开始按钮状态
+   */
+  changeStartButtonState(state: boolean) {
+    this.emit(HomeController.Event.StartButtonState, state);
   }
 }

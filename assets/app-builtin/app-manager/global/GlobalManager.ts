@@ -64,11 +64,11 @@ export class GlobalManager extends BaseManager {
   // 免费轮游戏记录索引
   private _gameRecordIndex: number = 0;
 
-  // 免费轮次数
-  private _freeSpinTimes: number = 0;
+  // 购买的免费轮次数
+  private _freeBonusTimes: number = 0;
 
-  // 免费轮总金额
-  private _freeSpinTotalAmount: number = 0;
+  // 购买的免费轮总金额
+  private _freeBonusTotalAmount: number = 0;
 
   // 是否开始自动游戏
   private _startAutoplay = false;
@@ -154,6 +154,12 @@ export class GlobalManager extends BaseManager {
   /** 赠送的免费游玩模式投注金额 */
   private _freespinBetAmount: number = 0;
 
+  /** 是否星卡模式 */
+  private _isStartCardMode: boolean = false;
+
+  /** 星卡模式投注金额 */
+  private _startCardBetAmount: number = 0;
+
   /** 是否赠送的免费游玩模式 */
   public get isFreespinMode(): boolean {
     return this._isFreespinMode;
@@ -164,21 +170,34 @@ export class GlobalManager extends BaseManager {
     app.manager.event.emit('freespin:state', bool);
     this._isFreespinMode = bool;
   }
-  
+
   /** 设置freespin投注金额 */
   public setFreespinBetAmount(val: number): void {
     this._freespinBetAmount = val;
   }
+
+  /** 获取星卡模式状态 */
+  public get isStartCardMode(): boolean {
+    return this._isStartCardMode;
+  }
+
+  public setIsStartCardMode(bool: boolean): void {
+    this._isStartCardMode = bool;
+  }
+
+  /** 设置星卡模式投注金额 */
+  public setStartCardBetAmount(val: number): void {
+    this._startCardBetAmount = val;
+  }
   
   public get betCount() {
-    const betCount = sys.localStorage.getItem('betCount_' + this.playerId);
-    console.log('betCount', betCount);  
+    let betCount = sys.localStorage.getItem('betCount_' + this.playerId);
     
     if (betCount) {
-      return parseFloat(betCount);
+      betCount = parseFloat(betCount);
     }
 
-    return this._isFreespinMode ? this._freespinBetAmount : this._betCount;
+    return this._isFreespinMode ? this._freespinBetAmount : betCount;
   }
 
   public setBetCount(val: number) {
@@ -219,20 +238,20 @@ export class GlobalManager extends BaseManager {
     this._gameRecordIndex = index;
   }
   
-  public get freeSpinTimes() {
-    return this._freeSpinTimes;
+  public get freeBonusTimes() {
+    return this._freeBonusTimes;
   }
 
-  public setFreeSpinTimes(times: number) {
-    this._freeSpinTimes = times;
+  public setFreeBonusTimes(times: number) {
+    this._freeBonusTimes = times;
   }
 
-  public get freeSpinTotalAmount() {
-    return this._freeSpinTotalAmount;
+  public get freeBonusTotalAmount() {
+    return this._freeBonusTotalAmount;
   }
 
-  public setFreeSpinTotalAmount(val: number) {
-    this._freeSpinTotalAmount = val;
+  public setFreeBonusTotalAmount(val: number) {
+    this._freeBonusTotalAmount = val;
   }
 
   public get startAutoPlay() {

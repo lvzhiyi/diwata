@@ -2,11 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-<<<<<<<< HEAD:assets/resources/icons/publicicons/icon_freespins.png.meta
-  "uuid": "1917d709-f7c3-4101-8ecb-9bc6353fb7e7",
-========
-  "uuid": "6b753cf8-f0f7-43c1-bb7c-34403bc99ca5",
->>>>>>>> origin/develop:assets/resources/icons/homeIcons/home_Free_time.png.meta
+  "uuid": "f9f9069c-1497-4257-afd6-be457693fa5e",
   "files": [
     ".json",
     ".png"
@@ -14,23 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-<<<<<<<< HEAD:assets/resources/icons/publicicons/icon_freespins.png.meta
-      "uuid": "1917d709-f7c3-4101-8ecb-9bc6353fb7e7@6c48a",
+      "uuid": "f9f9069c-1497-4257-afd6-be457693fa5e@6c48a",
       "displayName": "icon_freespins",
-========
-      "uuid": "6b753cf8-f0f7-43c1-bb7c-34403bc99ca5@6c48a",
-      "displayName": "home_Free_time",
->>>>>>>> origin/develop:assets/resources/icons/homeIcons/home_Free_time.png.meta
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-<<<<<<<< HEAD:assets/resources/icons/publicicons/icon_freespins.png.meta
-        "imageUuidOrDatabaseUri": "1917d709-f7c3-4101-8ecb-9bc6353fb7e7",
-========
-        "imageUuidOrDatabaseUri": "6b753cf8-f0f7-43c1-bb7c-34403bc99ca5",
->>>>>>>> origin/develop:assets/resources/icons/homeIcons/home_Free_time.png.meta
+        "imageUuidOrDatabaseUri": "f9f9069c-1497-4257-afd6-be457693fa5e",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -47,13 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-<<<<<<<< HEAD:assets/resources/icons/publicicons/icon_freespins.png.meta
-      "uuid": "1917d709-f7c3-4101-8ecb-9bc6353fb7e7@f9941",
+      "uuid": "f9f9069c-1497-4257-afd6-be457693fa5e@f9941",
       "displayName": "icon_freespins",
-========
-      "uuid": "6b753cf8-f0f7-43c1-bb7c-34403bc99ca5@f9941",
-      "displayName": "home_Free_time",
->>>>>>>> origin/develop:assets/resources/icons/homeIcons/home_Free_time.png.meta
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -61,20 +43,13 @@
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
-        "offsetY": 0.5,
+        "offsetY": 0,
         "trimX": 0,
         "trimY": 0,
-<<<<<<<< HEAD:assets/resources/icons/publicicons/icon_freespins.png.meta
         "width": 71,
         "height": 72,
         "rawWidth": 71,
         "rawHeight": 72,
-========
-        "width": 90,
-        "height": 59,
-        "rawWidth": 90,
-        "rawHeight": 60,
->>>>>>>> origin/develop:assets/resources/icons/homeIcons/home_Free_time.png.meta
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -86,7 +61,6 @@
         "meshType": 0,
         "vertices": {
           "rawPosition": [
-<<<<<<<< HEAD:assets/resources/icons/publicicons/icon_freespins.png.meta
             -35.5,
             -36,
             0,
@@ -98,19 +72,6 @@
             0,
             35.5,
             36,
-========
-            -45,
-            -29.5,
-            0,
-            45,
-            -29.5,
-            0,
-            -45,
-            29.5,
-            0,
-            45,
-            29.5,
->>>>>>>> origin/develop:assets/resources/icons/homeIcons/home_Free_time.png.meta
             0
           ],
           "indexes": [
@@ -123,7 +84,6 @@
           ],
           "uv": [
             0,
-<<<<<<<< HEAD:assets/resources/icons/publicicons/icon_freespins.png.meta
             72,
             71,
             72,
@@ -131,28 +91,18 @@
             0,
             71,
             0
-========
-            60,
-            90,
-            60,
-            0,
-            1,
-            90,
-            1
->>>>>>>> origin/develop:assets/resources/icons/homeIcons/home_Free_time.png.meta
           ],
           "nuv": [
             0,
-            0.016666666666666666,
+            0,
             1,
-            0.016666666666666666,
+            0,
             0,
             1,
             1,
             1
           ],
           "minPos": [
-<<<<<<<< HEAD:assets/resources/icons/publicicons/icon_freespins.png.meta
             -35.5,
             -36,
             0
@@ -160,24 +110,11 @@
           "maxPos": [
             35.5,
             36,
-========
-            -45,
-            -29.5,
-            0
-          ],
-          "maxPos": [
-            45,
-            29.5,
->>>>>>>> origin/develop:assets/resources/icons/homeIcons/home_Free_time.png.meta
             0
           ]
         },
         "isUuid": true,
-<<<<<<<< HEAD:assets/resources/icons/publicicons/icon_freespins.png.meta
-        "imageUuidOrDatabaseUri": "1917d709-f7c3-4101-8ecb-9bc6353fb7e7@6c48a",
-========
-        "imageUuidOrDatabaseUri": "6b753cf8-f0f7-43c1-bb7c-34403bc99ca5@6c48a",
->>>>>>>> origin/develop:assets/resources/icons/homeIcons/home_Free_time.png.meta
+        "imageUuidOrDatabaseUri": "f9f9069c-1497-4257-afd6-be457693fa5e@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.12",
@@ -192,10 +129,6 @@
     "type": "sprite-frame",
     "hasAlpha": true,
     "fixAlphaTransparencyArtifacts": false,
-<<<<<<<< HEAD:assets/resources/icons/publicicons/icon_freespins.png.meta
-    "redirect": "1917d709-f7c3-4101-8ecb-9bc6353fb7e7@6c48a"
-========
-    "redirect": "6b753cf8-f0f7-43c1-bb7c-34403bc99ca5@6c48a"
->>>>>>>> origin/develop:assets/resources/icons/homeIcons/home_Free_time.png.meta
+    "redirect": "f9f9069c-1497-4257-afd6-be457693fa5e@6c48a"
   }
 }

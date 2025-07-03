@@ -15,6 +15,7 @@ import CheckNetCtrl from '../../common/script/extra/CheckNetCtrl';
 import { ErrorType } from '../../common/script/extra/https/Constant';
 import { HTTP_STATUS_CODES } from '../../common/script/extra/Request';
 import { Environment, getApiUrl, getGameEnv } from '../../common/script/extra/config/envConfig';
+import commonInit from '../../common/script/extra/CommonInit';
 
 const { ccclass, property } = _decorator;
 @ccclass('AppInit')
@@ -74,6 +75,7 @@ export class AppInit extends BaseAppInit {
    * 用户初始化
    */
   async onUserInit() {
+    commonInit.init();
     // 预加载资源
     this._preloadResources();
 
