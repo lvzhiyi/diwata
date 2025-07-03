@@ -13,6 +13,8 @@ import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { HomeRollTool } from './expansion/HomeRollTool';
 import { GameResourceManager } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { preventRapidClickDecorator } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
+import { PackageFacade } from 'db://assets/common/script/PackageFacade';
+import { AdvancedButtonBreath } from 'db://assets/basePlate/middleWare/animations/AdvancedButtonBreath';
 
 const { ccclass, property } = _decorator;
 
@@ -25,14 +27,20 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   @property({ type: Node, tooltip: 'overLayNode' })
   private overLayNode: Node = null;
 
-  @property({ type: Node, tooltip: 'Freespin免费轮次数' })
-  private FreespinTimesNode: Node = null;
+  @property({ type: Node, tooltip: 'FreeBonusSpin次数' })
+  private FreeBonusSpinTimesNode: Node = null;
 
   @property({ type: Node, tooltip: '' })
-  private freespinView: Node = null;
+  private freeTimesView: Node = null;
+
+  @property({ type: Node, tooltip: '' })
+  private buyBonusBGView: Node = null;
 
   @property({ type: Node, tooltip: '' })
   private buyBonusView: Node = null;
+
+  @property({ type: Node, tooltip: '' })
+  private freeSpinView: Node = null;
 
   @property({ type: Node, tooltip: 'Tips Node' })
   private TipsNode: Node = null;
@@ -58,7 +66,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   private homeRollTool: HomeRollTool = null;
 
   // 是否是免费轮
-  private isFreeSpin: boolean = false;
+  private isFreeBonusSpin: boolean = false;
 
   onLoad() {
     this.homeRollTool = new HomeRollTool();
@@ -66,21 +74,36 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     this.initEvents();
 
-    this.onResizeScreen();
+    this.addEvent();
   }
 
-  /** *屏幕适配**/
-  onResizeScreen() {
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-    const screenScale =  screenHeight / screenWidth;
+  /** *监听freespin按钮状态**/
+  addEvent() {
+    app.manager.event.on('freespin:buttonState', this.onFreeBonusSpinButtonState, this);
+  }
 
-    console.log('screenWidth', screenWidth, screenHeight);
+  /** *监听freespin按钮状态**/
+  onFreeBonusSpinButtonState(enabled: boolean) {
+    if (enabled && app.manager.global.isFreespinMode) {
+      this.showFreeSpinView(true);
+    } else {
+      this.showFreeSpinView(false);
+    }
+  }
+
+  /** *显示freespin按钮**/
+  showFreeBonusSpinTimes() {
+    // this.FreespinTimesNode.active = true;
+  }
+
+  /** *隐藏freespin次数**/
+  hideFreeBonusSpinTimes() {
+    // this.FreespinTimesNode.active = false;
   }
 
   initData() {
     this.roundIndex = 0;
-    app.manager.global.setMultipleIndex(app.controller.slots.isFreeSpin ? 3 : 0);
+    app.manager.global.setMultipleIndex(app.controller.slots.isFreeBonusSpin ? 3 : 0);
   }
 
   initRoll() {
@@ -94,25 +117,31 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   initEvents() {
-    this.controller.on(SlotsController.Event.FreeSpinChange, this.startFreeSpinChange, this);
+    this.controller.on(SlotsController.Event.FreeBonusSpinChange, this.startFreeSpinChange, this);
     this.controller.on(SlotsController.Event.StartRolling, this.startGame, this);
     this.controller.on(SlotsController.Event.StopRolling, this.stopGame, this);
     app.manager.event.on('buyFreeSpinTimes', this.buyFreeSpinTimes, this);
   }
 
   /**
-   * 点击免费轮购买
+   * 点击免费轮购买或者展示freeSpin
    * */ 
   clickBuyBonus() {
-    if (this.canClickBuyBonus()) {
-      app.manager.ui.show({ name: 'PopBuybonus' });
-    } 
+    console.log('点击免费轮购买或者展示freeSpin', this.freeSpinView.active);
+
+    if(this.freeSpinView.active) {
+      PackageFacade.instance.openFreeSpin(); 
+    } else {
+      if (this.canClickBuyBonus()) {
+        app.manager.ui.show({ name: 'PopBuybonus' });
+      }
+    }
   }
 
   // 防止快速点击
   @preventRapidClickDecorator(1000)
   canClickBuyBonus() {
-    if (app.manager.global.isGoing || this.freespinView.active) {
+    if (app.manager.global.isGoing || this.freeTimesView.active) {
       if (app.controller.slots.betType === BetTypes.buy) {
         ToastManager.inst.show('The purchased free game is in use, and this function is temporarily unavailable');
       } else {
@@ -440,7 +469,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
        * 普通轮总金额为 this.resultData.totalPayoutAmount
        */
       if (this.currentRoundIsMaxMultiple()) {
-        this.totalRewardAmount = app.controller.slots.isFreeSpin ? app.manager.global.freeSpinTotalAmount : this.resultData.totalPayoutAmount;
+        this.totalRewardAmount = app.controller.slots.isFreeBonusSpin ? app.manager.global.freeBonusTotalAmount : this.resultData.totalPayoutAmount;
         this.changeTipsContent(`<color=#FF50E4><b>WIN</b></color> <color=#FFFFFF>₱ ${calculateWithBase(this.totalRewardAmount)}</color>`, true);
         await delay(50);
       }
@@ -449,20 +478,20 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
        * 大奖弹窗
        * 免费轮的结束轮，并且当前轮达到最大倍率，不展示大奖弹窗
        */
-      if (this.hasGrandPrize() && !(this.isFreeSpinEnd() && this.resultList[this.roundIndex]?.accumulateReachMaxMultiple)) {
+      if (this.hasGrandPrize() && !(this.isFreeBonusEnd() && this.resultList[this.roundIndex]?.accumulateReachMaxMultiple)) {
         await this.showGrandPrize();
       }
 
       /**
        * 如果免费轮的结束轮，则展示免费轮总金额弹窗
        */
-      if (this.isFreeSpinEnd()) { 
+      if (this.isFreeBonusEnd()) { 
         await this.showPopFreeSpinResult();
         // 重置免费轮数据
         app.manager.global.setGameRecordIds([]);
         app.manager.global.setGameRecordIndex(0);
         // 设置为非免费轮
-        app.controller.slots.freeSpinChange(false);
+        app.controller.slots.freeBonusSpinChange(false);
       } 
 
       /**
@@ -474,10 +503,11 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
        * 如果命中免费轮，则设置免费轮数据，并开始免费轮游戏
        */
       if (this.checkIsFreeRound()) {
-        app.manager.global.setFreeSpinTimes(10);
-        ToastManager.inst.show('FREE SPIN 10 TIMES');
+        const freeBonusTimes = this.resultList[this.roundIndex].gameRecordIds.length;
+        app.manager.global.setFreeBonusTimes(freeBonusTimes);
+        ToastManager.inst.show(`FREE SPIN ${freeBonusTimes} TIMES`);
 
-        this.setFreeSpinData(true, this.resultData.totalPayoutAmount);
+        this.setFreeBonusData(true, this.resultData.totalPayoutAmount);
         this.startFreeSpinGame();
 
         return;
@@ -525,7 +555,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 初始化数据
     await Promise.all(rollsScript.map(roll => roll.initData()));
     
-    app.manager.global.setMultipleIndex(app.controller.slots.isFreeSpin ? 3 : 0);
+    app.manager.global.setMultipleIndex(app.controller.slots.isFreeBonusSpin ? 3 : 0);
     // 结束游戏
     app.controller.home.endGame();
   }
@@ -563,11 +593,11 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   /**
    * 设置免费轮数据
    */
-  private setFreeSpinData(bool: boolean, freeSpinTotalAmount: number) {
+  private setFreeBonusData(bool: boolean, freeBonusTotalAmount: number) {
     // 设置免费轮状态
-    app.controller.slots.freeSpinChange(bool);
+    app.controller.slots.freeBonusSpinChange(bool);
     // 设置免费轮总金额
-    app.manager.global.setFreeSpinTotalAmount(freeSpinTotalAmount);
+    app.manager.global.setFreeBonusTotalAmount(freeBonusTotalAmount);
   }
 
   /**
@@ -575,15 +605,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * @returns 是否存在免费轮
    */
   private hasFreeSpin() {
-    return app.controller.slots.isFreeSpin && app.manager.global.gameRecordIds.length > 0 && app.manager.global.gameRecordIndex < app.manager.global.gameRecordIds.length - 1;
+    return app.controller.slots.isFreeBonusSpin && app.manager.global.gameRecordIds.length > 0 && app.manager.global.gameRecordIndex < app.manager.global.gameRecordIds.length - 1;
   }
 
   /**
    * 是否是免费轮的结束轮
    * @returns 是否是免费轮的结束轮
    */
-  private isFreeSpinEnd() {
-    return app.controller.slots.isFreeSpin && app.manager.global.gameRecordIds.length - 1 === app.manager.global.gameRecordIndex;
+  private isFreeBonusEnd() {
+    return app.controller.slots.isFreeBonusSpin && app.manager.global.gameRecordIds.length - 1 === app.manager.global.gameRecordIndex;
   }
 
   /**
@@ -615,8 +645,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 更新免费轮次数Node展示
    */
   private updateFreeSpinTimesNodeString() {
-    const newFreeSpinNumber = app.manager.global.freeSpinTimes - app.manager.global.gameRecordIndex - 1;
-    this.FreespinTimesNode.getComponent(Label).string = `${newFreeSpinNumber}`;
+    const newFreeSpinNumber = app.manager.global.freeBonusTimes - app.manager.global.gameRecordIndex - 1;
+    this.FreeBonusSpinTimesNode.getComponent(Label).string = `${newFreeSpinNumber}`;
   }
 
   /**
@@ -644,27 +674,43 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 1. 如果免费轮状态为true，则显示免费轮次数
    * 2. 如果免费轮状态为false，则隐藏免费轮次数
    */
-  private startFreeSpinChange(isFreeSpin: boolean) {
-    this.isFreeSpin = isFreeSpin;
-    isFreeSpin ? this.showFreeSpinTimes() : this.hideFreeSpinTimes();
+  private startFreeSpinChange(isFreeBonusSpin: boolean) {
+    this.isFreeBonusSpin = isFreeBonusSpin;
+    isFreeBonusSpin ? this.showFreeSpinTimes() : this.hideFreeSpinTimes();
   }
 
   /**
-   * 显示免费轮Node，
+   * 显示免费轮剩余次数Node，
    */
   private showFreeSpinTimes() {
-    this.FreespinTimesNode.active = true;
-    this.freespinView.active = true;
+    this.FreeBonusSpinTimesNode.active = true;
+    this.freeTimesView.active = true;
     this.buyBonusView.active = false;
+    this.freeSpinView.active = false;
+    this.buyBonusBGView.getComponent(AdvancedButtonBreath).pauseBreath();
   }
 
   /**
    * 隐藏免费轮Node，
    */
   private hideFreeSpinTimes() {
-    this.FreespinTimesNode.active = false;
-    this.freespinView.active = false;
-    this.buyBonusView.active = true;
+    this.FreeBonusSpinTimesNode.active = false;
+    this.freeTimesView.active = false;
+    this.buyBonusBGView.getComponent(AdvancedButtonBreath).startBreath();
+
+    if(app.manager.global.isFreespinMode) {
+      this.showFreeSpinView(true);
+    } else {
+      this.showFreeSpinView(false);
+    }
+  }
+
+  /**
+   * 是否显示成就FreeSpin按钮
+  */
+  showFreeSpinView(show: boolean) {
+    this.buyBonusView.active = !show;
+    this.freeSpinView.active = show;
   }
 
   /**
@@ -686,7 +732,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const { accumulateReachMaxMultiple } = this.resultList[this.roundIndex];
 
     // 如果当前轮命中免费轮，则不展示大奖弹窗
-    if (app.controller.slots.isFreeSpin && accumulateReachMaxMultiple) {
+    if (app.controller.slots.isFreeBonusSpin && accumulateReachMaxMultiple) {
       return Promise.resolve();
     }
 
@@ -715,7 +761,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         name: 'PopFreeSpinResult',
         data: { 
           times: app.manager.global.gameRecordIndex + 1,
-          amount: app.manager.global.freeSpinTotalAmount,
+          amount: app.manager.global.freeBonusTotalAmount,
           accumulateReachMaxMultiple
         },
         onHide: () => resolve(),
@@ -757,8 +803,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
 
     // 如果当前不是免费轮，并且本回合有免费轮游戏ids，则命中免费轮
-    if (!app.controller.slots.isFreeSpin && gameRecordIds.length > 0) {
-      app.manager.global.setFreeSpinTimes(10);
+    if (!app.controller.slots.isFreeBonusSpin && gameRecordIds.length > 0) {
+      app.manager.global.setFreeBonusTimes(gameRecordIds.length);
       app.manager.global.setGameRecordIds([...gameRecordIds]);
 
       return Promise.resolve(true);
@@ -767,57 +813,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     return Promise.resolve(false);
   }
 
-  /**
-   * 免费轮中，是否命中scatter增加次数
-   * scatterAddTimes和gameRecordIds正常情况下是相等的，如果免费轮中提前达到最大金额，则命中scatter+1时，gameRecordIds会返回空，
-   * 所以不能用gameRecordIds的长度来判断是否命中scatter增加次数
-   */
-  private async freeRoundIsHitScatterAddTimes(symbolAnimationDatas: ISymbolAnimationData[][]) {
-    const scatterAddTimes = await this.freeSpinScatterAddTimes(symbolAnimationDatas);
-
-    const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
-
-    // 如果当前不是免费轮，或者scatter增加次数小于等于0，则不命中scatter增加次数
-    if (!app.controller.slots.isFreeSpin || scatterAddTimes <= 0) {
-      return Promise.resolve(false);
-    }
-
-    app.manager.global.setFreeSpinTimes(app.manager.global.freeSpinTimes + scatterAddTimes);
-    app.manager.global.setGameRecordIds([...app.manager.global.gameRecordIds, ...gameRecordIds]);
-
-    // 获取freeSpinTimes节点位置
-    const targetPosition = this.FreespinTimesNode.getWorldPosition().clone();
-    const rollsScript = this.Rolls.map(roll => roll.getComponent(Roll));
-    // 播放scatter增加次数动画
-    await Promise.all(rollsScript.map(roll => roll.playScatterAddTimeAnimation(targetPosition)));
-      
-    // 更新免费轮次数Node展示
-    this.updateFreeSpinTimesNodeString();
-
-    return Promise.resolve(true);
-  }
-
-  /**
-   * 免费轮中，计算scatter增加次数
-   * @param symbolAnimationDatas 
-   * @returns 
-   */
-  private freeSpinScatterAddTimes(symbolAnimationDatas: ISymbolAnimationData[][]): number {
-    let count = 0;
-    
-    for (const innerArray of symbolAnimationDatas) {
-      for (const item of innerArray) {
-        if (item.symbolId === '3002' && !item.isPlayScatterAddTimeAnimation) {
-          count++;
-        }
-      }
-    }
-    
-    return count;
-  }
-
   onDestroy() {
-    this.controller.off(SlotsController.Event.FreeSpinChange, this.startFreeSpinChange, this);
+    this.controller.off(SlotsController.Event.FreeBonusSpinChange, this.startFreeSpinChange, this);
     this.controller.off(SlotsController.Event.StartRolling, this.startGame, this);
     this.controller.off(SlotsController.Event.StopRolling, this.stopGame, this);
     app.manager.event.off('buyFreeSpinTimes', this.buyFreeSpinTimes, this);

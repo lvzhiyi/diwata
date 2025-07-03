@@ -2,6 +2,7 @@ import { _decorator, Label, Node, RichText, Sprite, SpriteAtlas, UITransform } f
 import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { app } from 'db://assets/app/app';
 import { ApiPath, ErrorType } from 'db://assets/common/script/extra/https/Constant';
+import { mockFailedData } from 'db://assets/basePlate/core/baseUtil/mockDataUtils';
 
 const { ccclass, property } = _decorator;
 
@@ -91,7 +92,7 @@ export class PopErrorPop extends BaseView {
       case ErrorType.FreeSpinActivityIdInvalid:
         // freespin 活动id 已失效
         app.manager.event.emit('freeSpinActivityIdInvalid');
-        app.controller.slots.stopRolling(null);
+        app.controller.slots.stopRolling(mockFailedData);
         app.manager.event.emit('resetAutoPlay', true);
         break;
     }

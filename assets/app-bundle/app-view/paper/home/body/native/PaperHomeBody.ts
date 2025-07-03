@@ -28,7 +28,6 @@ import {  preventRapidClickDecorator, showInsufficientCreditAlert } from 'db://a
 import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { BetTypes } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
-import { freeSpinManager } from '../../activity/native/expansion/FreeSpinManager';
 
 const { ccclass, property } = _decorator;
 
@@ -54,7 +53,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   private autoModeBtn: Node = null;
 
   @property({ type: Node, tooltip: '开始按钮' })
-  private startBtn: Node = null;
+  startBtn: Node = null;
 
   @property({ type: Node, tooltip: '余额' })
   private creditLable: Node = null;
@@ -77,25 +76,20 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   @property({ type: Node, tooltip: '快速模式按钮' })
   private quickModeBtn: Node = null;
 
-  @property({ type: Node, tooltip: 'prizeNode' })
-  private prizeBoxNode: Node = null;
-
   @property({ type: Node, tooltip: '底部视图' })
   private bottomView: Node = null;
 
-  @property({ type: SpriteFrame, tooltip: 'freespin按钮图片' })
-  private freespinBtnSprite: SpriteFrame = null;
+  /** freespin模式下免费游玩次数节点 */
+  @property({
+    type: Node,
+    tooltip: 'freespin模式下免费游玩次数'
+  })
+  freespinTimesNode: Node = null;
 
-  @property({ type: SpriteFrame, tooltip: 'BuyBonus按钮图片' })
-  private buyBonusBtnSprite: SpriteFrame = null;
+  @property({ type: Node, tooltip: 'freeSpinWin 节点' })
+  freeSpinWin: Node = null;
 
-  @property({ type: Node, tooltip: 'freespin按钮' })
-  private freespinBtn: Node = null;
-
-  @property({ type: Node, tooltip: 'freespin次数label' })
-  private freeSpinTimesNode: Node = null;
-
-  private homeBodyUtil: HomeBodyUtil = new HomeBodyUtil();
+  private homeBodyUtil: HomeBodyUtil = null;
 
   // 初始化的相关逻辑写在这
   onLoad() {
@@ -105,6 +99,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       'Bet ₱ ' + numberToMoney(app.manager.global.betCount);
     this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.manager.global.vipLevel - 1];
     this.onResizeScreen();
+    this.homeBodyUtil = new HomeBodyUtil(this);
     GameResourceManager.instance.preloadLocalICons();
   }
 
@@ -121,7 +116,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
 
   protected beforeShow(next: (error?: string) => void, data?: any): any {
     next();
-    this.homeBodyUtil.adaptPrizeTopMargin(this.prizeBoxNode);
     this.homeBodyUtil.adaptBottomButtonPosition(this.bottomView);
   }
 
@@ -136,8 +130,15 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     this.controller.on(HomeController.Event.DisableButton, this.disabledPlayButton, this);
     /// 监听按钮启用
     this.controller.on(HomeController.Event.EnableButton, this.enabledPlayButton, this);
+    /// 监听投注金额按钮状态
+    this.controller.on(HomeController.Event.BetAmountButtonState, this.changeBetAmountButtonState, this);
+    /// 监听自动投注按钮状态
+    this.controller.on(HomeController.Event.AutoPlayButtonState, this.changeAutoPlayButtonState, this);
+    /// 监听开始按钮状态
+    this.controller.on(HomeController.Event.StartButtonState, this.changeStartButtonState, this);
     /// 监听投注金额变化
     app.manager.event.on('creditCountChange', this.creditCountChange, this);
+   
     /// 监听投注金额变化
     app.manager.event.on('betCountChange', this.betCountChange, this);
     // 监听自动模式变化
@@ -148,11 +149,12 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     app.manager.event.on('startAutoPlayChange', this.startAutoPlayChange, this);
     // 监听自动模式按钮点击
     app.manager.event.on('clickAllwaysAutoPlay', this.clickAllwaysAutoModeBtn, this);
+    // 停止自动投注
+    app.manager.event.on('stopAllwaysAutoPlay', this.stopAllwaysAutoPlay, this);
   }
 
   // 界面关闭时的相关逻辑写在这(已经关闭的界面不会触发onHide)
   onHide(result: undefined) {
-    // app.manager.ui.show<PaperHomeBody>({name: 'PaperHomeBody', onHide:(result) => { 接收到return的数据，并且有类型提示 }})
     this.controller.off(HomeController.Event.GameStart, this.startGame, this);
     this.controller.off(HomeController.Event.GameOver, this.gameOver, this);
     this.controller.off(HomeController.Event.DisableButton, this.disabledPlayButton, this);
@@ -165,22 +167,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
 
     return result;
   }
-
-  // /**
-  //  * 播放开始按钮动画
-  //  * @param mode 动画模式
-  //  * @param loop 是否循环
-  //  */
-  // private async playStartBtnAnimation(mode: 'rollBetBtn1' | 'rollBetBtn2' | 'rollBetBtn3', loop: boolean = false) {
-  //   const spine = this.startBtn.getComponent(sp.Skeleton);
-  
-  //   if (spine.animation !== mode) {
-  //     spine.clearTracks();
-  //   }
-  
-  //   spine.setAnimation(0, mode, loop);
-  //   await wrapSpineCompleteListener(spine);
-  // }
 
   /**
    * 余额变化
@@ -257,21 +243,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   clickQuickMode(event: EventTouch) {
     app.manager.global.setQuikeMode(!app.manager.global.quikeMode);
   }
-
-  // /**
-  //  * 监听freespin状态变化
-  //  * @param val
-  //  */
-  // freespinStateChange(val: boolean) {
-  //   this.freespinBtn.getComponent(Sprite).spriteFrame = val ? this.freespinBtnSprite : this.buyBonusBtnSprite;
-
-  //   if(val){
-  //     this.betAmoutSpine.node.active = true;
-  //     this.betAmoutSpine.setAnimation(0, 'action', false);
-  //   }else{
-  //     this.betAmoutSpine.node.active = false;
-  //   }
-  // }
 
   /// 点击免费轮购买
   clickBuyBonus() {
@@ -378,6 +349,15 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     }
   }
 
+  /**
+    * 停止自动模式
+    * */ 
+  stopAllwaysAutoPlay(){
+    this.stopAutoPlay();
+    this.disabledPlayButton();
+    ToastManager.inst.show('Auto spin disabled');
+  }
+
   // 禁用开始、金额、自动按钮
   // 如果是自动模式，则自动模式不禁用
   disabledPlayButton() {
@@ -388,39 +368,31 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     }
 
     this.betAmountIcon.getComponent(Button).interactable = false;
-    // this.controlStartButtonRotation(false);
-  }
-
-  // 控制开始按钮的旋转
-  private controlStartButtonRotation(isRotating: boolean) {
-    // 获取开始按钮
-    const startBtn = this.startBtn;
-    if (!startBtn) return;
-
-    if (isRotating) {
-      // 停止可能存在的旋转动作
-      Tween.stopAllByTarget(startBtn);
-
-      // 创建一个旋转动作, 2秒内旋转360度
-      tween(startBtn)
-        .by(8, { angle: -360 })
-        .repeatForever()
-        .start();
-    } else {
-      // 停止所有针对该按钮的动作
-      Tween.stopAllByTarget(startBtn);
-
-      // 重置按钮角度
-      // startBtn.angle = 0;
-    }
   }
 
   // 启用开始、金额、自动按钮
   enabledPlayButton() {
     this.startBtn.getComponent(Button).interactable = true;
     this.autoModeBtn.getComponent(Button).interactable = true;
-    this.betAmountIcon.getComponent(Button).interactable = true;
-    // this.controlStartButtonRotation(true);
+
+    if(app.manager.global.isFreespinMode == false){
+      this.betAmountIcon.getComponent(Button).interactable = true;
+    }
+  }
+
+  // 改变投注金额按钮状态
+  changeBetAmountButtonState(state: boolean) {
+    this.betAmountIcon.getComponent(Button).interactable = state;
+  }
+
+  // 改变自动投注按钮状态
+  changeAutoPlayButtonState(state: boolean) {
+    this.autoModeBtn.getComponent(Button).interactable = state;
+  }
+
+  // 改变开始按钮状态
+  changeStartButtonState(state: boolean) {
+    this.startBtn.getComponent(Button).interactable = state;
   }
 
   // 获取下一轮是否自动开始
