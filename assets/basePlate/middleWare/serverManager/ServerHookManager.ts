@@ -167,9 +167,10 @@ class ServerHookManager {
 
         return;
       }
-
+      
       this.onServerError(
-        'Unstable Network, Please check your network or restart the game to reconnect'
+        'Unstable Network, Please check your network or restart the game to reconnect',
+        path
       );
     });
   }
@@ -247,11 +248,22 @@ class ServerHookManager {
   }
 
   /** 服务器错误 */
-  private onServerError(error: any) {
-    showErrorPop({
-      type: ErrorType.NetError,
-      msg: error,
-    });
+  private onServerError(error: any, path: string) {
+    if (path === ApiPath.login) {
+      showErrorPop({
+        type: ErrorType.NetError,
+        msg: error,
+        confirmCallback: () => {
+          window.location.reload();
+        }
+      });
+    }else{
+      showErrorPop({
+        type: ErrorType.NetError,
+        msg: error
+      });
+    }
+
     this.errorNumber++;
 
     if (this.errorNumber >= 5) {

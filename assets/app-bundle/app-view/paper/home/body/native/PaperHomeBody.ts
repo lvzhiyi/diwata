@@ -93,13 +93,13 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
 
   // 初始化的相关逻辑写在这
   onLoad() {
+    this.homeBodyUtil = new HomeBodyUtil(this);
     this.creditLable.getComponent(Label).string =
       '₱ ' + numberToMoney(app.manager.global.creditCount);
     this.betLable.getComponent(Label).string =
       'Bet ₱ ' + numberToMoney(app.manager.global.betCount);
     this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.manager.global.vipLevel - 1];
     this.onResizeScreen();
-    this.homeBodyUtil = new HomeBodyUtil(this);
     GameResourceManager.instance.preloadLocalICons();
   }
 
