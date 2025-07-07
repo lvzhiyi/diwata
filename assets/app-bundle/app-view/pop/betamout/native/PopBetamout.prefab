@@ -834,7 +834,7 @@
     },
     "component": "",
     "_componentId": "c29191tFAhOHIvsRpmBhGSB",
-    "handler": "hide",
+    "handler": "closeView",
     "customEventData": ""
   },
   {

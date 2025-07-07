@@ -10,6 +10,7 @@ import { ToastView } from '../../basePlate/middleWare/commonUI/ToastView';
 import { ActivityEventMgr, ActivityEventMgrEventsType } from '../../common/script/ActivityEventMgr';
 import { GlobalMgr } from '../../common/script/extra/GlobalMgr';
 import { MoneyUtil } from '../../basePlate/core/baseUtil/MoneyUtil';
+import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
 
 // TODO 测试用
 const useMock = false;
@@ -191,6 +192,25 @@ export class HomeController extends BaseController<
   }
 
   /**
+   * 发送投注开始事件
+   * @param oldBalance 投注前的余额
+   * @param isAutoSpin 是否为自动投注
+   * @param useFreespin 是否是freespin模式
+   */
+  private trackSpinStart(oldBalance: number, useFreespin: boolean) {
+    const autoSpin = app.manager.global.allwaysAutoPlay;
+    EventTrackManager.inst.trackSpinStart({
+      old_balance: oldBalance,
+      new_balance: useFreespin ? oldBalance : oldBalance - app.manager.global.betCount,
+      round_number: this.betResult ? this.betResult.betRecordId : '',
+      bet_amount: app.manager.global.betCount,
+      auto_spin: autoSpin,
+      bonus_type: useFreespin ? 'free_spin' : 'normal',
+      bet_success: !!this.betResult,
+    });
+  }
+
+  /**
   * 获取普通投注结果
  */
   async getNormalBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, isFreeSpin?: boolean, compainId?: string) {
@@ -226,6 +246,8 @@ export class HomeController extends BaseController<
       this.betResult = res.data;
       await delay(app.manager.global.quikeMode ? 0 : 500);
       app.controller.slots.stopRolling(this.betResult);
+      // 埋点
+      this.trackSpinStart(app.manager.global.creditCount, true);
     } else {
       this.credit = calculateWithBase(app.manager.global.creditCount, false);
       this.betResult = mockFailedData;
@@ -287,6 +309,8 @@ export class HomeController extends BaseController<
       this.credit = res.data.credit;
       this.betResult = res.data;
       await delay(app.manager.global.quikeMode ? 0 : 500);
+      // 埋点
+      this.trackSpinStart(app.manager.global.creditCount, true);
 
       if (isUseStarCard) {
         // 星卡使用成功

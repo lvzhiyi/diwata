@@ -10,6 +10,7 @@ import {
   SpriteFrame,
 } from 'cc';
 import { app } from 'db://assets/app/app';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 
 const { ccclass, property } = _decorator;
@@ -60,7 +61,10 @@ export class BetAmountGrid extends Component {
   }
 
   click(val: number) {
+    // 埋点
+    EventTrackManager.inst.trackChangeAmount(app.manager.global.betCount, val);
     app.manager.global.setBetCount(val);
+   
     this.list.forEach((val, index) => {
       const label = this.listLabel[index];
 

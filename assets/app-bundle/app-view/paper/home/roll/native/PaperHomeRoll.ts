@@ -15,6 +15,7 @@ import { GameResourceManager } from 'db://assets/basePlate/middleWare/serverMana
 import { preventRapidClickDecorator } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { PackageFacade } from 'db://assets/common/script/PackageFacade';
 import { AdvancedButtonBreath } from 'db://assets/basePlate/middleWare/animations/AdvancedButtonBreath';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 
 const { ccclass, property } = _decorator;
 
@@ -133,6 +134,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       PackageFacade.instance.openFreeSpin(); 
     } else {
       if (this.canClickBuyBonus()) {
+        EventTrackManager.inst.trackBuyBonusOpen(app.manager.global.creditCount);
         app.manager.ui.show({ name: 'PopBuybonus' });
       }
     }
