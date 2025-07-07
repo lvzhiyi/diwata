@@ -2,6 +2,7 @@ import { _decorator, Color, Component, Label, Node } from 'cc';
 import dayjs from 'dayjs';
 import { MoneyUtil } from 'db://assets/basePlate/core/baseUtil/MoneyUtil';
 import { ToastView } from 'db://assets/basePlate/middleWare/commonUI/ToastView';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { copyText } from 'db://assets/common/script/extra/Utils/common';
 import { CopyUtils } from 'db://assets/common/script/extra/Utils/CopyUtils';
 
@@ -68,6 +69,8 @@ export class DetailCard extends Component {
       }else{
         ToastView.showCommonToast('Copy failed');
       }
+
+      EventTrackManager.inst.trackCopyRoundNumber(text, bool, 'game_detail');
     });
   }
 }

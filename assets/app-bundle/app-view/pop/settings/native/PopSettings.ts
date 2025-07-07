@@ -5,6 +5,7 @@ import { PopAutosetting } from '../../autosetting/native/PopAutosetting';
 import { PopBetrecord } from '../../betrecord/native/PopBetrecord';
 import { PopRule } from '../../rule/native/PopRule';
 import { Progress } from './expansion/Progress';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 
 const { ccclass, property } = _decorator;
 @ccclass('PopSettings')
@@ -36,78 +37,100 @@ export class PopSettings extends BaseView {
     @property(Node)
     private AutoSettingBtn: Node;
 
-    protected onEnable(): void {
-      this.initVoiceMusic();
+  private subMenus: Set<string> = new Set();
 
-      this.registerListener();
-    }
+  protected onEnable(): void {
+    this.initVoiceMusic();
 
-    protected onShow(data?: any) {
+    this.registerListener();
+  }
+
+  protected onShow(data?: any) {
+    this.changeAutoSettingBtnColor();
+  }
+
+  protected onDisable(): void {
+    app.manager.event.off('voiceChange');
+    app.manager.event.off('musicChange');
+    app.manager.event.off('isGoingChange');
+  }
+
+  // 初始化声音和音乐按钮
+  initVoiceMusic() {
+    this.VoiceProgress.getComponent(Progress).setValue(app.manager.global.voice);
+    this.VoiceButton.children[0].getComponent(Sprite).spriteFrame = app.manager.global.voice > 0 ? this.VoiceButtonSpritOn : this.VoiceButtonSpritOff;
+    this.MusicProgress.getComponent(Progress).setValue(app.manager.global.music);
+    this.MusicButton.children[0].getComponent(Sprite).spriteFrame = app.manager.global.music > 0 ? this.MusicButtonSpritOn : this.MusicButtonSpritOff;
+  }
+
+  // 注册监听
+  registerListener() {
+    app.manager.event.on('isGoingChange', () => {
       this.changeAutoSettingBtnColor();
-    }
+    });
+    // 监听voice
+    app.manager.event.on('voiceChange', () => {
+      this.initVoiceMusic();
+    });
+    // 监听music
+    app.manager.event.on('musicChange', () => {
+      this.initVoiceMusic();
+    });
+  }
 
-    protected onDisable(): void {
-      app.manager.event.off('voiceChange');
-      app.manager.event.off('musicChange');
-      app.manager.event.off('isGoingChange');
+  changeAutoSettingBtnColor() {
+    if (this.canClickAutoSetting()) {
+      console.log('1111888');
+      this.AutoSettingBtn.getChildByName('Border').getComponent(Sprite).color = new Color().fromHEX('#FFFFFF');
+      this.AutoSettingBtn.getChildByName('Border').getChildByName('Icon').getComponent(Sprite).color = new Color().fromHEX('#FFFFFF');
+      this.AutoSettingBtn.getChildByName('Border').getChildByName('title_Icon').getComponent(Sprite).color = new Color().fromHEX('#FFFFFF');
+    } else {
+      console.log('2222888');
+      this.AutoSettingBtn.getChildByName('Border').getComponent(Sprite).color = new Color(234, 242, 195, 100);
+      this.AutoSettingBtn.getChildByName('Border').getChildByName('Icon').getComponent(Sprite).color = new Color(234, 242, 195, 100);
+      this.AutoSettingBtn.getChildByName('Border').getChildByName('title_Icon').getComponent(Sprite).color = new Color(234, 242, 195, 100);
     }
+  }
 
-    // 初始化声音和音乐按钮
-    initVoiceMusic() {
-      this.VoiceProgress.getComponent(Progress).setValue(app.manager.global.voice);
-      this.VoiceButton.children[0].getComponent(Sprite).spriteFrame = app.manager.global.voice > 0 ? this.VoiceButtonSpritOn : this.VoiceButtonSpritOff;
-      this.MusicProgress.getComponent(Progress).setValue(app.manager.global.music);
-      this.MusicButton.children[0].getComponent(Sprite).spriteFrame = app.manager.global.music > 0 ? this.MusicButtonSpritOn : this.MusicButtonSpritOff;
-    }
+  // 是否可以点击自动设置
+  canClickAutoSetting() {
+    return !app.manager.global.isGoing && !app.manager.global.startAutoPlay && !app.manager.global.allwaysAutoPlay;
+  }
 
-    // 注册监听
-    registerListener() {
-      app.manager.event.on('isGoingChange', () => {
-        this.changeAutoSettingBtnColor();
-      });
-      // 监听voice
-      app.manager.event.on('voiceChange', () => {
-        this.initVoiceMusic();
-      });
-      // 监听music
-      app.manager.event.on('musicChange', () => {
-        this.initVoiceMusic();
-      });
-    }
+  // 显示投注记录
+  showPopBetRecord() {
+    // 上报打开投注记录事件
+    EventTrackManager.inst.trackOpenBetRecord();
+    this.subMenus.add('PopBetrecord');
+    app.manager.ui.show<PopBetrecord>({ name: 'PopBetrecord' });
+  }
 
-    changeAutoSettingBtnColor() {
-      if (this.canClickAutoSetting()) {
-        console.log('1111888');
-        this.AutoSettingBtn.getChildByName('Border').getComponent(Sprite).color = new Color().fromHEX('#FFFFFF');
-        this.AutoSettingBtn.getChildByName('Border').getChildByName('Icon').getComponent(Sprite).color = new Color().fromHEX('#FFFFFF');
-        this.AutoSettingBtn.getChildByName('Border').getChildByName('title_Icon').getComponent(Sprite).color = new Color().fromHEX('#FFFFFF');
-      } else {
-        console.log('2222888');
-        this.AutoSettingBtn.getChildByName('Border').getComponent(Sprite).color = new Color(234, 242, 195, 100);
-        this.AutoSettingBtn.getChildByName('Border').getChildByName('Icon').getComponent(Sprite).color = new Color(234, 242, 195, 100);
-        this.AutoSettingBtn.getChildByName('Border').getChildByName('title_Icon').getComponent(Sprite).color = new Color(234, 242, 195, 100);
-      }
-    }
+  // 显示规则
+  showPopRule() {
+    EventTrackManager.inst.trackOpenBetRules();
+    this.subMenus.add('PopRule');
+    app.manager.ui.show<PopRule>({ name: 'PopRule' });
+  }
 
-    // 是否可以点击自动设置
-    canClickAutoSetting() {
-      return !app.manager.global.isGoing && !app.manager.global.startAutoPlay && !app.manager.global.allwaysAutoPlay;
+  // 显示自动设置
+  showAutoSetting() {
+    if (this.canClickAutoSetting()) {
+      EventTrackManager.inst.trackOpenAutoBetSetting();
+      this.subMenus.add('PopAutosetting');
+      app.manager.ui.show<PopAutosetting>({ name: 'PopAutosetting' });
     }
+  }
 
-    // 显示投注记录
-    showPopBetRecord() {
-      app.manager.ui.show<PopBetrecord>({ name: 'PopBetrecord' });
-    }
-
-    // 显示规则
-    showPopRule() {
-      app.manager.ui.show<PopRule>({ name: 'PopRule' });
-    }
-
-    // 显示自动设置
-    showAutoSetting() {
-      if (this.canClickAutoSetting()) {
-        app.manager.ui.show<PopAutosetting>({ name: 'PopAutosetting' });
-      }
-    }
+  /**
+   * 关闭按钮
+  */
+  closebtnClick() {
+    app.manager.ui.hide({
+      name: 'PopSettings',
+      onHide: () => {
+        EventTrackManager.inst.trackSettingCancel(Array.from(this.subMenus));
+        this.subMenus.clear();
+      },
+    });
+  }
 }

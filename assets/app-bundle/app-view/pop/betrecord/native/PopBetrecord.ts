@@ -7,9 +7,10 @@ import { PopBetrecorddetail } from '../../betrecorddetail/native/PopBetrecorddet
 import { BetRecordListModel, getRecordHistory } from 'db://assets/basePlate/middleWare/services/user';
 import { Loading } from 'db://assets/basePlate/middleWare/commonUI/Loading';
 import { SelectDateView } from 'db://assets/basePlate/middleWare/commonUI/SelectDateView/SelectDateView';
-import { getTimestampsNowAgoMinutes } from 'db://assets/common/script/extra/Utils/common';
+import { calculateWithBase, getTimestampsNowAgoMinutes, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { IntersectionObserver } from 'db://assets/res-native/script/IntersectionObserver';
 import GameProcessCtrl from 'db://assets/common/script/extra/GameProcessCtrl';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 
 const { ccclass, property } = _decorator;
 
@@ -80,6 +81,12 @@ export class PopBetrecord extends BaseView {
     };
 
     private _recordList: any[] = [];
+
+    // 是否搜索
+    private _isSearched: boolean = false;
+
+    // 是否点击记录详情
+    private _isClickedRecordDetail: boolean = false;
 
     private _nodePool: NodePool;
 
@@ -157,6 +164,15 @@ export class PopBetrecord extends BaseView {
     }
 
     closeRecordLayout() {
+      const roundNumberScprit = this.RoundNumberNode.getComponent(EditBox);
+
+      EventTrackManager.inst.trackExitBetRecord({
+        search_time_range: this._ageMinutes === 60 ? '1 hour' : `${this._ageMinutes} mins`,
+        selected_date: dayjs(this._selectedDate).format('YYYY-MM-DD'),
+        round_number: roundNumberScprit.string ? roundNumberScprit.string : '',
+        search_used: this._isSearched,
+        clicked_record_detail: this._isClickedRecordDetail,
+      });
       app.manager.ui.hide({ name: 'PopBetrecord' });
     }
 
@@ -292,6 +308,15 @@ export class PopBetrecord extends BaseView {
         return;
       }
 
+      // 上报投注记录点击事件
+      EventTrackManager.inst.trackBetRecordItemClick({
+        search_time_range: this._ageMinutes === 60 ? '1 hour' : `${this._ageMinutes} mins`,
+        round_number: item.id,
+        net: calculateWithBase(item.payOutAmount - item.payAmount),
+        bet_amount: calculateWithBase(item.payAmount),
+        win: calculateWithBase(item.payOutAmount),
+        time: dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss'),
+      });
       app.manager.ui.show<PopBetrecorddetail>({ name: 'PopBetrecorddetail', data: { id: item.id } });
     }
 
@@ -342,6 +367,11 @@ export class PopBetrecord extends BaseView {
             endCreateTime: +new Date()
           };
 
+          this._isSearched = true;
+          // 上报时间范围，最小单位为分钟，如果为60分钟则为1小时
+          EventTrackManager.inst.trackBetRecordTimeRange(
+            this._ageMinutes === 60 ? '1 hour' : `${this._ageMinutes} mins`
+          );
           // 选择时间后置空日期
           this.clearDay();
 
@@ -386,6 +416,13 @@ export class PopBetrecord extends BaseView {
         this._pageParams.endCreateTime = dayjs(date).endOf('day').valueOf();
       }
 
+      this._isSearched = true;
+      // 上报日期范围
+      EventTrackManager.inst.trackBetRecordSearch({
+        search_time_range: '',
+        selected_date: dayjs(this._selectedDate).format('YYYY-MM-DD'),
+        round_number: '',
+      });
       this._pageParams = {
         ...this._pageParams,
         pageNo: 0,
@@ -397,19 +434,25 @@ export class PopBetrecord extends BaseView {
     }
 
     private clearDay() {
+      // 上报清除日期事件
+      EventTrackManager.inst.trackBetRecordFilterFieldClear({
+        cleared_field: 'date',
+        cleared_value: dayjs(this._selectedDate).format('YYYY-MM-DD'),
+      });
       const DataLabel = this.ClickToSelectADateLabel.getComponent(Label);
       DataLabel.color = new Color().fromHEX('#7F7F7F');
       DataLabel.string = 'Click to select a date';
     }
 
     private searchFromRoundNumber() {
+      const roundNumberScprit = this.RoundNumberNode.getComponent(EditBox);
       // 清空时间
       this.selectTabTime(null);
       // 清空日期显示
       const DataLabel = this.ClickToSelectADateLabel.getComponent(Label);
       DataLabel.color = new Color().fromHEX('#7F7F7F');
       DataLabel.string = 'Click to select a date';
-
+      
       this._pageParams = {
         ...this._pageParams,
         pageNo: 0,
@@ -417,10 +460,15 @@ export class PopBetrecord extends BaseView {
         endCreateTime: null,
       };
 
-      const roundNumberScprit = this.RoundNumberNode.getComponent(EditBox);
-
       // 如果输入框有值，则获取数据
       if (roundNumberScprit.string) {
+        this._isSearched = true;
+        // 上报查询单号事件
+        EventTrackManager.inst.trackBetRecordSearch({
+          search_time_range: '',
+          selected_date: '',
+          round_number: roundNumberScprit.string,
+        });
         this.getData(roundNumberScprit.string);
       } else {
         this.content.removeAllChildren();
@@ -429,6 +477,11 @@ export class PopBetrecord extends BaseView {
     }
 
     private clearRoundNumber() {
+      const roundNumberScript = this.RoundNumberNode.getComponent(EditBox);
+      EventTrackManager.inst.trackBetRecordFilterFieldClear({
+        cleared_field: 'round_number',
+        cleared_value: roundNumberScript.string,
+      });
       const roundNumberScprit = this.RoundNumberNode.getComponent(EditBox);
       roundNumberScprit.string = '';
       roundNumberScprit.blur();
