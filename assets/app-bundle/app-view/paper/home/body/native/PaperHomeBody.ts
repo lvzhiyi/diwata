@@ -233,16 +233,21 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   // 点击设置按钮
   clickSettingBtn() {
     app.manager.ui.show<PopSettings>({ name: 'PopSettings', onShow: () => { } });
+    // 设置按钮点击
+    EventTrackManager.inst.trackClickSetting(true);
   }
 
   // 展示选择金额视图
   clickBetAmount() {
     app.manager.ui.show({ name: 'PopBetamout' });
+    // 投注金额设置按钮点击
+    EventTrackManager.inst.trackBetAmountSetting(true);
   }
 
   /// 快速模式
   clickQuickMode(event: EventTouch) {
     app.manager.global.setQuikeMode(!app.manager.global.quikeMode);
+    EventTrackManager.inst.trackTurboSpin(app.manager.global.quikeMode);
   }
 
   /// 点击免费轮购买
@@ -344,10 +349,12 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       this.stopAutoPlay();
       this.disabledPlayButton();
       ToastManager.inst.show('Auto spin disabled');
+      EventTrackManager.inst.trackAutoSpin(false, app.manager.global.isFreespinMode ? 'free_spin' : 'normal');
     } else {
       app.manager.global.setAllwaysAutoPlay(true);
       this.startGame();
       ToastManager.inst.show('Auto spin enabled');
+      EventTrackManager.inst.trackAutoSpin(true, app.manager.global.isFreespinMode ? 'free_spin' : 'normal');
     }
   }
 

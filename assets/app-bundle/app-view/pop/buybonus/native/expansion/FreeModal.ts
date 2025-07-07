@@ -3,6 +3,7 @@ import { app } from 'db://assets/app/app';
 import { numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { PopBuybonus } from '../PopBuybonus';
 import { showInsufficientCreditAlert } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 
 const { ccclass, property } = _decorator;
 
@@ -206,6 +207,15 @@ export class FreeModal extends Component {
     }
 
     app.manager.event.emit('buyFreeSpinTimes', this.currentBetVal, this.currentQuantityVal);
+    // 埋点
+    EventTrackManager.inst.trackBuyBonus({
+      bonus_bet: this.currentBetVal,
+      bonus_quantity: this.currentQuantityVal,
+      bonus_price: this.currentBetVal * BUY_FREE_SPIN_TIMES_RATIO,
+      bonus_total_price: totalCost,
+      old_balance: app.manager.global.creditCount,
+      new_balance: app.manager.global.creditCount - totalCost,
+    });
     this.closeClickAction();
   }
 
@@ -213,6 +223,14 @@ export class FreeModal extends Component {
    * 关闭弹窗
    */
   public closeClickAction() {
+    const totalCost = this.currentBetVal * BUY_FREE_SPIN_TIMES_RATIO * this.currentQuantityVal;
+    EventTrackManager.inst.trackBuyBonusCancel({
+      balance: app.manager.global.creditCount,
+      bonus_quantity: this.currentQuantityVal,
+      bonus_price: this.currentBetVal * BUY_FREE_SPIN_TIMES_RATIO,
+      bonus_total_price: totalCost,
+      can_afford: app.manager.global.creditCount >= totalCost,
+    });
     app.manager.ui.hide<PopBuybonus>({ name: 'PopBuybonus' });
   }
 }

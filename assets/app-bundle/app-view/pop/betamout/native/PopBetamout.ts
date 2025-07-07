@@ -1,15 +1,30 @@
 import { _decorator } from 'cc';
 import BaseView from 'db://app/base/BaseView';
+import { app } from 'db://assets/app/app';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 
 const { ccclass } = _decorator;
 
 @ccclass('PopBetamout')
 export class PopBetamout extends BaseView {
-  start() {
+  private _betAmount: number;
 
+  start() {
+    this._betAmount = app.manager.global.betCount;
   }
 
   update(deltaTime: number) {
         
+  }
+
+  // 关闭视图
+  closeView() {
+    EventTrackManager.inst.trackChangeAmountCancel({
+      current_bet: this._betAmount,
+      selected_bet_before: this._betAmount,
+      selected_bet_after: app.manager.global.betCount,
+      changed: app.manager.global.betCount !== this._betAmount,
+    });
+    app.manager.ui.hide({ name: 'PopBetamout' });
   }
 }
