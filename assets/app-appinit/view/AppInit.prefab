@@ -372,7 +372,7 @@
     },
     "_type": 0,
     "_fillType": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -2326,7 +2326,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 749.9999999999999,
+      "width": 750,
       "height": 1334
     },
     "_anchorPoint": {
@@ -2361,6 +2361,9 @@
     },
     "selectedNode": {
       "__id__": 88
+    },
+    "dontShowNextTimeNode": {
+      "__id__": 86
     },
     "versionNode": {
       "__id__": 118

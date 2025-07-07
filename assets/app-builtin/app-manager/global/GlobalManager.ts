@@ -76,6 +76,9 @@ export class GlobalManager extends BaseManager {
   // 当前自动开始游戏次数
   private _currentAutoPlayTimes = 0;
 
+   /** 下次打开是否不需要显示引导页 */
+   private _isDontShowNextTime: boolean = false;
+
   // 自动游戏配置
   private _autoSetting = {
     // 执行制定轮后停止
@@ -188,6 +191,22 @@ export class GlobalManager extends BaseManager {
   /** 设置星卡模式投注金额 */
   public setStartCardBetAmount(val: number): void {
     this._startCardBetAmount = val;
+  }
+
+  /** 下次打开是否不需要显示引导页 */
+  public get isDontShowNextTime() {
+    const isDontShowNextTime = sys.localStorage.getItem('isDontShowNextTime');
+
+    if (isDontShowNextTime) {
+      this._isDontShowNextTime = isDontShowNextTime === 'true';
+    }
+
+    return this._isDontShowNextTime;
+  }
+
+  public setIsDontShowNextTime(bool: boolean) {
+    sys.localStorage.setItem('isDontShowNextTime', bool.toString());
+    this._isDontShowNextTime = bool;
   }
   
   public get betCount() {

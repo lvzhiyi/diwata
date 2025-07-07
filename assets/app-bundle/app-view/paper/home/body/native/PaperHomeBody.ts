@@ -28,6 +28,7 @@ import {  preventRapidClickDecorator, showInsufficientCreditAlert } from 'db://a
 import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { BetTypes } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 
 const { ccclass, property } = _decorator;
 
@@ -93,13 +94,13 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
 
   // 初始化的相关逻辑写在这
   onLoad() {
+    this.homeBodyUtil = new HomeBodyUtil(this);
     this.creditLable.getComponent(Label).string =
       '₱ ' + numberToMoney(app.manager.global.creditCount);
     this.betLable.getComponent(Label).string =
       'Bet ₱ ' + numberToMoney(app.manager.global.betCount);
     this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.manager.global.vipLevel - 1];
     this.onResizeScreen();
-    this.homeBodyUtil = new HomeBodyUtil(this);
     GameResourceManager.instance.preloadLocalICons();
   }
 
@@ -294,6 +295,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
    */
   goHome() {
     CpPostMessage.goHome();
+    EventTrackManager.inst.trackBackToHome();
   }
 
   /// 开始游戏
