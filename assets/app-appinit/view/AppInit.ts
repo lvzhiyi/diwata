@@ -16,6 +16,7 @@ import { ErrorType } from '../../common/script/extra/https/Constant';
 import { HTTP_STATUS_CODES } from '../../common/script/extra/Request';
 import { Environment, getApiUrl, getGameEnv } from '../../common/script/extra/config/envConfig';
 import commonInit from '../../common/script/extra/CommonInit';
+import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
 
 const { ccclass, property } = _decorator;
 @ccclass('AppInit')
@@ -31,6 +32,14 @@ export class AppInit extends BaseAppInit {
 
   @property(Node)
   private selectedNode: Node;
+
+  private isDontShowNextTime: boolean = false;
+
+  @property({
+    type: Node,
+    tooltip: '是否在下次显示引导页的按钮',
+  })
+  private dontShowNextTimeNode: Node;
 
 	/**
    * 版本号显示节点
@@ -56,10 +65,19 @@ export class AppInit extends BaseAppInit {
    * 初始化完成
    */
   protected onFinish() {
-    setTimeout(() => {
-      this.progressBarNode.active = false;
-      this.btnPlayNode.active = true;
-    }, 500);
+    EventTrackManager.inst.trackGameStart(app.manager.global.creditCount);
+    this.progressBarNode.active = false;
+
+    if (this.isDontShowNextTime) {  
+      Core.inst.manager.ui.showDefault(() => {
+        this.node.destroy();
+      });
+    }else{
+      setTimeout(() => {
+        this.btnPlayNode.active = true;
+      }, 500);
+    }
+
     this.initEffectVolume();
   }
 
@@ -72,12 +90,21 @@ export class AppInit extends BaseAppInit {
   }
 
   /**
+   * 初始化切换是否在下次打开游戏时显示引导页的按钮
+  */
+  private updateToggleDontShowNextTimeButton() {
+    this.selectedNode.active = app.manager.global.isDontShowNextTime;
+  }
+
+  /**
    * 用户初始化
    */
   async onUserInit() {
     commonInit.init();
     // 预加载资源
     this._preloadResources();
+    this.isDontShowNextTime = app.manager.global.isDontShowNextTime;
+    this.updateToggleDontShowNextTimeButton();
 
     try {
       await this.loginUser();
@@ -337,6 +364,9 @@ export class AppInit extends BaseAppInit {
 
   clickSelectedBox() {
     this.selectedNode.active = !this.selectedNode.active;
+    const isDontShowNextTime = !app.manager.global.isDontShowNextTime;
+    app.manager.global.setIsDontShowNextTime(isDontShowNextTime);
+    EventTrackManager.inst.trackDontShowNextTimeChange(isDontShowNextTime);
   }
 
   clickPlay() {

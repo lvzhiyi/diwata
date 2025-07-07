@@ -28,6 +28,7 @@ import {  preventRapidClickDecorator, showInsufficientCreditAlert } from 'db://a
 import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { BetTypes } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 
 const { ccclass, property } = _decorator;
 
@@ -294,6 +295,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
    */
   goHome() {
     CpPostMessage.goHome();
+    EventTrackManager.inst.trackBackToHome();
   }
 
   /// 开始游戏
