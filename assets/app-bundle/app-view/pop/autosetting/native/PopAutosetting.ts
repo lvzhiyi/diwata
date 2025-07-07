@@ -2,6 +2,7 @@ import { _decorator, Component, Node, Sprite, SpriteFrame, EventTarget, Color } 
 import { AddOrSub } from './expansion/AddOrSub';
 import { app } from 'db://assets/app/app';
 import BaseView from 'db://app/base/BaseView';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 
 const { ccclass, property } = _decorator;
 
@@ -121,5 +122,34 @@ export class PopAutosetting extends BaseView {
     // 设置自动开始游戏
     startAutoPlay() {
       app.manager.global.setStartAutoPlay(true);
+      // 记录自动开始游戏
+      EventTrackManager.inst.trackAutoBetSettingStart({
+        spin_count: app.manager.global.autoSetting.totalSpins.value,
+        enabled_spin_count: app.manager.global.autoSetting.totalSpins.selected,
+        single_win_limit: app.manager.global.autoSetting.singleWin.value,
+        enabled_win_limit: app.manager.global.autoSetting.singleWin.selected,
+        stop_if_balance_le: app.manager.global.autoSetting.balanceLess.value,
+        enabled_stop_if_balance_le: app.manager.global.autoSetting.balanceLess.selected,
+        stop_if_balance_ge: app.manager.global.autoSetting.balanceMore.value,
+        enabled_stop_if_balance_ge: app.manager.global.autoSetting.balanceMore.selected,
+        enabled_stop_on_free_game: app.manager.global.autoSetting.isFree.selected,
+      });
+      // 隐藏自动设置弹窗
+      app.manager.ui.hide({
+        name: 'PopAutosetting',
+        onHide: () => {
+        // 判断PopSettings是否显示，如果显示则隐藏
+          if (app.manager.ui.isShow('PopSettings')) {
+            app.manager.ui.hide({
+              name: 'PopSettings',
+              onHide: () => {},
+            });
+          }
+        },
+      });
+    }
+
+    protected closebtnClick() {
+      EventTrackManager.inst.trackAutoBetSettingCancel();
     }
 }

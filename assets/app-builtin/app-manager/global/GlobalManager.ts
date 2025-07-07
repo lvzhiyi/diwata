@@ -214,6 +214,8 @@ export class GlobalManager extends BaseManager {
     
     if (betCount) {
       betCount = parseFloat(betCount);
+    }else{
+      betCount = this._betCount;
     }
 
     return this._isFreespinMode ? this._freespinBetAmount : betCount;

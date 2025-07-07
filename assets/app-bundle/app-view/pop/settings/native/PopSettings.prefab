@@ -3774,8 +3774,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 292,
-      "y": 402,
+      "x": 285.754,
+      "y": 368.026,
       "z": 0
     },
     "_lrot": {
@@ -3898,7 +3898,7 @@
     },
     "component": "",
     "_componentId": "c87b2+cDqRBG6bG3M60/xxn",
-    "handler": "hide",
+    "handler": "closebtnClick",
     "customEventData": ""
   },
   {
@@ -3918,8 +3918,8 @@
       "__id__": 2
     },
     "_left": 0,
-    "_right": -17,
-    "_top": -2,
+    "_right": -10.754000000000019,
+    "_top": 31.97399999999999,
     "_bottom": 0,
     "_horizontalCenter": 0,
     "_verticalCenter": 0,

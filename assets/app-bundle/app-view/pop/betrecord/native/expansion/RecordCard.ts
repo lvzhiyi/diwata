@@ -2,6 +2,7 @@ import { _decorator, Color, Component, Label, Node, Sprite, SpriteFrame } from '
 import dayjs from 'dayjs';
 import { app } from 'db://assets/app/app';
 import { ToastView } from 'db://assets/basePlate/middleWare/commonUI/ToastView';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { BetRecordListModel } from 'db://assets/basePlate/middleWare/services/user';
 import {
   numberToMoney,
@@ -93,7 +94,11 @@ export class RecordCard extends Component {
     CopyUtils.copyText(text).then((bool) => {
       if(bool){
         ToastView.showCommonToast('Copy success');
+      }else{
+        ToastView.showCommonToast('Copy Failed');
       }
+
+      EventTrackManager.inst.trackCopyRoundNumber(this.RoundNumber, bool, 'betting_record');
     });
   }
 

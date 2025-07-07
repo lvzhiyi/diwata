@@ -7,6 +7,7 @@ import { SYMBOL_SIZE_MAP, transformRowListToColumnList } from 'db://assets/baseP
 import { app } from 'db://assets/app/app';
 import { PopBetrecorddetail } from '../PopBetrecorddetail';
 import { IntersectionObserver } from 'db://assets/res-native/script/IntersectionObserver';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 
 const { ccclass, property } = _decorator;
 
@@ -217,7 +218,7 @@ export class RecordDetailLayout extends Component {
    * 返回点击事件
   */
   public onBackClick() {
-    // EventTrackManager.inst.trackExitBetRecordDetail(this.id);
+    EventTrackManager.inst.trackExitBetRecordDetail(this.id);
     console.log('onBackClick', this.id);
     app.manager.ui.hide<PopBetrecorddetail>({ name: 'PopBetrecorddetail' });
   }

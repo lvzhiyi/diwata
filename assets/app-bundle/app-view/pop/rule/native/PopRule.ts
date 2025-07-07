@@ -17,6 +17,7 @@ import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { app } from 'db://assets/app/app';
 import { SymbolBox } from './expansion/SymbolBox';
 import { ButtonItem } from './expansion/ButtonItem';
+import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 
 const { ccclass, property } = _decorator;
 
@@ -649,5 +650,13 @@ export class PopRule extends BaseView {
     this.scheduleOnce(() => {
       this.contentNode.getComponent(Layout).updateLayout();
     }, 0.3);
+  }
+
+  /**
+   * 隐藏弹窗时的回调函数
+   * @param data 传入的数据，包含记录ID
+   */
+  onHide() {
+    EventTrackManager.inst.trackExitBetRules();
   }
 }
