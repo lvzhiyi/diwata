@@ -85,6 +85,7 @@ export class PopAutosetting extends BaseView {
       setting[key].value = value;
       setting[key].selected = value === 0 ? false : true;
       app.manager.global.setAutoSetting(setting);
+      console.log('key', key, value);
 
       if (key === 'totalSpins') {
         this.BottomNode.children.forEach(spin => {
@@ -150,6 +151,7 @@ export class PopAutosetting extends BaseView {
     }
 
     protected closebtnClick() {
+      app.manager.ui.hide({ name: 'PopAutosetting' });
       EventTrackManager.inst.trackAutoBetSettingCancel();
     }
 }

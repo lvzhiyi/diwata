@@ -10,9 +10,9 @@ import { serverHookManager } from 'db://assets/basePlate/middleWare/serverManage
 import { getUserCredit } from 'db://assets/basePlate/middleWare/services/user';
 import { HTTP_STATUS_CODES } from 'db://assets/common/script/extra/Request';
 import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsController';
-import { freeSpinManager } from './expansion/FreeSpinManager';
 import { GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
 import { calculateWithBase } from 'db://assets/common/script/extra/Utils/common';
+import { freeSpinManager } from 'db://assets/res-native/script/FreeSpinManager';
 
 const { ccclass, property } = _decorator;
 @ccclass('PaperHomeActivity')

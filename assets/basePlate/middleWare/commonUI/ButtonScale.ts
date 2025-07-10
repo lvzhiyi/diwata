@@ -5,14 +5,19 @@ const { ccclass } = _decorator;
 @ccclass('ButtonScale')
 export class ButtonScale extends Component {
   private button: Button = null;
+
   private readonly DEFAULT_SCALE = new Vec3(1, 1, 1);
-  private readonly PRESSED_SCALE = new Vec3(1.2, 1.2, 1.2);
+
+  private readonly PRESSED_SCALE = new Vec3(1.08, 1.08, 1.08);
+
   private readonly ANIMATION_DURATION = 0.1;
 
   start() {
     this.button = this.getComponent(Button);
+
     if (!this.button) {
       console.warn('ButtonScale component must be attached to a node with Button component');
+
       return;
     }
 

@@ -109,11 +109,6 @@ export class AppInit extends BaseAppInit {
     try {
       await this.loginUser();
       await this._getUserCredit();
-
-      if (this.runtimeEnv != 'local') {
-        await this.checkNetQuilty();
-      }
-
       this.versionNode.string = app.config.app.GAME_VER;
       this.nextInit();
     } catch (error) {
@@ -144,7 +139,6 @@ export class AppInit extends BaseAppInit {
   _initParams() {
     const params = getUrlParameters();
     app.store.user.setUserParams(params);
-    console.log('initUserParams', app.store.user.userParams);
   }
 
   /**
@@ -209,29 +203,29 @@ export class AppInit extends BaseAppInit {
    * 检查网络质量
    * 根据网络质量提供不同的游戏体验选项
    */
-  async checkNetQuilty() {
-    const quality = await CheckNetCtrl.checkQuality(app.config.app.GAME_ID);
+  // async checkNetQuilty() {
+  //   const quality = await CheckNetCtrl.checkQuality(app.config.app.GAME_ID);
 
-    return new Promise((resolve) => {
-      if (quality === 'slow') {
-        app.manager.global.setNetworkQuality('slow');
-        showErrorPop({
-          type: ErrorType.SlowNetTips,
-          msg: 'The network is slow at present. Would you like to use the smooth mode to play the game?',
-          confirmCallback: () => {
-            CheckNetCtrl.registerDownloader();
-            resolve(true);
-          },
-          cancelCallback: () => {
-            resolve(false);
-          },
-        });
-      } else {
-        app.manager.global.setNetworkQuality('fast');
-        resolve(false);
-      }
-    });
-  }
+  //   return new Promise((resolve) => {
+  //     if (quality === 'slow') {
+  //       app.manager.global.setNetworkQuality('slow');
+  //       showErrorPop({
+  //         type: ErrorType.SlowNetTips,
+  //         msg: 'The network is slow at present. Would you like to use the smooth mode to play the game?',
+  //         confirmCallback: () => {
+  //           CheckNetCtrl.registerDownloader();
+  //           resolve(true);
+  //         },
+  //         cancelCallback: () => {
+  //           resolve(false);
+  //         },
+  //       });
+  //     } else {
+  //       app.manager.global.setNetworkQuality('fast');
+  //       resolve(false);
+  //     }
+  //   });
+  // }
 
   /**
    * 登录，并保存 token
@@ -259,8 +253,6 @@ export class AppInit extends BaseAppInit {
     this.scheduleOnce(() => {
       // 初始化埋点
       this.initTrack();
-      eventTrack.track('sys_load_init');
-      eventTrack.track('sys_login');
     });
   }
 
@@ -317,6 +309,18 @@ export class AppInit extends BaseAppInit {
   }
 
   /**
+   * 加载音效资源
+   */
+  // private _loadSound() {
+  //   for (const sound of this.soundAssetList) {
+  //     app.manager.sound.load(sound as IEffectName, (result) => {
+  //       console.log('sound', sound, result);
+  //       this.nextInit();
+  //     });
+  //   }
+  // }
+
+  /**
    * 预加载资源
    *   type === sp.SkeletonData, SpriteFrame 时，bundle 为资源包名，path 为资源路径
    *   type === Prefab 时，bundle 为prefab名
@@ -330,7 +334,6 @@ export class AppInit extends BaseAppInit {
         { type: Prefab, bundle: 'PaperHomeRoll' },
         { type: Prefab, bundle: 'PaperHomeBody' },
         { type: Prefab, bundle: 'PopSettings' },
-        // { type: Prefab, bundle: 'PopBetamout' }
       ]
     ];
 

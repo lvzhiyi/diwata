@@ -215,7 +215,7 @@ export class AdvancedButtonBreath extends Component {
         this.createRotationBreath();
         break;
       case BreathType.COMBINED:
-        console.log('createCombinedBreath');
+     
         this.createCombinedBreath();
         break;
     }

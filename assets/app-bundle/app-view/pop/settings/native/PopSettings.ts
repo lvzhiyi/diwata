@@ -1,4 +1,4 @@
-import { _decorator, Color, Label, Node, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Button, Color, Label, Node, Sprite, SpriteFrame } from 'cc';
 import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { app } from 'db://assets/app/app';
 import { PopAutosetting } from '../../autosetting/native/PopAutosetting';
@@ -11,13 +11,13 @@ const { ccclass, property } = _decorator;
 @ccclass('PopSettings')
 export class PopSettings extends BaseView {
     @property(Node)
-    private VoiceButton: Node;
+    private VoiceIcon: Node;
 
     @property(Node)
     private VoiceProgress: Node;
 
     @property(Node)
-    private MusicButton: Node;
+    private MusicIcon: Node;
 
     @property(Node)
     private MusicProgress: Node;
@@ -58,9 +58,9 @@ export class PopSettings extends BaseView {
   // 初始化声音和音乐按钮
   initVoiceMusic() {
     this.VoiceProgress.getComponent(Progress).setValue(app.manager.global.voice);
-    this.VoiceButton.children[0].getComponent(Sprite).spriteFrame = app.manager.global.voice > 0 ? this.VoiceButtonSpritOn : this.VoiceButtonSpritOff;
+    this.VoiceIcon.getComponent(Sprite).spriteFrame = app.manager.global.voice > 0 ? this.VoiceButtonSpritOn : this.VoiceButtonSpritOff;
     this.MusicProgress.getComponent(Progress).setValue(app.manager.global.music);
-    this.MusicButton.children[0].getComponent(Sprite).spriteFrame = app.manager.global.music > 0 ? this.MusicButtonSpritOn : this.MusicButtonSpritOff;
+    this.MusicIcon.getComponent(Sprite).spriteFrame = app.manager.global.music > 0 ? this.MusicButtonSpritOn : this.MusicButtonSpritOff;
   }
 
   // 注册监听
@@ -80,15 +80,14 @@ export class PopSettings extends BaseView {
 
   changeAutoSettingBtnColor() {
     if (this.canClickAutoSetting()) {
-      console.log('1111888');
-      this.AutoSettingBtn.getChildByName('Border').getComponent(Sprite).color = new Color().fromHEX('#FFFFFF');
-      this.AutoSettingBtn.getChildByName('Border').getChildByName('Icon').getComponent(Sprite).color = new Color().fromHEX('#FFFFFF');
-      this.AutoSettingBtn.getChildByName('Border').getChildByName('title_Icon').getComponent(Sprite).color = new Color().fromHEX('#FFFFFF');
+      const button = this.AutoSettingBtn.getChildByName('ButtonItem').getComponent(Button);
+      const titleLabel = this.AutoSettingBtn.getChildByName('ButtonItem').getChildByName('Label').getComponent(Label);
+      titleLabel.color = new Color().fromHEX('#FFFFFF');
+      button.interactable = true;
     } else {
-      console.log('2222888');
-      this.AutoSettingBtn.getChildByName('Border').getComponent(Sprite).color = new Color(234, 242, 195, 100);
-      this.AutoSettingBtn.getChildByName('Border').getChildByName('Icon').getComponent(Sprite).color = new Color(234, 242, 195, 100);
-      this.AutoSettingBtn.getChildByName('Border').getChildByName('title_Icon').getComponent(Sprite).color = new Color(234, 242, 195, 100);
+      const titleLabel = this.AutoSettingBtn.getChildByName('ButtonItem').getChildByName('Label').getComponent(Label);
+      titleLabel.color = new Color().fromHEX('#7C7C7C');
+      this.AutoSettingBtn.getChildByName('ButtonItem').getComponent(Button).interactable = false;
     }
   }
 

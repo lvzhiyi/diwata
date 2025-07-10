@@ -41,8 +41,8 @@ export class RecordCard extends Component {
   private RoundNumber: string;
 
   protected onLoad(): void {
-    // 注册点击复制时间
-    this.CopyIconNode.on(Node.EventType.TOUCH_END, this.copy, this);
+    // // 注册点击复制时间
+    // this.CopyIconNode.on(Node.EventType.TOUCH_END, this.copy, this);
   }
 
   public initValue(dataInfo: BetRecordListModel) {

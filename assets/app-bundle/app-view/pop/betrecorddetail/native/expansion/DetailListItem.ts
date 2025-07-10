@@ -114,7 +114,7 @@ export class DetailListItem extends Component {
    
     this.rewardLineList.getComponent(UITransform).height = maxRewardLineCount * 60 + 10;
     this.addRewardItems(item.rewardLineList, cards);
-    this.node.getComponent(UITransform).height = maxRewardLineCount * 60 + 380;
+    // this.node.getComponent(UITransform).height = maxRewardLineCount * 60 + 380;
   }
 
   addRewardItems(data: BetRewardLineItem[], cards: SpriteFrame[]) {
