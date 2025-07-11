@@ -21,10 +21,10 @@
         "_value": true
       },
       "3d": {
-        "_value": true
+        "_value": false
       },
       "meshopt": {
-        "_value": true
+        "_value": false
       },
       "2d": {
         "_value": true
@@ -73,7 +73,7 @@
         "_value": false
       },
       "physics-2d": {
-        "_value": true,
+        "_value": false,
         "_option": "physics-2d-box2d",
         "_flags": {
           "physics-2d-box2d-wasm": {
@@ -96,7 +96,7 @@
         "_value": false
       },
       "intersection-2d": {
-        "_value": true
+        "_value": false
       },
       "primitive": {
         "_value": false
@@ -120,7 +120,7 @@
         "_value": true
       },
       "video": {
-        "_value": true
+        "_value": false
       },
       "webview": {
         "_value": true
@@ -129,7 +129,7 @@
         "_value": true
       },
       "websocket": {
-        "_value": true
+        "_value": false
       },
       "websocket-server": {
         "_value": false
@@ -182,25 +182,19 @@
     },
     "includeModules": [
       "2d",
-      "3d",
       "animation",
       "audio",
       "base",
       "gfx-webgl",
       "gfx-webgl2",
-      "intersection-2d",
       "legacy-pipeline",
       "marionette",
-      "meshopt",
       "particle-2d",
-      "physics-2d-box2d",
       "profiler",
       "skeletal-animation",
       "spine",
       "tween",
       "ui",
-      "video",
-      "websocket",
       "webview"
     ],
     "noDeprecatedFeatures": {

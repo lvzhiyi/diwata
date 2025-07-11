@@ -36,7 +36,7 @@
   },
   "mainBundleIsRemote": false,
   "mainBundleCompressionType": "merge_all_json",
-  "useSplashScreen": true,
+  "useSplashScreen": false,
   "bundleCommonChunk": false,
   "packAutoAtlas": true,
   "startScene": "5298bb0b-166e-4978-af98-0047d43757de",

@@ -15,6 +15,7 @@ import {
 import { MoneyUtil } from 'db://assets/basePlate/core/baseUtil/MoneyUtil';
 import { BetRewardLineItem } from 'db://assets/basePlate/middleWare/services/bet';
 import { RecordItemCard } from './RecordItemCard';
+import { RewardLine } from './RewardLine';
 
 const { ccclass, property } = _decorator;
 
@@ -54,22 +55,6 @@ export class DetailListItem extends Component {
   private rewardLineList: Node;
 
   private readonly REWARD_LINE_TEXT_CONTAINER_WIDTH = 304;
-
-  /**
-   * 动态调整Scale
-   */
-  private adjustScale(textContainer: Node, label: Label) {
-    const parentWidth = this.REWARD_LINE_TEXT_CONTAINER_WIDTH;
-    // SYMBOL图标大小+PAYS图标大小+间距+label宽度
-    const textContainerWidth = 50 + 52 + 20 + label.node.getComponent(UITransform).width;
-
-    if (textContainerWidth > parentWidth) {
-      const scale = parentWidth / textContainerWidth;
-      textContainer.scale = new Vec3(scale, scale, 1);
-    }
-
-    textContainer.getComponent(Layout).updateLayout();
-  }
 
   public initValue(item: any, maxRewardLineCount: number, imgSprite: SpriteFrame[][], cards: SpriteFrame[], otherList: SymbolItem[][]) {
     this.title.string = item.freeWheelFlag ? 'Free Game' : 'Main Game';
@@ -125,76 +110,14 @@ export class DetailListItem extends Component {
     data.map((itemData) => {
       const newItem = instantiate(this.RewardPrefab);
       this.rewardLineList.addChild(newItem);
-
-      // 设置图标
-      const RewardIconNode = this.findNodeByName(newItem, 'RewardIcon');
-
-      if (RewardIconNode) {
-        const tranform = RewardIconNode.getComponent(UITransform);
-        tranform.setContentSize(45, 50);
+      const  rewardLineItem = newItem.getComponent(RewardLine);
         
-        // 安全地获取或添加Sprite组件
-        let sprite = RewardIconNode.getComponent(Sprite);
+      // 加载图标资源
+      const findIcon = cards.find((item) => {
+        return item.name.indexOf(itemData.symbolId) !== -1;
+      });
 
-        if (!sprite) {
-          sprite = RewardIconNode.addComponent(Sprite);
-        }
-        
-        // 加载图标资源
-        const findIcon = cards.find((item) => {
-          return item.name.indexOf(itemData.symbolId) !== -1;
-        });
-        sprite.spriteFrame = findIcon;
-      }
-
-      // 设置中奖线
-      const RewardIconNumNode = this.findNodeByName(newItem, 'RewardIconNumLable');
-
-      const RewardLineType = {
-        THREE: '3',
-        FOUR: '4',
-        FIVE: '5',
-        SIX: '6',
-      };
-
-      if (RewardIconNumNode) {
-        if (itemData.rewardLineCount > 0) {
-          RewardIconNumNode.active = true;
-          const label = RewardIconNumNode.getComponent(Label);
-          label.string =
-            RewardLineType[itemData.rewardLineType as keyof typeof RewardLineType] || '';
-        } else {
-          // 隐藏
-          RewardIconNumNode.active = false;
-        }
-      }
-
-      // 设置文案
-      const RewardContainer = this.findNodeByName(newItem, 'RewardContainer');
-
-      if (RewardContainer) {
-        // 中奖金额
-        const textNode = RewardContainer.getChildByName('PaysAmoutLable');
-
-        if (textNode) {
-          const label = textNode.getComponent(Label);
-          const betNumber = MoneyUtil.formatDisplayAmount(MoneyUtil.internalToDisplay(itemData.betAmount) * itemData.odds);
-          let content = `₱ ${betNumber} X ${itemData.rewardLineCount}WAYS = ₱${MoneyUtil.internalToDisplay(itemData.rewardAmount)
-          }`;
-
-          if (itemData.multiple > 1 && itemData.symbolId != '3001') {
-            content = `₱ ${betNumber} X ${itemData.rewardLineCount}WAYS X ${itemData.multiple
-            } = ₱ ${MoneyUtil.internalToDisplay(itemData.rewardAmount)}`;
-          }
-
-          label.string = content;
-          
-          // 获取容器宽度并调整字体大小
-          this.scheduleOnce(() => {
-            this.adjustScale(RewardContainer, label);
-          }, 0.01);
-        }
-      }
+      rewardLineItem.initValue(itemData, findIcon);
       
       return newItem;
     });

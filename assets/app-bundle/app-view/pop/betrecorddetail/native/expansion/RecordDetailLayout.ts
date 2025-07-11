@@ -146,7 +146,7 @@ export class RecordDetailLayout extends Component {
       itemNode.getComponent(DetailListItem).initValue(element, maxRewardLineCount, imgSprites, this.cards, _otherList);
     });
     const height = gameRecordList.length * 370;
-    this.listBox.getComponent(UITransform).height = height > 640 ? height : 640;
+    this.listBox.getComponent(UITransform).height = height > 680 ? height : 680;
   }
 
   /**
