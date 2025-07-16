@@ -11,12 +11,10 @@ import { DEBUG } from 'cc/env';
 import eventTrack from '../../common/script/extra/eventTrack';
 import { serverHookManager } from '../../basePlate/middleWare/serverManager/ServerHookManager';
 import { initARMS } from '../../common/script/extra/armsSDK/init';
-import CheckNetCtrl from '../../common/script/extra/CheckNetCtrl';
-import { ErrorType } from '../../common/script/extra/https/Constant';
 import { HTTP_STATUS_CODES } from '../../common/script/extra/Request';
-import { Environment, getApiUrl, getGameEnv } from '../../common/script/extra/config/envConfig';
 import commonInit from '../../common/script/extra/CommonInit';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
+import { Environment, getApiUrl, getGameEnv } from '../../common/script/extra/config/envConfig';
 
 const { ccclass, property } = _decorator;
 @ccclass('AppInit')

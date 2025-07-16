@@ -52,13 +52,13 @@ export class PopFreeSpinResult extends BaseView {
       await this.numberWinBgAnimator.animateTo(
         this.amount,
         3,
-        (value) => numberToMoney(value, 3, false),
+        (value) => '₱ ' + numberToMoney(value, 3, false),
         true
       );
 
       this.scheduleOnce(() => {
         app.manager.ui.hide({ name: 'PopFreeSpinResult' });
-      }, 1);
+      }, app.manager.global.quikeMode ? 1 : 2.5);
 
       resolve();
     });

@@ -12,6 +12,8 @@ export class PopErrorPop extends BaseView {
 
   @property(Node) private confirmBtn: Node;
 
+  @property(Node) private confirmLable: Node;
+
   /** 文本节点 */
   @property(Node) private toastText: Node;
 
@@ -22,7 +24,7 @@ export class PopErrorPop extends BaseView {
   /** 文本节点容器 */
   @property(Node) private textContainer: Node;
 
-  @property(SpriteAtlas) private confirmBtnSprite: SpriteAtlas;
+  // @property(SpriteAtlas) private confirmBtnSprite: SpriteAtlas;
 
   private richText: RichText;
 
@@ -144,7 +146,7 @@ export class PopErrorPop extends BaseView {
       this.richText =
         this.toastText.getComponent(RichText) || this.toastText.addComponent(RichText);
       this.richText.fontSize = 32;
-      this.richText.lineHeight = 40;
+      this.richText.lineHeight = 33;
       this.richText.maxWidth = this.textContainer.getComponent(UITransform).width;
       this.richText.horizontalAlign = RichText.HorizontalAlign.CENTER;
       this.richText.verticalAlign = RichText.VerticalAlign.CENTER;
@@ -154,8 +156,8 @@ export class PopErrorPop extends BaseView {
     }
     if (!this.enableRichText && !this.labelText) {
       this.labelText = this.toastText.getComponent(Label) || this.toastText.addComponent(Label);
-      this.labelText.fontSize = 36;
-      this.labelText.lineHeight = 40;
+      this.labelText.fontSize = 32;
+      this.labelText.lineHeight = 33;
       this.labelText.horizontalAlign = Label.HorizontalAlign.CENTER;
       this.labelText.verticalAlign = Label.VerticalAlign.CENTER;
       this.richText?.destroy();
@@ -174,7 +176,7 @@ export class PopErrorPop extends BaseView {
     const textTransform = this.toastText.getComponent(UITransform);
     this.textContainer
       .getComponent(UITransform)
-      .setContentSize(textTransform.width, Math.max(textTransform.height, 400));
+      .setContentSize(textTransform.width, Math.max(textTransform.height, 250));
   }
 
   // 更新UI状态
@@ -192,21 +194,22 @@ export class PopErrorPop extends BaseView {
 
   // 更新确认按钮图标
   private updateConfirmButtonSprite(type: ErrorType) {
+    let confirmText = '';
     const spriteFrameMap = {
-      netError: 'BC_REFRESH',
+      netError: 'Refresh',
       recharge: 'Recharge',
-      serverError: 'QR_CONFIRM',
-      betError: 'QR_CONFIRM',
-      loginError: 'BC_REFRESH',
-      slowNetTips: 'QR_CONFIRM',
-      serverMaintenance: 'BC_REFRESH',
+      serverError: 'Confirm',
+      betError: 'Confirm',
+      loginError: 'Refresh',
+      slowNetTips: 'Confirm',
+      serverMaintenance: 'Refresh',
     };
+    confirmText = spriteFrameMap[type as keyof typeof spriteFrameMap];
 
-    const spriteFrameName = spriteFrameMap[type as keyof typeof spriteFrameMap];
+    const textLabel = this.confirmLable.getComponent(Label);
 
-    if (spriteFrameName) {
-      this.confirmBtn.getComponent(Sprite).spriteFrame =
-        this.confirmBtnSprite.getSpriteFrame(spriteFrameName);
+    if (textLabel.isValid) {
+      textLabel.string = confirmText;
     }
   }
 

@@ -502,7 +502,7 @@
         "__id__": 21
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 27
@@ -566,7 +566,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 19.5,
+      "x": 0,
       "y": 5,
       "z": 0
     },
@@ -719,7 +719,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 68.33,
+      "width": 29.33,
       "height": 100
     },
     "_anchorPoint": {

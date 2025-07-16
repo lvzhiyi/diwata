@@ -241,6 +241,7 @@ export class GlobalManager extends BaseManager {
 
   public setQuantity(val: number) {
     this._quantity = val;
+    app.manager.event.emit('quantityChange', val);
   }
 
   public get gameRecordIds() {

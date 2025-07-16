@@ -8,8 +8,8 @@ import CpPostMessage from 'db://assets/common/script/extra/tmBridge/cpPostMessag
 import { GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
 import { PackageFacade } from 'db://assets/common/script/PackageFacade';
 import { GameMrgEvent } from 'db://assets/common/script/extra/GameMrsEvent';
-import { GameDataMgrEventsType } from 'db://assets/common/script/data/ActivityDataMgr';
 import { Environment, getApiUrl, getGameEnv, getWebSocketUrl } from 'db://assets/common/script/extra/config/envConfig';
+import { GameDataMgrEventsType } from 'db://assets/common/script/data/ActivityDataMgr';
 
 const { ccclass } = _decorator;
 
@@ -317,11 +317,11 @@ class ServerHookManager {
     GlobalMgr.instance.playerName = app.manager.global.playerName;
     GlobalMgr.instance.userLevel = app.manager.global.getUserInfo().vipLevel;
     PackageFacade.instance.init({
-      activityIDs: [1, 2, 3, 4, 5, 6, 7],
+      activityIDs: [1, 2, 3, 4, 5, 6,],
       httpHeadUrl: hostUrl,
       token: token,
       gameID: GlobalMgr.instance.gameId,
-      effect: false,
+      effect: { volume: 1, audioClip: null },
       gameEnv: getGameEnv(),
       listener: GameMrgEvent.instance.getEventTarget(),
       moveToPos: new Vec3(),
@@ -336,14 +336,13 @@ class ServerHookManager {
         channelId: app.store.user.userParams.channelId,
         pId: app.store.user.userParams.pId,
         playerName: GlobalMgr.instance.playerName,
-      }
+      },
     });
 
     try {
       await PackageFacade.instance.preloadEntry();
       // //设置默认成就系统的音效音量
-      PackageFacade.instance
-        .getCommonEventTarget()
+      GameMrgEvent.instance.getEventTarget()
         .emit(
           GameDataMgrEventsType.updateVolume,
           parseFloat(localStorage.getItem('effectVolumeScale') || '1')
