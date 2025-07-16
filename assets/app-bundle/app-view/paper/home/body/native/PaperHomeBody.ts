@@ -29,6 +29,7 @@ import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { BetTypes } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
+import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
 
 const { ccclass, property } = _decorator;
 
@@ -152,6 +153,8 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     app.manager.event.on('clickAllwaysAutoPlay', this.clickAllwaysAutoModeBtn, this);
     // 停止自动投注
     app.manager.event.on('stopAllwaysAutoPlay', this.stopAllwaysAutoPlay, this);
+    // 监听免费轮次数变化
+    app.manager.event.on('quantityChange', this.quantityChange, this);
   }
 
   // 界面关闭时的相关逻辑写在这(已经关闭的界面不会触发onHide)
@@ -276,11 +279,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     return true;
   }
 
-  /// 点击jackpot中奖列表
-  clickJackpotRecordList() {
-    app.manager.ui.show({ name: 'PopJackpotRecord' });
-  }
-
   berforeStartGame() {
     // 如果自动模式开启，并且总次数选中，并且总次数大于0, 展示剩余次数
     if (
@@ -367,12 +365,22 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     ToastManager.inst.show('Auto spin disabled');
   }
 
+  /**
+   * 购买的免费轮总次数变化
+   * @param val
+   */
+  quantityChange(val: number) {
+    this.setAutoTimesLabel(val > 0 ? val.toString() : '');
+    this.autoModeChangeListener(val > 0);
+    this.autoModeBtn.getComponent(Button).interactable = val > 0;
+  }
+
   // 禁用开始、金额、自动按钮
   // 如果是自动模式，则自动模式不禁用
   disabledPlayButton() {
     this.startBtn.getComponent(Button).interactable = false;
 
-    if (!app.manager.global.allwaysAutoPlay && !app.manager.global.startAutoPlay) {
+    if (!app.manager.global.allwaysAutoPlay && !app.manager.global.startAutoPlay && app.manager.global.quantity === 0) {
       this.autoModeBtn.getComponent(Button).interactable = false;
     }
 
@@ -466,6 +474,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     globalManager.setCurrentAutoPlayTimes(0);
     globalManager.setStartAutoPlay(false);
     globalManager.setAllwaysAutoPlay(false);
+    globalManager.setQuantity(0);
     this.setAutoTimesLabel('');
   }
 }

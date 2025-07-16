@@ -542,9 +542,9 @@
       "__uuid__": "074c8a0a-f8b9-4d75-8f05-6404f77d32f3@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
-    "_type": 0,
+    "_type": 1,
     "_fillType": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -30154,9 +30154,9 @@
     },
     "todayColor": {
       "__type__": "cc.Color",
-      "r": 235,
-      "g": 180,
-      "b": 85,
+      "r": 255,
+      "g": 235,
+      "b": 100,
       "a": 255
     },
     "normalColor": {
@@ -30168,9 +30168,9 @@
     },
     "ashColor": {
       "__type__": "cc.Color",
-      "r": 190,
-      "g": 165,
-      "b": 125,
+      "r": 111,
+      "g": 95,
+      "b": 127,
       "a": 255
     },
     "scrollView": {

@@ -355,8 +355,6 @@ export class PopBetrecord extends BaseView {
       this.TimeTabs.children.forEach(tab => {
         if (currentTab === tab) {
           tab.getComponent(Sprite).spriteFrame = this.SelectIconOn;
-          tab.children[0].getComponent(Label).isBold = true;
-          tab.children[0].getComponent(Label).color = new Color().fromHEX('#ffffff');
 
           this._ageMinutes = parseInt(tab.children[0].name) || 0;
 
@@ -381,8 +379,6 @@ export class PopBetrecord extends BaseView {
           this.getData();
         } else {
           tab.getComponent(Sprite).spriteFrame = this.SelectIconOff;
-          tab.children[0].getComponent(Label).isBold = false;
-          tab.children[0].getComponent(Label).color = new Color().fromHEX('#163518');
         }
       });
     }

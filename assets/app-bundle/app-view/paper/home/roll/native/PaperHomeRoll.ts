@@ -69,6 +69,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   // 是否是免费轮
   private isFreeBonusSpin: boolean = false;
 
+  // 需要播放roll滚动动画的rollIndex
+  private needPlayRollsFrameSpine: boolean[] = [false, false, false, false, false, false];
+
   onLoad() {
     this.homeRollTool = new HomeRollTool();
     this.initRoll();
@@ -560,6 +563,108 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     app.manager.global.setMultipleIndex(app.controller.slots.isFreeBonusSpin ? 3 : 0);
     // 结束游戏
     app.controller.home.endGame();
+  }
+
+  /**
+   * 添加到顶部然后下落 或者 播放Roll边框动画然后落下然后添加到顶部最后下落
+   */
+  private async addToTopThenFallDowmOrRunRollFrameAnimationThenFallDownThenAddToTopThenFallDown(rollsScript: Roll[], symbolAnimationData: ISymbolAnimationData[][]) {
+    /**
+     * 处理this.needPlayRollsFrameSpine哪些roll需要播放滚轮动画的数据
+     */
+    this.currentNormalRoundHasMoreThanOneScatter();
+    this.needPlayRollsFrameSpine = this.needPlayRollsFrameSpine.map((needPlayRollsFrameSpine, index) => {
+      return !!(needPlayRollsFrameSpine && symbolAnimationData[index].find(item => item.isNeedRemove));
+    });
+
+    /**
+     * 处理仅下落的Roll和播放Roll边框动画后再下落的Roll的数据
+     * fallDownScript： 仅下落的Roll
+     * rollFrameAnimationScript： 播放Roll边框动画后再下落的Roll
+     */
+    const fallDownScript: Roll[] = [];
+    const rollFrameAnimationScript: Roll[] = [];
+
+    rollsScript.forEach((script, index) => {
+      if (!this.needPlayRollsFrameSpine[index]) {
+        fallDownScript.push(script);
+      } else {
+        rollFrameAnimationScript.push(script);
+      }
+    });
+
+    const nextRoundList = this.resultList[this.roundIndex + 1];
+
+    /**
+     * 添加仅下落roll上的新Symbol到顶部
+     * -- 传入下一回合roll的数据
+     */
+    if (fallDownScript.length > 0) {
+      await Promise.all(fallDownScript.map((roll, rollIndex) =>
+        roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[rollIndex]) || [])
+      ));
+    }
+
+    /**
+     * 仅Symbol下落
+     */
+    await Promise.all([...fallDownScript.map(roll => roll.fallDownSymbol()), ...rollFrameAnimationScript.map(roll => roll.fallDownSymbol())]);
+
+    /**
+     * Roll边框动画 之后 再Symbol下落
+     */
+    if (rollFrameAnimationScript.length > 0) {
+      // for (const script of rollFrameAnimationScript) {
+      //   await script.showRollFrameSpine(this.rollFrameSkeleton);
+      //   /**
+      //    * 添加Roll边框动画后下落，然后再添加到顶部下落
+      //    * -- 传入下一回合roll的数据
+      //    */
+      //   const rollIndex = rollFrameAnimationScript.indexOf(script) + fallDownScript.length;
+      //   await script.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[rollIndex]) || []);
+      //   await script.fallDownSymbol();
+    
+      //   if (this.rollFrameSkeleton.node.active) {
+      //     this.rollFrameSkeleton.node.active = false;
+      //     this.rollFrameSkeleton.clearAnimation();
+      //   }
+      // }
+    }
+  }
+
+  /**
+   * 当前回合是否命中超过1个scatter
+   * @returns 当前回合是否命中超过1个scatter 
+   */
+  private currentNormalRoundHasMoreThanOneScatter() {
+    this.needPlayRollsFrameSpine.fill(false);
+    
+    const wheel = this.resultList[this.roundIndex].wheel;
+    let scatterCount = 0;
+    let secondScatterIndex = -1;
+
+    const analyzeWheel = wheel[0].map((_: any, colIndex: number) => wheel.map((row: any) => row[colIndex]));
+
+    analyzeWheel.forEach((item: any, index: number) => {
+      if (item.find((item: any) => item?.symbolId === '3001')) {
+        scatterCount++;
+
+        if (scatterCount === 2) {
+          secondScatterIndex = index;
+        }
+      }
+    });
+
+    // 找到第 2 个 scatter，并且不是最后一个roll中
+    const hasMoreThanOneScatter = secondScatterIndex !== -1 && secondScatterIndex < this.needPlayRollsFrameSpine.length - 1;
+
+    if (hasMoreThanOneScatter) {
+      for (let i = secondScatterIndex + 1; i < this.needPlayRollsFrameSpine.length; i++) {
+        this.needPlayRollsFrameSpine[i] = true;
+      }
+    }
+
+    return !app.controller.slots.isFreeBonusSpin && hasMoreThanOneScatter;
   }
 
   /**

@@ -48,7 +48,7 @@ export class FreeModal extends Component {
 
   private currentQuantityVal: number;
 
-  private readonly CURRENCY_SYMBOL = '₱';
+  private readonly CURRENCY_SYMBOL = '';
 
   private readonly DEFAULT_QUANTITY = 1;
 
@@ -81,7 +81,7 @@ export class FreeModal extends Component {
    * @param amount 金额
    */
   private formatCurrency(amount: number): string {
-    return `${this.CURRENCY_SYMBOL}${amount}`;
+    return `${amount}`;
   }
 
   /**

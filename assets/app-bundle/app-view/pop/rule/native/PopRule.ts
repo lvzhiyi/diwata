@@ -78,8 +78,8 @@ export class PopRule extends BaseView {
 
   // 初始化的相关逻辑写在这
   onLoad() {
-    this.initData();
-    this.drawRule();
+    // this.initData();
+    // this.drawRule();
   }
 
   initData() {

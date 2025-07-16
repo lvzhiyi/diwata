@@ -126,7 +126,8 @@ export class RecordDetailLayout extends Component {
     // 找出每两个数据中的最大中奖线个数 
     const maxRewardLineCounts = this.findMaxRewardLineCount(gameRecordList);
     gameRecordList.forEach((element: any, index: number) => {
-      const maxRewardLineCount = maxRewardLineCounts[Math.floor(index / 2)];
+      // const maxRewardLineCount = maxRewardLineCounts[Math.floor(index / 2)];
+      const maxRewardLineCount = element.rewardLineList.length;
       const itemNode = instantiate(this.DetailItem);
 
       const otherList = element.wheel;
@@ -141,11 +142,11 @@ export class RecordDetailLayout extends Component {
           return null;
         });
       });
-      // this.insertItem(element, maxRewardLineCount, imgSprites, this.cards, _otherList);
       this.listBox.addChild(itemNode);
       itemNode.getComponent(DetailListItem).initValue(element, maxRewardLineCount, imgSprites, this.cards, _otherList);
     });
-    this.listBox.getComponent(UITransform).height = (gameRecordList.length / 2 + gameRecordList.length % 2) * 550;
+    const height = gameRecordList.length * 370;
+    this.listBox.getComponent(UITransform).height = height > 680 ? height : 680;
   }
 
   /**

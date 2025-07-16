@@ -1,8 +1,8 @@
 import BaseController from 'db://app/base/BaseController';
 import { app } from '../../app/app';
 import { BetSubTypes, BetTypes } from '../../basePlate/middleWare/enums/bet';
-import { freeSpinManager } from '../../app-bundle/app-view/paper/home/activity/native/expansion/FreeSpinManager';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
+import { freeSpinManager } from '../../res-native/script/FreeSpinManager';
 
 export class SlotsController extends BaseController<
   SlotsController,
