@@ -41,6 +41,9 @@ export class Symbol extends Component {
     // 动画
     private wildAnimationNode: Node = null;
 
+     // scatter动画Node
+     public scatterAnimationNode: Node = null;
+
     // scatter增加次数动画Node
     private scatterAddTimeAnimationNode: Node = null;
 
@@ -215,6 +218,23 @@ export class Symbol extends Component {
     }
 
     /**
+     * 播放scatter action动画
+     */
+    async startScatterActionAnimation(spineResourceName: string) {
+      if (!this.scatterAnimationNode) {
+        this.scatterAnimationNode = new Node('ScatterAnimationNode');
+        this.scatterAnimationNode.layer = this.node.layer;
+        this.scatterAnimationNode.setParent(this.node);
+      }
+
+      return null;
+      const skeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(spineResourceName);
+      const skeleton = await this.playAnimationSequence(this.scatterAnimationNode, skeletonData, [{ name: 'action', loop: false }]);
+
+      return skeleton;
+    }
+
+    /**
      * 获取wild节点，如果存在则返回，否则返回null
      */
     getWildNode() {
@@ -327,103 +347,55 @@ export class Symbol extends Component {
     }
 
     /**
-     * 播放scatter增加次数动画
+     * 播放动画序列
+     * @param skeleton 
+     * @param animations 
+     * @returns 
      */
-    async playScatterAddTimeAnimation(targetPosition: Vec3) {
-      return new Promise<void>(async (resolve) => {
-        // 如果动画节点存在，代表之前已经播放过，则不进行操作
-        if (this.scatterAddTimeAnimationNode) {
-          resolve();
-
-          return;
-        }
-
-        this.scatterAddTimeAnimationNode = new Node('ScatterAddTimeAnimationNode');
-        this.scatterAddTimeAnimationNode.layer = this.node.layer;
-        this.scatterAddTimeAnimationNode.setParent(this.node);
-
-        const skeleton = this.scatterAddTimeAnimationNode.getComponent(sp.Skeleton) || this.scatterAddTimeAnimationNode.addComponent(sp.Skeleton);
-        skeleton.premultipliedAlpha = true;
-        skeleton.skeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.LAMANG_ICON_SCATTER);
-        await this.playAnimationSequence(skeleton, ['action']);
-
-        const pointNumberBone = skeleton.findSlot('point_number')?.bone;
-
-        if (pointNumberBone) {
-          console.log(pointNumberBone.getWorldScaleX, pointNumberBone.worldY);
-
-          const boneWorldX = skeleton.node.worldPosition.x + pointNumberBone.worldX;
-          const boneWorldY = skeleton.node.worldPosition.y + pointNumberBone.worldY;
-
-          // 创建scatter+1节点
-          const scatterAddOneNode = await this.createScatterAddOneNode(boneWorldX, boneWorldY);
-
-          // scatter+1节点移动到freeSpinTimes节点
-          await this.scatterAddOneNodeMoveToFreeSpin(scatterAddOneNode, targetPosition);
-        }
-
-        resolve();
-      });
-    }
-
     /**
      * 播放动画序列
      * @param skeleton 
      * @param animations 
      * @returns 
      */
-    async playAnimationSequence(skeleton: sp.Skeleton, animations: string[]) {
-      return new Promise<void>(async (resolve) => {
+    async playAnimationSequence(node: Node, skeletonData: sp.SkeletonData, animations: { name: string, loop: boolean }[], onComplete?: () => void) {
+      return new Promise<sp.Skeleton>((resolve) => {
         if (animations.length === 0) {
-          resolve();
+          resolve(null);
 
           return;
         }
 
-        for (let i = 0; i < animations.length - 1 ; i++) {
-          skeleton.addAnimation(0, animations[i], false);
-        }
+        const skeleton = node.getComponent(sp.Skeleton) || node.addComponent(sp.Skeleton);
+        skeleton.premultipliedAlpha = false;
+        skeleton.skeletonData = skeletonData;
+        skeleton.timeScale = app.manager.global.gameSpeed;
 
-        const track: sp.spine.TrackEntry = skeleton.addAnimation(0, animations[animations.length - 1], false, 0);
-        
-        skeleton.setTrackCompleteListener(track, (trackEntry: sp.spine.TrackEntry) => {
-          if (trackEntry.animation.name === animations[animations.length - 1]) {
-            resolve();
-            skeleton.setTrackCompleteListener(track, null);
+        // 清除之前的监听器
+        skeleton.setCompleteListener(null);
+
+        // 添加动画序列
+        for (let i = 0; i < animations.length - 1; i++) {
+          const { name, loop } = animations[i];
+
+          if (i === 0) {
+            skeleton.setAnimation(0, name, loop);
+          } else {
+            skeleton.addAnimation(0, name, loop, 0);
+          }
+        }
+  
+        // 添加最后一个动画并设置监听器
+        const { name, loop } = animations[animations.length - 1];
+        skeleton.addAnimation(0, name, loop, 0);
+  
+        // 设置一次性监听器
+        skeleton.setCompleteListener((trackEntry: sp.spine.TrackEntry) => {
+          if (trackEntry.animation.name === name) {
+            onComplete?.();
+            resolve(skeleton);
           }
         });
-      });
-    }
-
-    /**
-     * 创建scatter+1节点
-     */
-    createScatterAddOneNode(boneWorldX: number, boneWorldY: number): Promise<Node> {
-      return new Promise<Node>(async (resolve) => {
-        const scatterAddOneNode = new Node('ScatterAddOne');
-        scatterAddOneNode.layer = this.node.layer;
-        scatterAddOneNode.addComponent(Sprite).spriteFrame = this.scatterAddOneSpriteFrame;
-        scatterAddOneNode.setParent(this.node.parent.parent.parent);
-
-        const position = new Vec3(boneWorldX, boneWorldY, 0);
-        scatterAddOneNode.setWorldPosition(position);
-        resolve(scatterAddOneNode);
-      });
-    }
-
-    /**
-     * scatter+1节点移动到freeSpin节点
-     */
-    scatterAddOneNodeMoveToFreeSpin(scatterAddOneNode: Node, targetPosition: Vec3) {
-      return new Promise<void>(async (resolve) => {
-        tween(scatterAddOneNode)
-          .to(0.5, { worldPosition: targetPosition })
-          .call(() => {
-            // 销毁scatter+1节点
-            scatterAddOneNode.destroy();
-            resolve();
-          })
-          .start();
       });
     }
 

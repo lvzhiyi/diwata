@@ -3,6 +3,7 @@ import { Symbol, SYMBOL_WILD_IDS } from './Symbol';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { app } from 'db://assets/app/app';
 
 const { ccclass, property } = _decorator;
 
@@ -18,7 +19,10 @@ export class Roll extends Component {
 
     @property(CCInteger)
     private itemCount: number = 5;
-    
+
+    @property(CCInteger)
+    private rollIndex: number = 0;
+
     private nodePool: NodePool = new NodePool();
 
     private rollTween: Tween | null = null;
@@ -42,14 +46,18 @@ export class Roll extends Component {
     private onRollComplete: () => void = null;
 
     // 消除、下坠动画数据
-    private symbolAnimationData: ISymbolAnimationData[] = [];
+    public symbolAnimationData: ISymbolAnimationData[] = [];
 
     // 顶部首个Symbol节点y坐标
     private firstSymbolY: number = 0;
 
+    private originalWorldPosition: Vec3 = new Vec3();
+
     protected onLoad(): void {
       this.initNodePool();
       this.initSymbols();
+      this.originalWorldPosition = this.node.getWorldPosition().clone();
+      this.originalWorldPosition.y = this.originalWorldPosition.y - 10;
     }
 
     /**
@@ -71,6 +79,7 @@ export class Roll extends Component {
       this.rollList = rollList.filter((item: any) => item !== null);
       console.log('rollList-数据', this.rollList);
       this.rollRemoveData = rollRemoveData;
+      console.log('rollRemoveData-数据', this.rollRemoveData);
     }
 
     /**
@@ -341,7 +350,6 @@ export class Roll extends Component {
       let fallDownCount = 0;
       // 当前roll是否存在剑则把所有元素变成剑
       const haveSword = this.currentRollHaveSword();
-      console.log('当前roll是否存在剑-数据', haveSword);
 
       for (let i = this.node.children.length - 1; i >= 0; i--) {
         const symbolNode = this.node.children[i];
@@ -354,7 +362,6 @@ export class Roll extends Component {
           fallDownCount,
           symbolId: haveSword ? SymbolType.SWORD : currentSymbolObj?.symbolId,
           symbolType: haveSword ? SymbolType.SWORD : currentSymbolObj?.symbolType,
-          isPlayScatterAddTimeAnimation: false
         });
 
         if (isNeedRemove) {
@@ -362,7 +369,35 @@ export class Roll extends Component {
         }
       }
 
+      console.log('处理消除数据-数据' + this.rollIndex, this.symbolAnimationData);
+
       return Promise.resolve(this.symbolAnimationData);
+    }
+
+    /**
+     * 显示rollFrameSpine，展示完毕后停止滚动
+     */
+    async showRollFrameSpine(rollFrameSkeleton: sp.Skeleton) {
+      rollFrameSkeleton.node.active = true;
+      rollFrameSkeleton.node.setWorldPosition(this.originalWorldPosition);
+      rollFrameSkeleton.timeScale = app.manager.global.gameSpeed;
+      rollFrameSkeleton.setAnimation(0, 'run', true);
+
+      return new Promise(async resolve => {
+        rollFrameSkeleton.setCompleteListener(() => {
+          this.scheduleOnce(() => {
+            resolve(true);
+          }, 1.5 / app.manager.global.gameSpeed);
+        });
+      });
+    }
+
+    /**
+     * 隐藏rollFrameSpine
+     */
+    async hideRollFrameSpine(rollFrameSkeleton: sp.Skeleton) {
+      rollFrameSkeleton.node.active = false;
+      rollFrameSkeleton.clearAnimation();
     }
 
     /**
@@ -373,8 +408,13 @@ export class Roll extends Component {
 
       return await Promise.all(this.rollRemoveData.map(async item => {
         const { rowIndex } = item;
+        const symbol = this.node.children[rowIndex]?.getComponent(Symbol);
 
-        return this.node.children[rowIndex].getComponent(Symbol).startLightAnimation();
+        if (symbol) {
+          return symbol.startLightAnimation();
+        }
+
+        return Promise.resolve();
       }));
     }
 
@@ -384,8 +424,13 @@ export class Roll extends Component {
     async endLightAnimation() {
       return await Promise.all(this.rollRemoveData.map(async item => {
         const { rowIndex } = item;
+        const symbol = this.node.children[rowIndex]?.getComponent(Symbol);
 
-        return this.node.children[rowIndex].getComponent(Symbol).destoryLightNode();
+        if (symbol) {
+          return symbol.destoryLightNode();
+        }
+
+        return Promise.resolve();
       }));
     }
 
@@ -395,24 +440,26 @@ export class Roll extends Component {
     removeSymbol() {
       return new Promise(resolve => {
         const removeSymbolNodeList: Node[] = [];
-        console.log('this.symbolAnimationData过滤前-数据', this.symbolAnimationData.length);
+        const filterSymbolAnimationData: ISymbolAnimationData[] = [];
+        console.log('this.symbolAnimationData过滤前-数据- ' + this.rollIndex, this.symbolAnimationData);
         this.symbolAnimationData.forEach(item => {
           const { symbolNode, isNeedRemove } = item;
   
-          // 如果symbol需要被消除，并且symbol没有金边，则将symbol添加到removeSymbolNodeList中
+          // 如果symbol需要被消除
           if (isNeedRemove) {
             removeSymbolNodeList.push(symbolNode);
+          } else {
+            filterSymbolAnimationData.push(item);
           }
         });
-  
+         
         removeSymbolNodeList.forEach((node: Node) => {
           this.nodePool.put(node);
           this.node.removeChild(node);
         });
-  
-        // 过滤掉需要消除的symbol,
-        this.symbolAnimationData = this.symbolAnimationData.filter(item => !item.isNeedRemove);
-        console.log('this.symbolAnimationData-数据', this.symbolAnimationData);
+        
+        this.symbolAnimationData = filterSymbolAnimationData;
+        console.log('this.symbolAnimationData过滤后不需要消除的-数据- ' + this.rollIndex, filterSymbolAnimationData);
 
         resolve(removeSymbolNodeList.length > 0);
       });
@@ -436,8 +483,9 @@ export class Roll extends Component {
           fallDownCount: length,
           symbolId,
           symbolType,
-          isPlayScatterAddTimeAnimation: false
         });
+
+        console.log('symbolAnimationData-添加symbol节点到顶部-数据', this.symbolAnimationData);
           
         this.node.insertChild(symbolNode, 0);
       }
@@ -450,14 +498,14 @@ export class Roll extends Component {
     /**
      * AnimationData中symbolNode下坠
      */
-    fallDownSymbol(): Promise<boolean> {
-      return new Promise(resolve => {
+    fallDownSymbol() {
+      return new Promise<ISymbolAnimationData[]>(resolve => {
         // 筛选需要下坠的节点
         const fallDownItems = this.symbolAnimationData.filter(item => item.fallDownCount > 0);
   
         // 如果没有需要下坠的节点，则直接返回 false
         if (fallDownItems.length === 0) {
-          resolve(false);
+          resolve([]);
 
           return;
         }
@@ -468,15 +516,16 @@ export class Roll extends Component {
             const { fallDownCount, symbolNode } = item;
             const wildNode = symbolNode.getComponent(Symbol)?.getWildNode();
             const targetY = symbolNode.position.y - this.itemHeight * fallDownCount;
+            item.fallDownCount = 0;
   
             // 主节点动画
             const symbolTween = tween(symbolNode)
-              .to(0.25, { position: new Vec3(0, targetY, 0) }, { easing: 'quartIn' });
+              .to(0.25, { position: new Vec3(0, targetY, 0) }, { easing: 'bounceOut' });
   
             // 如果有 wildNode，也添加动画
             if (wildNode) {
               const wildTween = tween(wildNode)
-                .to(0.25, { position: new Vec3(wildNode.position.x, targetY, 0) }, { easing: 'quartIn' });
+                .to(0.25, { position: new Vec3(wildNode.position.x, targetY, 0) }, { easing: 'bounceOut' });
                       
               tween(this.node)
                 .parallel(symbolTween, wildTween)
@@ -490,8 +539,8 @@ export class Roll extends Component {
   
         // 所有动画完成后 resolve(true)
         Promise.all(animationPromises)
-          .then(() => resolve(true))
-          .catch(() => resolve(false));
+          .then(() => resolve(this.symbolAnimationData))
+          .catch(() => resolve([]));
       });
     }
 
@@ -604,25 +653,5 @@ export class Roll extends Component {
       this.swordAnimationNode?.getComponent(sp.Skeleton)?.destroy();
       this.swordAnimationNode?.destroy();
       this.swordAnimationNode = null;
-    }
-
-    /**
-     * 播放scatter增加次数动画
-     */
-    async playScatterAddTimeAnimation(targetPosition: Vec3) {
-      const needScatterAddTimeSymbolList: Node[] = [];
-
-      this.symbolAnimationData.forEach(item => {
-        const { symbolId, symbolNode } = item;
-
-        if (symbolId === '3002' && !item.isPlayScatterAddTimeAnimation) {
-          item.isPlayScatterAddTimeAnimation = true;
-          needScatterAddTimeSymbolList.push(symbolNode);
-        }
-      });
-
-      await Promise.all(needScatterAddTimeSymbolList.map(item => {
-        return item.getComponent(Symbol).playScatterAddTimeAnimation(targetPosition);
-      }));
     }
 }

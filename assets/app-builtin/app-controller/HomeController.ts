@@ -13,7 +13,7 @@ import { MoneyUtil } from '../../basePlate/core/baseUtil/MoneyUtil';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
 
 // TODO 测试用
-const useMock = false;
+const useMock = true;
 
 export class HomeController extends BaseController<
   HomeController,

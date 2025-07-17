@@ -15,6 +15,7 @@ import { HTTP_STATUS_CODES } from '../../common/script/extra/Request';
 import commonInit from '../../common/script/extra/CommonInit';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
 import { Environment, getApiUrl, getGameEnv } from '../../common/script/extra/config/envConfig';
+import { GameResourceManager, SPINE_RESOURCE_NAMES } from '../../basePlate/middleWare/serverManager/GameResourceManager';
 
 const { ccclass, property } = _decorator;
 @ccclass('AppInit')
@@ -108,6 +109,8 @@ export class AppInit extends BaseAppInit {
       await this.loginUser();
       await this._getUserCredit();
       this.versionNode.string = app.config.app.GAME_VER;
+      // 预加载spine动画资源
+      await this.preloadSpineAnimation();
       this.nextInit();
     } catch (error) {
       this.nextInit();
@@ -145,6 +148,25 @@ export class AppInit extends BaseAppInit {
   _initRuntimeEnv() {
     this.runtimeEnv = getRuntimeEnv(app.store.user.userParams);
     console.log('initRuntimeEnv', this.runtimeEnv);
+  }
+
+  /**
+   * 预加载spine动画
+   */
+  private async preloadSpineAnimation() {
+    // 如果播放开始动画次数小于2次，则可预加载开场动画，
+    // if (app.manager.global.canPlayStartAnimation()) {
+    //   await GameResourceManager.instance.preloadLocalAnimations([SPINE_RESOURCE_NAMES.LAMANG_START]);
+    // }
+
+    await GameResourceManager.instance.preloadLocalAnimations([
+      SPINE_RESOURCE_NAMES.LAMANG_RUN,
+      SPINE_RESOURCE_NAMES.LAMANG_SWORD_HIT,
+      SPINE_RESOURCE_NAMES.LAMANG_BOW_EXPLODE,
+      // SPINE_RESOURCE_NAMES.LAMANG_ICON_WILD,
+      // SPINE_RESOURCE_NAMES.LAMANG_ICON_GOLD,
+      // SPINE_RESOURCE_NAMES.LAMANG_WILD, 
+    ]);
   }
 
   /**

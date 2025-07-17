@@ -1,8 +1,8 @@
-import { _decorator, Color, Label, Node, RichText, Sprite, SpriteFrame, UITransform, Vec3, Widget } from 'cc';
+import { _decorator, Color, Label, Node, RichText, sp, Sprite, SpriteFrame, tween, UITransform, Vec3, Widget } from 'cc';
 import BaseView from 'db://app/base/BaseView';
 import { Roll } from './expansion/Roll';
 import { Symbol } from './expansion/Symbol';
-import { calculateWithBase, delay } from 'db://assets/common/script/extra/Utils/common';
+import { calculateWithBase, delay, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { app } from 'db://assets/app/app';
 import { PopGrandPrize } from '../../../../pop/grand-prize/native/PopGrandPrize';
 import { BetTypes, RewardSubTypeEnum, SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
@@ -11,11 +11,12 @@ import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsCon
 import { RewardLineBox } from './expansion/RewardLineBox';
 import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { HomeRollTool } from './expansion/HomeRollTool';
-import { GameResourceManager } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { preventRapidClickDecorator } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { PackageFacade } from 'db://assets/common/script/PackageFacade';
 import { AdvancedButtonBreath } from 'db://assets/basePlate/middleWare/animations/AdvancedButtonBreath';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
+import { CurrentRoundAmount } from './expansion/CurrentRoundAmount';
 
 const { ccclass, property } = _decorator;
 
@@ -46,6 +47,12 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   @property({ type: Node, tooltip: 'Tips Node' })
   private TipsNode: Node = null;
 
+  @property({ type: sp.Skeleton, tooltip: 'SpineWinSkeleton' })
+  private SpineWinSkeleton: sp.Skeleton = null;
+
+  @property({ type: Node, tooltip: 'CurrentRoundAmount' })
+  private CurrentRoundAmount: Node = null;
+
   private Rolls: Node[] = [];
 
   // 当前回合index，默认为0，每次消除后+1
@@ -72,6 +79,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   // 需要播放roll滚动动画的rollIndex
   private needPlayRollsFrameSpine: boolean[] = [false, false, false, false, false, false];
 
+  // 滚轴边框动画
+  private rollFrameSkeleton: sp.Skeleton = null;
+
   onLoad() {
     this.homeRollTool = new HomeRollTool();
     this.initRoll();
@@ -79,11 +89,27 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.initEvents();
 
     this.addEvent();
+
+    this.initRollFrameSpine();
   }
 
   /** *监听freespin按钮状态**/
   addEvent() {
     app.manager.event.on('freespin:buttonState', this.onFreeBonusSpinButtonState, this);
+  }
+
+  /**
+   * 初始化rollFrameSpine
+   */
+  async initRollFrameSpine() {
+    const rollFrameNode = new Node();
+    rollFrameNode.layer = this.node.layer;
+    rollFrameNode.active = false;
+    rollFrameNode.setParent(this.node.parent.parent);
+
+    this.rollFrameSkeleton = rollFrameNode.addComponent(sp.Skeleton);
+    this.rollFrameSkeleton.premultipliedAlpha = false;
+    this.rollFrameSkeleton.skeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.LAMANG_RUN);
   }
 
   /** *监听freespin按钮状态**/
@@ -93,16 +119,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     } else {
       this.showFreeSpinView(false);
     }
-  }
-
-  /** *显示freespin按钮**/
-  showFreeBonusSpinTimes() {
-    // this.FreespinTimesNode.active = true;
-  }
-
-  /** *隐藏freespin次数**/
-  hideFreeBonusSpinTimes() {
-    // this.FreespinTimesNode.active = false;
   }
 
   initData() {
@@ -166,7 +182,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     console.log('startGame');
 
     if (this.totalRewardAmount === 0) {
-      this.changeTipsContent('Good Lucky');
+      this.changeTipsContent(null, null);
     }
     
     // 初始化数据
@@ -200,35 +216,84 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   /**
    * 逐个停止滚轴，带有延迟效果
    */
-  private stopAllRolls() {
-    this.Rolls.forEach((roll: Node, rollIndex: number) => {
-      setTimeout(() => {
-        this.stopSingleRoll(roll, rollIndex);
-      }, rollIndex * (app.manager.global.quikeMode ? 0 : 100));
-    });
-  }
+  private async stopAllRolls() {
+    // 同步停止的滚轴
+    const syncStopRolls = [];
+    // 异步停止的滚轴
+    const asyncStopRolls = [];
+
+    // 判断当前轮次是否存在两个scatter
+    this.currentNormalRoundHasMoreThanOneScatter();
+
+    for (const [rollIndex, roll] of this.Rolls.entries()) {
+      const needPlayRollFrameSpine = this.needPlayRollsFrameSpine[rollIndex];
+
+      if (app.manager.global.quikeMode && !needPlayRollFrameSpine) {
+        // 快速模式 并且 没有滚轮边框动画，直接同步停止滚轴
+        syncStopRolls.push(async () => this.stopSingleRoll(roll, rollIndex, needPlayRollFrameSpine));
+      } else {
+        // 非快速模式 或者 快速模式并且有滚轮边框动画，则需要播放滚轮边框动画
+        asyncStopRolls.push(async () => this.stopSingleRoll(roll, rollIndex, needPlayRollFrameSpine));
+      }
+    }
+
+    // 同步停止的滚轴
+    if (syncStopRolls.length > 0) {
+      await Promise.all(syncStopRolls.map(syncStopRoll => syncStopRoll()));
+    }
+
+    // 异步停止的滚轴
+    if (asyncStopRolls.length > 0) {
+      for (const asyncStopRoll of asyncStopRolls) {
+        if (app.manager.global.isClickScreen) {
+          // 如果点击屏幕则马上停止
+          asyncStopRoll();
+        } else {
+          await asyncStopRoll();
+        }
+      }
+    }
+  } 
 
   /**
    * 停止单个滚轴
    * @param roll 滚轴节点
-   * @param index 滚轴索引
+   * @param rollIndex 滚轴索引
+   * @param needPlayRollFrameSpine 是否需要播放rollFrameSpine动画
    */
-  private stopSingleRoll(roll: Node, rollIndex: number) {
-    // 获取当前roll的symbol列表
-    let rollList = this.resultList[this.roundIndex].wheel.map((item: any) => item[rollIndex]);
-    rollList = rollList.filter((item: any) => item !== null);
+  private async stopSingleRoll(roll: Node, rollIndex: number, needPlayRollFrameSpine: boolean) {
+    return new Promise(async (resolve) => {
+      // 获取当前roll的symbol列表
+      const rollList = this.resultList[this.roundIndex].wheel.map((item: any) => item[rollIndex]);
 
-    // roll滚动完成回调局部函数回调
-    const onRollComplete = () => {
-      if (this.isAllRollsStopped()) {
-        this.startRemoveSymbol();
+      // roll滚动完成回调
+      const onRollComplete = () => {
+        resolve(true);
+
+        if (this.isAllRollsStopped()) {
+          // 如果rollFrameSpine动画播放中，则停止
+          if (this.rollFrameSkeleton.node.active) {
+            this.rollFrameSkeleton.node.active = false;
+            this.rollFrameSkeleton.clearAnimation();
+          }
+
+          this.scheduleOnce(() => {
+            this.startRemoveSymbol();
+          }, 0.1);
+        }
+      };
+
+      // 如果需要播放rollFrameSpine动画，则播放
+      if (needPlayRollFrameSpine) {
+        await roll.getComponent(Roll).showRollFrameSpine(this.rollFrameSkeleton);
       }
-    };
 
-    roll.getComponent(Roll).stopRolling(
-      rollList,
-      onRollComplete
-    );
+      // 停止滚轴
+      roll.getComponent(Roll).stopRolling(
+        rollList,
+        onRollComplete
+      );
+    });
   }
 
   /**
@@ -310,18 +375,23 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   /**
-   * 核心消除逻辑
+   * ！！！！！核心消除逻辑！！！！！
    * 开始本回合消除
-   * 
-   * 2. 设置当前回合数据
-   * 3. 初始化Symbol动画数据
-   *  处理是否需要展示剑和棒子的动画
-   * 4. 处理消除数据
-   * 5. symbol变为wild
-   * 6. 移除Symbol
-   * 7. 添加新Symbol到顶部
-   * 8. Symbol下落
-   * 9. 结束本回合消除
+   * 1. 设置当前回合数据
+   * 2. 初始化Symbol动画数据
+   * 3. 处理消除数据
+   * 4. 命中scatter，则播放scatter击中宝箱动效
+   * 6. 如果命中scatter，则播放scatter击中宝箱动效
+   * 7. symbol变为wild 
+   * 9. 开始闪烁动画
+   * 10. 结束闪烁动画
+   * 11. 移除Symbol
+   * 12. 更新tips中奖金额
+   * 13. 显示中奖线Toast
+   * 14. 更新到下一个倍率
+   * 15. 添加新Symbol到顶部
+   * 16. Symbol下落
+   * 17. 结束本回合消除
    */
   async startRemoveSymbol() {
     const rollsScript = this.Rolls.map(roll => roll.getComponent(Roll));
@@ -366,7 +436,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     if (hasSymbolChangeToWilds.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 1500);
 
     /**
-     * 开始闪烁动画
+     * 开始执行闪烁动画
      */
     const hasStartLightAnimations = await Promise.all(rollsScript.map(roll => roll.startLightAnimation()));
 
@@ -399,41 +469,36 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     if (currentRoundTotalRewardAmount > 0) {
       this.totalRewardAmount += currentRoundTotalRewardAmount;
-      
-      this.changeTipsContent(`<color=#FF50E4><b>WIN</b></color> <color=#FFFFFF>₱ ${calculateWithBase(this.totalRewardAmount)}</color>`, true);
+      this.changeTipsContent(this.totalRewardAmount, this.totalRewardAmount + currentRoundTotalRewardAmount);
+      // this.changeTipsContent(`<color=#FF50E4><b>WIN</b></color> <color=#FFFFFF>₱ ${calculateWithBase(this.totalRewardAmount)}</color>`, true);
     }
 
     /**
-     * 更新到下一个倍率
+     * 更新到下一个轮的倍率
      */
     if (this.hasNextRound()) {
       this.updateNextMultiple();
     }
 
     /**
-     * 添加新Symbol到顶部
-     * -- 传入下一回合roll的数据
+     * 添加到顶部然后下落 或者 播放Roll边框动画然后落下然后添加到顶部最后下落
      */
-    console.log('消除后的消除数据', symbolAnimationData);
+    await this.addToTopThenFallDowmOrRunRollFrameAnimationThenFallDownThenAddToTopThenFallDown(rollsScript, symbolAnimationData);
 
-    symbolAnimationData = await Promise.all(rollsScript.map((roll, rollIndex) =>
-      roll.addNewSymbolToTop(this.resultList[this.roundIndex + 1]?.wheel.map((item: any) => item[rollIndex]) || [])
-    ));
+    console.log('下落后-数据', rollsScript.map(roll => roll.symbolAnimationData));
 
-    /**
-     * Symbol下落
-     */
-    const hasFallDownSymbols = await Promise.all(rollsScript.map(roll => roll.fallDownSymbol()));
-
-    if (hasFallDownSymbols.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 1000);
+    if (this.needPlayRollsFrameSpine.some(item => item)) {  
+      await delay(1000 / app.manager.global.gameSpeed);
+    }
 
     /**
      * 是否命中免费轮
      */
     const isNormalRoundHitFreeSpin = await this.normalRoundHitFreeSpin();
 
+    // 开始免费轮动画
     if (isNormalRoundHitFreeSpin) {
-      await delay(app.manager.global.quikeMode ? 500 : 1000);
+      await this.startHitFreeSpinScatterAnimation(symbolAnimationData);
     }
 
     this.changeWildData = [];
@@ -475,7 +540,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
        */
       if (this.currentRoundIsMaxMultiple()) {
         this.totalRewardAmount = app.controller.slots.isFreeBonusSpin ? app.manager.global.freeBonusTotalAmount : this.resultData.totalPayoutAmount;
-        this.changeTipsContent(`<color=#FF50E4><b>WIN</b></color> <color=#FFFFFF>₱ ${calculateWithBase(this.totalRewardAmount)}</color>`, true);
+        // this.changeTipsContent(`<color=#FF50E4><b>WIN</b></color> <color=#FFFFFF>₱ ${calculateWithBase(this.totalRewardAmount)}</color>`, true);
         await delay(50);
       }
 
@@ -566,7 +631,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   /**
-   * 添加到顶部然后下落 或者 播放Roll边框动画然后落下然后添加到顶部最后下落
+   * 添加到顶部然后下落 或者 播放Roll边框停牌动画然后落下然后添加到顶部最后下落
    */
   private async addToTopThenFallDowmOrRunRollFrameAnimationThenFallDownThenAddToTopThenFallDown(rollsScript: Roll[], symbolAnimationData: ISymbolAnimationData[][]) {
     /**
@@ -584,9 +649,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      */
     const fallDownScript: Roll[] = [];
     const rollFrameAnimationScript: Roll[] = [];
-
+    console.log('停牌数据-数据', this.needPlayRollsFrameSpine);
     rollsScript.forEach((script, index) => {
-      if (!this.needPlayRollsFrameSpine[index]) {
+      if (this.needPlayRollsFrameSpine[index] === false) {
         fallDownScript.push(script);
       } else {
         rollFrameAnimationScript.push(script);
@@ -614,21 +679,21 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * Roll边框动画 之后 再Symbol下落
      */
     if (rollFrameAnimationScript.length > 0) {
-      // for (const script of rollFrameAnimationScript) {
-      //   await script.showRollFrameSpine(this.rollFrameSkeleton);
-      //   /**
-      //    * 添加Roll边框动画后下落，然后再添加到顶部下落
-      //    * -- 传入下一回合roll的数据
-      //    */
-      //   const rollIndex = rollFrameAnimationScript.indexOf(script) + fallDownScript.length;
-      //   await script.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[rollIndex]) || []);
-      //   await script.fallDownSymbol();
-    
-      //   if (this.rollFrameSkeleton.node.active) {
-      //     this.rollFrameSkeleton.node.active = false;
-      //     this.rollFrameSkeleton.clearAnimation();
-      //   }
-      // }
+      for (const script of rollFrameAnimationScript) {
+        await script.showRollFrameSpine(this.rollFrameSkeleton);
+        /**
+       * 添加Roll边框动画后下落，然后再添加到顶部下落
+       * -- 传入下一回合roll的数据
+       */
+        const rollIndex = rollFrameAnimationScript.indexOf(script) + fallDownScript.length;
+        await script.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[rollIndex]) || []);
+        await script.fallDownSymbol();
+  
+        if (this.rollFrameSkeleton.node.active) {
+          this.rollFrameSkeleton.node.active = false;
+          this.rollFrameSkeleton.clearAnimation();
+        }
+      }
     }
   }
 
@@ -668,12 +733,41 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   /**
+   * 普通轮中命中免费轮，播放3个命中免费轮的scatter的动效
+   */
+  private async startHitFreeSpinScatterAnimation(symbolAnimationDatas: ISymbolAnimationData[][]) {
+    return new Promise<boolean>(async resolve => {
+      const scatterAnimationFunctions: Promise<void>[] = [];
+
+      symbolAnimationDatas.forEach(item => {
+        item.forEach(item => {
+          const symbol = item.symbolNode.getComponent(Symbol);
+
+          if (item.symbolId === '3001') {
+            scatterAnimationFunctions.push(new Promise(async resolve => {
+              await symbol.startScatterActionAnimation(SPINE_RESOURCE_NAMES.LAMANG_ICON_SCATTER);
+              resolve();
+            }));
+          }
+        });
+      });
+
+      if (scatterAnimationFunctions.length > 0) {
+        await Promise.all(scatterAnimationFunctions);
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  }
+
+  /**
    * 重置累计中奖金额
    */
   private resetTotalRewardAmount() {
     // 重置tips内容
     if (this.totalRewardAmount === 0) {
-      this.changeTipsContent('PLACE YOUR BETS!');
+      this.changeTipsContent(0, 0);
     } else {
       // 重置总中奖金额
       this.totalRewardAmount = 0;
@@ -879,13 +973,37 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   /**
    * 修改Tips内容
    */
-  private changeTipsContent(str: string, needRichText: boolean = false) {
-    if(needRichText){
-      this.TipsNode.getComponent(RichText).string = str;
-    }else{
-      this.TipsNode.getComponent(RichText).string = `<color=#FFFFFF>${str}</color>`;
+  private async changeTipsContent(startNum: number, endNum: number) {
+    if (endNum === null) {
+      this.TipsNode.getComponent(Label).string = 'GOOD LUCKY';
+    } else if (endNum === 0) {
+      this.TipsNode.getComponent(Label).string = 'PLACE YOUR BETS!';
+    } else {
+      const amount = calculateWithBase(endNum - startNum);
+
+      // 展示当前轮次金额弹出提示
+      await this.showCurrentRoundAmount(amount);
+
+      // 播放金额动画，如果金额变化小于2倍投注金额，则播放action1，否则播放action2
+      this.SpineWinSkeleton.setAnimation(0, amount < 2 * app.manager.global.betCount ? 'action1' : 'action2', false);
+      // 金额滚动效果
+      const target = { value: startNum };
+      const label = this.TipsNode.getComponent(Label);
+      tween(target).to(
+        2 / app.manager.global.gameSpeed,
+        { value: endNum },
+        { onUpdate: () => label.string = `WIN ₱ ${numberToMoney(calculateWithBase(target.value), 3, false)}` }
+      ).start();
     }
   } 
+
+  /**
+   * 展示当前轮次金额弹出提示
+   * @param amount 金额
+   */
+  private async showCurrentRoundAmount(amount: number) {
+    await this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(amount);
+  }
 
   /**
    * 当前回合是否达到最大倍率

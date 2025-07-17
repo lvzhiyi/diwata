@@ -321,7 +321,7 @@ class ServerHookManager {
       httpHeadUrl: hostUrl,
       token: token,
       gameID: GlobalMgr.instance.gameId,
-      effect: { volume: 1, audioClip: null },
+      effect: { volume: parseFloat(localStorage.getItem('audioSFXVolume') || '1'), audioClip: null },
       gameEnv: getGameEnv(),
       listener: GameMrgEvent.instance.getEventTarget(),
       moveToPos: new Vec3(),

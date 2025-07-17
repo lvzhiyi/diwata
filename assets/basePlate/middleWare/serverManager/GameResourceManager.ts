@@ -18,6 +18,9 @@ export const SPINE_RESOURCE_NAMES: { [key: string]: string } = {
 
   MFL: 'mfl',
 
+  // 滚轴动画
+  LAMANG_RUN: 'LamAng_run',
+
 };
 
 @ccclass('GameResourceManager')
