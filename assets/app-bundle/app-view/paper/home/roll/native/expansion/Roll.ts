@@ -77,9 +77,11 @@ export class Roll extends Component {
       columnIndex: number
     }[]) {
       this.rollList = rollList.filter((item: any) => item !== null);
-      console.log('rollList-数据', this.rollList);
       this.rollRemoveData = rollRemoveData;
-      console.log('rollRemoveData-数据', this.rollRemoveData);
+    }
+
+    getCurrentIndex() {
+      return this.rollIndex;
     }
 
     /**
@@ -369,8 +371,6 @@ export class Roll extends Component {
         }
       }
 
-      console.log('处理消除数据-数据' + this.rollIndex, this.symbolAnimationData);
-
       return Promise.resolve(this.symbolAnimationData);
     }
 
@@ -404,8 +404,6 @@ export class Roll extends Component {
      * 开始闪烁动画
      */
     async startLightAnimation() {
-      console.log('开始闪烁动画-数据', );
-
       return await Promise.all(this.rollRemoveData.map(async item => {
         const { rowIndex } = item;
         const symbol = this.node.children[rowIndex]?.getComponent(Symbol);
@@ -442,12 +440,10 @@ export class Roll extends Component {
         const removeSymbolNodeList: Node[] = [];
         const filterSymbolAnimationData: ISymbolAnimationData[] = [];
         console.log('this.symbolAnimationData过滤前-数据- ' + this.rollIndex, this.symbolAnimationData);
-        this.symbolAnimationData.forEach(item => {
-          const { symbolNode, isNeedRemove } = item;
-  
+        this.symbolAnimationData.forEach((item: ISymbolAnimationData) => {
           // 如果symbol需要被消除
-          if (isNeedRemove) {
-            removeSymbolNodeList.push(symbolNode);
+          if (item.isNeedRemove) {
+            removeSymbolNodeList.push(item.symbolNode);
           } else {
             filterSymbolAnimationData.push(item);
           }
@@ -461,7 +457,7 @@ export class Roll extends Component {
         this.symbolAnimationData = filterSymbolAnimationData;
         console.log('this.symbolAnimationData过滤后不需要消除的-数据- ' + this.rollIndex, filterSymbolAnimationData);
 
-        resolve(removeSymbolNodeList.length > 0);
+        resolve(this.symbolAnimationData);
       });
     }
 

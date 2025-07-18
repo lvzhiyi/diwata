@@ -573,9 +573,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
        * 如果命中免费轮，则设置免费轮数据，并开始免费轮游戏
        */
       if (this.checkIsFreeRound()) {
-        const freeBonusTimes = this.resultList[this.roundIndex].gameRecordIds.length;
-        app.manager.global.setFreeBonusTimes(freeBonusTimes);
-        ToastManager.inst.show(`FREE SPIN ${freeBonusTimes} TIMES`);
+        const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
+        app.manager.global.setFreeBonusTimes(gameRecordIds.length);
+        app.manager.global.setGameRecordIds([...gameRecordIds]);
+        ToastManager.inst.show(`FREE SPIN ${gameRecordIds.length} TIMES`);
 
         this.setFreeBonusData(true, this.resultData.totalPayoutAmount);
         this.startFreeSpinGame();
@@ -649,7 +650,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      */
     const fallDownScript: Roll[] = [];
     const rollFrameAnimationScript: Roll[] = [];
-    console.log('停牌数据-数据', this.needPlayRollsFrameSpine);
     rollsScript.forEach((script, index) => {
       if (this.needPlayRollsFrameSpine[index] === false) {
         fallDownScript.push(script);
@@ -665,8 +665,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * -- 传入下一回合roll的数据
      */
     if (fallDownScript.length > 0) {
-      await Promise.all(fallDownScript.map((roll, rollIndex) =>
-        roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[rollIndex]) || [])
+      await Promise.all(fallDownScript.map((roll) =>
+        roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[roll.getCurrentIndex()]) || [])
       ));
     }
 
@@ -679,15 +679,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * Roll边框动画 之后 再Symbol下落
      */
     if (rollFrameAnimationScript.length > 0) {
-      for (const script of rollFrameAnimationScript) {
-        await script.showRollFrameSpine(this.rollFrameSkeleton);
+      for (const roll of rollFrameAnimationScript) {
+        await roll.showRollFrameSpine(this.rollFrameSkeleton);
         /**
        * 添加Roll边框动画后下落，然后再添加到顶部下落
        * -- 传入下一回合roll的数据
        */
-        const rollIndex = rollFrameAnimationScript.indexOf(script) + fallDownScript.length;
-        await script.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[rollIndex]) || []);
-        await script.fallDownSymbol();
+
+        await roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[roll.getCurrentIndex()]) || []);
+        await roll.fallDownSymbol();
   
         if (this.rollFrameSkeleton.node.active) {
           this.rollFrameSkeleton.node.active = false;

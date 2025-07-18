@@ -13,7 +13,7 @@ import { MoneyUtil } from '../../basePlate/core/baseUtil/MoneyUtil';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
 
 // TODO 测试用
-const useMock = true;
+const useMock = false;
 
 export class HomeController extends BaseController<
   HomeController,
@@ -260,6 +260,7 @@ export class HomeController extends BaseController<
    * 花钱购买免费轮或者使用星卡
   */
   async buyBonusBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, starCardData?: any) {
+    app.controller.slots.setBetType(betType, betSubType);
     const isUseStarCard = !!starCardData; 
     let res: ApiResponse<BetResult> = null;
     let betData: any = null;
@@ -346,12 +347,13 @@ export class HomeController extends BaseController<
       betType,
       betSubType,
       betDetail: {
-        betRecordId,
+        betRecordId: betRecordId,
         gameRecordId: app.manager.global.gameRecordIds[app.manager.global.gameRecordIndex],
-        betAmount,
+        betAmount: betAmount,
         payAmount: 0,
       },
     });
+    console.log('getBetFreeSpinResult', app.manager.global.gameRecordIds[app.manager.global.gameRecordIndex]);
 
     if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data) {
       this.betResult = res.data;

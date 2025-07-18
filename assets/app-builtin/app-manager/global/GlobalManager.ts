@@ -253,6 +253,7 @@ export class GlobalManager extends BaseManager {
 
   public setGameRecordIds(ids: string[]) {
     this._gameRecordIds = ids;
+    console.log('setGameRecordIds-数据', this._gameRecordIds);
   }
 
   public get gameRecordIndex() {
