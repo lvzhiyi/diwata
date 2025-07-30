@@ -13,10 +13,10 @@ import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { HomeRollTool } from './expansion/HomeRollTool';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { preventRapidClickDecorator } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
-import { PackageFacade } from 'db://assets/common/script/PackageFacade';
 import { AdvancedButtonBreath } from 'db://assets/basePlate/middleWare/animations/AdvancedButtonBreath';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { CurrentRoundAmount } from './expansion/CurrentRoundAmount';
+import { GlobalActivity } from 'db://assets/common/script/extra/GlobalMgr';
 
 const { ccclass, property } = _decorator;
 
@@ -150,7 +150,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     console.log('点击免费轮购买或者展示freeSpin', this.freeSpinView.active);
 
     if(this.freeSpinView.active) {
-      PackageFacade.instance.openFreeSpin(); 
+      GlobalActivity.openFreeSpin(); 
     } else {
       if (this.canClickBuyBonus()) {
         EventTrackManager.inst.trackBuyBonusOpen(app.manager.global.creditCount);
@@ -208,7 +208,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   stopGame(data: BetResult) {
     this.resultData = data;
-    this.resultList = data.resultDetail.resultList;
+
+    if(data) {
+      this.resultList = data.resultDetail.resultList;
+    }
 
     this.stopAllRolls();
   }
@@ -244,10 +247,18 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     // 异步停止的滚轴
     if (asyncStopRolls.length > 0) {
-      for (const asyncStopRoll of asyncStopRolls) {
+      for (const [index, asyncStopRoll] of asyncStopRolls.entries()) {
         if (app.manager.global.isClickScreen) {
           // 如果点击屏幕则马上停止
-          asyncStopRoll();
+          // 当有边框动画时，边框动画的Roll异步停止，其他同步停止
+          const realIndex = syncStopRolls.length + index;
+          const needPlayRollFrameSpine = this.needPlayRollsFrameSpine[realIndex];
+
+          if (needPlayRollFrameSpine) {
+            await asyncStopRoll();
+          } else {
+            asyncStopRoll();
+          }
         } else {
           await asyncStopRoll();
         }
@@ -316,7 +327,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         });
       }
     });
-    
+    // 把棒子的节点储存到changeWildData中
     let bowTempArr :Node[] = [];
     hasShowBowNode.map((nodeArr:[], index) => {
       if (nodeArr.length > 0) {
@@ -334,11 +345,16 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     // 把棒子的节点储存到changeWildData中
     if (bowTempArr.length > 0) {
-      // 随机一个节点变为棒子图标
-      const randomIndex = Math.floor(Math.random() * bowTempArr.length);
-      const symbolNode = bowTempArr[randomIndex];
-      const symbol = symbolNode.getComponent(Symbol);
-      symbol.initSymbol('4011', );
+      // 把是主节点的变成棒子图标
+      bowTempArr.map(node => {
+        const symbol = node.getComponent(Symbol);
+
+        if (symbol.currentSymbolItem.main) {
+          symbol.initSymbol({
+            symbolId: '4011', symbolType: SymbolType.BOW, main: true 
+          });
+        }
+      });
     }
 
     console.log('changeWildData-数据', this.changeWildData);
@@ -424,8 +440,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     /**
      * 处理消除数据
      */
-    let symbolAnimationData = await Promise.all(rollsScript.map(roll => roll.dealRemoveData()));
+    await Promise.all(rollsScript.map(roll => roll.dealRemoveData()));
+    let symbolAnimationData = rollsScript.map(roll => roll.symbolAnimationData);
     console.log('初步处理消除数据', symbolAnimationData);
+    console.table(symbolAnimationData[2].map((_, index) => symbolAnimationData.map((item: any) => item[index]?.symbolId || '')));
     
     /**
      * symbol变为wild
@@ -485,7 +503,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      */
     await this.addToTopThenFallDowmOrRunRollFrameAnimationThenFallDownThenAddToTopThenFallDown(rollsScript, symbolAnimationData);
 
-    console.log('下落后-数据', rollsScript.map(roll => roll.symbolAnimationData));
+    symbolAnimationData = rollsScript.map(roll => roll.symbolAnimationData);
+    console.log('下落后数据', symbolAnimationData);
+    console.table(symbolAnimationData[2].map((_, index) => symbolAnimationData.map((item: any) => item[index]?.symbolId || '')));
 
     if (this.needPlayRollsFrameSpine.some(item => item)) {  
       await delay(1000 / app.manager.global.gameSpeed);
@@ -919,6 +939,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * @returns 是否中大奖
    */
   private hasGrandPrize() {
+    if (!this.resultData) {
+      return false;
+    }
+
     const { allWheelRewardSubType } = this.resultData.resultDetail;
 
     return allWheelRewardSubType !== RewardSubTypeEnum.NONE && allWheelRewardSubType !== RewardSubTypeEnum.OTHER;

@@ -1,9 +1,9 @@
 import { app } from 'db://assets/app/app';
 import { ActivityEventMgr, ActivityEventMgrEventsType } from 'db://assets/common/script/ActivityEventMgr';
-import { PackageFacade } from 'db://assets/common/script/PackageFacade';
 import { MoneyUtil } from 'db://assets/basePlate/core/baseUtil/MoneyUtil';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 import { _decorator, v3 } from 'cc';
+import { GlobalActivity } from '../../common/script/extra/GlobalMgr';
 
 const { ccclass } = _decorator;
 
@@ -91,7 +91,7 @@ class FreeSpinManager {
    * 点击freespin按钮
    */
   public onFreespinBtnClick() {
-    PackageFacade.instance.openFreeSpin();
+    GlobalActivity.openFreeSpin();
   }
 
   // ******************** freespin 模式内部实现 ********************
@@ -111,7 +111,7 @@ class FreeSpinManager {
     // 监听freeSpin金额累计
     app.manager.event.on('freeSpin:addAmount', this.updateFreespinRewardAmount, this);
 
-    if (PackageFacade.instance.useFreeSpin()) {
+    if (GlobalActivity.useFreeSpin()) {
       this.holdFreespinEvent();
     }
   }
@@ -121,7 +121,7 @@ class FreeSpinManager {
    * @param isActive 是否激活
    */
   private changeSideEntryDialogState(isActive: boolean) {
-    PackageFacade.instance.setEntryDialogActive(isActive);
+    GlobalActivity.setEntryDialogActive(isActive);
   }
 
   /**

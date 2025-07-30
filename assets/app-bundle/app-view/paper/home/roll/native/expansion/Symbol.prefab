@@ -381,14 +381,8 @@
         "__expectedType__": "cc.SpriteFrame"
       }
     ],
-    "goldSideIcon": {
-      "__uuid__": "134d3431-ea0b-4be1-8601-1e668d5948f8@f9941",
-      "__expectedType__": "cc.SpriteFrame"
-    },
-    "scatterAddOneSpriteFrame": {
-      "__uuid__": "46484896-a5e0-495c-bb3c-175449e4325d@f9941",
-      "__expectedType__": "cc.SpriteFrame"
-    },
+    "goldSideIcon": null,
+    "scatterAddOneSpriteFrame": null,
     "_id": ""
   },
   {

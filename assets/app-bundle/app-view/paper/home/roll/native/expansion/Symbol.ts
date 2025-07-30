@@ -19,13 +19,7 @@ export class Symbol extends Component {
 
     @property({ type: [SpriteFrame], tooltip: 'symbol icon' })
     private symbolBlurIcons: SpriteFrame[] = [];
-
-    @property({ type: SpriteFrame, tooltip: 'gold side icon' })
-    private goldSideIcon: SpriteFrame = null;
-
-    @property({ type: SpriteFrame, tooltip: 'scatter add one spriteframe' })
-    private scatterAddOneSpriteFrame: SpriteFrame = null;
-
+  
     private mapSymbols: Map<string, SpriteFrame> = new Map();
 
     private mapBlurSymbols: Map<string, SpriteFrame> = new Map();
@@ -66,11 +60,18 @@ export class Symbol extends Component {
     }
 
     /// 赋值数据对象 , fromServer 是否从服务器获取数据
-    initSymbol(symbolId: string, symbolType: SymbolTypeEnum = 'NORMAL', fromServer: boolean = false) {
+    initSymbol(symbolItem?: SymbolItem, fromServer: boolean = false) {
+      console.log('initSymbol', symbolItem);
+
+      if(!symbolItem) {
+        return;
+      }
+
       if(fromServer) {
         this.currentSymbolItem = {
-          symbolId: symbolId,
-          symbolType: symbolType,
+          symbolId: symbolItem.symbolId,
+          symbolType: symbolItem.symbolType,
+          main: symbolItem.main,
         };
       }
 
@@ -78,13 +79,13 @@ export class Symbol extends Component {
         this.initSprites();
       }
       /// 从服务器获取数据时，4001的symbolId需要特殊处理，随机一个normal的symbolId
-      if(fromServer && SYMBOL_WILD_IDS.indexOf(symbolId) !== -1) {
+      if(fromServer && SYMBOL_WILD_IDS.indexOf(symbolItem.symbolId) !== -1) {
         const randomIndex = Math.floor(Math.random() * SYMBOL_NORMAL_IDS.length);
         const randomSymbolId = SYMBOL_NORMAL_IDS[randomIndex];
         const spriteFrame = this.mapSymbols.get(`${randomSymbolId}`);
         this.iconNode.getComponent(Sprite).spriteFrame = spriteFrame;
       } else {
-        this.iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(`${symbolId}`);
+        this.iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(`${symbolItem.symbolId}`);
       }
     }
 
@@ -190,31 +191,6 @@ export class Symbol extends Component {
         sprite.customMaterial.destroy();
         sprite.customMaterial = null;
       }
-    }
-
-    /**
-     * bigwild动画后隐藏symbol
-     */
-    bigWildHideSymbol(leftNodeScript: Symbol, centerNodeScript: Symbol, rightNodeScript: Symbol) {
-      // 隐藏左中右三个symbol
-      leftNodeScript.initSymbol('', );
-      centerNodeScript.initSymbol('', );
-      rightNodeScript.initSymbol('', );
-    }
-
-    /**
-     * superwild动画后隐藏symbol
-     */
-    superWildHideSymbol() {
-      this.parentNode.parent.children.forEach((rollNode, rollIndex) => {
-        if (rollIndex === 1 || rollIndex === 2 || rollIndex === 3) {
-          rollNode.children.forEach((symbolNode, symbolIndex) => {
-            if (symbolIndex === 1 || symbolIndex === 2) {
-              symbolNode.getComponent(Symbol).initSymbol('', );
-            }
-          });
-        }
-      });
     }
 
     /**

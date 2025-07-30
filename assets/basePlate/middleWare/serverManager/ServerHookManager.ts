@@ -5,9 +5,7 @@ import { http, HTTP_STATUS_CODES } from 'db://assets/common/script/extra/Request
 import { createAuthHeaders, createWSAuthString, getRealServerTime } from 'db://assets/common/script/extra/Utils/common';
 import { showErrorPop, showServerMaintenanceTip } from '../../core/baseUtil/BaseCommonUtil';
 import CpPostMessage from 'db://assets/common/script/extra/tmBridge/cpPostMessage';
-import { GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
-import { PackageFacade } from 'db://assets/common/script/PackageFacade';
-import { GameMrgEvent } from 'db://assets/common/script/extra/GameMrsEvent';
+import { GlobalActivity, GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
 import { Environment, getApiUrl, getGameEnv, getWebSocketUrl } from 'db://assets/common/script/extra/config/envConfig';
 import { GameDataMgrEventsType } from 'db://assets/common/script/data/ActivityDataMgr';
 
@@ -303,27 +301,31 @@ class ServerHookManager {
     const wsSignature = createWSAuthString(realServerTime);
     const token = app.manager.global.getToken();
     let wsUrl = `${wshostUrl}/${token}?timestamp=${realServerTime}&signature=${wsSignature}&gameId=${app.config.app.GAME_ID}`;
-    console.log('wsUrl', wsUrl);
 
     // 如果是压测环境还是不走验证签名的
     if (getGameEnv() === 'info') {
       wsUrl = `${wshostUrl}/${token}`;
     }
 
-    GlobalMgr.instance.setToken(token);
-    GlobalMgr.instance.setwsHostUrl(wsUrl);
-    GlobalMgr.instance.gameId = app.config.app.GAME_ID;
-    GlobalMgr.instance.playerId = app.manager.global.playerId;
-    GlobalMgr.instance.playerName = app.manager.global.playerName;
-    GlobalMgr.instance.userLevel = app.manager.global.getUserInfo().vipLevel;
-    PackageFacade.instance.init({
+    GlobalActivity.initExternal(
+      {
+        gameId: app.config.app.GAME_ID,
+        userLevel: app.manager.global.getUserInfo().vipLevel,
+        token: token,
+        hostUrl: hostUrl,
+        wshostUrl: wsUrl,
+        playerId: app.manager.global.playerId,
+        playerName: app.manager.global.playerName,
+      }
+    );
+    GlobalActivity.initActivity({
       activityIDs: [1, 2, 3, 4, 5, 6,],
       httpHeadUrl: hostUrl,
       token: token,
-      gameID: GlobalMgr.instance.gameId,
+      gameID: app.config.app.GAME_ID,
       effect: { volume: parseFloat(localStorage.getItem('audioSFXVolume') || '1'), audioClip: null },
       gameEnv: getGameEnv(),
-      listener: GameMrgEvent.instance.getEventTarget(),
+      listener: GlobalActivity.getEventTarget(),
       moveToPos: new Vec3(),
       cardPos: new Vec3(),
       userInfo: {
@@ -340,13 +342,12 @@ class ServerHookManager {
     });
 
     try {
-      await PackageFacade.instance.preloadEntry();
+      await GlobalActivity.preloadEntry();
       // //设置默认成就系统的音效音量
-      GameMrgEvent.instance.getEventTarget()
-        .emit(
-          GameDataMgrEventsType.updateVolume,
-          parseFloat(localStorage.getItem('effectVolumeScale') || '1')
-        );
+      GlobalActivity.dispatchEvent(
+        GameDataMgrEventsType.updateVolume,
+        parseFloat(localStorage.getItem('effectVolumeScale') || '1')
+      );
     } catch (error) {
       console.error('configureActivityEntry error', error);
     }
