@@ -23,13 +23,6 @@ export class PopGrandPrize extends BaseView {
   private AmountLabel: Label;
 
   /**
-   * 金币扩散特效节点
-   * 在高级奖励类型时显示
-   */
-  @property({ type: Node, tooltip: '金币扩散节点' })
-  private GoldDiff: Node;
-
-  /**
    * Max Win节点
    */
   @property({ type: Node, tooltip: 'Max Win Node' })
@@ -108,12 +101,6 @@ export class PopGrandPrize extends BaseView {
     this.amount = params.amount;
     this.accumulateReachMaxMultiple = params.accumulateReachMaxMultiple;
 
-    // 根据奖励类型决定是否显示金币扩散效果
-    // 只有SUPER和SENSATIONAL类型才显示金币扩散
-    this.GoldDiff.active = 
-      this.rewardSubType === RewardSubTypeEnum.SUPER || 
-      this.rewardSubType === RewardSubTypeEnum.SENSATIONAL;
-
     // 根据是否达到最大倍率决定是否显示Max Win节点
     this.MaxWinNode.active = this.accumulateReachMaxMultiple;
   }
@@ -131,7 +118,8 @@ export class PopGrandPrize extends BaseView {
     const spineAtlas: sp.SkeletonData = await loadResource(
       'load',
       'pop-grand-prize-res',
-      `GrandPrize/IbongAdarna_pop_${this.rewardSubType}`,
+      // `GrandPrize/IbongAdarna_pop_${this.rewardSubType}`,
+      'GrandPrize/win',
       sp.SkeletonData
     );
     
@@ -145,11 +133,11 @@ export class PopGrandPrize extends BaseView {
     // this.playGrandPrizeSound();
     
     // 播放入场动画
-    await this.playSpineAnimation(spine, 'show', false);
+    await this.playSpineAnimation(spine, 'in', false);
     
     // 显示金额文本并播放循环动画
     textNode.active = true;
-    this.playSpineAnimation(spine, 'idle', true);
+    this.playSpineAnimation(spine, 'loop', true);
     
     // 执行整体缩放动画
     this.GrandprizeScaleAnimation();
@@ -165,6 +153,16 @@ export class PopGrandPrize extends BaseView {
     // 动画完成后，如果节点仍然有效，则执行隐藏逻辑
     if (this.node && this.node.isValid) {
       this.hideGrandPrize();
+    }
+  }
+
+  getAnimationPrefix() {
+    switch (this.rewardSubType) {
+      case RewardSubTypeEnum.NICE: return '01nice_';
+      case RewardSubTypeEnum.MEGA: return '02mega_';
+      case RewardSubTypeEnum.SUPER: return '03super_';
+      case RewardSubTypeEnum.SENSATIONAL: return '04sensational_';
+      default: return '01nice_';
     }
   }
 
@@ -199,16 +197,18 @@ export class PopGrandPrize extends BaseView {
    */
   private async playSpineAnimation(spine: sp.Skeleton, animName: string, loop: boolean = true) {
     return new Promise<void>((resolve) => {
+      const animationName = this.getAnimationPrefix() + animName;
+ 
       // 检查动画是否存在
-      if (!spine.findAnimation(animName)) {
-        console.warn(`动画 ${animName} 不存在，跳过播放`);
+      if (!spine.findAnimation(animationName)) {
+        console.warn(`动画 ${animationName} 不存在，跳过播放`);
         resolve();
 
         return;
       }
 
       // 设置动画并监听完成事件
-      spine.setAnimation(0, animName, loop);
+      spine.setAnimation(0, animationName, loop);
       spine.setCompleteListener(() => resolve());
     });
   }
@@ -302,7 +302,7 @@ export class PopGrandPrize extends BaseView {
     const originalPosition = textNode.position.clone();
 
     // 播放关闭骨骼动画
-    this.playSpineAnimation(spine, 'close', false);
+    this.playSpineAnimation(spine, 'out', false);
     
     return new Promise<void>((resolve) => {
       // 文本放大动画：放大并略微下移

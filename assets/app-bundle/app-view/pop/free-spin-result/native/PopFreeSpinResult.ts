@@ -1,4 +1,4 @@
-import { _decorator, Label, Node, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Label, Node, sp, Sprite, SpriteFrame } from 'cc';
 import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { NumberAnimator } from 'db://assets/basePlate/middleWare/commonUI/NumberAnimator';
 import { numberToMoney } from 'db://assets/common/script/extra/Utils/common';
@@ -21,6 +21,9 @@ export class PopFreeSpinResult extends BaseView {
 
   @property({ type: SpriteFrame, tooltip: 'maxWin SpriteFrame' })
   private maxWinSpriteFrame: SpriteFrame = null;
+
+  @property({ type: sp.Skeleton, tooltip: 'spineSkeleton' })
+  private spineSkeleton: sp.Skeleton = null;
 
   private numberWinBgAnimator: NumberAnimator = null;
 
@@ -48,6 +51,10 @@ export class PopFreeSpinResult extends BaseView {
   }
 
   showAmountAnimation() {
+    this.scheduleOnce(() => {
+      this.startAnimation();
+    });
+
     return new Promise<void>(async (resolve) => {
       await this.numberWinBgAnimator.animateTo(
         this.amount,
@@ -57,10 +64,22 @@ export class PopFreeSpinResult extends BaseView {
       );
 
       this.scheduleOnce(() => {
-        app.manager.ui.hide({ name: 'PopFreeSpinResult' });
+        this.stopAnimation();
       }, app.manager.global.quikeMode ? 1 : 2.5);
 
       resolve();
+    });
+  }
+
+  startAnimation() {
+    this.spineSkeleton.setAnimation(0, 'congratlilation_in', false);
+    this.spineSkeleton.addAnimation(0, 'congratlilation_loop', true);
+  }
+
+  stopAnimation() {
+    this.spineSkeleton.setAnimation(0, 'congratlilation_out', false);
+    this.spineSkeleton.setCompleteListener(() => {
+      app.manager.ui.hide({ name: 'PopFreeSpinResult' });
     });
   }
   
