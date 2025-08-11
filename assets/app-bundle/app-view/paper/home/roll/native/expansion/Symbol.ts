@@ -61,8 +61,6 @@ export class Symbol extends Component {
 
     /// 赋值数据对象 , fromServer 是否从服务器获取数据
     initSymbol(symbolItem?: SymbolItem, fromServer: boolean = false) {
-      console.log('initSymbol', symbolItem);
-
       if(!symbolItem) {
         return;
       }

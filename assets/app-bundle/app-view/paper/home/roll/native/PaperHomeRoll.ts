@@ -1,4 +1,4 @@
-import { _decorator, Color, Label, Node, RichText, sp, Sprite, SpriteFrame, tween, UITransform, Vec3, Widget } from 'cc';
+import { _decorator, Color, EventTouch, Label, Node, PolygonCollider2D, RichText, sp, Sprite, SpriteFrame, tween, UITransform, Vec3, Widget } from 'cc';
 import BaseView from 'db://app/base/BaseView';
 import { Roll } from './expansion/Roll';
 import { Symbol } from './expansion/Symbol';
@@ -24,6 +24,9 @@ const { ccclass, property } = _decorator;
 export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   @property({ type: Node, tooltip: 'MaskBox节点' })
   private MaskBoxNode: Node = null;
+
+  @property({ type: Node, tooltip: 'rollBgView节点' })
+  private rollBgViewNode: Node = null;
 
   /// 悬浮节点用于做动画 
   @property({ type: Node, tooltip: 'overLayNode' })
@@ -105,6 +108,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const rollFrameNode = new Node();
     rollFrameNode.layer = this.node.layer;
     rollFrameNode.active = false;
+    rollFrameNode.addComponent(UITransform);
+    rollFrameNode.getComponent(UITransform).setContentSize(100, 400);
     rollFrameNode.setParent(this.node.parent.parent);
 
     this.rollFrameSkeleton = rollFrameNode.addComponent(sp.Skeleton);
@@ -141,6 +146,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.controller.on(SlotsController.Event.StartRolling, this.startGame, this);
     this.controller.on(SlotsController.Event.StopRolling, this.stopGame, this);
     app.manager.event.on('buyFreeSpinTimes', this.buyFreeSpinTimes, this);
+    // 盘面添加点击事件
+    this.rollBgViewNode.on(Node.EventType.TOUCH_END, this.rollClick, this);
   }
 
   /**
@@ -156,6 +163,19 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         EventTrackManager.inst.trackBuyBonusOpen(app.manager.global.creditCount);
         app.manager.ui.show({ name: 'PopBuybonus' });
       }
+    }
+  }
+
+  /**
+   /**
+   * 盘面点击roll
+   */
+  rollClick(e: EventTouch) {
+    // 处理点击事件的逻辑
+    const isIn = HomeRollTool.isCheckAreaSuccess(this.rollBgViewNode, e);
+
+    if (isIn) {
+      app.controller.home.gameStartClick();
     }
   }
 
@@ -180,6 +200,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   async startGame() {
     console.log('startGame');
+    this.rollBgViewNode.off(Node.EventType.TOUCH_END, this.rollClick, this);
 
     if (this.totalRewardAmount === 0) {
       this.changeTipsContent(null, null);
@@ -624,6 +645,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         return;
       }
     }
+
+    // 监听RollContianer点击事件
+    this.rollBgViewNode.on(Node.EventType.TOUCH_END, this.rollClick, this);
+    app.manager.event.emit('roll:reward', 'end');
   }
 
   /**

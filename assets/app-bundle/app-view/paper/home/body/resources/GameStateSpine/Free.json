@@ -1,0 +1,62 @@
+{
+"skeleton": { "hash": "EeQJsPNRiNYasEy00nnxe0h99d0", "spine": "3.8.99", "images": "./img/", "audio": "./img/" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "FREE", "parent": "root" }
+],
+"slots": [
+	{ "name": "FREE", "bone": "FREE" },
+	{ "name": "FREE2", "bone": "FREE", "blend": "additive" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"FREE": {
+				"free2": { "x": -0.02, "y": -0.11, "width": 72, "height": 32 }
+			},
+			"FREE2": {
+				"free2": { "x": -0.02, "y": -0.11, "width": 72, "height": 32 }
+			}
+		}
+	}
+],
+"animations": {
+	"chuxian": {
+		"slots": {
+			"FREE": {
+				"attachment": [
+					{ "name": "free2" }
+				]
+			},
+			"FREE2": {
+				"color": [
+					{ "color": "ffffff00" },
+					{ "time": 0.1333, "color": "ffffffff" },
+					{ "time": 0.3333, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "name": "free2" }
+				]
+			}
+		}
+	},
+	"daiji": {
+		"slots": {
+			"FREE": {
+				"attachment": [
+					{ "name": "free2" }
+				]
+			},
+			"FREE2": {
+				"color": [
+					{ "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "name": "free2" }
+				]
+			}
+		}
+	}
+}
+}

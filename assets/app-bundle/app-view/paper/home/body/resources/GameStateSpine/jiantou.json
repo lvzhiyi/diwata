@@ -1,0 +1,96 @@
+{
+"skeleton": { "hash": "bI1yVwd3YnqnZSOyhnjS1T15P08", "spine": "3.8.99", "images": "./img/", "audio": "./img/" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "zhuan", "parent": "root" }
+],
+"slots": [
+	{ "name": "zhuan", "bone": "zhuan" },
+	{ "name": "hui", "bone": "zhuan", "color": "595959ff" },
+	{ "name": "zhuan2", "bone": "zhuan", "blend": "additive" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"hui": {
+				"zhuan": { "width": 82, "height": 85 }
+			},
+			"zhuan": {
+				"zhuan": { "width": 82, "height": 85 }
+			},
+			"zhuan2": {
+				"zhuan": { "width": 82, "height": 85 }
+			}
+		}
+	}
+],
+"animations": {
+	"daiji": {
+		"slots": {
+			"hui": {
+				"color": [
+					{ "color": "59595900" }
+				]
+			},
+			"zhuan": {
+				"attachment": [
+					{ "name": "zhuan" }
+				]
+			},
+			"zhuan2": {
+				"color": [
+					{ "color": "ffffff00" }
+				]
+			}
+		}
+	},
+	"faguang": {
+		"slots": {
+			"hui": {
+				"color": [
+					{ "color": "59595900" }
+				]
+			},
+			"zhuan": {
+				"attachment": [
+					{ "name": "zhuan" }
+				]
+			},
+			"zhuan2": {
+				"color": [
+					{ "color": "ffffff00", "curve": "stepped" },
+					{ "time": 0.1, "color": "ffffff00" },
+					{ "time": 0.3333, "color": "ffffffff" },
+					{ "time": 0.6667, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "name": "zhuan" }
+				]
+			}
+		}
+	},
+	"zhihui": {
+		"slots": {
+			"hui": {
+				"color": [
+					{ "color": "4f4f4fff" }
+				],
+				"attachment": [
+					{ "name": "zhuan" }
+				]
+			},
+			"zhuan": {
+				"color": [
+					{ "color": "6c6c6cff" }
+				]
+			},
+			"zhuan2": {
+				"color": [
+					{ "color": "ffffff00" }
+				]
+			}
+		}
+	}
+}
+}

@@ -1,0 +1,37 @@
+{
+"skeleton": { "hash": "PWgnU2QXJE9XqeG1dfh9Ypuzb/Y", "spine": "3.8.99", "images": "./img/", "audio": "./img/" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "yuan", "parent": "root" }
+],
+"slots": [
+	{ "name": "yuan", "bone": "yuan", "color": "ff0099ff", "blend": "additive" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"yuan": {
+				"yuan2": { "width": 173, "height": 173 }
+			}
+		}
+	}
+],
+"animations": {
+	"xunhuan": {
+		"slots": {
+			"yuan": {
+				"color": [
+					{ "color": "ffffff00" },
+					{ "time": 0.1667, "color": "ff0097ff" },
+					{ "time": 0.2333, "color": "ff0099ff" },
+					{ "time": 0.4, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "name": "yuan2" }
+				]
+			}
+		}
+	}
+}
+}

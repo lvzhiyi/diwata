@@ -206,8 +206,10 @@ class FreeSpinManager {
       }
 
       await this.enableFreespin(freespinTimes, betAmount, campaignId);
+      app.manager.event.emit('freespin:state:change', true, freespinTimes, betAmount, campaignId);
     } else {
       this.disableFreespin();
+      app.manager.event.emit('freespin:state:change', false, freespinTimes, betAmount, campaignId);
     }
   }
 

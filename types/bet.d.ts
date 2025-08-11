@@ -43,7 +43,7 @@ declare interface BetResultItem {
   /** 中奖子类型 */
   rewardSubType: RewardSubType;
   /** 中奖元素坐标集合 */
-  rewardSymbolIndexSet: SymbolPosition[];
+  rewardSymbolIndexSet: SymbolPosition[]|null;
   /** 中奖类型 */
   rewardType: RewardType;
   /** 中奖金额 */

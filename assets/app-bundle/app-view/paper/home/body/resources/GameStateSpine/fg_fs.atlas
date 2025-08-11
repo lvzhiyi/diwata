@@ -1,0 +1,13 @@
+
+fg_fs.png
+size: 395,652
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+gx
+  rotate: false
+  xy: 2, 2
+  size: 391, 648
+  orig: 412, 682
+  offset: 7, 2
+  index: -1

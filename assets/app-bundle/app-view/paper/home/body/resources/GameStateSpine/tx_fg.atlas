@@ -1,0 +1,146 @@
+
+tx_fg.png
+size: 1171,913
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+00
+  rotate: true
+  xy: 2, 779
+  size: 132, 135
+  orig: 282, 282
+  offset: 74, 74
+  index: -1
+01
+  rotate: true
+  xy: 139, 726
+  size: 185, 187
+  orig: 282, 282
+  offset: 48, 48
+  index: -1
+02
+  rotate: false
+  xy: 525, 706
+  size: 206, 205
+  orig: 282, 282
+  offset: 38, 39
+  index: -1
+03
+  rotate: false
+  xy: 951, 694
+  size: 218, 217
+  orig: 282, 282
+  offset: 32, 34
+  index: -1
+04
+  rotate: false
+  xy: 712, 480
+  size: 225, 224
+  orig: 282, 282
+  offset: 28, 30
+  index: -1
+05
+  rotate: false
+  xy: 231, 271
+  size: 230, 228
+  orig: 282, 282
+  offset: 25, 29
+  index: -1
+06
+  rotate: false
+  xy: 2, 39
+  size: 231, 230
+  orig: 282, 282
+  offset: 25, 27
+  index: -1
+07
+  rotate: true
+  xy: 463, 250
+  size: 229, 230
+  orig: 282, 282
+  offset: 26, 26
+  index: -1
+08
+  rotate: true
+  xy: 695, 249
+  size: 229, 231
+  orig: 282, 282
+  offset: 27, 25
+  index: -1
+09
+  rotate: true
+  xy: 235, 17
+  size: 231, 232
+  orig: 282, 282
+  offset: 26, 25
+  index: -1
+10
+  rotate: false
+  xy: 705, 2
+  size: 232, 232
+  orig: 282, 282
+  offset: 25, 25
+  index: -1
+11
+  rotate: true
+  xy: 469, 16
+  size: 231, 234
+  orig: 282, 282
+  offset: 24, 24
+  index: -1
+12
+  rotate: true
+  xy: 928, 236
+  size: 229, 232
+  orig: 282, 282
+  offset: 25, 24
+  index: -1
+13
+  rotate: false
+  xy: 2, 275
+  size: 227, 227
+  orig: 282, 282
+  offset: 30, 25
+  index: -1
+14
+  rotate: false
+  xy: 939, 467
+  size: 230, 225
+  orig: 282, 282
+  offset: 30, 27
+  index: -1
+15
+  rotate: false
+  xy: 238, 501
+  size: 234, 221
+  orig: 282, 282
+  offset: 29, 32
+  index: -1
+16
+  rotate: false
+  xy: 474, 481
+  size: 236, 223
+  orig: 282, 282
+  offset: 28, 31
+  index: -1
+17
+  rotate: false
+  xy: 2, 504
+  size: 234, 220
+  orig: 282, 282
+  offset: 30, 32
+  index: -1
+18
+  rotate: true
+  xy: 733, 706
+  size: 205, 216
+  orig: 282, 282
+  offset: 29, 36
+  index: -1
+19
+  rotate: true
+  xy: 328, 724
+  size: 187, 195
+  orig: 282, 282
+  offset: 46, 41
+  index: -1

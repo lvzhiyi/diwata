@@ -56,6 +56,17 @@ export class HomeController extends BaseController<
    */
   public autoPlayType: BetTypes;
 
+  /*
+  *点击开始游戏
+  */
+  gameStartClick(){
+    if (this.isEndGame === false) {
+      return;
+    }else{
+      this.emit(HomeController.Event.GameStart);
+    }
+  }
+
   /**
    * 游戏开始状态修改
    */
@@ -72,6 +83,7 @@ export class HomeController extends BaseController<
     GlobalMgr.instance.isGameing = true;
     this.isEndGame = false;
     app.controller.slots.startRolling();
+    app.manager.event.emit('roll:start', true);
   }
 
   /**
