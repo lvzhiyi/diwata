@@ -78,6 +78,7 @@ export class PopFreeSpinResult extends BaseView {
 
   stopAnimation() {
     this.spineSkeleton.setAnimation(0, 'congratlilation_out', false);
+    
     this.spineSkeleton.setCompleteListener(() => {
       app.manager.ui.hide({ name: 'PopFreeSpinResult' });
     });
