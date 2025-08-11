@@ -56,6 +56,17 @@ export class HomeController extends BaseController<
    */
   public autoPlayType: BetTypes;
 
+  /*
+  *点击开始游戏
+  */
+  gameStartClick(){
+    if (this.isEndGame === false) {
+      return;
+    }else{
+      this.emit(HomeController.Event.GameStart);
+    }
+  }
+
   /**
    * 游戏开始状态修改
    */
@@ -72,6 +83,7 @@ export class HomeController extends BaseController<
     GlobalMgr.instance.isGameing = true;
     this.isEndGame = false;
     app.controller.slots.startRolling();
+    app.manager.event.emit('roll:start', true);
   }
 
   /**
@@ -260,6 +272,7 @@ export class HomeController extends BaseController<
    * 花钱购买免费轮或者使用星卡
   */
   async buyBonusBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, starCardData?: any) {
+    app.controller.slots.setBetType(betType, betSubType);
     const isUseStarCard = !!starCardData; 
     let res: ApiResponse<BetResult> = null;
     let betData: any = null;
@@ -346,12 +359,13 @@ export class HomeController extends BaseController<
       betType,
       betSubType,
       betDetail: {
-        betRecordId,
+        betRecordId: betRecordId,
         gameRecordId: app.manager.global.gameRecordIds[app.manager.global.gameRecordIndex],
-        betAmount,
+        betAmount: betAmount,
         payAmount: 0,
       },
     });
+    console.log('getBetFreeSpinResult', app.manager.global.gameRecordIds[app.manager.global.gameRecordIndex]);
 
     if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data) {
       this.betResult = res.data;

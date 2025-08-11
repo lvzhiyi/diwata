@@ -64,6 +64,9 @@ export class GlobalManager extends BaseManager {
   // 免费轮游戏记录索引
   private _gameRecordIndex: number = 0;
 
+   // 游戏速度 
+   private _gameSpeed: number = 1;
+
   // 购买的免费轮次数
   private _freeBonusTimes: number = 0;
 
@@ -250,6 +253,7 @@ export class GlobalManager extends BaseManager {
 
   public setGameRecordIds(ids: string[]) {
     this._gameRecordIds = ids;
+    console.log('setGameRecordIds-数据', this._gameRecordIds);
   }
 
   public get gameRecordIndex() {
@@ -492,5 +496,15 @@ export class GlobalManager extends BaseManager {
   /** 修改网络质量全局变量 */
   public setNetworkQuality(quality: 'slow' | 'fast') {
     this._networkQuality = quality;
+  }
+
+  /** 游戏速度 */
+  public get gameSpeed() {
+    return this._gameSpeed;
+  }
+
+  /** 设置游戏速度 */
+  public setGameSpeed(speed: number) {
+    this._gameSpeed = speed;
   }
 }

@@ -39,9 +39,11 @@ export class SlotsController extends BaseController<
    * @param serverResults 服务器结果
    */
   async stopRolling(betResult: BetResult) {
-    this.betRecordId = betResult.betRecordId ?? '';
+    this.betRecordId = betResult?.betRecordId ?? '';
     
     this.emit(SlotsController.Event.StopRolling, betResult);
+
+    app.manager.event.emit('roll:stop', betResult.resultDetail.resultList?.some((item: BetResultItem) => item.rewardSymbolIndexSet?.length > 0));
   }
 
   /**

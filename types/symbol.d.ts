@@ -7,6 +7,8 @@ declare interface SymbolItem {
   symbolId: string;
   /** 元素类型 */
   symbolType?: SymbolTypeEnum;
+  /**是否是主元素*/
+  main: boolean;
 }
 
 /**
@@ -33,8 +35,6 @@ declare interface ISymbolAnimationData {
   symbolId: string;
   /** 符号类型 */
   symbolType: string;
-  /** 是否已经播放了scatter增加次数动画 */
-  isPlayScatterAddTimeAnimation: boolean;
 }
 
 /**

@@ -20,8 +20,6 @@ import { HomeController } from '../../../../../../app-builtin/app-controller/Hom
 import { PopSettings } from '../../../../pop/settings/native/PopSettings';
 import { calculateWithBase, getViewportSize, numberToMoney, wrapSpineCompleteListener } from 'db://assets/common/script/extra/Utils/common';
 import { GameUtilTool } from 'db://assets/common/script/extra/GameUtilTool';
-import { ActivityEventMgr, ActivityEventMgrEventsType } from 'db://assets/common/script/ActivityEventMgr';
-import { PackageFacade } from 'db://assets/common/script/PackageFacade';
 import { HomeBodyUtil } from './expansion/HomeBodyUtil';
 import CpPostMessage from 'db://assets/common/script/extra/tmBridge/cpPostMessage';
 import {  preventRapidClickDecorator, showInsufficientCreditAlert } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';

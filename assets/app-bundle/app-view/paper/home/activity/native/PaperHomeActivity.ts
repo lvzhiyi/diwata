@@ -2,15 +2,13 @@ import { _decorator, Node } from 'cc';
 import BaseView from '../../../../../../../extensions/app/assets/base/BaseView';
 import { GameUtilTool } from 'db://assets/common/script/extra/GameUtilTool';
 import { ActivityEventMgr, ActivityEventMgrEventsType } from 'db://assets/common/script/ActivityEventMgr';
-import { PackageFacade } from 'db://assets/common/script/PackageFacade';
 import { app } from 'db://assets/app/app';
-import { GameEventMgrEventsType, GameMrgEvent } from 'db://assets/common/script/extra/GameMrsEvent';
-import { ActivityDataMgr } from 'db://assets/common/script/data/ActivityDataMgr';
+import { ActivityDataMgr, GameDataMgrEventsType } from 'db://assets/common/script/data/ActivityDataMgr';
 import { serverHookManager } from 'db://assets/basePlate/middleWare/serverManager/ServerHookManager';
 import { getUserCredit } from 'db://assets/basePlate/middleWare/services/user';
 import { HTTP_STATUS_CODES } from 'db://assets/common/script/extra/Request';
 import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsController';
-import { GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
+import { GlobalActivity, GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
 import { calculateWithBase } from 'db://assets/common/script/extra/Utils/common';
 import { freeSpinManager } from 'db://assets/res-native/script/FreeSpinManager';
 
@@ -48,7 +46,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
           return true;
         });
         this.setupStarCardPostion();
-        PackageFacade.instance.showEntryDialog();
+        GlobalActivity.showEntryDialog();
         freeSpinManager.init();
       }
     }
@@ -126,9 +124,9 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
    */
     private onFreeBonusSpinStateChange(freeBonusSpinState: boolean) {
       if (freeBonusSpinState) {
-        GameMrgEvent.instance.dispatchEvent(GameEventMgrEventsType.updateBuyFreeCount, 1);
+        GlobalActivity.dispatchEvent(GameDataMgrEventsType.updateBuyFreeCount, 1);
       } else {
-        GameMrgEvent.instance.dispatchEvent(GameEventMgrEventsType.updateBuyFreeCount, 0);
+        GlobalActivity.dispatchEvent(GameDataMgrEventsType.updateBuyFreeCount, 0);
         const starCardData = ActivityDataMgr.instance.getGoodsData();
 
         // 隐藏星卡动效
@@ -149,7 +147,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
       this.scheduleOnce(() => {
         const betCountScreenPosition = GameUtilTool.getMoveToPos();
         const quikeModeScreenPosition = GameUtilTool.getCardPos();
-        PackageFacade.instance.setStarCardPosData(betCountScreenPosition, quikeModeScreenPosition);
+        GlobalActivity.setStarCardPosData(betCountScreenPosition, quikeModeScreenPosition);
       }, 0);
     }
 

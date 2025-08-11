@@ -73,7 +73,7 @@
         "_value": false
       },
       "physics-2d": {
-        "_value": false,
+        "_value": true,
         "_option": "physics-2d-box2d",
         "_flags": {
           "physics-2d-box2d-wasm": {
@@ -190,6 +190,7 @@
       "legacy-pipeline",
       "marionette",
       "particle-2d",
+      "physics-2d-box2d",
       "profiler",
       "skeletal-animation",
       "spine",

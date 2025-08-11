@@ -1963,7 +1963,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -95,
+      "x": -104.795,
       "y": 0,
       "z": 0
     },
@@ -2004,7 +2004,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 96.73828125,
+      "width": 115.0341796875,
       "height": 67.8
     },
     "_anchorPoint": {
@@ -2040,7 +2040,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "Round \nNumer",
+    "_string": "Round \n Number",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 30,
@@ -3672,6 +3672,8 @@
       "__id__": 0
     },
     "fileId": "1d0brnY/ZHz43KeDf8Al0d",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {

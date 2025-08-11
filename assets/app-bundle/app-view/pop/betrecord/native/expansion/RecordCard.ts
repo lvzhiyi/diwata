@@ -11,7 +11,6 @@ import {
   loadRemoteImage,
 } from 'db://assets/common/script/extra/Utils/common';
 import { CopyUtils } from 'db://assets/common/script/extra/Utils/CopyUtils';
-import { PackageFacade } from 'db://assets/common/script/PackageFacade';
 
 const { ccclass, property } = _decorator;
 
