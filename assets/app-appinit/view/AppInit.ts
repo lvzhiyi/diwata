@@ -15,7 +15,7 @@ import { HTTP_STATUS_CODES } from '../../common/script/extra/Request';
 import commonInit from '../../common/script/extra/CommonInit';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
 import { Environment, getApiUrl, getGameEnv } from '../../common/script/extra/config/envConfig';
-import { GameResourceManager, SPINE_RESOURCE_NAMES } from '../../basePlate/middleWare/serverManager/GameResourceManager';
+import { GameResourceManager } from '../../basePlate/middleWare/serverManager/GameResourceManager';
 
 const { ccclass, property } = _decorator;
 @ccclass('AppInit')
@@ -159,14 +159,7 @@ export class AppInit extends BaseAppInit {
     //   await GameResourceManager.instance.preloadLocalAnimations([SPINE_RESOURCE_NAMES.LAMANG_START]);
     // }
 
-    await GameResourceManager.instance.preloadLocalAnimations([
-      SPINE_RESOURCE_NAMES.LAMANG_RUN,
-      SPINE_RESOURCE_NAMES.LAMANG_SWORD_HIT,
-      SPINE_RESOURCE_NAMES.LAMANG_BOW_EXPLODE,
-      // SPINE_RESOURCE_NAMES.LAMANG_ICON_WILD,
-      // SPINE_RESOURCE_NAMES.LAMANG_ICON_GOLD,
-      // SPINE_RESOURCE_NAMES.LAMANG_WILD, 
-    ]);
+    await GameResourceManager.instance.preloadLocalAnimations();
   }
 
   /**
@@ -218,34 +211,6 @@ export class AppInit extends BaseAppInit {
 
     return this._login(loginData);
   }
-
-  /**
-   * 检查网络质量
-   * 根据网络质量提供不同的游戏体验选项
-   */
-  // async checkNetQuilty() {
-  //   const quality = await CheckNetCtrl.checkQuality(app.config.app.GAME_ID);
-
-  //   return new Promise((resolve) => {
-  //     if (quality === 'slow') {
-  //       app.manager.global.setNetworkQuality('slow');
-  //       showErrorPop({
-  //         type: ErrorType.SlowNetTips,
-  //         msg: 'The network is slow at present. Would you like to use the smooth mode to play the game?',
-  //         confirmCallback: () => {
-  //           CheckNetCtrl.registerDownloader();
-  //           resolve(true);
-  //         },
-  //         cancelCallback: () => {
-  //           resolve(false);
-  //         },
-  //       });
-  //     } else {
-  //       app.manager.global.setNetworkQuality('fast');
-  //       resolve(false);
-  //     }
-  //   });
-  // }
 
   /**
    * 登录，并保存 token
@@ -434,6 +399,7 @@ export class AppInit extends BaseAppInit {
       uat: '1hlahoc4rpc@f3b191fb36fbb85',
       qat: '1hlahoc4rpc@f3b191fb36fbb85',
       test: '1hlahoc4rpc@f3b191fb36fbb85',
+      trial: '1hlahoc4rpc@f3b191fb36fbb85',
     };
     const pid = pidMap[env as Environment] || 'default_pid';
     initARMS({

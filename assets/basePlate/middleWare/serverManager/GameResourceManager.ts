@@ -1,4 +1,4 @@
-import { _decorator, instantiate, Node, Prefab, resources, sp, SpriteAtlas, SpriteFrame } from 'cc';
+import { _decorator, instantiate, Node, Prefab, resources, sp, SpriteFrame } from 'cc';
 import logger from 'db://app/lib/logger/logger';
 import { loadResource } from '../../core/baseUtil/BaseCommonUtil';
 
@@ -7,6 +7,24 @@ const { ccclass, property } = _decorator;
 export const SPINE_RESOURCE_NAMES: { [key: string]: string } = {
   // 开始动画
   LAMANG_START: 'LamAng_start',
+  // wild动画
+  LAMANG_WILD: 'bianhuan',
+  // scatter动画
+  LAMANG_ICON_SCATTER: 'LamAng_icon_scatter',
+  // 剑被劈中的动画
+  LAMANG_SWORD_HIT: 'wheelhalo',
+  // 棒子爆炸的动画
+  LAMANG_BOW_EXPLODE: 'bz',
+
+  MFL: 'mfl',
+
+  // 滚轴动画
+  LAMANG_RUN: 'LamAng_run',
+
+};
+/// 滚动元素
+export const ROLL_RESOURCE_NAMES: { [key: string]: string } = {
+ 
   // wild动画
   LAMANG_WILD: 'bianhuan',
   // scatter动画
@@ -68,7 +86,7 @@ export class GameResourceManager {
       });
     }
   
-    //  预加载所有 Spine 动画，
+    //  预加载所有 OtherSpine 动画，
     //  names 为需要预加载的动画名称列表，如果没有则预加载resource中所有spine文件夹下的动画
     preloadLocalAnimations(names?: string[]) {
       const resourceNames = names || this.getSpineResourceNames();
@@ -85,8 +103,25 @@ export class GameResourceManager {
         logger.success(`${resourceNames.toString()} 动画已经预加载完成`);
       });
     }
-  
-    // 获取 Spine 动画实例
+
+    // 预加载所有 RollSpine 动画，
+    preloadAllRollAnimations(names?: string[]) {
+      const resourceNames = names || this.getRollResourceNames();
+      const loadPromises = resourceNames.map((name) => {
+        return new Promise<void>((resolve) => {
+          // 获取spine动画
+          this.getRollSpineAnimationDataByName(name).then(() => {
+            resolve();
+          });
+        });
+      });
+
+      return Promise.all(loadPromises).then(() => {
+        logger.success(`${resourceNames.toString()} roll动画已经预加载完成`);
+      });
+    }
+
+    // 获取 OtherSpine 动画实例
     async getSpineAnimationDataByName(spineName: string): Promise<sp.SkeletonData> {
       return new Promise(async (resolve) => {
         let spineData = this.spineResopurceMap[spineName];
@@ -95,7 +130,28 @@ export class GameResourceManager {
           resolve(spineData);
           logger.log(`预加载spine动画 ${spineName} 完成（缓存中获取）`);
         } else {
-          spineData = await loadResource('load', 'resources', `spine/${spineName}`, sp.SkeletonData);
+          spineData = await loadResource('load', 'resources', `Spines/OtherSpine/${spineName}`, sp.SkeletonData);
+          this.spineResopurceMap[spineName] = spineData;
+          resolve(spineData);
+          logger.log(`预加载spine动画 ${spineName} 完成`);
+        }
+      });
+    }
+
+    /**
+     * 获取 RollSpine 动画实例
+     * @param spineName 
+     * @returns 
+     */
+    async getRollSpineAnimationDataByName(spineName: string): Promise<sp.SkeletonData> {
+      return new Promise(async (resolve) => {
+        let spineData = this.spineResopurceMap[spineName];
+
+        if (spineData) {
+          resolve(spineData);
+          logger.log(`预加载spine动画 ${spineName} 完成（缓存中获取）`);
+        } else {
+          spineData = await loadResource('load', 'resources', `Spines/RollSpine/${spineName}`, sp.SkeletonData);
           this.spineResopurceMap[spineName] = spineData;
           resolve(spineData);
           logger.log(`预加载spine动画 ${spineName} 完成`);
@@ -138,5 +194,10 @@ export class GameResourceManager {
     // 获取resource中所有spine资源名称列表
     getSpineResourceNames(): string[] {
       return Object.keys(SPINE_RESOURCE_NAMES).map(key => SPINE_RESOURCE_NAMES[key]);
+    }
+
+    // 获取resource中所有role资源名称列表
+    getRollResourceNames(): string[] {
+      return Object.keys(ROLL_RESOURCE_NAMES).map(key => ROLL_RESOURCE_NAMES[key]);
     }
 }
