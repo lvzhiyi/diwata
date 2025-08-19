@@ -33,7 +33,6 @@ export class PageHome extends BaseView.BindController(SlotsController) {
 
   // 初始化的相关逻辑写在这
   onLoad() {
-    this.onControllerEvent();
     this.homeBgNode = this.node.getChildByName('homeImageBg');
     this.blurBgNode = this.node.getChildByName('blurBg');
 
@@ -50,23 +49,6 @@ export class PageHome extends BaseView.BindController(SlotsController) {
 
   protected start(): void {
    
-  }
-
-  // 监听所有事件
-  protected onControllerEvent() {
-    this.controller.on(SlotsController.Event.FreeBonusSpinChange, (a: boolean) => {
-      console.log('freeSpinChange', a);
-     
-      if (a) {
-        this.blurBgNode.getComponent(Sprite).spriteFrame = this.FreeSpinBg;
-        this.homeBgNode.getComponent(Sprite).spriteFrame = this.FreeSpinBg;
-      } else {
-        this.blurBgNode.getComponent(Sprite).spriteFrame = this.normalBg;
-        this.homeBgNode.getComponent(Sprite).spriteFrame = this.normalBg;
-      }
-
-      return true;
-    });
   }
 
   /**

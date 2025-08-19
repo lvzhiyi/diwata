@@ -79,6 +79,9 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   @property({ type: Node, tooltip: '底部视图' })
   private bottomView: Node = null;
 
+  @property({ type: Node, tooltip: 'BousSpineView 节点' })
+  private BousSpineView: Node = null;
+
   /** freespin模式下免费游玩次数节点 */
   @property({
     type: Node,
@@ -136,6 +139,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     this.controller.on(HomeController.Event.AutoPlayButtonState, this.changeAutoPlayButtonState, this);
     /// 监听开始按钮状态
     this.controller.on(HomeController.Event.StartButtonState, this.changeStartButtonState, this);
+    /// 监听免费轮状态
     /// 监听投注金额变化
     app.manager.event.on('creditCountChange', this.creditCountChange, this);
    

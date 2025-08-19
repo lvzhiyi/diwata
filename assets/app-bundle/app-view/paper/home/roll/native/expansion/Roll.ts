@@ -636,7 +636,7 @@ export class Roll extends Component {
           // 添加动画
           const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
-          skeleton.skeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.MFL);
+          skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(SPINE_RESOURCE_NAMES.MFL);
           skeleton.setAnimation(0, animationName, true);
       
           skeleton.setCompleteListener(() => {

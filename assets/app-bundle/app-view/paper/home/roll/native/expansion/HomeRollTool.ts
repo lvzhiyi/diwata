@@ -1,5 +1,5 @@
 import { _decorator, EventTouch, Intersection2D, isValid, math, Node, PolygonCollider2D, sp, UITransform, v2, v3, Vec2, Vec3 } from 'cc';
-import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 
 const { ccclass,  } = _decorator;
 
@@ -17,7 +17,7 @@ export class HomeRollTool  {
     overlayNode: Node,
   ): Promise<void> {
     const spineManager = GameResourceManager.instance;
-    const skeleonData = await spineManager.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.LAMANG_SWORD_HIT);
+    const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SWORD_HIT);
 
     if (skeleonData != null) {
       // 创建spine节点并设置大小
