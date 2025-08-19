@@ -2,7 +2,7 @@ import { _decorator, Component, Material, Node, sp, Sprite, SpriteFrame, tween, 
 import { app } from 'db://assets/app/app';
 import { loadResource } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
-import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 
 const SYMBOL_NORMAL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010'];
@@ -230,7 +230,7 @@ export class Symbol extends Component {
       this.lightNode.setWorldPosition(this.node.getWorldPosition());
 
       const skeleton = this.lightNode.getComponent(sp.Skeleton) || this.lightNode.addComponent(sp.Skeleton);
-      skeleton.skeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.MFL);
+      skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.MFL);
       skeleton.setAnimation(0, 'mfl', true);
     }
 
@@ -280,7 +280,7 @@ export class Symbol extends Component {
           // 添加动画
           const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
-          skeleton.skeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.LAMANG_WILD);
+          skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.LAMANG_WILD);
           skeleton.setAnimation(0, animationName, false);
           console.log('播放wild动画-数据', animationName);
           skeleton.setCompleteListener(() => {
@@ -305,7 +305,7 @@ export class Symbol extends Component {
           // 添加动画
           const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
-          skeleton.skeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.LAMANG_BOW_EXPLODE);
+          skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.BOW_EXPLODE);
           skeleton.setAnimation(0, animationName, false);
           console.log('播放棒子动画-数据', animationName);
           skeleton.setCompleteListener(() => {

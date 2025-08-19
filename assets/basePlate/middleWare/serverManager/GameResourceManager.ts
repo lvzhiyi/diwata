@@ -7,19 +7,8 @@ const { ccclass, property } = _decorator;
 export const SPINE_RESOURCE_NAMES: { [key: string]: string } = {
   // 开始动画
   LAMANG_START: 'LamAng_start',
-  // wild动画
-  LAMANG_WILD: 'bianhuan',
-  // scatter动画
-  LAMANG_ICON_SCATTER: 'LamAng_icon_scatter',
   // 剑被劈中的动画
-  LAMANG_SWORD_HIT: 'wheelhalo',
-  // 棒子爆炸的动画
-  LAMANG_BOW_EXPLODE: 'bz',
-
-  MFL: 'mfl',
-
-  // 滚轴动画
-  LAMANG_RUN: 'LamAng_run',
+  // LAMANG_SWORD_HIT: 'wheelhalo',
 
 };
 /// 滚动元素
@@ -30,9 +19,9 @@ export const ROLL_RESOURCE_NAMES: { [key: string]: string } = {
   // scatter动画
   LAMANG_ICON_SCATTER: 'LamAng_icon_scatter',
   // 剑被劈中的动画
-  LAMANG_SWORD_HIT: 'wheelhalo',
+  SWORD_HIT: 'wheelhalo',
   // 棒子爆炸的动画
-  LAMANG_BOW_EXPLODE: 'bz',
+  BOW_EXPLODE: 'bz',
 
   MFL: 'mfl',
 

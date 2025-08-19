@@ -1,4 +1,4 @@
-import { _decorator, Node } from 'cc';
+import { _decorator, Label, Node, sp } from 'cc';
 import BaseView from '../../../../../../../extensions/app/assets/base/BaseView';
 import { GameUtilTool } from 'db://assets/common/script/extra/GameUtilTool';
 import { ActivityEventMgr, ActivityEventMgrEventsType } from 'db://assets/common/script/ActivityEventMgr';
@@ -18,6 +18,12 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
     @property({ type: Node, tooltip: 'ActivityEntry' })
     private activityEntry: Node = null;
 
+    @property({ type: Node, tooltip: 'BousSpineView 节点' })
+    private BousSpineView: Node = null;
+
+    @property({ type: Node, tooltip: 'numberLable 节点' })
+    private NumberLable: Node = null;
+
     // 初始化的相关逻辑写在这
     onLoad() { 
      
@@ -34,11 +40,6 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
           this.otherMessage,
           this
         );
-        this.controller.on(SlotsController.Event.FreeBonusSpinChange, (a: boolean) => {
-          this.onFreeBonusSpinStateChange(a);
-
-          return true;
-        });
         this.controller.on(SlotsController.Event.GameOver, (a: BetResult) => {
           // 当前轮游戏结束，更新freeSpin次数
           freeSpinManager.onRoundEnd();
@@ -49,6 +50,12 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         GlobalActivity.showEntryDialog();
         freeSpinManager.init();
       }
+
+      this.controller.on(SlotsController.Event.FreeBonusSpinChange, (a: boolean) => {
+        this.onFreeBonusSpinStateChange(a);
+
+        return true;
+      });
     }
 
     protected beforeShow(next: (error?: string) => void, data?: any) {
@@ -124,6 +131,8 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
    */
     private onFreeBonusSpinStateChange(freeBonusSpinState: boolean) {
       if (freeBonusSpinState) {
+        // 展示免费轮中奖动画
+        this.showFreeBonusSpineAnimation();
         GlobalActivity.dispatchEvent(GameDataMgrEventsType.updateBuyFreeCount, 1);
       } else {
         GlobalActivity.dispatchEvent(GameDataMgrEventsType.updateBuyFreeCount, 0);
@@ -137,6 +146,42 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
           this.betCountChange(app.manager.global.tempBetCount);
         }
       }
+    }
+
+    /**
+     * 展示免费轮中奖动画
+     */
+    private showFreeBonusSpineAnimation() {
+      // sm节点隐藏
+      GlobalActivity.setEntryDialogActive(false);
+      this.BousSpineView.active = true;
+      this.NumberLable.getComponent(Label).string = app.manager.global.freeBonusTimes.toString();
+      // 开始播放动画
+      const Skeleton = this.BousSpineView.getComponent(sp.Skeleton);
+      Skeleton.setAnimation(0, 'show', false);
+      // 监听自定义事件 "sz"
+      Skeleton.setEventListener((trackEntry: sp.spine.TrackEntry, event: sp.spine.Event) => {
+        if (event.data.name === 'sz') {
+          console.log('监听到 sz 事件:', event);
+          this.NumberLable.active = true;
+        }
+      });
+
+      Skeleton.setCompleteListener((track: sp.spine.TrackEntry) => {
+        console.log('动画播放完成');
+        Skeleton.setCompleteListener(null);
+        // 播放 show_free_game 动效，不循环
+        Skeleton.setAnimation(0, 'show_free_game', false);
+        // 监听 show_free_game 播放完成
+        Skeleton.setCompleteListener((showFreeGameTrack: sp.spine.TrackEntry) => {
+          console.log('show_free_game 动效播放完成');
+          // 移除动效
+          this.BousSpineView.active = false;
+          this.NumberLable.active = false;
+          GlobalActivity.setEntryDialogActive(true);
+          Skeleton.clearAnimations();
+        });
+      });
     }
 
     /**

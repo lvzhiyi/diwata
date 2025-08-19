@@ -11,7 +11,7 @@ import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsCon
 import { RewardLineBox } from './expansion/RewardLineBox';
 import { ToastManager } from 'db://assets/res-native/script/ToastManager';
 import { HomeRollTool } from './expansion/HomeRollTool';
-import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { preventRapidClickDecorator } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { AdvancedButtonBreath } from 'db://assets/basePlate/middleWare/animations/AdvancedButtonBreath';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
@@ -114,7 +114,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     this.rollFrameSkeleton = rollFrameNode.addComponent(sp.Skeleton);
     this.rollFrameSkeleton.premultipliedAlpha = false;
-    this.rollFrameSkeleton.skeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.LAMANG_RUN);
+    this.rollFrameSkeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.LAMANG_RUN);
   }
 
   /** *监听freespin按钮状态**/
@@ -617,7 +617,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
         app.manager.global.setFreeBonusTimes(gameRecordIds.length);
         app.manager.global.setGameRecordIds([...gameRecordIds]);
-        ToastManager.inst.show(`FREE SPIN ${gameRecordIds.length} TIMES`);
+        // ToastManager.inst.show(`FREE SPIN ${gameRecordIds.length} TIMES`);
 
         this.setFreeBonusData(true, this.resultData.totalPayoutAmount);
         this.startFreeSpinGame();
@@ -790,7 +790,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
           if (item.symbolId === '3001') {
             scatterAnimationFunctions.push(new Promise(async resolve => {
-              await symbol.startScatterActionAnimation(SPINE_RESOURCE_NAMES.LAMANG_ICON_SCATTER);
+              await symbol.startScatterActionAnimation(ROLL_RESOURCE_NAMES.LAMANG_ICON_SCATTER);
               resolve();
             }));
           }
