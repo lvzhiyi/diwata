@@ -1,12 +1,22 @@
-import { _decorator, EventTouch, Intersection2D, isValid, math, Node, PolygonCollider2D, sp, UITransform, v2, v3, Vec2, Vec3 } from 'cc';
+import { _decorator, EventTouch, instantiate, Intersection2D, isValid, math, Node, PolygonCollider2D, Prefab, sp, tween, UITransform, v2, v3, Vec2, Vec3 } from 'cc';
 import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { Symbol } from './Symbol';
+import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
+import { delay } from 'db://assets/common/script/extra/Utils/common';
 
 const { ccclass,  } = _decorator;
 
+export interface ChangeWildData {
+  node: Node;
+  type: SymbolType;
+  rollNode?: Node;
+  hasShow?: boolean;
+  rollIndex?: number;
+}
 @ccclass('HomeRollTool')
 export class HomeRollTool  {
   /**
-   * scatter显示散射光环动画
+   * 
    * @param {Node} targetNode - 需要显示光环动画的目标节点
    * @param {Node} overlayNode - 用于显示光环动画的覆盖节点
    * @param {number} scaleRatio - 缩放比例，默认为0.8
@@ -15,13 +25,14 @@ export class HomeRollTool  {
   async showSwordHaloAnimation(
     targetNode: Node,
     overlayNode: Node,
+    goddessNode: Node
   ): Promise<void> {
     const spineManager = GameResourceManager.instance;
     const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SWORD_HIT);
 
     if (skeleonData != null) {
       // 创建spine节点并设置大小
-      const spineNode = this.createSpineNode(targetNode, overlayNode, 0.8);
+      const spineNode = this.createSpineNode(targetNode, overlayNode, true);
 
       return new Promise<void>(async (resolve) => {
         try {
@@ -29,10 +40,11 @@ export class HomeRollTool  {
           const skeleton = spineNode.getComponent(sp.Skeleton) || spineNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
           skeleton.skeletonData = skeleonData;
-          skeleton.setAnimation(0, 'wheelhalo', false);
-          skeleton.setCompleteListener(() => {
-            this.destoryAnimationNode(spineNode);
-            console.log('播放剑动画完成-数据', 'wheelhalo');
+       
+          // 播放多个动画序列
+          HomeRollTool.playAnimationSequence(skeleton, ['dao_atk', 'dao_hit', 'dao_in'], () => {
+            // this.destoryAnimationNode(spineNode);
+            console.log('播放剑动画序列完成');
             resolve();
           });
         } catch (error) {
@@ -47,30 +59,227 @@ export class HomeRollTool  {
   }
 
   /**
+   * 多个点同时飞向女神的动画
+   * */ 
+  async showFlyingToGoddessAnimation(
+    targetNodes: ChangeWildData[],
+    overlayNode: Node,
+    goddessTargetNode: Node,
+    lightPrefab: Prefab,
+    goddessNode: Node
+  ): Promise<void> {
+    return new Promise<void>(async (resolve) => {
+      targetNodes.forEach((changeWildData) => {
+        const lightNode = instantiate(lightPrefab);
+        lightNode.setParent(overlayNode);
+        lightNode.setWorldPosition(changeWildData.node.getWorldPosition());
+        tween(lightNode)
+          .to(
+            0.55,
+            { worldPosition: goddessTargetNode.getWorldPosition(), scale: v3(0.6, 0.6, 1) },
+            { easing: 'quadIn' } 
+          )
+          .call(() => {
+            lightNode.removeFromParent();
+            console.log('轨迹动画执行动画完毕');
+          })
+          .start();
+      });
+      await delay(500);
+      // 女神先执行劈剑动画
+      const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
+      goddessSkeleton.premultipliedAlpha = false;
+      const animationName = this.getGoddessAnimation(targetNodes);
+      goddessSkeleton.setAnimation(0, animationName, false);
+      goddessSkeleton.setCompleteListener(() => {
+        // 女神执行待机动画
+        goddessSkeleton.setAnimation(0, 'animation', true);
+      });
+      await delay(1000);
+      resolve();
+    });
+  }
+
+  /**
+   * 播放棍子击中动画
+   * */ 
+  async showBowHitAnimation(
+    targetNode: Node,
+    overlayNode: Node,
+    goddessNode: Node
+  ): Promise<void> {
+    const spineManager = GameResourceManager.instance;
+    const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.BOW_EXPLODE);
+
+    if (skeleonData != null) {
+      // 创建spine节点并设置大小
+      const spineNode = this.createSpineNode(targetNode, overlayNode, false);
+
+      return new Promise<void>(async (resolve) => {
+        try {
+          // 添加动画
+          const skeleton = spineNode.getComponent(sp.Skeleton) || spineNode.addComponent(sp.Skeleton);
+          skeleton.premultipliedAlpha = false;
+          skeleton.skeletonData = skeleonData;
+          // 播放多个动画序列
+          HomeRollTool.playAnimationSequence(skeleton, ['gun_atk', 'gun_in'], () => {
+            // this.destoryAnimationNode(spineNode);
+            console.log('播放棒子动画序列完成');
+            resolve();
+          });
+        } catch (error) {
+          console.error('加载spine/gun动画失败', error);
+          this.destoryAnimationNode(spineNode);
+          resolve();
+        }
+      });
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  /**
+   * 根据中的图标决定女神播放什么动效
+  */
+  getGoddessAnimation(
+    changeWildData: ChangeWildData[]
+  ):string{
+    const hasSword = changeWildData.some(item => item.type === SymbolType.SWORD);
+    const hasMainBow = changeWildData.some(item => item.type === SymbolType.MAIN_BOW);
+
+    if (hasSword && !hasMainBow) {
+      return 'animation3';
+    // 返回女神挥剑animation3
+    } else if (!hasSword && hasMainBow) {
+      return 'animation2';
+    } else if (hasSword && hasMainBow) {
+      return 'animation4';
+    }
+  }
+
+  /**
+   * 连续播放多个动画
+   * @param {sp.Skeleton} skeleton - Spine骨架组件
+   * @param {string[]} animationNames - 要播放的动画名称数组
+   * @param {Function} onComplete - 所有动画播放完成后的回调
+   */
+  static  playAnimationSequence(skeleton: sp.Skeleton, animationNames: string[], onComplete: () => void): void {
+    if (!animationNames || animationNames.length === 0) {
+      onComplete();
+
+      return;
+    }
+
+    let currentIndex = 0;
+    
+    const playNextAnimation = () => {
+      if (currentIndex >= animationNames.length) {
+        // 所有动画播放完成
+        onComplete();
+
+        return;
+      }
+
+      const animationName = animationNames[currentIndex];
+      console.log(`播放动画: ${animationName}, 索引: ${currentIndex}`);
+      
+      // 设置动画完成监听器
+      skeleton.setCompleteListener(() => {
+        currentIndex++;
+        
+        // 延迟一帧播放下一个动画，确保当前动画完全结束
+        setTimeout(() => {
+          playNextAnimation();
+        }, 0);
+      });
+
+      // 播放当前动画
+      skeleton.setAnimation(0, animationName, false);
+    };
+
+    // 开始播放第一个动画
+    playNextAnimation();
+  }
+
+  /**
+   * 播放多个动画序列（带循环选项）
+   * @param {sp.Skeleton} skeleton - Spine骨架组件
+   * @param {Array<{name: string, loop: boolean}>} animations - 动画配置数组，包含名称和是否循环
+   * @param {Function} onComplete - 所有动画播放完成后的回调
+   */
+  private playAnimationSequenceWithLoop(
+    skeleton: sp.Skeleton, 
+    animations: Array<{name: string, loop: boolean}>, 
+    onComplete: () => void
+  ): void {
+    if (!animations || animations.length === 0) {
+      onComplete();
+
+      return;
+    }
+
+    let currentIndex = 0;
+    
+    const playNextAnimation = () => {
+      if (currentIndex >= animations.length) {
+        // 所有动画播放完成
+        onComplete();
+
+        return;
+      }
+
+      const animation = animations[currentIndex];
+      console.log(`播放动画: ${animation.name}, 循环: ${animation.loop}, 索引: ${currentIndex}`);
+      
+      // 设置动画完成监听器
+      skeleton.setCompleteListener(() => {
+        currentIndex++;
+        
+        // 延迟一帧播放下一个动画
+        setTimeout(() => {
+          playNextAnimation();
+        }, 0);
+      });
+
+      // 播放当前动画
+      skeleton.setAnimation(0, animation.name, animation.loop);
+    };
+
+    // 开始播放第一个动画
+    playNextAnimation();
+  }
+
+  /**
    * 创建并配置spine节点
    * @param {Node} targetNode - 目标节点
    * @param {Node} overlayNode - 覆盖节点
    * @param {number} scaleRatio - 缩放比例
    * @returns {Node} 配置好的spine节点
    */
-  private createSpineNode(targetNode: Node, overlayNode: Node, scaleRatio: number = 0.8): Node {
+  private createSpineNode(targetNode: Node, overlayNode: Node, isRoll: boolean = false): Node {
     const targetTransform = targetNode.getComponent(UITransform);
     const spineNode = new Node('spineNode');
     
     // 设置UITransform组件
     const spineTransform = spineNode.addComponent(UITransform);
-    spineTransform.setContentSize(targetTransform.width, targetTransform.height);
+    spineTransform.setContentSize(targetTransform.contentSize);
     
     // 设置缩放
-    spineNode.setScale(scaleRatio, scaleRatio, 1);
+    // spineNode.setScale(scaleRatio, scaleRatio, 1);
     spineNode.layer = overlayNode.layer;
     
     // 添加到覆盖节点
     overlayNode.addChild(spineNode);
-    
-    // 设置位置
-    const parent = targetNode.parent;
-    spineNode.setPosition(parent.position.x, parent.position.y, parent.position.z);
+
+    if (isRoll) {
+      const parent = targetNode.parent;
+      spineNode.setPosition(parent.position.x, parent.position.y, parent.position.z);
+    }else{
+      // 直接使用目标节点的世界坐标来设置 spine 节点的世界坐标
+      const targetWorldPos = targetNode.getWorldPosition();
+      // 直接设置世界坐标，这样无论在哪一层都能正确显示
+      spineNode.setWorldPosition(targetWorldPos.x, targetWorldPos.y, targetWorldPos.z);
+    }
     
     return spineNode;
   }

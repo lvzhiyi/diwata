@@ -1,4 +1,4 @@
-import { _decorator, Color, EventTouch, Label, Node, PolygonCollider2D, RichText, sp, Sprite, SpriteFrame, tween, UITransform, Vec3, Widget } from 'cc';
+import { _decorator, EventTouch, Label, Node, Prefab, sp,  tween, UITransform } from 'cc';
 import BaseView from 'db://app/base/BaseView';
 import { Roll } from './expansion/Roll';
 import { Symbol } from './expansion/Symbol';
@@ -8,20 +8,26 @@ import { PopGrandPrize } from '../../../../pop/grand-prize/native/PopGrandPrize'
 import { BetTypes, RewardSubTypeEnum, SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { PopFreeSpinResult } from '../../../../pop/free-spin-result/native/PopFreeSpinResult';
 import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsController';
-import { RewardLineBox } from './expansion/RewardLineBox';
 import { ToastManager } from 'db://assets/res-native/script/ToastManager';
-import { HomeRollTool } from './expansion/HomeRollTool';
-import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { ChangeWildData, HomeRollTool } from './expansion/HomeRollTool';
+import { GameResourceManager, ROLL_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { preventRapidClickDecorator } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { AdvancedButtonBreath } from 'db://assets/basePlate/middleWare/animations/AdvancedButtonBreath';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { CurrentRoundAmount } from './expansion/CurrentRoundAmount';
 import { GlobalActivity } from 'db://assets/common/script/extra/GlobalMgr';
+import { BousView } from './expansion/BousView';
 
 const { ccclass, property } = _decorator;
 
 @ccclass('PaperHomeRoll')
 export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
+  @property({ type: Node, tooltip: '女神节点' })
+  private goddessNode: Node = null;
+
+  @property({ type: Node, tooltip: '女神动画节点' })
+  private goddessAnimationNode: Node = null;
+
   @property({ type: Node, tooltip: 'MaskBox节点' })
   private MaskBoxNode: Node = null;
 
@@ -39,16 +45,16 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   private freeTimesView: Node = null;
 
   @property({ type: Node, tooltip: '' })
-  private buyBonusBGView: Node = null;
-
-  @property({ type: Node, tooltip: '' })
-  private buyBonusView: Node = null;
+  private BonusView: Node = null;
 
   @property({ type: Node, tooltip: '' })
   private freeSpinView: Node = null;
 
   @property({ type: Node, tooltip: 'Tips Node' })
   private TipsNode: Node = null;
+
+  @property(Prefab)
+  private lightPrefab: Prefab = null;
 
   @property({ type: sp.Skeleton, tooltip: 'SpineWinSkeleton' })
   private SpineWinSkeleton: sp.Skeleton = null;
@@ -71,7 +77,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   private totalRewardAmount: number = 0;
 
   // 需要执行的wild变化的数据,node：棒子的节点，type：类型，rollNode：滚轴节点，hasShow：是否展示过动画,RollIndex：滚轴索引
-  private changeWildData: {node: Node, type: SymbolType, rollNode?: Node, hasShow?: boolean, rollIndex?: number}[] = [];
+  private changeWildData: ChangeWildData[] = [];
 
   // 动画管理工具类
   private homeRollTool: HomeRollTool = null;
@@ -91,14 +97,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     this.initEvents();
 
-    this.addEvent();
-
     this.initRollFrameSpine();
-  }
-
-  /** *监听freespin按钮状态**/
-  addEvent() {
-    app.manager.event.on('freespin:buttonState', this.onFreeBonusSpinButtonState, this);
   }
 
   /**
@@ -119,7 +118,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
   /** *监听freespin按钮状态**/
   onFreeBonusSpinButtonState(enabled: boolean) {
-    if (enabled && app.manager.global.isFreespinMode) {
+    if (enabled && app.manager.global.isBuyFreeBonusMode) {
       this.showFreeSpinView(true);
     } else {
       this.showFreeSpinView(false);
@@ -349,42 +348,47 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       }
     });
     // 把棒子的节点储存到changeWildData中
-    let bowTempArr :Node[] = [];
-    hasShowBowNode.map((nodeArr:[], index) => {
+    hasShowBowNode.map((nodeArr: Node[], index) => {
       if (nodeArr.length > 0) {
         nodeArr.map((node) => {
+          const isMainBow = node.getComponent(Symbol).currentSymbolItem.main === true;
           this.changeWildData.push({
             node,
-            type: SymbolType.BOW,
+            type: isMainBow ? SymbolType.MAIN_BOW : SymbolType.BOW,
             hasShow: false,
             rollIndex: index
           });
-          bowTempArr.push(node);
         });
       }
     });
 
-    // 把棒子的节点储存到changeWildData中
-    if (bowTempArr.length > 0) {
-      // 把是主节点的变成棒子图标
-      bowTempArr.map(node => {
-        const symbol = node.getComponent(Symbol);
-
-        if (symbol.currentSymbolItem.main) {
-          symbol.initSymbol({
-            symbolId: '4011', symbolType: SymbolType.BOW, main: true 
-          });
-        }
-      });
-    }
-
     console.log('changeWildData-数据', this.changeWildData);
 
-    return hasShowSwordNode.some(item => item !== null) || bowTempArr.length > 0;
+    return hasShowSwordNode.some(item => item !== null) || hasShowBowNode.some(item => item !== null);
   }
 
   /**
-     * 使用for...of循环处理异步序列处理是否需要展示剑和棒子的动画
+   * 同时执行棒子和剑光球飞向女神的效果
+  */
+  private async playBowAndSwordFlyingAnimation() {
+    if (this.changeWildData.length === 0 || app.manager.global.quikeMode) return Promise.resolve();
+    // 先根据rollIndex排序
+    this.changeWildData.sort((a, b) => a.rollIndex - b.rollIndex);
+    const newChangeWildData = this.changeWildData.filter((itemMap) => {
+      return itemMap.type === SymbolType.SWORD || itemMap.type === SymbolType.MAIN_BOW;
+    });
+    if (newChangeWildData.length === 0) return Promise.resolve();
+    await this.homeRollTool.showFlyingToGoddessAnimation(
+      newChangeWildData,
+      this.overLayNode,
+      this.goddessAnimationNode,
+      this.lightPrefab,
+      this.goddessNode
+    );
+  }
+
+  /**
+     * 使用for...of循环处理异步序列处理是否需要展示剑和棒子打击动画
     */
    
   public async playSequentialAnimations(): Promise<void> {
@@ -401,11 +405,16 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       if (itemMap.type === SymbolType.SWORD) {
         await this.homeRollTool.showSwordHaloAnimation(
           itemMap.rollNode, 
-          this.overLayNode
+          this.overLayNode,
+          this.goddessNode
         );
         itemMap.hasShow = true;
       } else if (itemMap.type === SymbolType.BOW) {
-        await itemMap.node.getComponent(Symbol).changeToBowAnimation();
+        await this.homeRollTool.showBowHitAnimation(
+          itemMap.node,
+          this.overLayNode,
+          this.goddessNode
+        );
         itemMap.hasShow = true;
       }
     }
@@ -447,8 +456,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     ));
     // 处理是否需要展示剑和棒子
     await this.handleSwordAndStick();
+    // 同时执行棒子和剑光球飞向女神的效果
+    await this.playBowAndSwordFlyingAnimation();
 
-    // 调用同步动画等待函数
+    // 调用同步动画依次执行等待函数
     await this.playSequentialAnimations();
 
     if (this.changeWildData.length > 0) await delay(app.manager.global.quikeMode ? 500 : 1500);
@@ -619,7 +630,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         app.manager.global.setGameRecordIds([...gameRecordIds]);
         // ToastManager.inst.show(`FREE SPIN ${gameRecordIds.length} TIMES`);
 
-        this.setFreeBonusData(true, this.resultData.totalPayoutAmount);
+        await this.setFreeBonusData(this.resultData.totalPayoutAmount);
         this.startFreeSpinGame();
 
         return;
@@ -649,6 +660,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 监听RollContianer点击事件
     this.rollBgViewNode.on(Node.EventType.TOUCH_END, this.rollClick, this);
     app.manager.event.emit('roll:reward', 'end');
+    console.log('结束游戏');
   }
 
   /**
@@ -837,13 +849,20 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   /**
-   * 设置免费轮数据
+   * 设置免费轮数据,播放免费轮转场动画
    */
-  private setFreeBonusData(bool: boolean, freeBonusTotalAmount: number) {
+  private setFreeBonusData(freeBonusTotalAmount: number):Promise<void> {
+    return new Promise<void>(resolve => {
     // 设置免费轮状态
-    app.controller.slots.freeBonusSpinChange(bool);
-    // 设置免费轮总金额
-    app.manager.global.setFreeBonusTotalAmount(freeBonusTotalAmount);
+      app.controller.slots.freeBonusSpinChange(true);
+      app.manager.event.emit('begainfreeBonusAnimation', () => {
+        console.log('转场动画执行完成');
+        app.manager.event.emit('roll:reward', 'end');
+        resolve();
+      });
+      // 设置免费轮总金额
+      app.manager.global.setFreeBonusTotalAmount(freeBonusTotalAmount);
+    });
   }
 
   /**
@@ -922,6 +941,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   private startFreeSpinChange(isFreeBonusSpin: boolean) {
     this.isFreeBonusSpin = isFreeBonusSpin;
+    console.log('startFreeSpinChange', isFreeBonusSpin);
     isFreeBonusSpin ? this.showFreeSpinTimes() : this.hideFreeSpinTimes();
   }
 
@@ -929,22 +949,20 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 显示免费轮剩余次数Node，
    */
   private showFreeSpinTimes() {
-    this.FreeBonusSpinTimesNode.active = true;
-    this.freeTimesView.active = true;
-    this.buyBonusView.active = false;
-    this.freeSpinView.active = false;
-    this.buyBonusBGView.getComponent(AdvancedButtonBreath).pauseBreath();
+    if (this.BonusView.isValid) {
+      this.BonusView.getComponent(BousView).updateBuyBonusStatus(3);
+    }
+
+    this.BonusView.getComponent(AdvancedButtonBreath).pauseBreath();
   }
 
   /**
    * 隐藏免费轮Node，
    */
   private hideFreeSpinTimes() {
-    this.FreeBonusSpinTimesNode.active = false;
-    this.freeTimesView.active = false;
-    this.buyBonusBGView.getComponent(AdvancedButtonBreath).startBreath();
+    this.BonusView.getComponent(AdvancedButtonBreath).startBreath();
 
-    if(app.manager.global.isFreespinMode) {
+    if(app.manager.global.isBuyFreeBonusMode) {
       this.showFreeSpinView(true);
     } else {
       this.showFreeSpinView(false);
@@ -955,8 +973,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 是否显示成就FreeSpin按钮
   */
   showFreeSpinView(show: boolean) {
-    this.buyBonusView.active = !show;
-    this.freeSpinView.active = show;
+    if (this.BonusView.isValid) {
+      this.BonusView.getComponent(BousView).updateBuyBonusStatus(show ? 2 : 1);
+    }
   }
 
   /**

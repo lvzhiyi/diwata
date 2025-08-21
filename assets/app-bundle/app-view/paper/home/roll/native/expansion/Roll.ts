@@ -2,7 +2,7 @@ import { _decorator, CCInteger, Component, instantiate, Material, Node, NodePool
 import { Symbol, SYMBOL_WILD_IDS } from './Symbol';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
-import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { app } from 'db://assets/app/app';
 
 const { ccclass, property } = _decorator;
@@ -81,6 +81,7 @@ export class Roll extends Component {
     }[]) {
       this.rollList = rollList.filter((item: any) => item !== null);
       this.rollRemoveData = rollRemoveData;
+      app.manager.event.emit('roll:reward', 'start');
     }
 
     getCurrentIndex() {
@@ -218,7 +219,7 @@ export class Roll extends Component {
       }
 
       if(isBlur) {
-        symbol.getComponent(Symbol).initBlurSymbol(symbolItem.symbolId, symbolItem.symbolType);
+        symbol.getComponent(Symbol).initBlurSymbol(symbolItem?.symbolId);
       } else {
         symbol.getComponent(Symbol).initSymbol(symbolItem, fromServer);
       }
@@ -231,13 +232,21 @@ export class Roll extends Component {
      * @returns 随机符号ID
      */
     randomSymbolId() {
-      let index = Math.floor(SYMBOL_IDS.length * Math.random());
+      const random = Math.random();
+      let randomIndex: number;
 
-      if (index > 4 && Math.random() > 0.6) {
-        index = Math.floor(index / 2);
+      if (random < 0.85) {
+        // 75%的概率选择0-10，// 0-4
+        randomIndex = Math.floor(Math.random() * 9); 
+      } else {
+        // 25%的概率选择1-10，// 5-10
+        randomIndex = Math.floor(Math.random() * 5) + 4; 
+      }
+      if (randomIndex >= SYMBOL_IDS.length - 1) {
+        randomIndex = 5;
       }
 
-      return SYMBOL_IDS[index];
+      return SYMBOL_IDS[randomIndex];
     }
 
     /**
@@ -255,9 +264,17 @@ export class Roll extends Component {
       this.node.removeChild(lastNode);
 
       let  resultSymbol =   resultSymbols?.shift();
-      
+      let   symbol = resultSymbol;
+
+      if(!resultSymbol) {
+        symbol = {
+          symbolId: this.randomSymbolId(), symbolType: 'NORMAL', main: false 
+        };
+      }
+
+      const needBlur = resultSymbols?.length > 0;
       // 如果resultSymbols不为空，则创建symbolId，否则随机一个symbolId
-      let SymbolNode = this.createSymbol(resultSymbol, resultSymbols?.length > 0 ? false : true);
+      let SymbolNode = this.createSymbol(symbol, needBlur, needBlur);
      
       if (children.length > 0) { 
         const firstChildPos = children[0].position.clone();
@@ -345,6 +362,12 @@ export class Roll extends Component {
         if(symbol.currentSymbolItem) {
           if (symbol.currentSymbolItem.symbolId  === SymbolType.BOW && symbolId !== SymbolType.WILD) {
             showBowNode.push(child);
+
+            if (symbol.currentSymbolItem.main === true) {
+              symbol.initSymbol({
+                symbolId: '4011', symbolType: SymbolType.BOW, main: true 
+              },);
+            }
           }
         }
       });
@@ -361,7 +384,6 @@ export class Roll extends Component {
       const haveSword = this.currentRollHaveSword();
       const children = this.node.children;
       const reversedChildren = Array.from(children).reverse();
-      console.log('reversedChildren', reversedChildren.length);
 
       for (const [index, symbolNode] of reversedChildren.entries()) {
         const currentSymbolObj:any = symbolNode.getComponent(Symbol)?.currentSymbolItem || null;
@@ -621,7 +643,8 @@ export class Roll extends Component {
         this.swordAnimationNode.setParent(this.node.parent.parent.parent);
         this.swordAnimationNode.setWorldPosition(originalPos);
         // 播放wild动画，动画完成后删除动画，并在wildNode设置图片
-        await this.playSwordAnimation(this.swordAnimationNode, 'mfl',);
+        console.log('播放dao动画');
+        await this.playSwordAnimation(this.swordAnimationNode, 'dao_atk',);
 
         resolve(true);
       });
@@ -636,15 +659,19 @@ export class Roll extends Component {
           // 添加动画
           const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
-          skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(SPINE_RESOURCE_NAMES.MFL);
-          skeleton.setAnimation(0, animationName, true);
-      
+          const  skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SWORD_HIT);
+
+          if (skeletonData) {
+            skeleton.skeletonData = skeletonData;
+            skeleton.setAnimation(0, animationName, false);
+          }
+
           skeleton.setCompleteListener(() => {
             this.destoryWildAnimationNode();
             resolve();
           });
         } catch (error) {
-          console.error('加载spine/动画失败', error);
+          console.error('加载dao/动画失败', error);
           this.destoryWildAnimationNode();
           resolve();
         }

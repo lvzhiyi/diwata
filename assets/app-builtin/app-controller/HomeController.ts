@@ -79,11 +79,11 @@ export class HomeController extends BaseController<
     this.emit(HomeController.Event.DisableButton);
     GameProcessCtrl.gameState = GameState.GameStarting;
     app.manager.global.setIsGoing(true);
+    app.manager.event.emit('roll:start', true);
     // 活动系统需要游戏的状态
     GlobalMgr.instance.isGameing = true;
     this.isEndGame = false;
     app.controller.slots.startRolling();
-    app.manager.event.emit('roll:start', true);
   }
 
   /**
@@ -111,6 +111,7 @@ export class HomeController extends BaseController<
       // 免费轮最后一轮
       // 更改余额
       app.manager.global.setCreditCount(calculateWithBase(this.credit, true));
+      this.emit(HomeController.Event.EnableButton);
     } else if(app.manager.global.startAutoPlay && this.checkIsFreeRound(this.betResult)) {
       // 自动模式，命中免费轮，检查是否继续自动执行
       this.emit(HomeController.Event.IsAutoPlay, this.betResult);
@@ -256,7 +257,7 @@ export class HomeController extends BaseController<
 
       this.credit = res.data.credit;
       this.betResult = res.data;
-      await delay(app.manager.global.quikeMode ? 0 : 500);
+      if (!app.manager.global.quikeMode) await delay(500);
       app.controller.slots.stopRolling(this.betResult);
       // 埋点
       this.trackSpinStart(app.manager.global.creditCount, true);
