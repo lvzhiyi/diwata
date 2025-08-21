@@ -70,6 +70,9 @@ export class GlobalManager extends BaseManager {
   // 购买的免费轮次数
   private _freeBonusTimes: number = 0;
 
+  // 购买的免费轮的状态
+  private _BuyFreeBonusMode: boolean = false;
+
   // 购买的免费轮总金额
   private _freeBonusTotalAmount: number = 0;
 
@@ -132,214 +135,225 @@ export class GlobalManager extends BaseManager {
   // 网络质量
   private _networkQuality: 'slow' | 'fast' = 'fast';
 
-  /** 资源质量, 暂时不用high，只用low和medium，默认是medium */
-  public get assetQuality(): 'low' | 'medium' {
-    return this._networkQuality === 'slow' ? 'low' : 'medium';
-  }
+   /** 是否成就系统赠送的免费游玩模式 */
+   private _isFreespinMode: boolean = false;
 
-  public get gameId() {
-    return this._gameId;
-  }
+   /** 赠送的免费游玩模式投注金额 */
+   private _freespinBetAmount: number = 0;
+ 
+   /** 是否星卡模式 */
+   private _isStartCardMode: boolean = false;
+ 
+   /** 星卡模式投注金额 */
+   private _startCardBetAmount: number = 0;
 
-  public setGameId(id: string) {
-    this._gameId = id;
-  }
+   /** 资源质量, 暂时不用high，只用low和medium，默认是medium */
+   public get assetQuality(): 'low' | 'medium' {
+     return this._networkQuality === 'slow' ? 'low' : 'medium';
+   }
 
-  public get creditCount() {
-    return this._creditCount;
-  }
+   public get gameId() {
+     return this._gameId;
+   }
 
-  public setCreditCount(val: number) {
-    this._creditCount = val;
-    app.manager.event.emit('creditCountChange', val);
-  }
+   public setGameId(id: string) {
+     this._gameId = id;
+   }
 
-  /** 是否赠送的免费游玩模式 */
-  private _isFreespinMode: boolean = false;
+   public get creditCount() {
+     return this._creditCount;
+   }
 
-  /** 赠送的免费游玩模式投注金额 */
-  private _freespinBetAmount: number = 0;
+   public setCreditCount(val: number) {
+     this._creditCount = val;
+     app.manager.event.emit('creditCountChange', val);
+   }
 
-  /** 是否星卡模式 */
-  private _isStartCardMode: boolean = false;
+   /** 获取购买的免费轮状态 */
+   public get isBuyFreeBonusMode(): boolean {
+     return this._BuyFreeBonusMode;
+   }
 
-  /** 星卡模式投注金额 */
-  private _startCardBetAmount: number = 0;
+   /** 设置购买的免费轮状态 */
+   public setBuyFreeBonusMode(bool: boolean): void {
+     this._BuyFreeBonusMode = bool;
+     app.manager.event.emit('freeBonusModeChange', bool);
+   }
 
-  /** 是否赠送的免费游玩模式 */
-  public get isFreespinMode(): boolean {
-    return this._isFreespinMode;
-  }
-  /** 设置是否赠送的免费游玩模式 */
+   /** 是否成就系统赠送的免费游玩模式 */
+   public get isFreespinMode(): boolean {
+     return this._isFreespinMode;
+   }
+   /** 设置是否成就系统赠送的免费游玩模式 */
   
-  public setIsFreespinMode(bool: boolean): void {
-    app.manager.event.emit('freespin:state', bool);
-    this._isFreespinMode = bool;
-  }
+   public setIsFreespinMode(bool: boolean): void {
+     app.manager.event.emit('freespin:state', bool);
+     this._isFreespinMode = bool;
+   }
 
-  /** 设置freespin投注金额 */
-  public setFreespinBetAmount(val: number): void {
-    this._freespinBetAmount = val;
-  }
+   /** 设置freespin投注金额 */
+   public setFreespinBetAmount(val: number): void {
+     this._freespinBetAmount = val;
+   }
 
-  /** 获取星卡模式状态 */
-  public get isStartCardMode(): boolean {
-    return this._isStartCardMode;
-  }
+   /** 获取星卡模式状态 */
+   public get isStartCardMode(): boolean {
+     return this._isStartCardMode;
+   }
 
-  public setIsStartCardMode(bool: boolean): void {
-    this._isStartCardMode = bool;
-  }
+   public setIsStartCardMode(bool: boolean): void {
+     this._isStartCardMode = bool;
+   }
 
-  /** 设置星卡模式投注金额 */
-  public setStartCardBetAmount(val: number): void {
-    this._startCardBetAmount = val;
-  }
+   /** 设置星卡模式投注金额 */
+   public setStartCardBetAmount(val: number): void {
+     this._startCardBetAmount = val;
+   }
 
-  /** 下次打开是否不需要显示引导页 */
-  public get isDontShowNextTime() {
-    const isDontShowNextTime = sys.localStorage.getItem('isDontShowNextTime');
+   /** 下次打开是否不需要显示引导页 */
+   public get isDontShowNextTime() {
+     const isDontShowNextTime = sys.localStorage.getItem('isDontShowNextTime');
 
-    if (isDontShowNextTime) {
-      this._isDontShowNextTime = isDontShowNextTime === 'true';
-    }
+     if (isDontShowNextTime) {
+       this._isDontShowNextTime = isDontShowNextTime === 'true';
+     }
 
-    return this._isDontShowNextTime;
-  }
+     return this._isDontShowNextTime;
+   }
 
-  public setIsDontShowNextTime(bool: boolean) {
-    sys.localStorage.setItem('isDontShowNextTime', bool.toString());
-    this._isDontShowNextTime = bool;
-  }
+   public setIsDontShowNextTime(bool: boolean) {
+     sys.localStorage.setItem('isDontShowNextTime', bool.toString());
+     this._isDontShowNextTime = bool;
+   }
   
-  public get betCount() {
-    let betCount = sys.localStorage.getItem('betCount_' + this.playerId);
+   public get betCount() {
+     let betCount = sys.localStorage.getItem('betCount_' + this.playerId);
     
-    if (betCount) {
-      betCount = parseFloat(betCount);
-    }else{
-      betCount = this._betCount;
-    }
+     if (betCount) {
+       betCount = parseFloat(betCount);
+     }else{
+       betCount = this._betCount;
+     }
 
-    return this._isFreespinMode ? this._freespinBetAmount : betCount;
-  }
+     return this._isFreespinMode ? this._freespinBetAmount : betCount;
+   }
 
-  public setBetCount(val: number) {
-    sys.localStorage.setItem('betCount_' + this.playerId, val.toString());
-    this._betCount = val;
-    app.manager.event.emit('betCountChange', val);
-  }
+   public setBetCount(val: number) {
+     sys.localStorage.setItem('betCount_' + this.playerId, val.toString());
+     this._betCount = val;
+     app.manager.event.emit('betCountChange', val);
+   }
 
-  public get tempBetCount() {
-    return this._tempBetCount;
-  }
+   public get tempBetCount() {
+     return this._tempBetCount;
+   }
 
-  public setTempBetCount(val: number) {
-    this._tempBetCount = val;
-  }
+   public setTempBetCount(val: number) {
+     this._tempBetCount = val;
+   }
 
-  public get quantity() {
-    return this._quantity;
-  }
+   public get quantity() {
+     return this._quantity;
+   }
 
-  public setQuantity(val: number) {
-    this._quantity = val;
-    app.manager.event.emit('quantityChange', val);
-  }
+   public setQuantity(val: number) {
+     this._quantity = val;
+     app.manager.event.emit('quantityChange', val);
+   }
 
-  public get gameRecordIds() {
-    return this._gameRecordIds;
-  }
+   public get gameRecordIds() {
+     return this._gameRecordIds;
+   }
 
-  public setGameRecordIds(ids: string[]) {
-    this._gameRecordIds = ids;
-    console.log('setGameRecordIds-数据', this._gameRecordIds);
-  }
+   public setGameRecordIds(ids: string[]) {
+     this._gameRecordIds = ids;
+     console.log('setGameRecordIds-数据', this._gameRecordIds);
+   }
 
-  public get gameRecordIndex() {
-    return this._gameRecordIndex;
-  }
+   public get gameRecordIndex() {
+     return this._gameRecordIndex;
+   }
 
-  public setGameRecordIndex(index: number) {
-    this._gameRecordIndex = index;
-  }
+   public setGameRecordIndex(index: number) {
+     this._gameRecordIndex = index;
+   }
   
-  public get freeBonusTimes() {
-    return this._freeBonusTimes;
-  }
+   public get freeBonusTimes() {
+     return this._freeBonusTimes;
+   }
 
-  public setFreeBonusTimes(times: number) {
-    this._freeBonusTimes = times;
-  }
+   public setFreeBonusTimes(times: number) {
+     this._freeBonusTimes = times;
+   }
 
-  public get freeBonusTotalAmount() {
-    return this._freeBonusTotalAmount;
-  }
+   public get freeBonusTotalAmount() {
+     return this._freeBonusTotalAmount;
+   }
 
-  public setFreeBonusTotalAmount(val: number) {
-    this._freeBonusTotalAmount = val;
-  }
+   public setFreeBonusTotalAmount(val: number) {
+     this._freeBonusTotalAmount = val;
+   }
 
-  public get startAutoPlay() {
-    return this._startAutoplay;
-  }
+   public get startAutoPlay() {
+     return this._startAutoplay;
+   }
 
-  public setStartAutoPlay(bool: boolean) {
-    this._startAutoplay = bool;
-    app.manager.event.emit('startAutoPlayChange', bool);
-  }
+   public setStartAutoPlay(bool: boolean) {
+     this._startAutoplay = bool;
+     app.manager.event.emit('startAutoPlayChange', bool);
+   }
 
-  public get currentAutoPlayTimes() {
-    return this._currentAutoPlayTimes;
-  }
+   public get currentAutoPlayTimes() {
+     return this._currentAutoPlayTimes;
+   }
 
-  public setCurrentAutoPlayTimes(times: number) {
-    this._currentAutoPlayTimes = times;
-  }
+   public setCurrentAutoPlayTimes(times: number) {
+     this._currentAutoPlayTimes = times;
+   }
 
-  public get multipleIndex() {
-    return this._multipleIndex;
-  }
+   public get multipleIndex() {
+     return this._multipleIndex;
+   }
 
-  public setMultipleIndex(index: number) {
-    this._multipleIndex = index;
-    app.manager.event.emit('multipleIndexChange', index);
-  }
+   public setMultipleIndex(index: number) {
+     this._multipleIndex = index;
+     app.manager.event.emit('multipleIndexChange', index);
+   }
 
-  public get voice() {
-    if (sys.localStorage.getItem('voice')) {
-      this._voice = parseInt(sys.localStorage.getItem('voice') || '100');
-    }else{
-      this._voice = 100;
-    }
+   public get voice() {
+     if (sys.localStorage.getItem('voice')) {
+       this._voice = parseInt(sys.localStorage.getItem('voice') || '100');
+     }else{
+       this._voice = 100;
+     }
 
-    return this._voice;
-  }
+     return this._voice;
+   }
 
-  public setVoice(val: number) {
-    if (val > 100 || val < 0) return;
-    console.log('setVoice', val); 
-    this._voice = val;
-    sys.localStorage.setItem('voice', val.toString());
-    app.manager.event.emit('voiceChange', val);
-  }
+   public setVoice(val: number) {
+     if (val > 100 || val < 0) return;
+     console.log('setVoice', val); 
+     this._voice = val;
+     sys.localStorage.setItem('voice', val.toString());
+     app.manager.event.emit('voiceChange', val);
+   }
 
-  public get music() {
-    if (sys.localStorage.getItem('music')) {
-      this._music = parseInt(sys.localStorage.getItem('music') || '100');
-    }else{
-      this._music = 100;
-    }
+   public get music() {
+     if (sys.localStorage.getItem('music')) {
+       this._music = parseInt(sys.localStorage.getItem('music') || '100');
+     }else{
+       this._music = 100;
+     }
 
-    return this._music;
-  }
+     return this._music;
+   }
 
-  public setMusic(val: number) {
-    if (val > 100 || val < 0) return;
-    this._music = val;
-    sys.localStorage.setItem('music', val.toString());
-    app.manager.event.emit('musicChange', val);
-  }
+   public setMusic(val: number) {
+     if (val > 100 || val < 0) return;
+     this._music = val;
+     sys.localStorage.setItem('music', val.toString());
+     app.manager.event.emit('musicChange', val);
+   }
 
   /** 点击屏幕 */
   private _isClickScreen: boolean = false;

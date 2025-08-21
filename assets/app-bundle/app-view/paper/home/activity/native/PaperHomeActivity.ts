@@ -51,11 +51,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         freeSpinManager.init();
       }
 
-      this.controller.on(SlotsController.Event.FreeBonusSpinChange, (a: boolean) => {
-        this.onFreeBonusSpinStateChange(a);
-
-        return true;
-      });
+      app.manager.event.on('begainfreeBonusAnimation', this.showFreeBonusSpineAnimation, this);
     }
 
     protected beforeShow(next: (error?: string) => void, data?: any) {
@@ -131,8 +127,6 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
    */
     private onFreeBonusSpinStateChange(freeBonusSpinState: boolean) {
       if (freeBonusSpinState) {
-        // 展示免费轮中奖动画
-        this.showFreeBonusSpineAnimation();
         GlobalActivity.dispatchEvent(GameDataMgrEventsType.updateBuyFreeCount, 1);
       } else {
         GlobalActivity.dispatchEvent(GameDataMgrEventsType.updateBuyFreeCount, 0);
@@ -151,7 +145,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
     /**
      * 展示免费轮中奖动画
      */
-    private showFreeBonusSpineAnimation() {
+    private showFreeBonusSpineAnimation(callback: () => void) {
       // sm节点隐藏
       GlobalActivity.setEntryDialogActive(false);
       this.BousSpineView.active = true;
@@ -167,6 +161,16 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         }
       });
 
+      // 设置一个超时定时器，4秒后执行callback
+      const timeoutId = setTimeout(() => {
+        console.log('动画播放超时');
+        this.BousSpineView.active = false;
+        this.NumberLable.active = false;
+        GlobalActivity.setEntryDialogActive(true);
+        Skeleton.clearAnimations();
+        callback();
+      }, 4000);
+
       Skeleton.setCompleteListener((track: sp.spine.TrackEntry) => {
         console.log('动画播放完成');
         Skeleton.setCompleteListener(null);
@@ -176,10 +180,12 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         Skeleton.setCompleteListener((showFreeGameTrack: sp.spine.TrackEntry) => {
           console.log('show_free_game 动效播放完成');
           // 移除动效
+          clearTimeout(timeoutId); 
           this.BousSpineView.active = false;
           this.NumberLable.active = false;
           GlobalActivity.setEntryDialogActive(true);
           Skeleton.clearAnimations();
+          callback();
         });
       });
     }

@@ -59,6 +59,7 @@ export class SlotsController extends BaseController<
    */
   freeBonusSpinChange(isFreeBonusSpin: boolean) {
     this.isFreeBonusSpin = isFreeBonusSpin;
+    app.manager.global.setBuyFreeBonusMode(isFreeBonusSpin);
     this.emit(SlotsController.Event.FreeBonusSpinChange, isFreeBonusSpin);
 
     if(!isFreeBonusSpin){

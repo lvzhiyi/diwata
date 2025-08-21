@@ -61,6 +61,10 @@ export  enum SymbolType {
  
   /** 棒子符号 */
   BOW = '4011',
+
+  /** 主棒子符号 */
+  MAIN_BOW = '4014',
+  
   /** 重叠符号棒子和剑 */
   OVERLAP = '4001',
 

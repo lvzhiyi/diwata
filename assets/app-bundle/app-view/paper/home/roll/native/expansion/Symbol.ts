@@ -4,6 +4,7 @@ import { loadResource } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
+import { HomeRollTool } from './HomeRollTool';
 
 const SYMBOL_NORMAL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010'];
 export const SYMBOL_WILD_IDS = ['4001', '4010', '4011'];
@@ -87,7 +88,7 @@ export class Symbol extends Component {
       }
     }
 
-    initBlurSymbol(symbolId: string, symbolType: SymbolTypeEnum = 'NORMAL') {
+    initBlurSymbol(symbolId: string) {
       if (this.mapBlurSymbols.size === 0) {
         this.initSprites();
       }
@@ -152,43 +153,10 @@ export class Symbol extends Component {
         this.wildAnimationNode.setWorldPosition(originalPos);
 
         // 播放wild动画，动画完成后删除动画，
-        await this.playBowExplodeAnimation(this.wildAnimationNode, 'bz');
+        console.log('播放gun动画');
+        await this.playBowExplodeAnimation(this.wildAnimationNode, 'gun_atk');
         resolve(true);
       });
-    }
-
-    /**
-     * 在滚动开始时为所有符号添加模糊效果
-     */
-    private addBlurToAllSymbols(node: Node): void {
-      const sprite = node.getComponent(Sprite);
-
-      if (sprite) {
-        // 创建模糊材质
-        const blurMaterial = new Material();
-        blurMaterial.initialize({
-          // 使用内置模糊效果
-          effectName: 'builtin-blur', 
-          // 模糊半径
-          defines: { BLUR_RADIUS: 5.0, }
-        });
-        // 设置模糊材质
-        sprite.customMaterial =  blurMaterial;
-      }
-    }
-
-    /**
-     * 停止滚动时移除所有符号的模糊效果
-     */
-    private removeBlurFromAllSymbols(node: Node): void {
-      const sprite = node.getComponent(Sprite);
-
-      if (sprite.customMaterial) {
-        // 恢复原有状态和材质
-        // 移除材质
-        sprite.customMaterial.destroy();
-        sprite.customMaterial = null;
-      }
     }
 
     /**
@@ -305,13 +273,15 @@ export class Symbol extends Component {
           // 添加动画
           const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
-          skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.BOW_EXPLODE);
-          skeleton.setAnimation(0, animationName, false);
-          console.log('播放棒子动画-数据', animationName);
-          skeleton.setCompleteListener(() => {
-            this.destoryWildAnimationNode();
-            resolve();
-          });
+          const  skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.BOW_EXPLODE);
+
+          if (skeletonData) {
+            skeleton.skeletonData = skeletonData;
+            HomeRollTool.playAnimationSequence(skeleton, ['gun_atk', 'gun_in'], () => {
+              this.destoryWildAnimationNode();
+              resolve();
+            });
+          }
         } catch (error) {
           console.error('加载spine/LamAng_wild动画失败', error);
           this.destoryWildAnimationNode();

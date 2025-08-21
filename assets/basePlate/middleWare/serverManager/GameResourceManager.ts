@@ -19,9 +19,10 @@ export const ROLL_RESOURCE_NAMES: { [key: string]: string } = {
   // scatter动画
   LAMANG_ICON_SCATTER: 'LamAng_icon_scatter',
   // 剑被劈中的动画
-  SWORD_HIT: 'wheelhalo',
+  SWORD_HIT: 'dao',
+  
   // 棒子爆炸的动画
-  BOW_EXPLODE: 'bz',
+  BOW_EXPLODE: 'gun',
 
   MFL: 'mfl',
 
