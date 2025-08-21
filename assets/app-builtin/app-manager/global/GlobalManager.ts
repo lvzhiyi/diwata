@@ -147,6 +147,12 @@ export class GlobalManager extends BaseManager {
    /** 星卡模式投注金额 */
    private _startCardBetAmount: number = 0;
 
+   /** 开场动画是否点击Skip */
+   private _isSkipStartAnimation: boolean = false;
+
+   /** 盘面提示弹框是否点击过 */
+   private _isClickRollTips: boolean = false;
+
    /** 资源质量, 暂时不用high，只用low和medium，默认是medium */
    public get assetQuality(): 'low' | 'medium' {
      return this._networkQuality === 'slow' ? 'low' : 'medium';
@@ -408,6 +414,30 @@ export class GlobalManager extends BaseManager {
 
   public setAutoSetting(setting: any) {
     this._autoSetting = setting;
+  }
+
+  public get isSkipStartAnimation() {
+    return this._isSkipStartAnimation;
+  }
+
+  public setIsSkipStartAnimation(bool: boolean) {
+    sys.localStorage.setItem('isSkipStartAnimation', bool.toString());
+    this._isSkipStartAnimation = bool;
+  }
+
+  public get isClickRollTips() {
+    const isClickRollTips = sys.localStorage.getItem('isClickRollTips');
+
+    if (isClickRollTips) {
+      this._isClickRollTips = isClickRollTips === 'true';
+    }
+
+    return this._isClickRollTips;
+  }
+
+  public setIsClickRollTips(bool: boolean) {
+    sys.localStorage.setItem('isClickRollTips', bool.toString());
+    this._isClickRollTips = bool;
   }
 
   private static instance: GlobalManager;

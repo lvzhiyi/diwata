@@ -17,6 +17,7 @@ import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/Ev
 import { CurrentRoundAmount } from './expansion/CurrentRoundAmount';
 import { GlobalActivity } from 'db://assets/common/script/extra/GlobalMgr';
 import { BousView } from './expansion/BousView';
+import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
 
 const { ccclass, property } = _decorator;
 
@@ -174,8 +175,32 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const isIn = HomeRollTool.isCheckAreaSuccess(this.rollBgViewNode, e);
 
     if (isIn) {
-      app.controller.home.gameStartClick();
+      if (!app.manager.global.isClickRollTips) {
+        // 展示提示弹框
+        this.showFirstClickRollTipsDialog();
+      } else {
+        app.controller.home.gameStartClick();
+      }
     }
+  }
+
+  /** 显示首次点击的踢死弹窗 */
+  private showFirstClickRollTipsDialog() {
+    app.manager.ui.show({
+      name: 'PopErrorPop',
+      data: {
+        msg: 'Click the board for\n SPIN/STOP.\nPress "Confirm" to spin.',
+        type: ErrorType.NormalTips,
+        showCancel: false,
+        confirmCallback: () => {
+          console.log('点击确认');
+          app.manager.ui.hide({ name: 'PopErrorPop', onHide: () => { } });
+          app.controller.home.gameStartClick();
+          app.manager.global.setIsClickRollTips(true);
+        },
+      },
+      onShow: () => { },
+    });
   }
 
   // 防止快速点击
