@@ -514,8 +514,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 开始执行闪烁动画
      */
     const hasStartLightAnimations = await Promise.all(rollsScript.map(roll => roll.startLightAnimation()));
-
-    if (hasStartLightAnimations.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 1000);
+    console.log('开始执行闪烁动画-数据');
+    // if (hasStartLightAnimations.some(item => item)) await delay(app.manager.global.quikeMode ? 800 : 3000);
 
     /**
      * 如果当前回合达到最大倍率，则结束本回合消除
@@ -530,13 +530,13 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 结束闪烁动画
      */
     await Promise.all(rollsScript.map(roll => roll.endLightAnimation()));
-    
+    if (hasStartLightAnimations.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 1000);
+    console.log('结束闪烁动画-数据');
     /**
      * 移除Symbol
      */
     console.log('开始移除Symbol-数据');
     await Promise.all(rollsScript.map(roll => roll.removeSymbol()));
-
     /**
      * 更新tips中奖金额
      */
@@ -562,7 +562,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     symbolAnimationData = rollsScript.map(roll => roll.symbolAnimationData);
     console.log('下落后数据', symbolAnimationData);
-    console.table(symbolAnimationData[2].map((_, index) => symbolAnimationData.map((item: any) => item[index]?.symbolId || '')));
+    console.table(symbolAnimationData[1].map((_, index) => symbolAnimationData.map((item: any) => item[index]?.symbolId || '')));
 
     if (this.needPlayRollsFrameSpine.some(item => item)) {  
       await delay(1000 / app.manager.global.gameSpeed);

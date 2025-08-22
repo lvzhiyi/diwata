@@ -81,7 +81,11 @@ export class Roll extends Component {
     }[]) {
       this.rollList = rollList.filter((item: any) => item !== null);
       this.rollRemoveData = rollRemoveData;
-      app.manager.event.emit('roll:reward', 'start');
+
+      if(rollRemoveData.length > 0) {
+        app.manager.event.emit('roll:reward', 'start');
+        console.log('需要消除的节点-数据', rollRemoveData);
+      }
     }
 
     getCurrentIndex() {

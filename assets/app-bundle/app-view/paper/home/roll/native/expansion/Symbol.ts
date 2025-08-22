@@ -14,7 +14,15 @@ const { ccclass, property } = _decorator;
 export class Symbol extends Component {
     @property(Node)
     private iconNode: Node = null;
-    
+
+    // 中奖动画和消除动画
+    @property(Node)
+    private LightSpine: Node = null;
+
+    // 消除节点
+    @property(Node)
+    private removeSpineNode: Node = null;
+
     @property({ type: [SpriteFrame], tooltip: 'symbol icon' })
     private symbolIcons: SpriteFrame[] = [];
 
@@ -29,9 +37,6 @@ export class Symbol extends Component {
 
     // wild Node
     private wildNode: Node = null;
-
-    // 闪烁
-    private lightNode: Node = null;
 
     // 动画
     private wildAnimationNode: Node = null;
@@ -107,7 +112,7 @@ export class Symbol extends Component {
         return sprite.spriteFrame.name;
       }
 
-      return '';
+      return this.currentSymbolItem.symbolId;
     }
 
     /**
@@ -160,23 +165,6 @@ export class Symbol extends Component {
     }
 
     /**
-     * 播放scatter action动画
-     */
-    async startScatterActionAnimation(spineResourceName: string) {
-      if (!this.scatterAnimationNode) {
-        this.scatterAnimationNode = new Node('ScatterAnimationNode');
-        this.scatterAnimationNode.layer = this.node.layer;
-        this.scatterAnimationNode.setParent(this.node);
-      }
-
-      return null;
-      const skeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(spineResourceName);
-      const skeleton = await this.playAnimationSequence(this.scatterAnimationNode, skeletonData, [{ name: 'action', loop: false }]);
-
-      return skeleton;
-    }
-
-    /**
      * 获取wild节点，如果存在则返回，否则返回null
      */
     getWildNode() {
@@ -184,22 +172,50 @@ export class Symbol extends Component {
     }
 
     /**
-     * 开始闪烁动画
+     * 开始闪烁中奖动画
      */
-    async startLightAnimation() {
-      if (this.lightNode) {
-        return;
-      }
+    async startLightAnimation(): Promise<void> {
+      return new Promise<void>(async (resolve) => {
+        /// 根据当前图片的尺寸，设置LightSpine的尺寸
+        const iconSize = this.iconNode.getComponent(UITransform).contentSize;
+        this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
+        this.LightSpine.active = true;
+        // this.removeSpineNode.active = true;
+        const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+        const removeSkeleton = this.removeSpineNode.getComponent(sp.Skeleton) || this.removeSpineNode.addComponent(sp.Skeleton);
+        const animationName = 'symbol_' + this.getSymbolId();
+        skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
+        // skeleton.setStartListener(() => {
+        //   // this.iconNode.getComponent(Sprite).spriteFrame = null;
+        // });
+        const animationPlayName = animationName + '_1';
+        const animationPlayName2 = animationName + '_2';
+        // 播放多个动画序列
+        HomeRollTool.playAnimationSequence(skeleton, [animationPlayName, animationPlayName2], () => {
+          console.log('播放中奖动画完成');
+          this.LightSpine.active = false;
+          resolve();
+        });
+        // 同时播放两个动画
+        // HomeRollTool.playAnimationSequence(removeSkeleton, ['xiaochu_down', 'xiaochu_up'], () => {
+        //   console.log('播放消除动画完成');
+        //   this.removeSpineNode.active = false;
+        //   // 恢复skeleton静态帧，data设置为null
+        //   removeSkeleton.setToSetupPose();
+          
+        //   resolve();
+        // });
+      });
+    }
 
-      this.lightNode = new Node('Light');
-      this.lightNode.layer = this.node.layer;
-      this.lightNode.setParent(this.parentNode.parent);
-      this.lightNode.setScale(0.15, 0.15, 0.15);
-      this.lightNode.setWorldPosition(this.node.getWorldPosition());
-
-      const skeleton = this.lightNode.getComponent(sp.Skeleton) || this.lightNode.addComponent(sp.Skeleton);
-      skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.MFL);
-      skeleton.setAnimation(0, 'mfl', true);
+    startScatterActionAnimation(animationName: string): Promise<void> {
+      return new Promise<void>(async (resolve) => {
+        const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+        skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
+        HomeRollTool.playAnimationSequence(skeleton, ['symbol_3001_1', 'symbol_3001_2'], () => {
+          resolve();
+        });
+      });
     }
 
     /**
@@ -216,9 +232,16 @@ export class Symbol extends Component {
      * 销毁闪烁Node
      */
     destoryLightNode() {
-      this.lightNode?.getComponent(sp.Skeleton)?.destroy();
-      this.lightNode?.destroy();
-      this.lightNode = null;
+      const skeleton = this.LightSpine.getComponent(sp.Skeleton);
+
+      if (skeleton) {
+        // 恢复skeleton静态帧，data设置为null
+        this.LightSpine.getComponent(sp.Skeleton).setToSetupPose();
+        this.LightSpine.getComponent(sp.Skeleton).skeletonData = null;
+      }
+
+      this.LightSpine.active = false; 
+      this.removeSpineNode.active = false;
     }
 
     /**
@@ -228,15 +251,6 @@ export class Symbol extends Component {
       this.wildAnimationNode?.getComponent(sp.Skeleton)?.destroy();
       this.wildAnimationNode?.destroy();
       this.wildAnimationNode = null;
-    }
-
-    /**
-     * 销毁scatter增加次数动画Node
-     */
-    destoryScatterAddTimeAnimationNode() {
-      this.scatterAddTimeAnimationNode?.getComponent(sp.Skeleton)?.destroy();
-      this.scatterAddTimeAnimationNode?.destroy();
-      this.scatterAddTimeAnimationNode = null;
     }
 
     /**
@@ -348,8 +362,7 @@ export class Symbol extends Component {
      */
     protected onDisable(): void {
       this.destoryWildNode();
-      this.destoryLightNode();
+      // this.destoryLightNode();
       this.destoryWildAnimationNode();
-      this.destoryScatterAddTimeAnimationNode();
     }
 }

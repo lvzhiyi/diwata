@@ -17,7 +17,7 @@ export const ROLL_RESOURCE_NAMES: { [key: string]: string } = {
   // wild动画
   LAMANG_WILD: 'bianhuan',
   // scatter动画
-  LAMANG_ICON_SCATTER: 'LamAng_icon_scatter',
+  LAMANG_ICON_SCATTER: 'symbol_3001',
   // 剑被劈中的动画
   SWORD_HIT: 'dao',
   
@@ -26,8 +26,26 @@ export const ROLL_RESOURCE_NAMES: { [key: string]: string } = {
 
   MFL: 'mfl',
 
+  // 元素消除
+  XIAO_CHU: 'xiaochu',
+
   // 滚轴动画
   LAMANG_RUN: 'LamAng_run',
+  /// 1001-1014 图标动画
+  '1001':'symbol_1001',
+  '1002':'symbol_1002',
+  '1003':'symbol_1003',
+  '1004':'symbol_1004',
+  '1005':'symbol_1005',
+  '1006':'symbol_1006',
+  '1007':'symbol_1007',
+  '1008':'symbol_1008',
+  '1009':'symbol_1009',
+  '1010':'symbol_1010',
+  '3001':'symbol_3001',
+  '4010':'symbol_4010',
+  '4011':'symbol_4011',
+  '5001':'symbol_5001',
 
 };
 

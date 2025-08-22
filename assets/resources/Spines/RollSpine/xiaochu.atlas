@@ -1,0 +1,160 @@
+
+xiaochu.png
+size: 376,1811
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+sword_00
+  rotate: false
+  xy: 247, 1688
+  size: 129, 123
+  orig: 240, 240
+  offset: 56, 58
+  index: -1
+sword_02
+  rotate: false
+  xy: 247, 1565
+  size: 129, 123
+  orig: 240, 240
+  offset: 56, 58
+  index: -1
+sword_04
+  rotate: false
+  xy: 243, 1442
+  size: 129, 123
+  orig: 240, 240
+  offset: 56, 58
+  index: -1
+sword_06
+  rotate: false
+  xy: 243, 1319
+  size: 129, 123
+  orig: 240, 240
+  offset: 56, 58
+  index: -1
+sword_08
+  rotate: false
+  xy: 235, 1051
+  size: 129, 123
+  orig: 240, 240
+  offset: 56, 58
+  index: -1
+sword_10
+  rotate: false
+  xy: 226, 928
+  size: 129, 123
+  orig: 240, 240
+  offset: 56, 58
+  index: -1
+sword_12
+  rotate: false
+  xy: 226, 805
+  size: 129, 123
+  orig: 240, 240
+  offset: 56, 58
+  index: -1
+sword_14
+  rotate: false
+  xy: 220, 682
+  size: 129, 123
+  orig: 240, 240
+  offset: 56, 58
+  index: -1
+sword_16
+  rotate: false
+  xy: 198, 385
+  size: 129, 123
+  orig: 240, 240
+  offset: 56, 58
+  index: -1
+sword_18
+  rotate: false
+  xy: 198, 262
+  size: 129, 123
+  orig: 240, 240
+  offset: 56, 58
+  index: -1
+sword_20
+  rotate: false
+  xy: 0, 0
+  size: 129, 123
+  orig: 240, 240
+  offset: 56, 58
+  index: -1
+sword_22
+  rotate: true
+  xy: 235, 1174
+  size: 145, 134
+  orig: 240, 240
+  offset: 48, 53
+  index: -1
+sword_24
+  rotate: true
+  xy: 214, 508
+  size: 174, 160
+  orig: 240, 240
+  offset: 34, 40
+  index: -1
+xiaochu_01
+  rotate: false
+  xy: 190, 80
+  size: 182, 182
+  orig: 300, 300
+  offset: 59, 59
+  index: -1
+xiaochu_02
+  rotate: false
+  xy: 0, 123
+  size: 190, 190
+  orig: 300, 300
+  offset: 55, 55
+  index: -1
+xiaochu_03
+  rotate: false
+  xy: 0, 313
+  size: 198, 198
+  orig: 300, 300
+  offset: 51, 51
+  index: -1
+xiaochu_05
+  rotate: true
+  xy: 0, 912
+  size: 220, 226
+  orig: 300, 300
+  offset: 43, 34
+  index: -1
+xiaochu_07
+  rotate: true
+  xy: 0, 1337
+  size: 234, 243
+  orig: 300, 300
+  offset: 36, 28
+  index: -1
+xiaochu_09
+  rotate: true
+  xy: 0, 1571
+  size: 240, 247
+  orig: 300, 300
+  offset: 34, 25
+  index: -1
+xiaochu_11
+  rotate: false
+  xy: 0, 1132
+  size: 235, 205
+  orig: 300, 300
+  offset: 40, 53
+  index: -1
+xiaochu_13
+  rotate: false
+  xy: 0, 709
+  size: 220, 203
+  orig: 300, 300
+  offset: 40, 54
+  index: -1
+xiaochu_15
+  rotate: false
+  xy: 0, 511
+  size: 214, 198
+  orig: 300, 300
+  offset: 40, 59
+  index: -1
