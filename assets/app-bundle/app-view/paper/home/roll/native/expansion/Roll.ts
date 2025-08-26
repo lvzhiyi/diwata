@@ -4,6 +4,7 @@ import { delay } from 'db://assets/common/script/extra/Utils/common';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { app } from 'db://assets/app/app';
+import { HomeRollTool } from './HomeRollTool';
 
 const { ccclass, property } = _decorator;
 
@@ -60,7 +61,7 @@ export class Roll extends Component {
       this.initNodePool();
       this.initSymbols();
       this.originalWorldPosition = this.node.getWorldPosition().clone();
-      this.originalWorldPosition.y = this.originalWorldPosition.y - 10;
+      this.originalWorldPosition.x = this.originalWorldPosition.x + 15;
     }
 
     /**
@@ -92,6 +93,14 @@ export class Roll extends Component {
       return this.rollIndex;
     }
 
+    getItemCount() {
+      return this.itemCount;
+    }
+
+    getItemHeight() {
+      return this.itemHeight;
+    }
+
     /**
      * 初始化节点池
      */
@@ -109,9 +118,15 @@ export class Roll extends Component {
       const itemCount = this.itemCount ?? 5;
       const rollHeight = (this.itemCount - 1) * this.itemHeight;
       const firstSymbolY = rollHeight / 2 + this.itemHeight / 2;
-  
+      
       for (let i = 0; i < itemCount; i++) {
-        let symbolId = this.randomSymbolId();
+        let symbolId;
+
+        if(this.rollIndex < 3) {
+          symbolId = this.randomSymbolId(HomeRollTool.getRandomIndex(this.rollIndex));
+        } else {
+          symbolId = this.randomSymbolId();
+        }
 
         // 初始化面板不随机出symbolId为3001
         if (symbolId === '3001') {
@@ -235,19 +250,23 @@ export class Roll extends Component {
      * 随机SymbolId
      * @returns 随机符号ID
      */
-    randomSymbolId() {
+    randomSymbolId(Index?: number) {
       const random = Math.random();
-      let randomIndex: number;
+      let randomIndex: number ;
 
-      if (random < 0.85) {
-        // 75%的概率选择0-10，// 0-4
-        randomIndex = Math.floor(Math.random() * 9); 
+      if(Index){
+        randomIndex = Index;
       } else {
-        // 25%的概率选择1-10，// 5-10
-        randomIndex = Math.floor(Math.random() * 5) + 4; 
-      }
-      if (randomIndex >= SYMBOL_IDS.length - 1) {
-        randomIndex = 5;
+        if (random < 0.85) {
+          // 75%的概率选择0-10，// 0-4
+          randomIndex = Math.floor(Math.random() * 9); 
+        } else {
+          // 25%的概率选择1-10，// 5-10
+          randomIndex = Math.floor(Math.random() * 5) + 4; 
+        }
+        if (randomIndex >= SYMBOL_IDS.length - 1) {
+          randomIndex = 5;
+        }
       }
 
       return SYMBOL_IDS[randomIndex];
@@ -276,9 +295,10 @@ export class Roll extends Component {
         };
       }
 
-      const needBlur = resultSymbols?.length > 0;
+      const needBlur = resultSymbols?.length > 0 ? false : true;
+      const fromServer = resultSymbols?.length > 0 ? true : false;
       // 如果resultSymbols不为空，则创建symbolId，否则随机一个symbolId
-      let SymbolNode = this.createSymbol(symbol, needBlur, needBlur);
+      let SymbolNode = this.createSymbol(symbol, fromServer, needBlur);
      
       if (children.length > 0) { 
         const firstChildPos = children[0].position.clone();
@@ -390,9 +410,13 @@ export class Roll extends Component {
       const reversedChildren = Array.from(children).reverse();
 
       for (const [index, symbolNode] of reversedChildren.entries()) {
-        const currentSymbolObj:any = symbolNode.getComponent(Symbol)?.currentSymbolItem || null;
+        const originalIndex = children.length - 1 - index;
+        const currentSymbolObj = this.rollList[originalIndex] || null;
+        // const currentSymbolObj:any = symbolNode.getComponent(Symbol)?.currentSymbolItem || null;
         // 当需要消除时，如果当前symbol
-        const isNeedRemove = this.rollRemoveData.some(remove => remove.rowIndex === index);
+        const isNeedRemove = this.rollRemoveData.some(
+          remove => remove.rowIndex === originalIndex
+        );
         this.symbolAnimationData.unshift({ 
           symbolNode,
           isNeedRemove,
@@ -416,7 +440,8 @@ export class Roll extends Component {
       rollFrameSkeleton.node.active = true;
       rollFrameSkeleton.node.setWorldPosition(this.originalWorldPosition);
       rollFrameSkeleton.timeScale = app.manager.global.gameSpeed;
-      rollFrameSkeleton.setAnimation(0, 'run', true);
+      const scatterAnimationName = HomeRollTool.getScatterRunAnimationName(this.rollIndex);
+      rollFrameSkeleton.setAnimation(0, scatterAnimationName, true);
 
       return new Promise(async resolve => {
         rollFrameSkeleton.setCompleteListener(() => {
@@ -436,7 +461,7 @@ export class Roll extends Component {
     }
 
     /**
-     * 开始闪烁动画
+     * 开始中奖闪烁
      */
     async startLightAnimation() {
       return await Promise.all(this.rollRemoveData.map(async item => {
@@ -451,20 +476,44 @@ export class Roll extends Component {
       }));
     }
 
+    // /**
+    //  * 开始播放落地回弹动画
+    //  */
+    // async startElementFallBackAnimation() {
+    //   return await Promise.all(this.node.children.map(async item => {
+    //     const symbol = item.getComponent(Symbol);
+
+    //     if (symbol) {
+    //       return symbol.startElementFallBackAnimation();
+    //     }
+
+    //     return Promise.resolve();
+    //   }));
+    // }
+
     /**
-     * 结束闪烁动画
+     * 播放消除闪烁动画
      */
     async endLightAnimation() {
-      return await Promise.all(this.rollRemoveData.map(async item => {
-        const { rowIndex } = item;
-        const symbol = this.node.children[rowIndex]?.getComponent(Symbol);
+      // 获取需要消除的数组
+      const needRemoveSymbolData = this.symbolAnimationData.filter(item => item.isNeedRemove);
 
+      if (needRemoveSymbolData.length === 0) {
+        return Promise.resolve();
+      }
+
+      const endLightAnimationPromises = needRemoveSymbolData.map(item => {
+        const { symbolNode } = item;
+        const symbol = symbolNode?.getComponent(Symbol);
+        
         if (symbol) {
-          return symbol.destoryLightNode();
+          return symbol.beginDestoryLightNode();
         }
 
         return Promise.resolve();
-      }));
+      });
+
+      await Promise.all(endLightAnimationPromises);
     }
 
     /**

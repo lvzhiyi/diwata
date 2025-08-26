@@ -431,14 +431,12 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         await this.homeRollTool.showSwordHaloAnimation(
           itemMap.rollNode, 
           this.overLayNode,
-          this.goddessNode
         );
         itemMap.hasShow = true;
       } else if (itemMap.type === SymbolType.BOW) {
         await this.homeRollTool.showBowHitAnimation(
           itemMap.node,
           this.overLayNode,
-          this.goddessNode
         );
         itemMap.hasShow = true;
       }
@@ -503,20 +501,14 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     console.table(symbolAnimationData[2].map((_, index) => symbolAnimationData.map((item: any) => item[index]?.symbolId || '')));
     
     /**
-     * symbol变为wild
+     * symbol变为wild,先清空overlayNode上面的发光节点
      */
+    this.homeRollTool.destoryOverlayNodeLight(this.overLayNode);
     const hasSymbolChangeToWilds = await Promise.all(rollsScript.map(roll => roll.symbolChangeToWild()));
    
     console.log('symbol变为wild-数据', hasSymbolChangeToWilds);
     if (hasSymbolChangeToWilds.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 1500);
-
-    /**
-     * 开始执行闪烁动画
-     */
-    const hasStartLightAnimations = await Promise.all(rollsScript.map(roll => roll.startLightAnimation()));
-    console.log('开始执行闪烁动画-数据');
-    // if (hasStartLightAnimations.some(item => item)) await delay(app.manager.global.quikeMode ? 800 : 3000);
-
+   
     /**
      * 如果当前回合达到最大倍率，则结束本回合消除
      */
@@ -527,34 +519,39 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     }
 
     /**
-     * 结束闪烁动画
+     * 开始执行闪烁和消除动画
      */
-    await Promise.all(rollsScript.map(roll => roll.endLightAnimation()));
-    if (hasStartLightAnimations.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 1000);
-    console.log('结束闪烁动画-数据');
+    console.log('开始执行闪烁-数据');
+    await Promise.all(rollsScript.map(roll => roll.startLightAnimation())); 
+    console.log('结束闪烁和消除动画-数据');
+    const endLightAnimationData = await Promise.all(rollsScript.map(roll => roll.endLightAnimation())); 
+    if (endLightAnimationData.some(item => item)) await delay(500);
+    console.log('endLightAnimationData-数据', endLightAnimationData);
+   
     /**
      * 移除Symbol
      */
     console.log('开始移除Symbol-数据');
     await Promise.all(rollsScript.map(roll => roll.removeSymbol()));
+
     /**
      * 更新tips中奖金额
      */
     const currentRoundTotalRewardAmount = this.resultList[this.roundIndex].totalRewardAmount;
 
     if (currentRoundTotalRewardAmount > 0) {
-      this.totalRewardAmount += currentRoundTotalRewardAmount;
       this.changeTipsContent(this.totalRewardAmount, this.totalRewardAmount + currentRoundTotalRewardAmount);
+      this.totalRewardAmount += currentRoundTotalRewardAmount;
       // this.changeTipsContent(`<color=#FF50E4><b>WIN</b></color> <color=#FFFFFF>₱ ${calculateWithBase(this.totalRewardAmount)}</color>`, true);
     }
-
+  
     /**
      * 更新到下一个轮的倍率
      */
     if (this.hasNextRound()) {
       this.updateNextMultiple();
     }
-
+    
     /**
      * 添加到顶部然后下落 或者 播放Roll边框动画然后落下然后添加到顶部最后下落
      */
@@ -562,7 +559,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     symbolAnimationData = rollsScript.map(roll => roll.symbolAnimationData);
     console.log('下落后数据', symbolAnimationData);
-    console.table(symbolAnimationData[1].map((_, index) => symbolAnimationData.map((item: any) => item[index]?.symbolId || '')));
+    console.table(symbolAnimationData[2].map((_, index) => symbolAnimationData.map((item: any) => item[index]?.symbolId || '')));
 
     if (this.needPlayRollsFrameSpine.some(item => item)) {  
       await delay(1000 / app.manager.global.gameSpeed);

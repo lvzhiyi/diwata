@@ -3,6 +3,7 @@ import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from '
 import { Symbol } from './Symbol';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
+import { Roll } from './Roll';
 
 const { ccclass,  } = _decorator;
 
@@ -25,7 +26,6 @@ export class HomeRollTool  {
   async showSwordHaloAnimation(
     targetNode: Node,
     overlayNode: Node,
-    goddessNode: Node
   ): Promise<void> {
     const spineManager = GameResourceManager.instance;
     const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SWORD_HIT);
@@ -33,7 +33,9 @@ export class HomeRollTool  {
     if (skeleonData != null) {
       // 创建spine节点并设置大小
       const spineNode = this.createSpineNode(targetNode, overlayNode, true);
-
+      
+      const lightSpineNodes = this.creatSwordLightSpineNode(spineNode, targetNode);
+      
       return new Promise<void>(async (resolve) => {
         try {
           // 添加动画
@@ -42,9 +44,28 @@ export class HomeRollTool  {
           skeleton.skeletonData = skeleonData;
        
           // 播放多个动画序列
-          HomeRollTool.playAnimationSequence(skeleton, ['dao_atk', 'dao_hit', 'dao_in'], () => {
-            // this.destoryAnimationNode(spineNode);
+          HomeRollTool.playAnimationSequence(skeleton, ['dao_atk', 'dao_hit'], async () => {
             console.log('播放剑动画序列完成');
+
+            if(lightSpineNodes.length > 0) {
+              const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SWORD_HIT_LIGHT);
+              // 播放发光动画
+              lightSpineNodes.map(item => {
+                console.log('发光节点 :', {
+                  name: item.name,
+                  uuid: item.uuid,
+                  parent: item.parent?.name || 'null',
+                  parentRef: item.parent,
+                  active: item.active,
+                  component: item.getComponent(sp.Skeleton),
+                  isValid: item.isValid
+                }, skeleonData);
+                const skeleton = item.getComponent(sp.Skeleton) || item.addComponent(sp.Skeleton);
+                skeleton.skeletonData = skeleonData;
+                skeleton.setAnimation(0, 'dao_in', true);
+              });
+            }
+
             resolve();
           });
         } catch (error) {
@@ -56,6 +77,44 @@ export class HomeRollTool  {
     } else {
       return Promise.resolve();
     }
+  }
+
+  creatSwordLightSpineNode(targetNode: Node, rollNode: Node): Node[] {
+    let lightSpineNodes: Node[] = [];
+    const itemCount = rollNode.getComponent(Roll).getItemCount();
+    const itemHeight = rollNode.getComponent(Roll).getItemHeight();
+
+    if(itemCount > 0) {
+      const rollHeight = (itemCount - 1) * itemHeight;
+      const firstSymbolY = rollHeight / 2 - itemHeight / 2;
+      
+      for (let i = 0; i < itemCount - 1; i++) {
+        const lightSpineNode = new Node('DaoSpineNode');
+        const spineTransform = lightSpineNode.addComponent(UITransform);
+        spineTransform.setContentSize(116, itemHeight);
+        
+        lightSpineNode.layer = targetNode.layer;
+
+        const skeleton = lightSpineNode.getComponent(sp.Skeleton) || lightSpineNode.addComponent(sp.Skeleton);
+        skeleton.premultipliedAlpha = false;
+        const symbolY = firstSymbolY - itemHeight * i;
+        lightSpineNode.setPosition(0, symbolY, 0);
+        
+        // 确保父节点存在且有效
+        if (targetNode && targetNode.isValid) {
+          // 使用 addChild 方法替代 setParent，这样更可靠
+          targetNode.addChild(lightSpineNode);
+          // 确保节点被激活
+          lightSpineNode.active = true;
+        } else {
+          console.error('目标节点无效，无法添加发光节点:', targetNode);
+        }
+        
+        lightSpineNodes.push(lightSpineNode);
+      }
+    }
+
+    return lightSpineNodes;
   }
 
   /**
@@ -106,7 +165,6 @@ export class HomeRollTool  {
   async showBowHitAnimation(
     targetNode: Node,
     overlayNode: Node,
-    goddessNode: Node
   ): Promise<void> {
     const spineManager = GameResourceManager.instance;
     const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.BOW_EXPLODE);
@@ -121,12 +179,19 @@ export class HomeRollTool  {
           const skeleton = spineNode.getComponent(sp.Skeleton) || spineNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
           skeleton.skeletonData = skeleonData;
-          // 播放多个动画序列
-          HomeRollTool.playAnimationSequence(skeleton, ['gun_atk', 'gun_in'], () => {
-            // this.destoryAnimationNode(spineNode);
-            console.log('播放棒子动画序列完成');
-            resolve();
+          skeleton.setAnimation(0, 'gun_atk', false);
+          skeleton.setCompleteListener((track) => {
+            if (track.animation.name === 'gun_atk') {
+              console.log('播放棒子动画序列完成');
+              resolve();
+              skeleton.setAnimation(0, 'gun_in', true);
+            }
           });
+          // // 播放多个动画序列
+          // HomeRollTool.playAnimationSequence(skeleton, ['gun_atk', 'gun_in'], () => {
+          //   // this.destoryAnimationNode(spineNode);
+           
+          // });
         } catch (error) {
           console.error('加载spine/gun动画失败', error);
           this.destoryAnimationNode(spineNode);
@@ -202,54 +267,6 @@ export class HomeRollTool  {
   }
 
   /**
-   * 播放多个动画序列（带循环选项）
-   * @param {sp.Skeleton} skeleton - Spine骨架组件
-   * @param {Array<{name: string, loop: boolean}>} animations - 动画配置数组，包含名称和是否循环
-   * @param {Function} onComplete - 所有动画播放完成后的回调
-   */
-  private playAnimationSequenceWithLoop(
-    skeleton: sp.Skeleton, 
-    animations: Array<{name: string, loop: boolean}>, 
-    onComplete: () => void
-  ): void {
-    if (!animations || animations.length === 0) {
-      onComplete();
-
-      return;
-    }
-
-    let currentIndex = 0;
-    
-    const playNextAnimation = () => {
-      if (currentIndex >= animations.length) {
-        // 所有动画播放完成
-        onComplete();
-
-        return;
-      }
-
-      const animation = animations[currentIndex];
-      console.log(`播放动画: ${animation.name}, 循环: ${animation.loop}, 索引: ${currentIndex}`);
-      
-      // 设置动画完成监听器
-      skeleton.setCompleteListener(() => {
-        currentIndex++;
-        
-        // 延迟一帧播放下一个动画
-        setTimeout(() => {
-          playNextAnimation();
-        }, 0);
-      });
-
-      // 播放当前动画
-      skeleton.setAnimation(0, animation.name, animation.loop);
-    };
-
-    // 开始播放第一个动画
-    playNextAnimation();
-  }
-
-  /**
    * 创建并配置spine节点
    * @param {Node} targetNode - 目标节点
    * @param {Node} overlayNode - 覆盖节点
@@ -258,14 +275,13 @@ export class HomeRollTool  {
    */
   private createSpineNode(targetNode: Node, overlayNode: Node, isRoll: boolean = false): Node {
     const targetTransform = targetNode.getComponent(UITransform);
-    const spineNode = new Node('spineNode');
+    const spineNodeName = isRoll ? 'spineNoderoll' : 'spineNodeitem';
+    const spineNode = new Node(spineNodeName);
     
     // 设置UITransform组件
     const spineTransform = spineNode.addComponent(UITransform);
     spineTransform.setContentSize(targetTransform.contentSize);
     
-    // 设置缩放
-    // spineNode.setScale(scaleRatio, scaleRatio, 1);
     spineNode.layer = overlayNode.layer;
     
     // 添加到覆盖节点
@@ -280,6 +296,8 @@ export class HomeRollTool  {
       // 直接设置世界坐标，这样无论在哪一层都能正确显示
       spineNode.setWorldPosition(targetWorldPos.x, targetWorldPos.y, targetWorldPos.z);
     }
+
+    spineNode.active = true;
     
     return spineNode;
   }
@@ -304,33 +322,50 @@ export class HomeRollTool  {
   }
 
   /**
-   * 根据节点大小自适应Skeleton
-   * @param {Node} skeletonNode - Skeleton节点
-   * @param {Node} targetNode - 目标节点
-   * @param {boolean} maintainAspectRatio - 是否保持宽高比
-   */
-  fitSkeletonToNode(skeletonNode: Node, targetNode: Node, maintainAspectRatio: boolean = true): void {
-    const targetTransform = targetNode.getComponent(UITransform);
-    const skeletonTransform = skeletonNode.getComponent(UITransform);
-    
-    if (targetTransform && skeletonTransform) {
-      if (maintainAspectRatio) {
-        // 保持宽高比，取较小的缩放比例
-        const scaleX = targetTransform.width / skeletonTransform.width;
-        const scaleY = targetTransform.height / skeletonTransform.height;
-        const scale = Math.min(scaleX, scaleY);
-        
-        skeletonNode.setScale(scale, scale, 1);
-      } else {
-        // 直接拉伸到目标大小
-        skeletonTransform.setContentSize(targetTransform.width, targetTransform.height);
-      }
+   * 移除overlayNode上面的发光节点
+  */
+  destoryOverlayNodeLight(overlayNode: Node) {
+    if(overlayNode.children.length > 0) {
+      overlayNode.children.forEach(child => {
+        console.log('child', child.name);
+
+        if (child.name === 'spineNodeitem') {
+        // 移除spineNode节点
+          this.destoryAnimationNode(child);
+          child.destroy();
+        }
+        if (child.name === 'spineNoderoll') {
+          const lightSpineNodes = child.children;
+          lightSpineNodes.forEach(item => {
+            this.destoryAnimationNode(item);
+            item.destroy();
+          });
+          child.destroy();
+        }
+      });
     }
   }
 
   destoryAnimationNode(aniNode: Node) {
-    aniNode.getComponent(sp.Skeleton)?.destroy();
-    aniNode.destroy();
+    const skeleton = aniNode.getComponent(sp.Skeleton);
+
+    if(skeleton) {
+      // 1. 停止所有动画
+      skeleton.clearTracks();
+        
+      // 2. 移除监听器
+      skeleton.setCompleteListener(null);
+      skeleton.setEventListener(null);
+      
+      // 3. 清空动画数据
+      skeleton.skeletonData = null;
+      
+      // 4. 重置到初始状态
+      skeleton.setToSetupPose();
+      
+      // 5. 销毁组件
+      skeleton.destroy();
+    }
   }
 
   /**
@@ -370,5 +405,34 @@ export class HomeRollTool  {
     }
 
     return inside;
+  }
+
+  /**
+   * 根据roll所在的Index,返回scatter期待的动画名字
+  */
+  static getScatterRunAnimationName(rollIndex: number): string {
+    switch (rollIndex) {
+      case 2:
+      case 3:
+        return 'chang';
+      case 1:
+      case 4:
+        return 'zhong';
+      case 0:
+      case 5:
+        return 'duan';
+      default:
+        return '';
+    }
+  }
+
+  static getRandomIndex(rollIndex: number): number {
+    if (rollIndex === 0) {
+      return Math.floor(Math.random() * 3) + 0; 
+    } else if (rollIndex === 1) {
+      return Math.floor(Math.random() * 3) + 3; 
+    } else if (rollIndex === 2) {
+      return Math.floor(Math.random() * 3) + 6; 
+    }
   }
 }

@@ -30,7 +30,9 @@ export const ROLL_RESOURCE_NAMES: { [key: string]: string } = {
   XIAO_CHU: 'xiaochu',
 
   // 滚轴动画
-  LAMANG_RUN: 'LamAng_run',
+  LAMANG_RUN: 'gunzhou',
+  // 刀 发光动画
+  SWORD_HIT_LIGHT: 'dao_in',
   /// 1001-1014 图标动画
   '1001':'symbol_1001',
   '1002':'symbol_1002',
