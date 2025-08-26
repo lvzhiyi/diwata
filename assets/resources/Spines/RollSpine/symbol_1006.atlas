@@ -1,0 +1,118 @@
+
+symbol_1006.png
+size: 445,413
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+high_bg
+  rotate: false
+  xy: 214, 0
+  size: 116, 107
+  orig: 118, 109
+  offset: 1, 1
+  index: -1
+high_bg2
+  rotate: false
+  xy: 330, 0
+  size: 115, 107
+  orig: 118, 109
+  offset: 2, 1
+  index: -1
+symbol_7_1
+  rotate: false
+  xy: 0, 311
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_00
+  rotate: false
+  xy: 107, 311
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_02
+  rotate: false
+  xy: 214, 311
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_04
+  rotate: false
+  xy: 321, 311
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_06
+  rotate: false
+  xy: 0, 209
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_08
+  rotate: false
+  xy: 107, 209
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_10
+  rotate: false
+  xy: 214, 209
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_12
+  rotate: false
+  xy: 321, 209
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_14
+  rotate: false
+  xy: 0, 107
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_16
+  rotate: false
+  xy: 107, 107
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_18
+  rotate: false
+  xy: 214, 107
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_20
+  rotate: false
+  xy: 321, 107
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_22
+  rotate: false
+  xy: 0, 5
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1
+symbol_7_1_24
+  rotate: false
+  xy: 107, 5
+  size: 107, 102
+  orig: 109, 104
+  offset: 1, 1
+  index: -1

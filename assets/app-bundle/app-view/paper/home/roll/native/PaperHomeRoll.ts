@@ -17,6 +17,7 @@ import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/Ev
 import { CurrentRoundAmount } from './expansion/CurrentRoundAmount';
 import { GlobalActivity } from 'db://assets/common/script/extra/GlobalMgr';
 import { BousView } from './expansion/BousView';
+import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
 
 const { ccclass, property } = _decorator;
 
@@ -174,8 +175,32 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const isIn = HomeRollTool.isCheckAreaSuccess(this.rollBgViewNode, e);
 
     if (isIn) {
-      app.controller.home.gameStartClick();
+      if (!app.manager.global.isClickRollTips) {
+        // 展示提示弹框
+        this.showFirstClickRollTipsDialog();
+      } else {
+        app.controller.home.gameStartClick();
+      }
     }
+  }
+
+  /** 显示首次点击的踢死弹窗 */
+  private showFirstClickRollTipsDialog() {
+    app.manager.ui.show({
+      name: 'PopErrorPop',
+      data: {
+        msg: 'Click the board for\n SPIN/STOP.\nPress "Confirm" to spin.',
+        type: ErrorType.NormalTips,
+        showCancel: false,
+        confirmCallback: () => {
+          console.log('点击确认');
+          app.manager.ui.hide({ name: 'PopErrorPop', onHide: () => { } });
+          app.controller.home.gameStartClick();
+          app.manager.global.setIsClickRollTips(true);
+        },
+      },
+      onShow: () => { },
+    });
   }
 
   // 防止快速点击
@@ -406,14 +431,12 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         await this.homeRollTool.showSwordHaloAnimation(
           itemMap.rollNode, 
           this.overLayNode,
-          this.goddessNode
         );
         itemMap.hasShow = true;
       } else if (itemMap.type === SymbolType.BOW) {
         await this.homeRollTool.showBowHitAnimation(
           itemMap.node,
           this.overLayNode,
-          this.goddessNode
         );
         itemMap.hasShow = true;
       }
@@ -478,20 +501,14 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     console.table(symbolAnimationData[2].map((_, index) => symbolAnimationData.map((item: any) => item[index]?.symbolId || '')));
     
     /**
-     * symbol变为wild
+     * symbol变为wild,先清空overlayNode上面的发光节点
      */
+    this.homeRollTool.destoryOverlayNodeLight(this.overLayNode);
     const hasSymbolChangeToWilds = await Promise.all(rollsScript.map(roll => roll.symbolChangeToWild()));
    
     console.log('symbol变为wild-数据', hasSymbolChangeToWilds);
     if (hasSymbolChangeToWilds.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 1500);
-
-    /**
-     * 开始执行闪烁动画
-     */
-    const hasStartLightAnimations = await Promise.all(rollsScript.map(roll => roll.startLightAnimation()));
-
-    if (hasStartLightAnimations.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 1000);
-
+   
     /**
      * 如果当前回合达到最大倍率，则结束本回合消除
      */
@@ -502,10 +519,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     }
 
     /**
-     * 结束闪烁动画
+     * 开始执行闪烁和消除动画
      */
-    await Promise.all(rollsScript.map(roll => roll.endLightAnimation()));
-    
+    console.log('开始执行闪烁-数据');
+    await Promise.all(rollsScript.map(roll => roll.startLightAnimation())); 
+    console.log('结束闪烁和消除动画-数据');
+    const endLightAnimationData = await Promise.all(rollsScript.map(roll => roll.endLightAnimation())); 
+    if (endLightAnimationData.some(item => item)) await delay(500);
+    console.log('endLightAnimationData-数据', endLightAnimationData);
+   
     /**
      * 移除Symbol
      */
@@ -518,18 +540,18 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const currentRoundTotalRewardAmount = this.resultList[this.roundIndex].totalRewardAmount;
 
     if (currentRoundTotalRewardAmount > 0) {
-      this.totalRewardAmount += currentRoundTotalRewardAmount;
       this.changeTipsContent(this.totalRewardAmount, this.totalRewardAmount + currentRoundTotalRewardAmount);
+      this.totalRewardAmount += currentRoundTotalRewardAmount;
       // this.changeTipsContent(`<color=#FF50E4><b>WIN</b></color> <color=#FFFFFF>₱ ${calculateWithBase(this.totalRewardAmount)}</color>`, true);
     }
-
+  
     /**
      * 更新到下一个轮的倍率
      */
     if (this.hasNextRound()) {
       this.updateNextMultiple();
     }
-
+    
     /**
      * 添加到顶部然后下落 或者 播放Roll边框动画然后落下然后添加到顶部最后下落
      */

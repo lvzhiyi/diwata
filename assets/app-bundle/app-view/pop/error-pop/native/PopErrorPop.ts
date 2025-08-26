@@ -202,6 +202,7 @@ export class PopErrorPop extends BaseView {
       betError: 'Confirm',
       loginError: 'Refresh',
       slowNetTips: 'Confirm',
+      normalTips: 'Confirm',
       serverMaintenance: 'Refresh',
     };
     confirmText = spriteFrameMap[type as keyof typeof spriteFrameMap];

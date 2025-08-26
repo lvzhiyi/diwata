@@ -280,7 +280,7 @@ export class StartButtonState extends Component {
           this.changePlayState('reward');
           this.processRewardAnimations();
           // this.processDisableStateAnimations();
-          console.log('中奖事件播放置灰效果');
+          console.log('中奖事件播放置灰效果:start');
         } else {
           this.disimageChange(false);
           this.isClicked = false;

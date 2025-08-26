@@ -1,0 +1,20 @@
+
+symbol_1005.png
+size: 184,91
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+symbol_14
+  rotate: false
+  xy: 0, 0
+  size: 92, 91
+  orig: 94, 93
+  offset: 1, 1
+  index: -1
+symbol_14_00
+  rotate: false
+  xy: 92, 0
+  size: 92, 91
+  orig: 94, 93
+  offset: 1, 1
+  index: -1

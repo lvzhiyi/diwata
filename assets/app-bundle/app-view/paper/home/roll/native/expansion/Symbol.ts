@@ -1,4 +1,4 @@
-import { _decorator, Component, Material, Node, sp, Sprite, SpriteFrame, tween, UITransform, Vec2, Vec3 } from 'cc';
+import { _decorator, Component, Material, Node, sp, Sprite, SpriteFrame, tween, UIOpacity, UITransform, Vec2, Vec3 } from 'cc';
 import { app } from 'db://assets/app/app';
 import { loadResource } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
@@ -14,7 +14,15 @@ const { ccclass, property } = _decorator;
 export class Symbol extends Component {
     @property(Node)
     private iconNode: Node = null;
-    
+
+    // 中奖动画和消除动画
+    @property(Node)
+    private LightSpine: Node = null;
+
+    // 消除节点
+    @property(Node)
+    private removeSpineNode: Node = null;
+
     @property({ type: [SpriteFrame], tooltip: 'symbol icon' })
     private symbolIcons: SpriteFrame[] = [];
 
@@ -29,9 +37,6 @@ export class Symbol extends Component {
 
     // wild Node
     private wildNode: Node = null;
-
-    // 闪烁
-    private lightNode: Node = null;
 
     // 动画
     private wildAnimationNode: Node = null;
@@ -61,30 +66,50 @@ export class Symbol extends Component {
     }
 
     /// 赋值数据对象 , fromServer 是否从服务器获取数据
-    initSymbol(symbolItem?: SymbolItem, fromServer: boolean = false) {
+    async initSymbol(symbolItem?: SymbolItem, fromServer: boolean = false) {
       if(!symbolItem) {
         return;
       }
+      if (this.mapSymbols.size === 0) {
+        this.initSprites();
+      }
 
+      this.checkOpacity();
+
+      // 从服务器获取数据时
       if(fromServer) {
         this.currentSymbolItem = {
           symbolId: symbolItem.symbolId,
           symbolType: symbolItem.symbolType,
           main: symbolItem.main,
         };
+
+        // 从服务器获取数据时，4001的symbolId需要特殊处理，随机一个normal的symbolId
+        if(SYMBOL_WILD_IDS.indexOf(symbolItem.symbolId) !== -1) {
+          const randomIndex = Math.floor(Math.random() * SYMBOL_NORMAL_IDS.length);
+          const randomSymbolId = SYMBOL_NORMAL_IDS[randomIndex];
+          const spriteFrame = this.mapSymbols.get(`${randomSymbolId}`);
+          this.iconNode.getComponent(Sprite).spriteFrame = spriteFrame;
+          // 执行落地回弹动画
+          await this.startElementFallBackAnimation(randomSymbolId);
+        }else{
+          this.iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(`${symbolItem.symbolId}`);
+          // 执行落地回弹动画
+          await this.startElementFallBackAnimation(symbolItem.symbolId);
+        }
+      }else{
+        this.iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(`${symbolItem.symbolId}`);
+      }
+    }
+
+    /** 检查透明度 */
+    checkOpacity() {
+      if (this.LightSpine.getComponent(UIOpacity).opacity === 0) {
+        this.LightSpine.getComponent(UIOpacity).opacity = 255;
       }
 
-      if (this.mapSymbols.size === 0) {
-        this.initSprites();
-      }
-      /// 从服务器获取数据时，4001的symbolId需要特殊处理，随机一个normal的symbolId
-      if(fromServer && SYMBOL_WILD_IDS.indexOf(symbolItem.symbolId) !== -1) {
-        const randomIndex = Math.floor(Math.random() * SYMBOL_NORMAL_IDS.length);
-        const randomSymbolId = SYMBOL_NORMAL_IDS[randomIndex];
-        const spriteFrame = this.mapSymbols.get(`${randomSymbolId}`);
-        this.iconNode.getComponent(Sprite).spriteFrame = spriteFrame;
-      } else {
-        this.iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(`${symbolItem.symbolId}`);
+      if (this.iconNode.getComponent(UIOpacity).opacity === 0) {
+        this.iconNode.getComponent(UIOpacity).opacity = 255;
       }
     }
 
@@ -93,6 +118,8 @@ export class Symbol extends Component {
         this.initSprites();
       }
 
+      this.checkOpacity();
+      console.log('initBlurSymbol', symbolId);
       this.iconNode.getComponent(Sprite).spriteFrame = this.mapBlurSymbols.get(`${symbolId}`);
     }
 
@@ -107,7 +134,7 @@ export class Symbol extends Component {
         return sprite.spriteFrame.name;
       }
 
-      return '';
+      return this.currentSymbolItem.symbolId;
     }
 
     /**
@@ -160,23 +187,6 @@ export class Symbol extends Component {
     }
 
     /**
-     * 播放scatter action动画
-     */
-    async startScatterActionAnimation(spineResourceName: string) {
-      if (!this.scatterAnimationNode) {
-        this.scatterAnimationNode = new Node('ScatterAnimationNode');
-        this.scatterAnimationNode.layer = this.node.layer;
-        this.scatterAnimationNode.setParent(this.node);
-      }
-
-      return null;
-      const skeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(spineResourceName);
-      const skeleton = await this.playAnimationSequence(this.scatterAnimationNode, skeletonData, [{ name: 'action', loop: false }]);
-
-      return skeleton;
-    }
-
-    /**
      * 获取wild节点，如果存在则返回，否则返回null
      */
     getWildNode() {
@@ -184,22 +194,144 @@ export class Symbol extends Component {
     }
 
     /**
-     * 开始闪烁动画
+     * 开始元素落地回弹动画
      */
-    async startLightAnimation() {
-      if (this.lightNode) {
-        return;
-      }
+    async startElementFallBackAnimation(symbolId: string): Promise<void> {
+      return new Promise<void>(async (resolve) => {
+        try {
+          const timeout = setTimeout(() => {
+            resolve();
+          }, 1000);
+          /// 根据当前图片的尺寸，设置LightSpine的尺寸
+          const iconSize = this.iconNode.getComponent(UITransform).contentSize;
+          this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
+          this.LightSpine.active = true;
+          this.iconNode.active = false;
+          const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+          const animationName = 'symbol_' + symbolId;
+          skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
+          const animationPlayName = animationName + '_1';
+          skeleton.setAnimation(0, animationPlayName, false);
+          skeleton.setCompleteListener(() => {
+            clearTimeout(timeout);
+            this.LightSpine.active = false;
+            this.iconNode.active = true;
+            resolve();
+            skeleton.setCompleteListener(null);
+            skeleton.skeletonData = null;
+          });
+        }catch(error){
+          console.error('startElementFallBackAnimation 执行出错:', error);
+          this.LightSpine.active = false;
+          this.iconNode.active = true;
+          resolve();
+        }
+      });
+    }
 
-      this.lightNode = new Node('Light');
-      this.lightNode.layer = this.node.layer;
-      this.lightNode.setParent(this.parentNode.parent);
-      this.lightNode.setScale(0.15, 0.15, 0.15);
-      this.lightNode.setWorldPosition(this.node.getWorldPosition());
+    /**
+     * 开始闪烁中奖
+     */
+    async startLightAnimation(): Promise<void> {
+      return new Promise<void>(async (resolve, reject) => {
+        try {
+          // 设置节点尺寸和状态
+          const iconSize = this.iconNode.getComponent(UITransform).contentSize;
+          this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
+          this.LightSpine.active = true;
+          this.removeSpineNode.active = true;
 
-      const skeleton = this.lightNode.getComponent(sp.Skeleton) || this.lightNode.addComponent(sp.Skeleton);
-      skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.MFL);
-      skeleton.setAnimation(0, 'mfl', true);
+          // 获取或添加Skeleton组件
+          const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+          const removeSkeleton = this.removeSpineNode.getComponent(sp.Skeleton) || this.removeSpineNode.addComponent(sp.Skeleton);
+          // 播放消除动画
+          removeSkeleton.setAnimation(0, 'xiaochu_down', false);
+
+          // 加载并播放中奖动画
+          const animationName = 'symbol_' + this.getSymbolId();
+          skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
+          const animationPlayName = animationName + '_2';
+          skeleton.setAnimation(0, animationPlayName, false);
+          removeSkeleton.setCompleteListener(() => {
+            resolve();
+          });
+
+          // 添加超时保护
+          const timeout = setTimeout(() => {
+            console.warn('startLightAndRemoveAnimation 超时，强制完成');
+            this.cleanupAnimationNodes();
+            resolve();
+          }, 1500);
+
+          // 在resolve时清除超时
+          const originalResolve = resolve;
+
+          resolve = () => {
+            clearTimeout(timeout);
+            originalResolve();
+          };
+        } catch (error) {
+          console.error('startLightAndRemoveAnimation 执行出错:', error);
+          this.cleanupAnimationNodes();
+          reject(error);
+        }
+      });
+    }
+
+    /**
+     * 清理动画节点状态
+     */
+    private cleanupAnimationNodes(): void {
+      this.LightSpine.active = false;
+      this.removeSpineNode.active = false;
+      this.iconNode.getComponent(Sprite).spriteFrame = null;
+    }
+
+    /**
+     * 播放渐隐动画
+     */
+    private playFadeOutAnimation(): Promise<void> {
+      return new Promise<void>((resolve) => {
+        // 获取或添加UIOpacity组件
+        const lightUIOpacity = this.LightSpine.getComponent(UIOpacity) || this.LightSpine.addComponent(UIOpacity);
+        const iconUIOpacity = this.iconNode.getComponent(UIOpacity) || this.iconNode.addComponent(UIOpacity);
+
+        if (lightUIOpacity && iconUIOpacity) {
+          // 设置初始透明度
+          lightUIOpacity.opacity = 255;
+          iconUIOpacity.opacity = 255;
+
+          // 创建渐隐动画 - 同时进行
+          tween(lightUIOpacity)
+            .to(1, { opacity: 0 })
+            .start();
+
+          tween(iconUIOpacity)
+            .to(1, { opacity: 0 })
+            .call(() => {
+              resolve();
+            })
+            .start();
+        } else {
+          // 如果没有相应组件，直接完成
+          resolve();
+        }
+      });
+    }
+
+    startScatterActionAnimation(animationName: string): Promise<void> {
+      return new Promise<void>(async (resolve) => {
+        this.LightSpine.active = true;
+        const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+        skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
+        skeleton.setAnimation(0, 'symbol_3001_2', false);
+        skeleton.setCompleteListener(() => {
+          this.LightSpine.active = false;
+          resolve();
+          skeleton.setCompleteListener(null);
+          skeleton.skeletonData = null;
+        });
+      });
     }
 
     /**
@@ -213,12 +345,59 @@ export class Symbol extends Component {
     }
   
     /** 
-     * 销毁闪烁Node
+     * 播放消除动画后销毁闪烁Node
      */
-    destoryLightNode() {
-      this.lightNode?.getComponent(sp.Skeleton)?.destroy();
-      this.lightNode?.destroy();
-      this.lightNode = null;
+    beginDestoryLightNode(): Promise<void> {
+      return new Promise<void>(async (resolve) => {
+        try {
+          const skeleton = this.removeSpineNode.getComponent(sp.Skeleton) || this.removeSpineNode.addComponent(sp.Skeleton);
+          const lightSkeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+
+          if (skeleton && skeleton.skeletonData) {
+            // 检查动画是否存在
+            const animationName = 'xiaochu_up';
+            skeleton.setAnimation(0, animationName, false);
+            // 播放渐隐动画
+            this.playFadeOutAnimation().then(() => {
+              // 清理中奖动画隐藏元素图片
+              lightSkeleton.setCompleteListener(null);
+              lightSkeleton.skeletonData = null;
+            });
+              
+            // 添加超时保护
+            const timeout = setTimeout(() => {
+              console.warn('消除动画超时，强制完成');
+              this.completeDestoryLightNode(skeleton);
+              resolve();
+            }, 2000); 
+              
+            skeleton.setCompleteListener(() => {
+              clearTimeout(timeout);
+              console.log('消除动画播放完成');
+              this.completeDestoryLightNode(skeleton);
+              resolve();
+            });
+          } else {
+            console.warn('没有找到 skeleton 组件，直接完成');
+            this.completeDestoryLightNode(null);
+            resolve();
+          }
+        } catch (error) {
+          console.error('beginDestoryLightNode 执行出错:', error);
+          this.completeDestoryLightNode(null);
+          resolve();
+        }
+      });
+    }
+
+    // 抽取公共的完成逻辑
+    private completeDestoryLightNode(skeleton: sp.Skeleton | null) {
+      this.LightSpine.active = false; 
+      this.removeSpineNode.active = false;
+
+      if (skeleton) {
+        // skeleton.setToSetupPose();
+      }
     }
 
     /**
@@ -228,15 +407,6 @@ export class Symbol extends Component {
       this.wildAnimationNode?.getComponent(sp.Skeleton)?.destroy();
       this.wildAnimationNode?.destroy();
       this.wildAnimationNode = null;
-    }
-
-    /**
-     * 销毁scatter增加次数动画Node
-     */
-    destoryScatterAddTimeAnimationNode() {
-      this.scatterAddTimeAnimationNode?.getComponent(sp.Skeleton)?.destroy();
-      this.scatterAddTimeAnimationNode?.destroy();
-      this.scatterAddTimeAnimationNode = null;
     }
 
     /**
@@ -348,8 +518,7 @@ export class Symbol extends Component {
      */
     protected onDisable(): void {
       this.destoryWildNode();
-      this.destoryLightNode();
+      // this.destoryLightNode();
       this.destoryWildAnimationNode();
-      this.destoryScatterAddTimeAnimationNode();
     }
 }

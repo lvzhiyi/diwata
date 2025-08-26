@@ -1,0 +1,20 @@
+
+symbol_1003.png
+size: 176,98
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+symbol_12
+  rotate: false
+  xy: 0, 0
+  size: 88, 98
+  orig: 90, 100
+  offset: 1, 1
+  index: -1
+symbol_12_00
+  rotate: false
+  xy: 88, 0
+  size: 88, 98
+  orig: 90, 100
+  offset: 1, 1
+  index: -1
