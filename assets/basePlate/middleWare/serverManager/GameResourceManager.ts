@@ -7,8 +7,8 @@ const { ccclass, property } = _decorator;
 export const SPINE_RESOURCE_NAMES: { [key: string]: string } = {
   // 开始动画
   LAMANG_START: 'LamAng_start',
-  // 剑被劈中的动画
-  // LAMANG_SWORD_HIT: 'wheelhalo',
+  // 大奖弹框动画
+  GRAND_PRIZE: 'win',
 
 };
 /// 滚动元素
@@ -138,12 +138,12 @@ export class GameResourceManager {
 
         if (spineData) {
           resolve(spineData);
-          logger.log(`预加载spine动画 ${spineName} 完成（缓存中获取）`);
+          // logger.log(`预加载spine动画 ${spineName} 完成（缓存中获取）`);
         } else {
           spineData = await loadResource('load', 'resources', `Spines/OtherSpine/${spineName}`, sp.SkeletonData);
           this.spineResopurceMap[spineName] = spineData;
           resolve(spineData);
-          logger.log(`预加载spine动画 ${spineName} 完成`);
+          // logger.log(`预加载spine动画 ${spineName} 完成`);
         }
       });
     }
@@ -159,12 +159,12 @@ export class GameResourceManager {
 
         if (spineData) {
           resolve(spineData);
-          logger.log(`预加载spine动画 ${spineName} 完成（缓存中获取）`);
+          // logger.log(`预加载spine动画 ${spineName} 完成（缓存中获取）`);
         } else {
           spineData = await loadResource('load', 'resources', `Spines/RollSpine/${spineName}`, sp.SkeletonData);
           this.spineResopurceMap[spineName] = spineData;
           resolve(spineData);
-          logger.log(`预加载spine动画 ${spineName} 完成`);
+          // logger.log(`预加载spine动画 ${spineName} 完成`);
         }
       });
     }

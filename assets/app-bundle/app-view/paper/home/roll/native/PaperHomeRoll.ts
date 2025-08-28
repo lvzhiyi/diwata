@@ -485,7 +485,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 调用同步动画依次执行等待函数
     await this.playSequentialAnimations();
 
-    if (this.changeWildData.length > 0) await delay(app.manager.global.quikeMode ? 500 : 1500);
+    if (this.changeWildData.length > 0) await delay(app.manager.global.quikeMode ? 300 : 800);
 
     /**
      * 初始化Symbol动画数据

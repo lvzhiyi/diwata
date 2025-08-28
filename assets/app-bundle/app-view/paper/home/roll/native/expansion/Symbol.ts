@@ -119,7 +119,7 @@ export class Symbol extends Component {
       }
 
       this.checkOpacity();
-      console.log('initBlurSymbol', symbolId);
+      
       this.iconNode.getComponent(Sprite).spriteFrame = this.mapBlurSymbols.get(`${symbolId}`);
     }
 

@@ -6,6 +6,7 @@ import { RewardSubTypeEnum } from 'db://assets/basePlate/middleWare/enums/bet';
 import { NumberAnimator } from 'db://assets/basePlate/middleWare/commonUI/NumberAnimator';
 import { loadResource } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { delay, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
+import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 
 const { ccclass, property } = _decorator;
 
@@ -115,13 +116,7 @@ export class PopGrandPrize extends BaseView {
     const textNode = this.node.getChildByName('AmontBox');
     
     // 根据奖励类型加载对应的骨骼动画资源
-    const spineAtlas: sp.SkeletonData = await loadResource(
-      'load',
-      'pop-grand-prize-res',
-      // `GrandPrize/IbongAdarna_pop_${this.rewardSubType}`,
-      'GrandPrize/win',
-      sp.SkeletonData
-    );
+    const spineAtlas: sp.SkeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.GRAND_PRIZE);
     
     // 资源检查，确保所有必要元素都存在
     if (!spine || !this.rewardSubType || !spineAtlas) return;
