@@ -85,7 +85,7 @@ export class Symbol extends Component {
         };
 
         // 从服务器获取数据时，4001的symbolId需要特殊处理，随机一个normal的symbolId
-        if(SYMBOL_WILD_IDS.indexOf(symbolItem.symbolId) !== -1) {
+        if(SYMBOL_WILD_IDS.indexOf(symbolItem.symbolId) !== -1 && !symbolItem.main) {
           const randomIndex = Math.floor(Math.random() * SYMBOL_NORMAL_IDS.length);
           const randomSymbolId = SYMBOL_NORMAL_IDS[randomIndex];
           const spriteFrame = this.mapSymbols.get(`${randomSymbolId}`);
@@ -191,6 +191,32 @@ export class Symbol extends Component {
      */
     getWildNode() {
       return this.wildNode;
+    }
+
+    /** 播放剑或者棒子的动画 */
+    async playSwordOrBowAnimation(symbolId: string) {
+      try {
+        /// 根据当前图片的尺寸，设置LightSpine的尺寸
+        const iconSize = this.iconNode.getComponent(UITransform).contentSize;
+        this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
+        this.LightSpine.active = true;
+        this.iconNode.active = false;
+        const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+        const animationName = 'symbol_' + symbolId;
+        skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
+        const animationPlayName = animationName + '_2';
+        skeleton.setAnimation(0, animationPlayName, false);
+        skeleton.setCompleteListener(() => {
+          this.LightSpine.active = false;
+          this.iconNode.active = true;
+          skeleton.setCompleteListener(null);
+          skeleton.skeletonData = null;
+        });
+      }catch(error){
+        console.error('startElementFallBackAnimation 执行出错:', error);
+        this.LightSpine.active = false;
+        this.iconNode.active = true;
+      }
     }
 
     /**

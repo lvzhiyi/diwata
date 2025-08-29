@@ -1,4 +1,4 @@
-import { _decorator, EventTouch, Label, Node, Prefab, sp,  tween, UITransform } from 'cc';
+import { _decorator, EventTouch, Label, Node, Prefab, sp,  tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import BaseView from 'db://app/base/BaseView';
 import { Roll } from './expansion/Roll';
 import { Symbol } from './expansion/Symbol';
@@ -99,6 +99,34 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.initEvents();
 
     this.initRollFrameSpine();
+
+    // 如果有开屏动画线隐藏节点
+    if (app.manager.global.canPlayStartAnimation()) {
+      this.hiddenAllNodes();
+    }
+  }
+
+  private hiddenAllNodes() {
+    this.node.active = false;
+    this.node.scale = new Vec3(0, 0, 0);
+    this.goddessNode.getComponent(UIOpacity).opacity = 0;
+  }
+
+  startHomeRollAnimation() {
+    this.node.active = true;
+    // 女神节点渐显
+    tween(this.goddessNode.getComponent(UIOpacity))
+      .to(0.6, { opacity: 255 }, { easing: 'sineOut' })
+      .start();
+    tween(this.node)
+      .to(0.3, { scale: new Vec3(1, 1, 1) }, { easing: 'sineOut' })
+      .to(0.25, { scale: new Vec3(0.8, 0.8, 0.8) }, { easing: 'sineInOut' })
+      .to(0.15, { scale: new Vec3(1, 1, 1) }, { easing: 'sineInOut' })
+      .start();
+  }
+
+  startHomeAnimationComplete() {
+    this.node.active = true;
   }
 
   /**
@@ -110,7 +138,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     rollFrameNode.active = false;
     rollFrameNode.addComponent(UITransform);
     rollFrameNode.getComponent(UITransform).setContentSize(100, 400);
-    rollFrameNode.setParent(this.node.parent.parent);
+    rollFrameNode.setParent(this.overLayNode);
 
     this.rollFrameSkeleton = rollFrameNode.addComponent(sp.Skeleton);
     this.rollFrameSkeleton.premultipliedAlpha = false;
@@ -146,6 +174,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.controller.on(SlotsController.Event.StartRolling, this.startGame, this);
     this.controller.on(SlotsController.Event.StopRolling, this.stopGame, this);
     app.manager.event.on('buyFreeSpinTimes', this.buyFreeSpinTimes, this);
+    app.manager.event.on('startHomeRollAnimation', this.startHomeRollAnimation, this);
+    app.manager.event.on('startHomeAnimationComplete', this.startHomeAnimationComplete, this);
     // 盘面添加点击事件
     this.rollBgViewNode.on(Node.EventType.TOUCH_END, this.rollClick, this);
   }
@@ -375,14 +405,11 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 把棒子的节点储存到changeWildData中
     hasShowBowNode.map((nodeArr: Node[], index) => {
       if (nodeArr.length > 0) {
-        nodeArr.map((node) => {
-          const isMainBow = node.getComponent(Symbol).currentSymbolItem.main === true;
-          this.changeWildData.push({
-            node,
-            type: isMainBow ? SymbolType.MAIN_BOW : SymbolType.BOW,
-            hasShow: false,
-            rollIndex: index
-          });
+        this.changeWildData.push({
+          nodes: nodeArr,
+          type: SymbolType.BOW,
+          hasShow: false,
+          rollIndex: index
         });
       }
     });
@@ -435,7 +462,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         itemMap.hasShow = true;
       } else if (itemMap.type === SymbolType.BOW) {
         await this.homeRollTool.showBowHitAnimation(
-          itemMap.node,
+          itemMap.nodes,
           this.overLayNode,
         );
         itemMap.hasShow = true;
@@ -485,7 +512,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 调用同步动画依次执行等待函数
     await this.playSequentialAnimations();
 
-    if (this.changeWildData.length > 0) await delay(app.manager.global.quikeMode ? 300 : 800);
+    if (this.changeWildData.length > 0) await delay(app.manager.global.quikeMode ? 100 : 300);
 
     /**
      * 初始化Symbol动画数据

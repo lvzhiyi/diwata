@@ -156,10 +156,10 @@ export class AppInit extends BaseAppInit {
    * 预加载spine动画
    */
   private async preloadSpineAnimation() {
-    // 如果播放开始动画次数小于2次，则可预加载开场动画，
-    // if (app.manager.global.canPlayStartAnimation()) {
-    //   await GameResourceManager.instance.preloadLocalAnimations([SPINE_RESOURCE_NAMES.LAMANG_START]);
-    // }
+    // 则可预加载开场动画，
+    if (app.manager.global.canPlayStartAnimation()) {
+      await GameResourceManager.instance.preloadLocalAnimations([SPINE_RESOURCE_NAMES.LAMANG_START]);
+    }
 
     await GameResourceManager.instance.preloadLocalAnimations();
     GameResourceManager.instance.preloadAllRollAnimations();

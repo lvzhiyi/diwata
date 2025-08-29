@@ -8,7 +8,7 @@ declare interface SymbolItem {
   /** 元素类型 */
   symbolType?: SymbolTypeEnum;
   /**是否是主元素*/
-  main: boolean;
+  main?: boolean;
 }
 
 /**

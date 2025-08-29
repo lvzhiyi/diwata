@@ -9,6 +9,10 @@ import {
   Sprite,
   SpriteFrame,
 
+  tween,
+
+  UIOpacity,
+
   Vec3,
 } from 'cc';
 import BaseView from '../../../../../../../extensions/app/assets/base/BaseView';
@@ -102,7 +106,50 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       'Bet ₱ ' + numberToMoney(app.manager.global.betCount);
     this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.manager.global.vipLevel - 1];
     this.onResizeScreen();
+
+    // 如果有开屏动画线隐藏节点
+    if (app.manager.global.canPlayStartAnimation()) {
+      this.hiddenAllNodes();
+    }
+
+    app.manager.event.on('startHomeAnimationComplete', this.startHomeAnimationComplete, this);
+
     GameResourceManager.instance.preloadLocalICons();
+  }
+
+  private hiddenAllNodes() {
+    // 为两个节点添加渐显动画
+    const nodes = [this.topView, this.bottomView];
+    nodes.forEach((node) => {
+      let uiOpacity = node.getComponent(UIOpacity);
+     
+      if (!uiOpacity) {
+        uiOpacity = node.addComponent(UIOpacity);
+      }
+
+      node.active = false;
+      uiOpacity.opacity = 0; 
+    });
+  }
+
+  startHomeAnimationComplete() {
+    // 为两个节点添加渐显动画
+    const nodes = [this.topView, this.bottomView];
+    nodes.forEach((node) => {
+      let uiOpacity = node.getComponent(UIOpacity);
+
+      if (!uiOpacity) {
+        uiOpacity = node.addComponent(UIOpacity);
+      }
+
+      // 确保从透明开始
+      uiOpacity.opacity = 0; 
+      node.active = true;
+     
+      tween(uiOpacity)
+        .to(2, { opacity: 255 }, { easing: 'sineOut' })
+        .start();
+    });
   }
 
   /** *屏幕适配**/

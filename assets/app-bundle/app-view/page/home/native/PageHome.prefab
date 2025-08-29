@@ -401,14 +401,12 @@
     "_captureFocus": true,
     "_shade": false,
     "_blockInput": true,
-    "FreeSpinBg": {
-      "__uuid__": "10682488-abee-45e0-aa01-bb43bb77ee3c@f9941",
-      "__expectedType__": "cc.SpriteFrame"
-    },
     "normalBg": {
       "__uuid__": "dcbf4bdb-0f4b-4914-a223-39f862a7a158@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
+    "startHomeSpine": null,
+    "animationView": null,
     "_id": ""
   },
   {

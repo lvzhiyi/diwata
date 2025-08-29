@@ -8,7 +8,8 @@ import { Roll } from './Roll';
 const { ccclass,  } = _decorator;
 
 export interface ChangeWildData {
-  node: Node;
+  node?: Node;
+  nodes?: Node[];
   type: SymbolType;
   rollNode?: Node;
   hasShow?: boolean;
@@ -37,6 +38,11 @@ export class HomeRollTool  {
       const lightSpineNodes = this.creatSwordLightSpineNode(spineNode, targetNode);
       
       return new Promise<void>(async (resolve) => {
+        // 0.3秒后执行
+        setTimeout(() => {
+          resolve();
+        }, 600);
+
         try {
           // 添加动画
           const skeleton = spineNode.getComponent(sp.Skeleton) || spineNode.addComponent(sp.Skeleton);
@@ -47,31 +53,28 @@ export class HomeRollTool  {
           HomeRollTool.playAnimationSequence(skeleton, ['dao_atk', 'dao_hit'], async () => {
             console.log('播放剑动画序列完成');
 
-            if(lightSpineNodes.length > 0) {
-              const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SWORD_HIT_LIGHT);
-              // 播放发光动画
-              lightSpineNodes.map(item => {
-                console.log('发光节点 :', {
-                  name: item.name,
-                  uuid: item.uuid,
-                  parent: item.parent?.name || 'null',
-                  parentRef: item.parent,
-                  active: item.active,
-                  component: item.getComponent(sp.Skeleton),
-                  isValid: item.isValid
-                }, skeleonData);
-                const skeleton = item.getComponent(sp.Skeleton) || item.addComponent(sp.Skeleton);
-                skeleton.skeletonData = skeleonData;
-                skeleton.setAnimation(0, 'dao_in', true);
-              });
-            }
-
-            resolve();
+            // if(lightSpineNodes.length > 0) {
+            //   const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SWORD_HIT_LIGHT);
+            //   // 播放发光动画
+            //   lightSpineNodes.map(item => {
+            //     console.log('发光节点 :', {
+            //       name: item.name,
+            //       uuid: item.uuid,
+            //       parent: item.parent?.name || 'null',
+            //       parentRef: item.parent,
+            //       active: item.active,
+            //       component: item.getComponent(sp.Skeleton),
+            //       isValid: item.isValid
+            //     }, skeleonData);
+            //     const skeleton = item.getComponent(sp.Skeleton) || item.addComponent(sp.Skeleton);
+            //     skeleton.skeletonData = skeleonData;
+            //     skeleton.setAnimation(0, 'dao_in', true);
+            //   });
+            // }
           });
         } catch (error) {
           console.error('加载spine/LamAng_wild动画失败', error);
           this.destoryAnimationNode(spineNode);
-          resolve();
         }
       });
     } else {
@@ -163,40 +166,41 @@ export class HomeRollTool  {
    * 播放棍子击中动画
    * */ 
   async showBowHitAnimation(
-    targetNode: Node,
+    targetNodes: Node[],
     overlayNode: Node,
   ): Promise<void> {
     const spineManager = GameResourceManager.instance;
     const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.BOW_EXPLODE);
 
     if (skeleonData != null) {
-      // 创建spine节点并设置大小
-      const spineNode = this.createSpineNode(targetNode, overlayNode, false);
-
       return new Promise<void>(async (resolve) => {
-        try {
-          // 添加动画
-          const skeleton = spineNode.getComponent(sp.Skeleton) || spineNode.addComponent(sp.Skeleton);
-          skeleton.premultipliedAlpha = false;
-          skeleton.skeletonData = skeleonData;
-          skeleton.setAnimation(0, 'gun_atk', false);
-          skeleton.setCompleteListener((track) => {
-            if (track.animation.name === 'gun_atk') {
-              console.log('播放棒子动画序列完成');
-              resolve();
-              skeleton.setAnimation(0, 'gun_in', true);
-            }
-          });
-          // // 播放多个动画序列
-          // HomeRollTool.playAnimationSequence(skeleton, ['gun_atk', 'gun_in'], () => {
-          //   // this.destoryAnimationNode(spineNode);
-           
-          // });
-        } catch (error) {
-          console.error('加载spine/gun动画失败', error);
-          this.destoryAnimationNode(spineNode);
+        // 0.3秒后执行
+        setTimeout(() => {
           resolve();
-        }
+        }, 600);
+
+        targetNodes.forEach(item => {
+          // 创建spine节点并设置大小
+          const spineNode = this.createSpineNode(item, overlayNode, false);
+
+          try {
+          // 添加动画
+            const skeleton = spineNode.getComponent(sp.Skeleton) || spineNode.addComponent(sp.Skeleton);
+            skeleton.premultipliedAlpha = false;
+            skeleton.skeletonData = skeleonData;
+            skeleton.setAnimation(0, 'gun_atk', false);
+            skeleton.setCompleteListener((track) => {
+              if (track.animation.name === 'gun_atk') {
+                // console.log('播放棒子动画序列完成');
+            
+                // skeleton.setAnimation(0, 'gun_in', true);
+              }
+            });
+          } catch (error) {
+            console.error('加载spine/gun动画失败', error);
+            this.destoryAnimationNode(spineNode);
+          }
+        });
       });
     } else {
       return Promise.resolve();
@@ -365,6 +369,42 @@ export class HomeRollTool  {
       
       // 5. 销毁组件
       skeleton.destroy();
+    }
+  }
+
+  /**
+   * 销毁动画Node
+   */
+  static destoryAnimationNode(animationNode: Node) {
+    if (!animationNode || !animationNode.isValid) {
+      return;
+    }
+
+    try {
+      const skeleton = animationNode.getComponent(sp.Skeleton);
+
+      if (skeleton) {
+        // 清除所有事件监听器
+        skeleton.setCompleteListener(null);
+        skeleton.setEventListener(null);
+        
+        // 清除动画数据引用
+        skeleton.skeletonData = null;
+        
+        // 停止所有动画
+        skeleton.clearTracks();
+        
+        // 销毁组件
+        skeleton.destroy();
+      }
+
+      // 销毁节点
+      animationNode.destroy();
+      animationNode = null;
+    } catch (error) {
+      console.error('销毁动画节点失败:', error);
+      // 强制清理引用
+      animationNode = null;
     }
   }
 
