@@ -15,13 +15,17 @@ export class Symbol extends Component {
     @property(Node)
     private iconNode: Node = null;
 
-    // 中奖动画和消除动画
+    // 中奖动画
     @property(Node)
     private LightSpine: Node = null;
 
     // 消除节点
     @property(Node)
-    private removeSpineNode: Node = null;
+    private removeUpSpineNode: Node = null;
+
+    // 消除底部节点
+    @property(Node)
+    private removeDownSpineNode: Node = null;
 
     @property({ type: [SpriteFrame], tooltip: 'symbol icon' })
     private symbolIcons: SpriteFrame[] = [];
@@ -85,7 +89,7 @@ export class Symbol extends Component {
         };
 
         // 从服务器获取数据时，4001的symbolId需要特殊处理，随机一个normal的symbolId
-        if(SYMBOL_WILD_IDS.indexOf(symbolItem.symbolId) !== -1) {
+        if(SYMBOL_WILD_IDS.indexOf(symbolItem.symbolId) !== -1 && !symbolItem.main) {
           const randomIndex = Math.floor(Math.random() * SYMBOL_NORMAL_IDS.length);
           const randomSymbolId = SYMBOL_NORMAL_IDS[randomIndex];
           const spriteFrame = this.mapSymbols.get(`${randomSymbolId}`);
@@ -119,7 +123,7 @@ export class Symbol extends Component {
       }
 
       this.checkOpacity();
-      console.log('initBlurSymbol', symbolId);
+      
       this.iconNode.getComponent(Sprite).spriteFrame = this.mapBlurSymbols.get(`${symbolId}`);
     }
 
@@ -193,6 +197,32 @@ export class Symbol extends Component {
       return this.wildNode;
     }
 
+    /** 播放剑或者棒子的动画 */
+    async playSwordOrBowAnimation(symbolId: string) {
+      try {
+        /// 根据当前图片的尺寸，设置LightSpine的尺寸
+        const iconSize = this.iconNode.getComponent(UITransform).contentSize;
+        this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
+        this.LightSpine.active = true;
+        this.iconNode.active = false;
+        const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+        const animationName = 'symbol_' + symbolId;
+        skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
+        const animationPlayName = animationName + '_2';
+        skeleton.setAnimation(0, animationPlayName, false);
+        skeleton.setCompleteListener(() => {
+          this.LightSpine.active = false;
+          this.iconNode.active = true;
+          skeleton.setCompleteListener(null);
+          skeleton.skeletonData = null;
+        });
+      }catch(error){
+        console.error('startElementFallBackAnimation 执行出错:', error);
+        this.LightSpine.active = false;
+        this.iconNode.active = true;
+      }
+    }
+
     /**
      * 开始元素落地回弹动画
      */
@@ -230,30 +260,41 @@ export class Symbol extends Component {
     }
 
     /**
-     * 开始闪烁中奖
+     * 开始闪烁中奖和消除动画
      */
-    async startLightAnimation(): Promise<void> {
+    async startLightAndRemoveAnimation(): Promise<void> {
       return new Promise<void>(async (resolve, reject) => {
         try {
           // 设置节点尺寸和状态
           const iconSize = this.iconNode.getComponent(UITransform).contentSize;
           this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
           this.LightSpine.active = true;
-          this.removeSpineNode.active = true;
+          this.removeUpSpineNode.active = true;
+          this.removeDownSpineNode.active = true;
 
           // 获取或添加Skeleton组件
           const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
-          const removeSkeleton = this.removeSpineNode.getComponent(sp.Skeleton) || this.removeSpineNode.addComponent(sp.Skeleton);
+          const removeUpSkeleton = this.removeUpSpineNode.getComponent(sp.Skeleton) || this.removeUpSpineNode.addComponent(sp.Skeleton);
+          const removeDownSkeleton = this.removeDownSpineNode.getComponent(sp.Skeleton) || this.removeDownSpineNode.addComponent(sp.Skeleton);
           // 播放消除动画
-          removeSkeleton.setAnimation(0, 'xiaochu_down', false);
+          removeUpSkeleton.setAnimation(0, 'xiaochu_up', false);
+          removeDownSkeleton.setAnimation(0, 'xiaochu_down', false);
 
           // 加载并播放中奖动画
           const animationName = 'symbol_' + this.getSymbolId();
           skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
           const animationPlayName = animationName + '_2';
           skeleton.setAnimation(0, animationPlayName, false);
-          removeSkeleton.setCompleteListener(() => {
+          skeleton.setCompleteListener(() => {
+            skeleton.setCompleteListener(null);
+            skeleton.skeletonData = null;
+            this.LightSpine.active = false;
+            this.iconNode.getComponent(UIOpacity).opacity = 0;
+          });
+          removeUpSkeleton.setCompleteListener(() => {
             resolve();
+            removeUpSkeleton.setCompleteListener(null);
+            this.cleanupAnimationNodes();
           });
 
           // 添加超时保护
@@ -261,7 +302,7 @@ export class Symbol extends Component {
             console.warn('startLightAndRemoveAnimation 超时，强制完成');
             this.cleanupAnimationNodes();
             resolve();
-          }, 1500);
+          }, 2500);
 
           // 在resolve时清除超时
           const originalResolve = resolve;
@@ -283,8 +324,8 @@ export class Symbol extends Component {
      */
     private cleanupAnimationNodes(): void {
       this.LightSpine.active = false;
-      this.removeSpineNode.active = false;
-      this.iconNode.getComponent(Sprite).spriteFrame = null;
+      this.removeUpSpineNode.active = false;
+      this.removeDownSpineNode.active = false;
     }
 
     /**
@@ -303,11 +344,11 @@ export class Symbol extends Component {
 
           // 创建渐隐动画 - 同时进行
           tween(lightUIOpacity)
-            .to(1, { opacity: 0 })
+            .to(0.5, { opacity: 0 })
             .start();
 
           tween(iconUIOpacity)
-            .to(1, { opacity: 0 })
+            .to(0.5, { opacity: 0 })
             .call(() => {
               resolve();
             })
@@ -350,7 +391,7 @@ export class Symbol extends Component {
     beginDestoryLightNode(): Promise<void> {
       return new Promise<void>(async (resolve) => {
         try {
-          const skeleton = this.removeSpineNode.getComponent(sp.Skeleton) || this.removeSpineNode.addComponent(sp.Skeleton);
+          const skeleton = this.removeUpSpineNode.getComponent(sp.Skeleton) || this.removeUpSpineNode.addComponent(sp.Skeleton);
           const lightSkeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
 
           if (skeleton && skeleton.skeletonData) {
@@ -393,7 +434,7 @@ export class Symbol extends Component {
     // 抽取公共的完成逻辑
     private completeDestoryLightNode(skeleton: sp.Skeleton | null) {
       this.LightSpine.active = false; 
-      this.removeSpineNode.active = false;
+      this.removeUpSpineNode.active = false;
 
       if (skeleton) {
         // skeleton.setToSetupPose();

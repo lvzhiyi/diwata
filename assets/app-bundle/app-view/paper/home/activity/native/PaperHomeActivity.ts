@@ -11,6 +11,8 @@ import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsCon
 import { GlobalActivity, GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
 import { calculateWithBase } from 'db://assets/common/script/extra/Utils/common';
 import { freeSpinManager } from 'db://assets/res-native/script/FreeSpinManager';
+import { HomeRollTool } from '../../roll/native/expansion/HomeRollTool';
+import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 
 const { ccclass, property } = _decorator;
 @ccclass('PaperHomeActivity')
@@ -21,12 +23,54 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
     @property({ type: Node, tooltip: 'BousSpineView 节点' })
     private BousSpineView: Node = null;
 
+    /// 开屏动画节点
+   @property(Node)
+   private startHomeSpine: Node | null = null;
+
     @property({ type: Node, tooltip: 'numberLable 节点' })
     private NumberLable: Node = null;
 
     // 初始化的相关逻辑写在这
-    onLoad() { 
+    onLoad() {
      
+    }
+
+    private async playStartHomeSpine() {
+      if (app.manager.global.canPlayStartAnimation()) {
+        if (this.startHomeSpine.isValid) {
+          this.startHomeSpine.active = true;
+           
+          try {
+            const skeleton = this.startHomeSpine.getComponent(sp.Skeleton);
+            const skeleonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.LAMANG_START);
+            skeleton.skeletonData = skeleonData;
+            skeleton.setAnimation(0, 'show', false);
+            // 监听自定义事件 "sz"
+            skeleton.setEventListener((trackEntry: sp.spine.TrackEntry, event: sp.spine.Event) => {
+              if (event.data.name === 'guadian') {
+                app.manager.event.emit('startHomeRollAnimation');
+              }
+            });
+            skeleton.setCompleteListener(() => {
+              this.playStartAnimationComplete();
+            });
+          } catch (error) {
+            app.manager.event.emit('startHomeAnimationComplete');
+            this.playStartAnimationComplete();
+          }
+        }
+      }
+    }
+  
+    private playStartAnimationComplete() {
+      if(this.startHomeSpine) {
+        HomeRollTool.destoryAnimationNode(this.startHomeSpine);
+      }
+
+      GlobalActivity.showEntryDialog();
+  
+      app.manager.event.emit('startHomeAnimationComplete');
+      // 播放背景音乐
     }
 
     // 界面打开时的相关逻辑写在这(onShow可被多次调用-它与onHide不成对)
@@ -47,11 +91,18 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
           return true;
         });
         this.setupStarCardPostion();
-        GlobalActivity.showEntryDialog();
+
+        // 如果有开屏动画线隐藏sm入口
+        if (app.manager.global.canPlayStartAnimation() === false) {
+          GlobalActivity.showEntryDialog();
+        }
+
         freeSpinManager.init();
       }
 
       app.manager.event.on('begainfreeBonusAnimation', this.showFreeBonusSpineAnimation, this);
+      // 播放开屏动画
+      this.playStartHomeSpine();
     }
 
     protected beforeShow(next: (error?: string) => void, data?: any) {

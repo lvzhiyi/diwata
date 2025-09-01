@@ -9,18 +9,20 @@ import { PopBetamout } from '../../../pop/betamout/native/PopBetamout';
 import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsController';
 import { showErrorPop } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
+import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { HomeRollTool } from '../../../paper/home/roll/native/expansion/HomeRollTool';
 
 const { ccclass, property } = _decorator;
 @ccclass('PageHome')
 export class PageHome extends BaseView.BindController(SlotsController) {
   // 子界面列表，数组顺序为子界面排列顺序
   protected miniViews: IMiniViewNames = ['PaperHomeRoll', 'PaperHomeBody', 'PaperHomeActivity'];
-  
-  @property(SpriteFrame)
-  private FreeSpinBg: SpriteFrame | null = null;
 
   @property(SpriteFrame)
   private normalBg: SpriteFrame | null = null;
+
+   @property(Node)
+   private animationView: Node | null = null;
   
   private homeBgNode: Node | null = null;
 
@@ -48,7 +50,7 @@ export class PageHome extends BaseView.BindController(SlotsController) {
   }
 
   protected start(): void {
-   
+
   }
 
   /**

@@ -9,6 +9,10 @@ import {
   Sprite,
   SpriteFrame,
 
+  tween,
+
+  UIOpacity,
+
   Vec3,
 } from 'cc';
 import BaseView from '../../../../../../../extensions/app/assets/base/BaseView';
@@ -102,7 +106,50 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       'Bet ₱ ' + numberToMoney(app.manager.global.betCount);
     this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.manager.global.vipLevel - 1];
     this.onResizeScreen();
+
+    // 如果有开屏动画线隐藏节点
+    if (app.manager.global.canPlayStartAnimation()) {
+      this.hiddenAllNodes();
+    }
+
+    app.manager.event.on('startHomeAnimationComplete', this.startHomeAnimationComplete, this);
+
     GameResourceManager.instance.preloadLocalICons();
+  }
+
+  private hiddenAllNodes() {
+    // 为两个节点添加渐显动画
+    const nodes = [this.topView, this.bottomView];
+    nodes.forEach((node) => {
+      let uiOpacity = node.getComponent(UIOpacity);
+     
+      if (!uiOpacity) {
+        uiOpacity = node.addComponent(UIOpacity);
+      }
+
+      node.active = false;
+      uiOpacity.opacity = 0; 
+    });
+  }
+
+  startHomeAnimationComplete() {
+    // 为两个节点添加渐显动画
+    const nodes = [this.topView, this.bottomView];
+    nodes.forEach((node) => {
+      let uiOpacity = node.getComponent(UIOpacity);
+
+      if (!uiOpacity) {
+        uiOpacity = node.addComponent(UIOpacity);
+      }
+
+      // 确保从透明开始
+      uiOpacity.opacity = 0; 
+      node.active = true;
+     
+      tween(uiOpacity)
+        .to(2, { opacity: 255 }, { easing: 'sineOut' })
+        .start();
+    });
   }
 
   /** *屏幕适配**/
@@ -188,7 +235,8 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   betCountChange(val: number) {
     // 获取当前正在展示的金额
     const currentBetAmount = this.betLable.getComponent(Label).string;
-    const targetBetAmount = 'BET ₱ ' + numberToMoney(val);
+    const targetBetAmount = 'Bet ₱ ' + numberToMoney(val);
+    console.log('betCountChange', currentBetAmount, targetBetAmount);
 
     // 如果当前金额和val相等，则不进行操作
     if(currentBetAmount === targetBetAmount){
@@ -336,33 +384,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     }
 
     app.controller.slots.betNormal();
-  }
-
-  /**
-   * 点击页面如果游戏进行中，则停止游戏
-   */
-  private _clickPageToStop() {
-    if(app.manager.global.isGoing){
-      // if(this.result != null){
-      //   console.log('有数据了，点击页面停止');
-
-      //   if (new Date().getTime() - this.clickToStopTime > 300) {
-      //     this.clickToStopTime = new Date().getTime();
-      //     this.clickStopCount++;
-
-      //     if (this.clickStopCount === 3 && !app.manager.global.quikeMode) {
-      //       // this.showFastModeModal();
-      //     }
-
-      //     app.manager.global.setIsClickPageQuickStop(true);
-      //     this.stopGameRightNow(false);
-      //   }
-      // }else{
-      //   // 按钮置灰
-      //   console.log('按钮置灰');
-      //   app.manager.event.emit('button:disable');
-      // }
-    }
   }
 
   /// 游戏结束

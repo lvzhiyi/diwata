@@ -317,6 +317,17 @@ export class GlobalManager extends BaseManager {
      this._currentAutoPlayTimes = times;
    }
 
+   /** 是否可以播放开场动画 */
+   public canPlayStartAnimation(){
+     const isSkipStartAnimation = sys.localStorage.getItem('isSkipStartAnimation');
+
+     if(isSkipStartAnimation){
+       return false;
+     }
+
+     return true;
+   }
+
    public get multipleIndex() {
      return this._multipleIndex;
    }
@@ -417,11 +428,17 @@ export class GlobalManager extends BaseManager {
   }
 
   public get isSkipStartAnimation() {
+    const isSkipStartAnimation = sessionStorage.getItem('isSkipStartAnimation');
+
+    if(isSkipStartAnimation){
+      this._isSkipStartAnimation = isSkipStartAnimation === 'true';
+    }
+
     return this._isSkipStartAnimation;
   }
 
   public setIsSkipStartAnimation(bool: boolean) {
-    sys.localStorage.setItem('isSkipStartAnimation', bool.toString());
+    sessionStorage.setItem('isSkipStartAnimation', bool.toString());
     this._isSkipStartAnimation = bool;
   }
 

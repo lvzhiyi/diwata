@@ -15,7 +15,7 @@ import { HTTP_STATUS_CODES } from '../../common/script/extra/Request';
 import commonInit from '../../common/script/extra/CommonInit';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
 import { Environment, getApiUrl, getGameEnv } from '../../common/script/extra/config/envConfig';
-import { GameResourceManager } from '../../basePlate/middleWare/serverManager/GameResourceManager';
+import { GameResourceManager, SPINE_RESOURCE_NAMES } from '../../basePlate/middleWare/serverManager/GameResourceManager';
 
 const { ccclass, property } = _decorator;
 @ccclass('AppInit')
@@ -78,6 +78,8 @@ export class AppInit extends BaseAppInit {
     }
 
     this.initEffectVolume();
+    // 开始进行异步资源的加载
+    this.preloadOtherResources();
   }
 
   /**
@@ -154,13 +156,18 @@ export class AppInit extends BaseAppInit {
    * 预加载spine动画
    */
   private async preloadSpineAnimation() {
-    // 如果播放开始动画次数小于2次，则可预加载开场动画，
-    // if (app.manager.global.canPlayStartAnimation()) {
-    //   await GameResourceManager.instance.preloadLocalAnimations([SPINE_RESOURCE_NAMES.LAMANG_START]);
-    // }
+    // 则可预加载开场动画，
+    if (app.manager.global.canPlayStartAnimation()) {
+      await GameResourceManager.instance.preloadLocalAnimations([SPINE_RESOURCE_NAMES.LAMANG_START]);
+    }
 
     await GameResourceManager.instance.preloadLocalAnimations();
     GameResourceManager.instance.preloadAllRollAnimations();
+  }
+
+  private async preloadOtherResources() {
+    GameResourceManager.instance.preloadLocalAnimations([SPINE_RESOURCE_NAMES.GRAND_PRIZE]);
+    this.preloadOtherPopResources();
   }
 
   /**
@@ -347,6 +354,39 @@ export class AppInit extends BaseAppInit {
           this.nextInit();
         };
       }));
+    });
+    task.start();
+  }
+
+  /** 加载其他弹框资源 */
+  private async preloadOtherPopResources() {
+    const preloadResources = [
+      { type: Prefab, bundle: 'PopBuybonus' },
+      { type: Prefab, bundle: 'PopBetamout' },
+      { type: Prefab, bundle: 'PopGrandPrize' },
+    ];
+
+    const task = Core.inst.lib.task.createAny();
+    preloadResources.forEach((item:{ bundle: string, path?: string, type: any }) => {
+      task.add(async (next) => {
+        const {
+          bundle, path, type
+        } = item;
+        
+        if (type === sp.SkeletonData) {
+          await loadResource('preloadDir', bundle, path, type);
+        } else if (type === SpriteFrame) {
+          await loadResource('load', bundle, path, type);
+        } else if (type === Prefab) {
+          await loadBundle(bundle);
+        } else {
+          console.error('preloadResources error', type);
+
+          return;
+        }
+
+        next();
+      });
     });
     task.start();
   }

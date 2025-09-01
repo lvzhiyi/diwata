@@ -60,7 +60,7 @@ export class Roll extends Component {
     protected onLoad(): void {
       this.initNodePool();
       this.initSymbols();
-      this.originalWorldPosition = this.node.getWorldPosition().clone();
+      this.originalWorldPosition = this.node.parent.getPosition().clone();
       this.originalWorldPosition.x = this.originalWorldPosition.x + 15;
     }
 
@@ -99,6 +99,10 @@ export class Roll extends Component {
 
     getItemHeight() {
       return this.itemHeight;
+    }
+
+    getRollRemoveData() {
+      return this.rollRemoveData;
     }
 
     /**
@@ -362,10 +366,9 @@ export class Roll extends Component {
       if (hasShowSwordNode) {
         const symbolNode = this.node.children.find(child => child.getComponent(Symbol).currentSymbolItem.main === true );
 
+        // 播放剑的动画
         if (symbolNode) {
-          symbolNode.getComponent(Symbol).initSymbol({
-            symbolId: '4010', symbolType: SymbolType.SWORD, main: true 
-          },);
+          symbolNode.getComponent(Symbol).playSwordOrBowAnimation('4010');
         }
 
         return Promise.resolve(symbolNode);
@@ -375,7 +378,7 @@ export class Roll extends Component {
     }
 
     /**
-     * 处理是否需要展示棒子,并把棒子的节点返回用于储存
+     * 处理是否需要展示拍打棒子,并把棒子的节点返回用于储存
      */
     showBowSymbol(): Promise<Node[]> {
       let showBowNode: Node[] = [];
@@ -384,13 +387,11 @@ export class Roll extends Component {
         const symbolId = symbol.getSymbolId() || '';
 
         if(symbol.currentSymbolItem) {
-          if (symbol.currentSymbolItem.symbolId  === SymbolType.BOW && symbolId !== SymbolType.WILD) {
-            showBowNode.push(child);
-
+          if (symbol.currentSymbolItem.symbolId  === SymbolType.BOW && symbolId !== SymbolType.WILD ) {
             if (symbol.currentSymbolItem.main === true) {
-              symbol.initSymbol({
-                symbolId: '4011', symbolType: SymbolType.BOW, main: true 
-              },);
+              symbol.playSwordOrBowAnimation('4011');
+            }else{
+              showBowNode.push(child);
             }
           }
         }
@@ -438,7 +439,8 @@ export class Roll extends Component {
      */
     async showRollFrameSpine(rollFrameSkeleton: sp.Skeleton) {
       rollFrameSkeleton.node.active = true;
-      rollFrameSkeleton.node.setWorldPosition(this.originalWorldPosition);
+      console.log('this.originalWorldPosition', this.originalWorldPosition);
+      rollFrameSkeleton.node.setPosition(this.originalWorldPosition);
       rollFrameSkeleton.timeScale = app.manager.global.gameSpeed;
       const scatterAnimationName = HomeRollTool.getScatterRunAnimationName(this.rollIndex);
       rollFrameSkeleton.setAnimation(0, scatterAnimationName, true);
@@ -463,13 +465,13 @@ export class Roll extends Component {
     /**
      * 开始中奖闪烁
      */
-    async startLightAnimation() {
+    async startLightAndRemoveAnimation() {
       return await Promise.all(this.rollRemoveData.map(async item => {
         const { rowIndex } = item;
         const symbol = this.node.children[rowIndex]?.getComponent(Symbol);
 
         if (symbol) {
-          return symbol.startLightAnimation();
+          return symbol.startLightAndRemoveAnimation();
         }
 
         return Promise.resolve();

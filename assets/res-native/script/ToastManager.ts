@@ -62,7 +62,7 @@ export class ToastManager extends Component {
 
   /** Toast的默认配置选项 */
   private defaultOptions: ToastOptions = {
-    duration: 2,
+    duration: 1.5,
     fadeInTime: 0.2,
     fadeOutTime: 0.2,
     offset: new Vec3(0, 0, 0)

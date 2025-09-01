@@ -1,12 +1,12 @@
 
 spin_btn.png
-size: 154,154
+size: 150,150
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 di
   rotate: false
-  xy: 2, 2
+  xy: 0, 0
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
