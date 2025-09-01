@@ -43,7 +43,7 @@ export class SlotsController extends BaseController<
     
     this.emit(SlotsController.Event.StopRolling, betResult);
 
-    app.manager.event.emit('roll:stop', betResult.resultDetail.resultList?.some((item: BetResultItem) => item.rewardSymbolIndexSet?.length > 0));
+    app.manager.event.emit('roll:stop', betResult.resultDetail?.resultList?.some((item: BetResultItem) => item.rewardSymbolIndexSet?.length > 0));
   }
 
   /**

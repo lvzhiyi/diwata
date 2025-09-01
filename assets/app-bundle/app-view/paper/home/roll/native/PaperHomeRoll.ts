@@ -285,7 +285,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.resultData = data;
 
     if(data) {
-      this.resultList = data.resultDetail.resultList;
+      this.resultList = data.resultDetail?.resultList || [];
     }
 
     this.stopAllRolls();
@@ -549,12 +549,16 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 开始执行闪烁和消除动画
      */
     console.log('开始执行闪烁-数据');
-    await Promise.all(rollsScript.map(roll => roll.startLightAnimation())); 
-    console.log('结束闪烁和消除动画-数据');
-    const endLightAnimationData = await Promise.all(rollsScript.map(roll => roll.endLightAnimation())); 
-    if (endLightAnimationData.some(item => item)) await delay(500);
-    console.log('endLightAnimationData-数据', endLightAnimationData);
-   
+    const hasLitghtAnimation = await Promise.all(rollsScript.map(async roll => {
+      const lightAndRemoveAnimation = await roll.startLightAndRemoveAnimation();
+      const rollRemoveData = roll.getRollRemoveData();
+
+      if (rollRemoveData.length > 0) {
+        await delay(200);
+      }
+
+      return lightAndRemoveAnimation;
+    }));  
     /**
      * 移除Symbol
      */
@@ -582,6 +586,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     /**
      * 添加到顶部然后下落 或者 播放Roll边框动画然后落下然后添加到顶部最后下落
      */
+    if (hasLitghtAnimation.some(item => item)) await delay(200);
     await this.addToTopThenFallDowmOrRunRollFrameAnimationThenFallDownThenAddToTopThenFallDown(rollsScript, symbolAnimationData);
 
     symbolAnimationData = rollsScript.map(roll => roll.symbolAnimationData);
@@ -765,12 +770,14 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     });
 
     const nextRoundList = this.resultList[this.roundIndex + 1];
-
+    
     /**
      * 添加仅下落roll上的新Symbol到顶部
      * -- 传入下一回合roll的数据
      */
     if (fallDownScript.length > 0) {
+      await Promise.all(fallDownScript.map(roll => roll.fallDownSymbol()));
+      await delay(200);
       await Promise.all(fallDownScript.map((roll) =>
         roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[roll.getCurrentIndex()]) || [])
       ));

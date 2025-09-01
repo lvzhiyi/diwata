@@ -101,6 +101,10 @@ export class Roll extends Component {
       return this.itemHeight;
     }
 
+    getRollRemoveData() {
+      return this.rollRemoveData;
+    }
+
     /**
      * 初始化节点池
      */
@@ -461,13 +465,13 @@ export class Roll extends Component {
     /**
      * 开始中奖闪烁
      */
-    async startLightAnimation() {
+    async startLightAndRemoveAnimation() {
       return await Promise.all(this.rollRemoveData.map(async item => {
         const { rowIndex } = item;
         const symbol = this.node.children[rowIndex]?.getComponent(Symbol);
 
         if (symbol) {
-          return symbol.startLightAnimation();
+          return symbol.startLightAndRemoveAnimation();
         }
 
         return Promise.resolve();

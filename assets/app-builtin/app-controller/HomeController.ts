@@ -258,7 +258,16 @@ export class HomeController extends BaseController<
       this.credit = res.data.credit;
       this.betResult = res.data;
       if (!app.manager.global.quikeMode) await delay(500);
-      app.controller.slots.stopRolling(this.betResult);
+      const resultDetail = res.data?.resultDetail;
+
+      // resultDetail 有数据才进入游戏结束逻辑
+      if(resultDetail){
+        app.controller.slots.stopRolling(this.betResult);
+      }else{
+        this.betResult = mockFailedData;
+        app.controller.slots.stopRolling(this.betResult);
+      }
+      
       // 埋点
       this.trackSpinStart(app.manager.global.creditCount, true);
     } else {
