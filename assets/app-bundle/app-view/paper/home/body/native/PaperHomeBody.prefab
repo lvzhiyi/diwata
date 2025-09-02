@@ -2178,9 +2178,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 245,
+      "g": 247,
+      "b": 237,
       "a": 255
     },
     "_spriteFrame": {
@@ -2308,8 +2308,6 @@
       "__id__": 0
     },
     "fileId": "3b4AYaqRFPqpoOxcj/ikXK",
-    "instance": null,
-    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -4084,8 +4082,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 22.24609375,
-      "height": 50.4
+      "width": 16.3,
+      "height": 40
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -4129,8 +4127,11 @@
     "_lineHeight": 40,
     "_overflow": 0,
     "_enableWrapText": true,
-    "_font": null,
-    "_isSystemFontUsed": true,
+    "_font": {
+      "__uuid__": "5a9f796b-363b-4d9a-b613-5acb652db32c",
+      "__expectedType__": "cc.BitmapFont"
+    },
+    "_isSystemFontUsed": false,
     "_spacingX": 0,
     "_isItalic": false,
     "_isBold": false,

@@ -137,7 +137,7 @@ export class HomeRollTool  {
         lightNode.setWorldPosition(changeWildData.node.getWorldPosition());
         tween(lightNode)
           .to(
-            0.55,
+            0.65,
             { worldPosition: goddessTargetNode.getWorldPosition(), scale: v3(0.6, 0.6, 1) },
             { easing: 'quadIn' } 
           )
