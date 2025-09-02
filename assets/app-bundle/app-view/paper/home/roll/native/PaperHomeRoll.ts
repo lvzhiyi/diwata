@@ -174,6 +174,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.controller.on(SlotsController.Event.StartRolling, this.startGame, this);
     this.controller.on(SlotsController.Event.StopRolling, this.stopGame, this);
     app.manager.event.on('buyFreeSpinTimes', this.buyFreeSpinTimes, this);
+    app.manager.event.on('freespin:state:change', this.showFreespinView, this);
     app.manager.event.on('startHomeRollAnimation', this.startHomeRollAnimation, this);
     app.manager.event.on('startHomeAnimationComplete', this.startHomeAnimationComplete, this);
     // 盘面添加点击事件
@@ -998,30 +999,34 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   private startFreeSpinChange(isFreeBonusSpin: boolean) {
     this.isFreeBonusSpin = isFreeBonusSpin;
     console.log('startFreeSpinChange', isFreeBonusSpin);
-    isFreeBonusSpin ? this.showFreeSpinTimes() : this.hideFreeSpinTimes();
+    isFreeBonusSpin ? this.showFreeBonusTimes(true) : this.showFreeBonusTimes(false);
   }
 
-  /**
-   * 显示免费轮剩余次数Node，
-   */
-  private showFreeSpinTimes() {
+  /** 展示成就的免费模式 or隐藏成就的免费模式 */
+  showFreespinView() {
     if (this.BonusView.isValid) {
-      this.BonusView.getComponent(BousView).updateBuyBonusStatus(3);
+      // 如果是成就系统赠送的免费游玩模式
+      if(app.manager.global.isFreespinMode) {
+        this.BonusView.getComponent(BousView).updateBuyBonusStatus(2);
+      } else {
+        this.BonusView.getComponent(BousView).updateBuyBonusStatus(1);
+      }
     }
 
     this.BonusView.getComponent(AdvancedButtonBreath).pauseBreath();
   }
 
   /**
-   * 隐藏免费轮Node，
+   * 显示免费轮剩余次数Node，
    */
-  private hideFreeSpinTimes() {
-    this.BonusView.getComponent(AdvancedButtonBreath).startBreath();
-
-    if(app.manager.global.isBuyFreeBonusMode) {
-      this.showFreeSpinView(true);
+  private showFreeBonusTimes(show: boolean) {
+    if (this.BonusView.isValid) {
+      this.BonusView.getComponent(BousView).updateBuyBonusStatus(show ? 3 : 1);
+    }
+    if(show) {
+      this.BonusView.getComponent(AdvancedButtonBreath).startBreath();
     } else {
-      this.showFreeSpinView(false);
+      this.BonusView.getComponent(AdvancedButtonBreath).pauseBreath();
     }
   }
 

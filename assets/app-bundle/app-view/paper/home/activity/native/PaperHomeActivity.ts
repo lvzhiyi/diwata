@@ -68,6 +68,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
       }
 
       GlobalActivity.showEntryDialog();
+      freeSpinManager.init();
   
       app.manager.event.emit('startHomeAnimationComplete');
       // 播放背景音乐
@@ -95,9 +96,8 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         // 如果有开屏动画线隐藏sm入口
         if (app.manager.global.canPlayStartAnimation() === false) {
           GlobalActivity.showEntryDialog();
+          freeSpinManager.init();
         }
-
-        freeSpinManager.init();
       }
 
       app.manager.event.on('begainfreeBonusAnimation', this.showFreeBonusSpineAnimation, this);
