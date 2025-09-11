@@ -9,6 +9,15 @@ export enum IGameType {
   FREE_SPIN = 'FREE_SPIN',
 }
 
+export enum IQuickMode {
+	/** 普通模式 */
+  nomal = 'nomal',
+  /** 快速模式 */
+  quick = 'quick',
+  /** 涡轮增压模式 */
+	turbo = 'turbo',
+}
+
 @ccclass('GlobalManager')
 export class GlobalManager extends BaseManager {
   // [无序] 自身初始化完成, init执行完毕后被调用
@@ -118,7 +127,7 @@ export class GlobalManager extends BaseManager {
   private _music: number = 100;
 
   // 快速模式
-  private _quikeMode: boolean = false;
+  private _quikeMode: IQuickMode = IQuickMode.nomal;
 
   // 无限自动轮
   private _allwaysAutoPlay: boolean = false;
@@ -147,8 +156,8 @@ export class GlobalManager extends BaseManager {
    /** 星卡模式投注金额 */
    private _startCardBetAmount: number = 0;
 
-   /** 开场动画是否点击Skip */
-   private _isSkipStartAnimation: boolean = false;
+   // 开屏动画是否永远不播放
+   private _isNeverPlayOpenHomeAnimtion: boolean = false;
 
    /** 盘面提示弹框是否点击过 */
    private _isClickRollTips: boolean = false;
@@ -319,13 +328,7 @@ export class GlobalManager extends BaseManager {
 
    /** 是否可以播放开场动画 */
    public canPlayStartAnimation(){
-     const isSkipStartAnimation = sys.localStorage.getItem('isSkipStartAnimation');
-
-     if(isSkipStartAnimation){
-       return false;
-     }
-
-     return true;
+     return !this.isNeverPlayOpenHomeAnimtion;
    }
 
    public get multipleIndex() {
@@ -387,9 +390,9 @@ export class GlobalManager extends BaseManager {
     return this._quikeMode || this._isClickScreen;
   }
 
-  public setQuikeMode(bool: boolean) {
-    this._quikeMode = bool;
-    app.manager.event.emit('quikeModeChange', bool);
+  public setQuikeMode(quickMode: IQuickMode) {
+    this._quikeMode = quickMode;
+    app.manager.event.emit('quikeModeChange', quickMode);
   }
 
   public get allwaysAutoPlay() {
@@ -427,19 +430,19 @@ export class GlobalManager extends BaseManager {
     this._autoSetting = setting;
   }
 
-  public get isSkipStartAnimation() {
-    const isSkipStartAnimation = sessionStorage.getItem('isSkipStartAnimation');
+  public get isNeverPlayOpenHomeAnimtion() {
+    const playNum = sessionStorage.getItem('NeverPlayOpenHomeAnimtion');
 
-    if(isSkipStartAnimation){
-      this._isSkipStartAnimation = isSkipStartAnimation === 'true';
+    if (playNum) {
+      this._isNeverPlayOpenHomeAnimtion = playNum === 'true';
     }
 
-    return this._isSkipStartAnimation;
+    return this._isNeverPlayOpenHomeAnimtion;
   }
 
-  public setIsSkipStartAnimation(bool: boolean) {
-    sessionStorage.setItem('isSkipStartAnimation', bool.toString());
-    this._isSkipStartAnimation = bool;
+  public setIsNeverPlayOpenHomeAnimtion(isNeverPlayOpenHomeAnimtion: boolean) {
+    sessionStorage.setItem('NeverPlayOpenHomeAnimtion', isNeverPlayOpenHomeAnimtion.toString());
+    this._isNeverPlayOpenHomeAnimtion = isNeverPlayOpenHomeAnimtion;
   }
 
   public get isClickRollTips() {

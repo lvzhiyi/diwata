@@ -54,7 +54,7 @@ export class PopErrorPop extends BaseView {
       return;
     }
     if (this.serviceUrl === ApiPath.bet) {
-      app.controller.slots.stopRolling(null);
+      app.controller.slots.stopRolling(mockFailedData);
       app.manager.event.emit('resetAutoPlay', true);
     }
 

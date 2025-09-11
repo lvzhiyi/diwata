@@ -27,6 +27,12 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
    @property(Node)
    private startHomeSpine: Node | null = null;
 
+   @property(Node)
+  private selectedNode: Node | null = null;
+
+  @property(Node)
+  private skipView: Node | null = null;
+
     @property({ type: Node, tooltip: 'numberLable 节点' })
     private NumberLable: Node = null;
 
@@ -35,13 +41,30 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
      
     }
 
+    /**
+   * 点击跳过开屏动画
+  */
+    clickSkipStartAnimation() {
+      this.playStartAnimationComplete(false);
+    }
+
+    /**
+   * 点击选择是否永远不播放开屏动画
+   */
+    clickSelectedBox() {
+      this.selectedNode.active = !this.selectedNode.active;
+      app.manager.global.setIsNeverPlayOpenHomeAnimtion(!app.manager.global.isNeverPlayOpenHomeAnimtion);
+    }
+
     private async playStartHomeSpine() {
       if (app.manager.global.canPlayStartAnimation()) {
         if (this.startHomeSpine.isValid) {
           this.startHomeSpine.active = true;
-           
+          this.skipView.active = true;
+
           try {
-            const skeleton = this.startHomeSpine.getComponent(sp.Skeleton);
+            const spineNode = this.startHomeSpine.getChildByName('SpineNode');
+            const skeleton = spineNode.getComponent(sp.Skeleton);
             const skeleonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.LAMANG_START);
             skeleton.skeletonData = skeleonData;
             skeleton.setAnimation(0, 'show', false);
@@ -52,25 +75,26 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
               }
             });
             skeleton.setCompleteListener(() => {
-              this.playStartAnimationComplete();
+              this.playStartAnimationComplete(true);
             });
           } catch (error) {
             app.manager.event.emit('startHomeAnimationComplete');
-            this.playStartAnimationComplete();
+            this.playStartAnimationComplete(true);
           }
         }
       }
     }
   
-    private playStartAnimationComplete() {
+    private playStartAnimationComplete(needAnimation: boolean = true) {
       if(this.startHomeSpine) {
+        this.skipView.active = false;
         HomeRollTool.destoryAnimationNode(this.startHomeSpine);
       }
 
       GlobalActivity.showEntryDialog();
       freeSpinManager.init();
   
-      app.manager.event.emit('startHomeAnimationComplete');
+      app.manager.event.emit('startHomeAnimationComplete', needAnimation);
       // 播放背景音乐
     }
 

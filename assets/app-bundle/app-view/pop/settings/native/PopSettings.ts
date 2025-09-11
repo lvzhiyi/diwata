@@ -93,7 +93,7 @@ export class PopSettings extends BaseView {
 
   // 是否可以点击自动设置
   canClickAutoSetting() {
-    return !app.manager.global.isGoing && !app.manager.global.startAutoPlay && !app.manager.global.allwaysAutoPlay;
+    return !app.manager.global.isGoing && !app.manager.global.startAutoPlay && !app.manager.global.allwaysAutoPlay && !app.manager.global.isFreespinMode;
   }
 
   // 显示投注记录

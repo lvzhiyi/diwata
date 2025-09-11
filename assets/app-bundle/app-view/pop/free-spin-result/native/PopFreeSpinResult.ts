@@ -3,6 +3,7 @@ import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { NumberAnimator } from 'db://assets/basePlate/middleWare/commonUI/NumberAnimator';
 import { numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { app } from 'db://assets/app/app';
+import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 
 const { ccclass, property } = _decorator;
 @ccclass('PopFreeSpinResult')
@@ -65,7 +66,7 @@ export class PopFreeSpinResult extends BaseView {
 
       this.scheduleOnce(() => {
         this.stopAnimation();
-      }, app.manager.global.quikeMode ? 1 : 2.5);
+      }, app.manager.global.quikeMode !== IQuickMode.nomal ? 1 : 2.5);
 
       resolve();
     });
