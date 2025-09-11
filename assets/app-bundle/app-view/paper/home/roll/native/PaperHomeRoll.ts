@@ -18,6 +18,8 @@ import { CurrentRoundAmount } from './expansion/CurrentRoundAmount';
 import { GlobalActivity } from 'db://assets/common/script/extra/GlobalMgr';
 import { BousView } from './expansion/BousView';
 import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
+import GameProcessCtrl, { GameState } from 'db://assets/common/script/extra/GameProcessCtrl';
+import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 
 const { ccclass, property } = _decorator;
 
@@ -125,8 +127,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       .start();
   }
 
-  startHomeAnimationComplete() {
+  startHomeAnimationComplete(needAnimation: boolean = true) {
     this.node.active = true;
+    this.node.scale = new Vec3(1, 1, 1);
+    this.goddessNode.getComponent(UIOpacity).opacity = 255;
   }
 
   /**
@@ -275,7 +279,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.Rolls.forEach((roll: Node, rollIndex: number) => {
       setTimeout(() => {
         roll.getComponent(Roll).startRolling();
-      }, rollIndex * (app.manager.global.quikeMode ? 0 : 100));
+      }, rollIndex * (app.manager.global.quikeMode !== IQuickMode.nomal ? 0 : 100));
     });
   }
 
@@ -307,7 +311,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     for (const [rollIndex, roll] of this.Rolls.entries()) {
       const needPlayRollFrameSpine = this.needPlayRollsFrameSpine[rollIndex];
 
-      if (app.manager.global.quikeMode && !needPlayRollFrameSpine) {
+      if (app.manager.global.quikeMode !== IQuickMode.nomal && !needPlayRollFrameSpine) {
         // 快速模式 并且 没有滚轮边框动画，直接同步停止滚轴
         syncStopRolls.push(async () => this.stopSingleRoll(roll, rollIndex, needPlayRollFrameSpine));
       } else {
@@ -424,7 +428,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 同时执行棒子和剑光球飞向女神的效果
   */
   private async playBowAndSwordFlyingAnimation() {
-    if (this.changeWildData.length === 0 || app.manager.global.quikeMode) return Promise.resolve();
+    if (this.changeWildData.length === 0 || app.manager.global.quikeMode !== IQuickMode.nomal) return Promise.resolve();
     // 先根据rollIndex排序
     this.changeWildData.sort((a, b) => a.rollIndex - b.rollIndex);
     const newChangeWildData = this.changeWildData.filter((itemMap) => {
@@ -445,7 +449,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     */
    
   public async playSequentialAnimations(): Promise<void> {
-    if (this.changeWildData.length === 0 || app.manager.global.quikeMode) return Promise.resolve();
+    if (this.changeWildData.length === 0 || app.manager.global.quikeMode !== IQuickMode.nomal) return Promise.resolve();
     // 先根据rollIndex排序
     this.changeWildData.sort((a, b) => a.rollIndex - b.rollIndex);
 
@@ -513,7 +517,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 调用同步动画依次执行等待函数
     await this.playSequentialAnimations();
 
-    if (this.changeWildData.length > 0) await delay(app.manager.global.quikeMode ? 100 : 300);
+    if (this.changeWildData.length > 0) await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 100 : 300);
 
     /**
      * 初始化Symbol动画数据
@@ -535,7 +539,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const hasSymbolChangeToWilds = await Promise.all(rollsScript.map(roll => roll.symbolChangeToWild()));
    
     console.log('symbol变为wild-数据', hasSymbolChangeToWilds);
-    if (hasSymbolChangeToWilds.some(item => item)) await delay(app.manager.global.quikeMode ? 500 : 1500);
+    if (hasSymbolChangeToWilds.some(item => item)) await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 500 : 1500);
    
     /**
      * 如果当前回合达到最大倍率，则结束本回合消除
@@ -739,6 +743,12 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     await Promise.all(rollsScript.map(roll => roll.initData()));
     
     app.manager.global.setMultipleIndex(app.controller.slots.isFreeBonusSpin ? 3 : 0);
+
+    // 添加契约展示判断,没有命中免费轮，也不是免费轮子轮，非子轮最后一轮，不展示契约
+    if(!this.checkIsFreeRound() && !this.isFreeBonusEnd()) {
+      await GameProcessCtrl.setGameStateAsync(GameState.GameEnded);
+    }
+
     // 结束游戏
     app.controller.home.endGame();
   }

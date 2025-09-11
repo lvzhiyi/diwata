@@ -28,6 +28,8 @@ import { BetTypes } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
+import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
+import globalSpeedCtrl from 'db://assets/common/script/extra/GlobalSpeedCtrl';
 
 const { ccclass, property } = _decorator;
 
@@ -132,7 +134,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     });
   }
 
-  startHomeAnimationComplete() {
+  startHomeAnimationComplete(needAnimation: boolean = true) {
     // 为两个节点添加渐显动画
     const nodes = [this.topView, this.bottomView];
     nodes.forEach((node) => {
@@ -141,14 +143,18 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       if (!uiOpacity) {
         uiOpacity = node.addComponent(UIOpacity);
       }
-
+      if(needAnimation){
       // 确保从透明开始
-      uiOpacity.opacity = 0; 
-      node.active = true;
+        uiOpacity.opacity = 0; 
+        node.active = true;
      
-      tween(uiOpacity)
-        .to(2, { opacity: 255 }, { easing: 'sineOut' })
-        .start();
+        tween(uiOpacity)
+          .to(2, { opacity: 255 }, { easing: 'sineOut' })
+          .start();
+      }else{
+        node.active = true;
+        uiOpacity.opacity = 255;
+      }
     });
   }
 
@@ -266,11 +272,15 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
    * 快速模式变化
    * @param val
    */
-  quikeModeChangeListener(val: boolean) {
+  quikeModeChangeListener(val: IQuickMode) {
     console.log('quikeModeChangeListener', val);
-    this.quickModeBtn.getComponent(Sprite).spriteFrame = val
-      ? this.quickBtnOnSprite
-      : this.quickBtnOffSprite;
+    [IQuickMode.nomal, IQuickMode.quick, IQuickMode.turbo].forEach(item => {
+      if(item === val){
+        this.quickModeBtn.getChildByName(item).active = true;
+      }else{
+        this.quickModeBtn.getChildByName(item).active = false;
+      }
+    });
   }
 
   /**
@@ -313,8 +323,29 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
 
   /// 快速模式
   clickQuickMode(event: EventTouch) {
-    app.manager.global.setQuikeMode(!app.manager.global.quikeMode);
-    EventTrackManager.inst.trackTurboSpin(app.manager.global.quikeMode);
+    // if(app.manager.global.quikeMode !== IQuickMode.nomal){
+    //   EffectManager.inst.playEffect(AudioPath.UI.OPEN);
+    // }else{
+    //   EffectManager.inst.playEffect(AudioPath.UI.CLOSE);
+    // }
+
+    const quickModes = [IQuickMode.nomal, IQuickMode.quick, IQuickMode.turbo];
+    const findIndex = quickModes.findIndex((item) => item === app.manager.global.quikeMode);
+    const nextIndex = findIndex + 1 === quickModes.length ? 0 : findIndex + 1;
+    app.manager.global.setQuikeMode(quickModes[nextIndex]);
+
+    if(quickModes[nextIndex] === IQuickMode.turbo){
+      globalSpeedCtrl.startAcceleratedMode(2);
+
+      // BGMManager.inst.pauseBGM();
+      this.scheduleOnce(() => {
+        // BGMManager.inst.resumeBGM();
+      }, 0.5);
+    }else{
+      globalSpeedCtrl.stopAcceleratedMode();
+    }
+
+    EventTrackManager.inst.trackTurboSpin(quickModes[nextIndex] === IQuickMode.quick);
   }
 
   /// 点击免费轮购买
@@ -360,8 +391,22 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
    * 返回首页
    */
   goHome() {
-    CpPostMessage.goHome();
     EventTrackManager.inst.trackBackToHome();
+    app.manager.ui.show({
+      name: 'PopErrorPop',
+      data: {
+        msg: 'Are you sure you want to leave?',
+        type: ErrorType.SlowNetTips,
+        showCancelBtn: true,
+        cancelCallback: () => {
+          app.manager.ui.hide({ name: 'PopErrorPop', onHide: () => { } });
+        },
+        confirmCallback: () => {
+          app.manager.ui.hide({ name: 'PopErrorPop', onHide: () => { } });
+          CpPostMessage.goHome();
+        },
+      },
+    });
   }
 
   /// 开始游戏
@@ -380,6 +425,10 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     if (app.manager.global.isGoing) {
       app.manager.event.emit('button:disable');
 
+      if(app.manager.global.quikeMode === IQuickMode.nomal){
+        app.manager.global.setClickScreen(true);
+      }
+      
       return;
     }
 

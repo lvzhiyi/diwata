@@ -11,6 +11,7 @@ import { ActivityEventMgr, ActivityEventMgrEventsType } from '../../common/scrip
 import { GlobalMgr } from '../../common/script/extra/GlobalMgr';
 import { MoneyUtil } from '../../basePlate/core/baseUtil/MoneyUtil';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
+import { IQuickMode } from '../app-manager/global/GlobalManager';
 
 // TODO 测试用
 const useMock = false;
@@ -257,7 +258,7 @@ export class HomeController extends BaseController<
 
       this.credit = res.data.credit;
       this.betResult = res.data;
-      if (!app.manager.global.quikeMode) await delay(500);
+      if (app.manager.global.quikeMode === IQuickMode.nomal) await delay(500);
       const resultDetail = res.data?.resultDetail;
 
       // resultDetail 有数据才进入游戏结束逻辑
@@ -331,7 +332,7 @@ export class HomeController extends BaseController<
       );
       this.credit = res.data.credit;
       this.betResult = res.data;
-      await delay(app.manager.global.quikeMode ? 0 : 500);
+      await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 0 : 500);
       // 埋点
       this.trackSpinStart(app.manager.global.creditCount, true);
 
@@ -379,7 +380,7 @@ export class HomeController extends BaseController<
 
     if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data) {
       this.betResult = res.data;
-      await delay(app.manager.global.quikeMode ? 0 : 500);
+      await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 0 : 500);
       app.controller.slots.stopRolling(this.betResult);
     } else {
       this.betResult = mockFailedData;

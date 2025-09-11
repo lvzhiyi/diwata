@@ -1,4 +1,5 @@
 import { _decorator, Component, Node, sp, Vec3, Tween, tween, Label } from 'cc';
+import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 import { app } from 'db://assets/app/app';
 
 const { ccclass, property } = _decorator;
@@ -505,7 +506,7 @@ export class StartButtonState extends Component {
        * @param speed 旋转速度
        */
       private changeArrowRotateSpeed(speed: 'slow' | 'fast') {
-        this.rotateSpeed = speed === 'fast' && app.manager.global.quikeMode ? 'turbo' : speed;
+        this.rotateSpeed = speed === 'fast' && app.manager.global.quikeMode !== IQuickMode.nomal ? 'turbo' : speed;
         console.log('this.rotateSpeed', this.rotateSpeed);
         this.rotateArrow();
       }

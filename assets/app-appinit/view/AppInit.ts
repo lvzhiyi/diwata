@@ -162,7 +162,7 @@ export class AppInit extends BaseAppInit {
     }
 
     await GameResourceManager.instance.preloadLocalAnimations();
-    GameResourceManager.instance.preloadAllRollAnimations();
+    await GameResourceManager.instance.preloadAllRollAnimations();
   }
 
   private async preloadOtherResources() {

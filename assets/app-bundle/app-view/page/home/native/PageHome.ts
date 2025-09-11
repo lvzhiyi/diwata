@@ -11,6 +11,7 @@ import { showErrorPop } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil
 import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { HomeRollTool } from '../../../paper/home/roll/native/expansion/HomeRollTool';
+import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 
 const { ccclass, property } = _decorator;
 @ccclass('PageHome')
@@ -62,7 +63,7 @@ export class PageHome extends BaseView.BindController(SlotsController) {
     const currentCount = parseInt(sys.localStorage.getItem(storageKey) || '0');
     console.log('clickScreen1', app.manager.global.isGoing);
 
-    if (app.manager.global.isGoing && !app.manager.global.quikeMode) {
+    if (app.manager.global.isGoing && app.manager.global.quikeMode === IQuickMode.nomal) {
       app.manager.global.setClickScreen(true);
       console.log('clickScreen', currentCount);
 
@@ -71,11 +72,11 @@ export class PageHome extends BaseView.BindController(SlotsController) {
           type: ErrorType.SlowNetTips,
           msg: 'Whether to enable the fast mode?',
           confirmCallback: () => {
-            app.manager.global.setQuikeMode(!app.manager.global.quikeMode);
+            app.manager.global.setQuikeMode(IQuickMode.quick);
             sys.localStorage.setItem(showScreenTips, false);
           },
           cancelCallback: () => {
-            app.manager.global.setQuikeMode(false);
+            app.manager.global.setQuikeMode(IQuickMode.nomal);
             sys.localStorage.setItem(showScreenTips, false);
           },
         });
