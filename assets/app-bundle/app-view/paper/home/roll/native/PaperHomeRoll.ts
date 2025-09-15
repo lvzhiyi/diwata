@@ -844,13 +844,11 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       }
     });
 
-    // 找到第 2 个 scatter，并且不是最后一个roll中
-    const hasMoreThanOneScatter = secondScatterIndex !== -1 && secondScatterIndex < this.needPlayRollsFrameSpine.length - 1;
+    // 找到第 3 个 scatter
+    const hasMoreThanOneScatter = secondScatterIndex !== -1;
 
     if (hasMoreThanOneScatter) {
-      for (let i = secondScatterIndex + 1; i < this.needPlayRollsFrameSpine.length; i++) {
-        this.needPlayRollsFrameSpine[i] = true;
-      }
+      this.needPlayRollsFrameSpine[secondScatterIndex] = true;
     }
 
     return !app.controller.slots.isFreeBonusSpin && hasMoreThanOneScatter;

@@ -209,6 +209,8 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     app.manager.event.on('stopAllwaysAutoPlay', this.stopAllwaysAutoPlay, this);
     // 监听免费轮次数变化
     app.manager.event.on('quantityChange', this.quantityChange, this);
+    // 重置自动投注
+    app.manager.event.on('resetGameMode', this.resetGameMode, this);
   }
 
   // 界面关闭时的相关逻辑写在这(已经关闭的界面不会触发onHide)
@@ -348,6 +350,25 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     EventTrackManager.inst.trackTurboSpin(quickModes[nextIndex] === IQuickMode.quick);
   }
 
+  /**
+  重置游戏所有的模式
+  */
+  resetGameMode(){
+    // 如果是正在自动投注，停止自动投注
+    if(app.manager.global.allwaysAutoPlay || app.manager.global.startAutoPlay || app.manager.global.quantity > 0){
+      this.stopAutoPlay();
+    }
+    // 如果是免费轮中，退出免费轮模式,清空数据
+    if(app.controller.slots.isFreeBonusSpin){
+      // 重置免费轮数据
+      app.manager.global.setGameRecordIds([]);
+      app.manager.global.setGameRecordIndex(0);
+      app.manager.global.setFreeBonusTimes(0);
+      // 设置为非免费轮
+      app.controller.slots.freeBonusSpinChange(false);
+    }
+  }
+  
   /// 点击免费轮购买
   clickBuyBonus() {
     if (this.canClickBuyBonus()) {
