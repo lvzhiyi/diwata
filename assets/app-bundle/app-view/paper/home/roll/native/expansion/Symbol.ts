@@ -1,4 +1,4 @@
-import { _decorator, Component, Material, Node, sp, Sprite, SpriteFrame, tween, UIOpacity, UITransform, Vec2, Vec3 } from 'cc';
+import { _decorator, Component, Material, Node, Size, sp, Sprite, SpriteFrame, tween, UIOpacity, UITransform, Vec2, Vec3 } from 'cc';
 import { app } from 'db://assets/app/app';
 import { loadResource } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
@@ -52,6 +52,9 @@ export class Symbol extends Component {
     private scatterAddTimeAnimationNode: Node = null;
 
     public currentSymbolItem: SymbolItem = null;
+
+    // 当前图标的大小
+    private _currentIconSize: Size = new Size();
 
     protected onLoad(): void {
       this.parentNode = this.node.parent;
@@ -234,6 +237,7 @@ export class Symbol extends Component {
           }, 1000);
           /// 根据当前图片的尺寸，设置LightSpine的尺寸
           const iconSize = this.iconNode.getComponent(UITransform).contentSize;
+          this._currentIconSize = iconSize.clone();
           this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
           this.LightSpine.active = true;
           this.iconNode.active = false;

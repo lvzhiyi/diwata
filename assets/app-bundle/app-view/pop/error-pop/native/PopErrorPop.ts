@@ -55,7 +55,7 @@ export class PopErrorPop extends BaseView {
     }
     if (this.serviceUrl === ApiPath.bet) {
       app.controller.slots.stopRolling(mockFailedData);
-      app.manager.event.emit('resetAutoPlay', true);
+      app.manager.event.emit('resetGameMode', true);
     }
 
     if (this.closeable) {
@@ -95,7 +95,7 @@ export class PopErrorPop extends BaseView {
         // freespin 活动id 已失效
         app.manager.event.emit('freeSpinActivityIdInvalid');
         app.controller.slots.stopRolling(mockFailedData);
-        app.manager.event.emit('resetAutoPlay', true);
+        app.manager.event.emit('resetGameMode', true);
         break;
     }
 
