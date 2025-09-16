@@ -1,4 +1,5 @@
-import { _decorator, Component, Node, Label, tween, UITransform, view, instantiate, Prefab, Vec3, Sprite, Color, input, Input, EventTouch, math, sp, SpriteFrame } from 'cc';
+// eslint-disable-next-line max-len
+import { _decorator, Component, Node, Label, tween, UITransform, view, instantiate, Prefab, Vec3, Sprite, Color, input, Input, EventTouch, math, sp, SpriteFrame, TweenEasing } from 'cc';
 import { app } from 'db://assets/app/app';
 
 const { ccclass, property } = _decorator;
@@ -24,7 +25,20 @@ export class RouletteWheel extends Component {
 
   private currentRotation: number = 0;
 
+  // 动画相关属性
   private isAnimating: boolean = false;
+
+  // 动画持续时间
+  private animationDuration: number = 0.6;
+ 
+  // 缓动类型
+  private easingType: TweenEasing = 'backOut';
+ 
+  // 是否启用过冲效果
+  private enableOvershoot: boolean = true;
+ 
+  // 过冲量（0-1之间）
+  private overshootAmount: number = 0.5; 
   
   // 弧形参数
   // 圆环半径 (直径 780)
@@ -186,32 +200,72 @@ export class RouletteWheel extends Component {
     this.animateToRotation(targetRotation);
   }
 
-  /**
-   * 动画旋转到目标角度
-   */
   private animateToRotation(targetRotation: number): void {
     if (this.isAnimating) return;
     
     this.isAnimating = true;
     const startRotation = this.currentRotation;
     
+    // 计算过冲角度（如果需要）
+    let finalTargetRotation = targetRotation;
+
+    if (this.enableOvershoot && this.easingType.includes('back')) {
+      const overshootAngle = this.DATA_ANGLE_STEP * this.overshootAmount;
+      finalTargetRotation = targetRotation + overshootAngle;
+    }
+    
+    // 使用弹性缓动函数，创建更自然的旋转效果
     tween({ rotation: startRotation })
-      .to(0.3, { rotation: targetRotation }, {
+      .to(this.animationDuration, { rotation: finalTargetRotation }, {
+        easing: this.easingType, 
         onUpdate: (target) => {
           this.currentRotation = target.rotation;
           this.updateItemsPosition();
         }
       })
       .call(() => {
-        this.isAnimating = false;
-        // 标准化旋转角度，避免角度过大
-        this.currentRotation = ((targetRotation % 360) + 360) % 360;
-        
-        // 打印当前中心item的值
-        const currentData = this.getCurrentData();
-        console.log('滑动完成后的中心item值:', currentData);
+        // 如果启用了过冲，需要平滑回到最终位置
+        if (this.enableOvershoot && this.easingType.includes('back')) {
+          this.smoothReturnToTarget(targetRotation);
+        } else {
+          this.finishAnimation(targetRotation);
+        }
       })
       .start();
+  }
+
+  /**
+   * 平滑回到目标位置
+   */
+  private smoothReturnToTarget(targetRotation: number): void {
+    const startRotation = this.currentRotation;
+    const returnDuration = 0.15; 
+      
+    tween({ rotation: startRotation })
+      .to(returnDuration, { rotation: targetRotation }, {
+        easing: 'quadOut', 
+        onUpdate: (target) => {
+          this.currentRotation = target.rotation;
+          this.updateItemsPosition();
+        }
+      })
+      .call(() => {
+        this.finishAnimation(targetRotation);
+      })
+      .start();
+  }
+
+  /**
+   * 完成动画
+   */
+  private finishAnimation(targetRotation: number): void {
+    this.isAnimating = false;
+    // 标准化旋转角度，避免角度过大
+    this.currentRotation = ((targetRotation % 360) + 360) % 360;
+    
+    // 打印当前中心item的值
+    const currentData = this.getCurrentData();
+    console.log('滑动完成后的中心item值:', currentData);
   }
 
   /**
@@ -285,6 +339,74 @@ export class RouletteWheel extends Component {
     
   public multipleIndexChange(index: number): void {
     this.jumpToData(this.dataList[index]);
+  }
+
+  /**
+   * 设置动画参数
+   * @param duration 动画持续时间
+   * @param easing 缓动类型
+   * @param enableOvershoot 是否启用过冲效果
+   * @param overshootAmount 过冲量（0-1之间）
+   */
+  public setAnimationParams(
+    duration: number = 0.6, 
+    easing: TweenEasing = 'backOut', 
+    enableOvershoot: boolean = true,
+    overshootAmount: number = 0.1
+  ): void {
+    this.animationDuration = duration;
+    this.easingType = easing;
+    this.enableOvershoot = enableOvershoot;
+    this.overshootAmount = Math.max(0, Math.min(1, overshootAmount));
+  }
+
+  /**
+   * 获取可用的缓动类型列表
+   */
+  public getAvailableEasingTypes(): string[] {
+    return [
+      // 弹性回弹效果
+      'backOut',     
+      // 弹性进出效果
+      'backInOut',   
+      // 弹性振荡效果
+      'elasticOut',  
+      // 弹性振荡进出效果
+      'elasticInOut',
+      // 弹跳效果
+      'bounceOut',
+      // 弹跳进出效果
+      'bounceInOut',
+      // 二次缓出
+      'quadOut',     
+      // 三次缓出
+      'cubicOut',    
+      // 四次缓出
+      'quartOut',    
+      // 五次缓出
+      'quintOut',    
+      // 正弦缓出
+      'sineOut',     
+      // 指数缓出
+      'expoOut',     
+      // 圆形缓出
+      'circOut',     
+      // 指数缓出
+      'expoOut',      
+      // 圆形缓出
+      'circOut',     
+    ];
+  }
+
+  /**
+   * 快速切换到下一个位置（无动画）
+   */
+  public snapToNext(direction: number): void {
+    if (this.isAnimating) return;
+    
+    const targetRotation = this.currentRotation + (direction * this.DATA_ANGLE_STEP);
+    this.currentRotation = ((targetRotation % 360) + 360) % 360;
+    this.updateItemsPosition();
   }
 
   update(deltaTime: number) {

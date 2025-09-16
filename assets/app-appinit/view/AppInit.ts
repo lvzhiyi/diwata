@@ -14,8 +14,9 @@ import { initARMS } from '../../common/script/extra/armsSDK/init';
 import { HTTP_STATUS_CODES } from '../../common/script/extra/Request';
 import commonInit from '../../common/script/extra/CommonInit';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
-import { Environment, getApiUrl, getGameEnv } from '../../common/script/extra/config/envConfig';
+import {  getApiUrl, getGameEnv } from '../../common/script/extra/config/envConfig';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from '../../basePlate/middleWare/serverManager/GameResourceManager';
+import { Environment } from '../../common/script/extra/config/env';
 
 const { ccclass, property } = _decorator;
 @ccclass('AppInit')
