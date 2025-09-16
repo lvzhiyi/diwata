@@ -6,8 +6,9 @@ import { createAuthHeaders, createWSAuthString, getRealServerTime } from 'db://a
 import { showErrorPop, showServerMaintenanceTip } from '../../core/baseUtil/BaseCommonUtil';
 import CpPostMessage from 'db://assets/common/script/extra/tmBridge/cpPostMessage';
 import { GlobalActivity, GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
-import { Environment, getApiUrl, getGameEnv, getWebSocketUrl } from 'db://assets/common/script/extra/config/envConfig';
+import { getApiUrl, getGameEnv, getWebSocketUrl } from 'db://assets/common/script/extra/config/envConfig';
 import { GameDataMgrEventsType } from 'db://assets/common/script/data/ActivityDataMgr';
+import { Environment } from 'db://assets/common/script/extra/config/env';
 
 const { ccclass } = _decorator;
 
