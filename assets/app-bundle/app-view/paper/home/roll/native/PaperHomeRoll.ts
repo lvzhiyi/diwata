@@ -174,7 +174,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   initEvents() {
-    this.controller.on(SlotsController.Event.FreeBonusSpinChange, this.startFreeSpinChange, this);
+    this.controller.on(SlotsController.Event.FreeBonusSpinChange, this.startFreeBonusChange, this);
     this.controller.on(SlotsController.Event.StartRolling, this.startGame, this);
     this.controller.on(SlotsController.Event.StopRolling, this.stopGame, this);
     app.manager.event.on('buyFreeSpinTimes', this.buyFreeSpinTimes, this);
@@ -577,6 +577,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     if (currentRoundTotalRewardAmount > 0) {
       this.changeTipsContent(this.totalRewardAmount, this.totalRewardAmount + currentRoundTotalRewardAmount);
+
       this.totalRewardAmount += currentRoundTotalRewardAmount;
       // this.changeTipsContent(`<color=#FF50E4><b>WIN</b></color> <color=#FFFFFF>₱ ${calculateWithBase(this.totalRewardAmount)}</color>`, true);
     }
@@ -1004,10 +1005,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 1. 如果免费轮状态为true，则显示免费轮次数
    * 2. 如果免费轮状态为false，则隐藏免费轮次数
    */
-  private startFreeSpinChange(isFreeBonusSpin: boolean) {
+  private startFreeBonusChange(isFreeBonusSpin: boolean) {
     this.isFreeBonusSpin = isFreeBonusSpin;
     console.log('startFreeSpinChange', isFreeBonusSpin);
-    isFreeBonusSpin ? this.showFreeBonusTimes(true) : this.showFreeBonusTimes(false);
+    isFreeBonusSpin ? this.showFreeBonusTimes() : this.hideFreeSpinTimes();
   }
 
   /** 展示成就的免费模式 or隐藏成就的免费模式 */
@@ -1027,14 +1028,20 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   /**
    * 显示免费轮剩余次数Node，
    */
-  private showFreeBonusTimes(show: boolean) {
+  private showFreeBonusTimes() {
     if (this.BonusView.isValid) {
-      this.BonusView.getComponent(BousView).updateBuyBonusStatus(show ? 3 : 1);
+      this.BonusView.getComponent(BousView).updateBuyBonusStatus(3);
     }
-    if(show) {
-      this.BonusView.getComponent(AdvancedButtonBreath).startBreath();
+  }
+
+  /**
+   * 隐藏免费轮Node，
+   */
+  private hideFreeSpinTimes() {
+    if(app.manager.global.isFreespinMode) {
+      this.showFreeSpinView(true);
     } else {
-      this.BonusView.getComponent(AdvancedButtonBreath).pauseBreath();
+      this.showFreeSpinView(false);
     }
   }
 
@@ -1176,7 +1183,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   onDestroy() {
-    this.controller.off(SlotsController.Event.FreeBonusSpinChange, this.startFreeSpinChange, this);
+    this.controller.off(SlotsController.Event.FreeBonusSpinChange, this.startFreeBonusChange, this);
     this.controller.off(SlotsController.Event.StartRolling, this.startGame, this);
     this.controller.off(SlotsController.Event.StopRolling, this.stopGame, this);
     app.manager.event.off('buyFreeSpinTimes', this.buyFreeSpinTimes, this);
