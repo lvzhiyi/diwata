@@ -239,6 +239,7 @@ export class StartButtonState extends Component {
        * 开始滚动事件
        */
       public onRollStart() {
+        console.log('roll:start事件');
         this.changePlayState('playing');
         this.isGamePlaying = true;
     
@@ -249,7 +250,7 @@ export class StartButtonState extends Component {
        * 停止滚动事件
        */
       public onRollStop(isReward: boolean = false) {
-        console.log('停止-中奖事件', isReward);
+        console.log('roll:stop事件', isReward);
         this.disimageChange(false);
 
         // 如果未中奖，直接重置为待机状态

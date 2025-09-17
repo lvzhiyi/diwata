@@ -368,6 +368,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
             this.rollFrameSkeleton.clearAnimation();
           }
 
+          // 派发滚动停止的事件
+          app.manager.event.emit('roll:stop', this.resultList?.some((item: BetResultItem) => item.rewardSymbolIndexSet?.length > 0));
+
           this.scheduleOnce(() => {
             this.startRemoveSymbol();
           }, 0.1);
