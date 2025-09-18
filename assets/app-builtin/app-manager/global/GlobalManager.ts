@@ -335,9 +335,9 @@ export class GlobalManager extends BaseManager {
      return this._multipleIndex;
    }
 
-   public setMultipleIndex(index: number) {
+   public setMultipleIndex(index: number, needAnimation: boolean = true) {
      this._multipleIndex = index;
-     app.manager.event.emit('multipleIndexChange', index);
+     app.manager.event.emit('multipleIndexChange', index, needAnimation);
    }
 
    public get voice() {

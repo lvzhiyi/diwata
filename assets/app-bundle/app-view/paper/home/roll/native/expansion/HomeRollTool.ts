@@ -124,17 +124,17 @@ export class HomeRollTool  {
    * 多个点同时飞向女神的动画
    * */ 
   async showFlyingToGoddessAnimation(
-    targetNodes: ChangeWildData[],
+    targetNodes: Node[],
     overlayNode: Node,
     goddessTargetNode: Node,
     lightPrefab: Prefab,
     goddessNode: Node
   ): Promise<void> {
     return new Promise<void>(async (resolve) => {
-      targetNodes.forEach((changeWildData) => {
+      targetNodes.forEach((node) => {
         const lightNode = instantiate(lightPrefab);
         lightNode.setParent(overlayNode);
-        lightNode.setWorldPosition(changeWildData.node.getWorldPosition());
+        lightNode.setWorldPosition(node.getWorldPosition());
         tween(lightNode)
           .to(
             0.65,
@@ -148,10 +148,11 @@ export class HomeRollTool  {
           .start();
       });
       await delay(500);
-      // 女神先执行劈剑动画
+      // 女神执行动画
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
       goddessSkeleton.premultipliedAlpha = false;
       const animationName = this.getGoddessAnimation(targetNodes);
+      console.log('女神执行动画', animationName);
       goddessSkeleton.setAnimation(0, animationName, false);
       goddessSkeleton.setCompleteListener(() => {
         // 女神执行待机动画
@@ -171,15 +172,22 @@ export class HomeRollTool  {
   ): Promise<void> {
     const spineManager = GameResourceManager.instance;
     const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.BOW_EXPLODE);
-
+   
     if (skeleonData != null) {
       return new Promise<void>(async (resolve) => {
         // 0.3秒后执行
         setTimeout(() => {
           resolve();
-        }, 600);
+        }, 500);
 
         targetNodes.forEach(item => {
+          // 过滤主元素
+          const isMain = item.getComponent(Symbol).currentSymbolItem.main;
+
+          if(isMain){
+            return;
+          }
+
           // 创建spine节点并设置大小
           const spineNode = this.createSpineNode(item, overlayNode, false);
 
@@ -191,9 +199,6 @@ export class HomeRollTool  {
             skeleton.setAnimation(0, 'gun_atk', false);
             skeleton.setCompleteListener((track) => {
               if (track.animation.name === 'gun_atk') {
-                // console.log('播放棒子动画序列完成');
-            
-                // skeleton.setAnimation(0, 'gun_in', true);
               }
             });
           } catch (error) {
@@ -211,10 +216,10 @@ export class HomeRollTool  {
    * 根据中的图标决定女神播放什么动效
   */
   getGoddessAnimation(
-    changeWildData: ChangeWildData[]
+    changeWildData: Node[]
   ):string{
-    const hasSword = changeWildData.some(item => item.type === SymbolType.SWORD);
-    const hasMainBow = changeWildData.some(item => item.type === SymbolType.MAIN_BOW);
+    const hasSword = changeWildData.some(item => item.getComponent(Symbol).currentSymbolItem.symbolId === SymbolType.SWORD);
+    const hasMainBow = changeWildData.some(item => item.getComponent(Symbol).currentSymbolItem.symbolId === SymbolType.BOW);
 
     if (hasSword && !hasMainBow) {
       return 'animation3';

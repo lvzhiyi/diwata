@@ -4,10 +4,10 @@
     "removeSplash": {
       "id": "removeSplash",
       "label": "removeSplash",
-      "enable": true,
+      "enable": false,
       "removeSplash": {
-        "complete": true,
-        "form": "https://creator-api.cocos.com/api/form/show?sid=1564c63a17e94d030e80d1bc905702d0"
+        "complete": false,
+        "form": "https://creator-api.cocos.com/api/form/show?"
       }
     }
   }

@@ -190,17 +190,18 @@ export class AppInit extends BaseAppInit {
 
     const mockParams = useMockData
       ? {
-        birthday:'01-01-1990',
-        channelId:'1050',
-        nickName:'cpTest10010',
-        gameId:'zhumeng006',
-        pId:'50',
-        playerId:'cpTest10010',
-        playerName:'cpTest10010',
+        birthday: '01-01-1990',
+        channelId: '1050',
+        gameId: 'zhumeng006',
+        nickName: 'cpTest10008',
+        pId: '50',
+        playerId: 'cpTest10008',
+        playerName: 'cpTest10008',
         // eslint-disable-next-line max-len
-        token:'253c91327245400092a9a52544bf9d7d18f6ef49d4c1ad7f1b39afe91b5f3615667caaf5aeb9bcdb1f3021a698a903e6effa11ba611f0c97db5d844ee769ba33a0b9a1662832490549fcf18bc09f4b896d6cf6acc793ab1287873a69dd4f14d90cf6b45de4305f683cbe279daa6c31cc',
-        userLevel:'1',
-        userName:'cpTest10010'
+        token: '253c91327245400092a9a52544bf9d7d18f6ef49d4c1ad7f1b39afe91b5f3615667caaf5aeb9bcdb1f3021a698a903e671ad70511da7302b045dc0dd1a1b20bc2d0d7a72374eeb617439279affd94ab1d34a0dab7ef559b86b7537a520a421d7589cb3fa40863abd7e40ced73762aab6',
+        userLevel: '1',
+        userName: 'cpTest10008',
+        ut: 'afe'
       }
       : {};
     const loginData = {
