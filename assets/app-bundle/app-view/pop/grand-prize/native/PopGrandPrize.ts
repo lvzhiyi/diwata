@@ -161,42 +161,46 @@ export class PopGrandPrize extends BaseView {
      const spine = this.node.getChildByName('Bg').getComponent(sp.Skeleton);
      const textNode = this.node.getChildByName('AmontBox');
     
-     // 根据奖励类型加载对应的骨骼动画资源
-     const spineAtlas: sp.SkeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.GRAND_PRIZE);
+     try {
+       // 根据奖励类型加载对应的骨骼动画资源
+       const spineAtlas: sp.SkeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.GRAND_PRIZE);
     
-     // 资源检查，确保所有必要元素都存在
-     if (!spine || !this.rewardSubType || !spineAtlas) return;
+       // 资源检查，确保所有必要元素都存在
+       if (!spine || !this.rewardSubType || !spineAtlas) return;
     
-     // 设置骨骼动画数据
-     spine.skeletonData = spineAtlas;
+       // 设置骨骼动画数据
+       spine.skeletonData = spineAtlas;
 
-     // 设置骨骼动画数据
-     spine.setSkin(animationName);
+       // 设置骨骼动画数据
+       spine.setSkin(animationName);
 
-     spine.timeScale = app.manager.global.gameSpeed;
+       spine.timeScale = app.manager.global.gameSpeed;
     
-     // 播放音效和背景音乐
-     // this.playGrandPrizeSound();
+       // 播放音效和背景音乐
+       // this.playGrandPrizeSound();
 
-     this.currentAnimationName = animationName;
+       this.currentAnimationName = animationName;
     
-     // 播放入场动画
-     await this.playSpineAnimation(spine, `${animationName}in`, false);
+       // 播放入场动画
+       await this.playSpineAnimation(spine, `${animationName}in`, false);
     
-     // 显示金额文本并播放循环动画
-     textNode.active = true;
-     this.playSpineAnimation(spine, 'loop', true);
-     this.playSpineAnimation(spine, `${animationName}loop`, true);
+       // 显示金额文本并播放循环动画
+       textNode.active = true;
+       this.playSpineAnimation(spine, 'loop', true);
+       this.playSpineAnimation(spine, `${animationName}loop`, true);
     
-     // 执行整体缩放动画
-     this.GrandprizeScaleAnimation();
+       // 执行整体缩放动画
+       this.GrandprizeScaleAnimation();
 
-     await delay(4600 / app.manager.global.gameSpeed);
+       await delay(4600 / app.manager.global.gameSpeed);
 
-     // 动画完成后，如果节点仍然有效，则执行隐藏逻辑
-     // 动画完成后，如果节点仍然有效，则执行隐藏逻辑
-     if (this.node && this.node.isValid && animationName === this.animationQueue[this.animationQueue.length - 1] && !this.isPlayEnd) {
-       this.hideGrandPrize();
+       // 动画完成后，如果节点仍然有效，则执行隐藏逻辑
+       // 动画完成后，如果节点仍然有效，则执行隐藏逻辑
+       if (this.node && this.node.isValid && animationName === this.animationQueue[this.animationQueue.length - 1] && !this.isPlayEnd) {
+         this.hideGrandPrize();
+       }
+     } catch (error) {
+       console.error('playGrandPrizeAnimation error:', error);
      }
    }
 
