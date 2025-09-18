@@ -575,7 +575,7 @@ export class Roll extends Component {
         this.node.insertChild(symbolNode, 0);
       }
 
-      await delay(50);
+      // await delay(50);
   
       return Promise.resolve(this.symbolAnimationData);
     }
@@ -596,21 +596,39 @@ export class Roll extends Component {
         }
   
         // 收集所有动画的 Promise
-        const animationPromises = fallDownItems.map(item => {
+        const animationPromises = fallDownItems.map((item, index) => {
           return new Promise<void>(innerResolve => {
             const { fallDownCount, symbolNode } = item;
             const wildNode = symbolNode.getComponent(Symbol)?.getWildNode();
             const targetY = symbolNode.position.y - this.itemHeight * fallDownCount;
             item.fallDownCount = 0;
   
-            // 主节点动画
+            // 根据下落距离调整动画时长，让动画更自然
+            const fallDistance = Math.abs(fallDownCount * this.itemHeight);
+            // 基础时长
+            const baseDuration = 0.3;
+            // 距离因子，最大为1
+            const distanceFactor = Math.min(fallDistance / (this.itemHeight * 2), 1);
+            // 0.3-0.5秒之间
+            const animationDuration = baseDuration + distanceFactor * 0.2;
+            
+            // 添加轻微的延迟，让不同高度的元素有层次感
+            // 每个元素延迟20ms
+            const delayTime = index * 0.02;
+            
+            // 主节点动画 - 使用更平滑的缓动
             const symbolTween = tween(symbolNode)
-              .to(0.25, { position: new Vec3(0, targetY, 0) }, { easing: 'bounceOut' });
+              .delay(delayTime)
+              .to(animationDuration, { position: new Vec3(0, targetY, 0) }, {
+                // 使用cubicOut让动画更丝滑
+                easing: 'cubicOut'
+              });
   
             // 如果有 wildNode，也添加动画
             if (wildNode) {
               const wildTween = tween(wildNode)
-                .to(0.25, { position: new Vec3(wildNode.position.x, targetY, 0) }, { easing: 'bounceOut' });
+                .delay(delayTime)
+                .to(animationDuration, { position: new Vec3(wildNode.position.x, targetY, 0) }, { easing: 'cubicOut' });
                       
               tween(this.node)
                 .parallel(symbolTween, wildTween)
