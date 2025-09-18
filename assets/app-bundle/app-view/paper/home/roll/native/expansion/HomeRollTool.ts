@@ -34,9 +34,7 @@ export class HomeRollTool  {
     if (skeleonData != null) {
       // 创建spine节点并设置大小
       const spineNode = this.createSpineNode(targetNode, overlayNode, true);
-      
-      const lightSpineNodes = this.creatSwordLightSpineNode(spineNode, targetNode);
-      
+            
       return new Promise<void>(async (resolve) => {
         // 0.3秒后执行
         setTimeout(() => {
@@ -52,25 +50,6 @@ export class HomeRollTool  {
           // 播放多个动画序列
           HomeRollTool.playAnimationSequence(skeleton, ['dao_atk', 'dao_hit'], async () => {
             console.log('播放剑动画序列完成');
-
-            // if(lightSpineNodes.length > 0) {
-            //   const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SWORD_HIT_LIGHT);
-            //   // 播放发光动画
-            //   lightSpineNodes.map(item => {
-            //     console.log('发光节点 :', {
-            //       name: item.name,
-            //       uuid: item.uuid,
-            //       parent: item.parent?.name || 'null',
-            //       parentRef: item.parent,
-            //       active: item.active,
-            //       component: item.getComponent(sp.Skeleton),
-            //       isValid: item.isValid
-            //     }, skeleonData);
-            //     const skeleton = item.getComponent(sp.Skeleton) || item.addComponent(sp.Skeleton);
-            //     skeleton.skeletonData = skeleonData;
-            //     skeleton.setAnimation(0, 'dao_in', true);
-            //   });
-            // }
           });
         } catch (error) {
           console.error('加载spine/LamAng_wild动画失败', error);
@@ -158,7 +137,7 @@ export class HomeRollTool  {
         // 女神执行待机动画
         goddessSkeleton.setAnimation(0, 'animation', true);
       });
-      await delay(1000);
+      await delay(500);
       resolve();
     });
   }
@@ -178,7 +157,7 @@ export class HomeRollTool  {
         // 0.3秒后执行
         setTimeout(() => {
           resolve();
-        }, 500);
+        }, 300);
 
         targetNodes.forEach(item => {
           // 过滤主元素

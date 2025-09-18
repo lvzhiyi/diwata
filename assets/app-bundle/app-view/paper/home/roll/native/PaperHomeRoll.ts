@@ -575,7 +575,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       const rollRemoveData = roll.getRollRemoveData();
 
       if (rollRemoveData.length > 0) {
-        await delay(200);
+        await delay(100);
       }
 
       return lightAndRemoveAnimation;
@@ -584,7 +584,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 移除Symbol
      */
     console.log('开始移除Symbol-数据');
-    await Promise.all(rollsScript.map(roll => roll.removeSymbol()));
+    // await Promise.all(rollsScript.map(roll => roll.removeSymbol()));
 
     /**
      * 更新tips中奖金额
@@ -802,6 +802,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      */
     if (fallDownScript.length > 0) {
       await Promise.all(fallDownScript.map(roll => roll.fallDownSymbol()));
+      await Promise.all(fallDownScript.map(roll => roll.removeSymbol())); 
       await delay(100);
       await Promise.all(fallDownScript.map((roll) =>
         roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[roll.getCurrentIndex()]) || [])
@@ -823,7 +824,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
        * 添加Roll边框动画后下落，然后再添加到顶部下落
        * -- 传入下一回合roll的数据
        */
-
+        await roll.removeSymbol(); 
         await roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[roll.getCurrentIndex()]) || []);
         await roll.fallDownSymbol();
   
