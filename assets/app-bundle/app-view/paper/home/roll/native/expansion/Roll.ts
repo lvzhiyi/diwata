@@ -61,7 +61,7 @@ export class Roll extends Component {
       this.initNodePool();
       this.initSymbols();
       this.originalWorldPosition = this.node.parent.getPosition().clone();
-      this.originalWorldPosition.x = this.originalWorldPosition.x + 15;
+      this.originalWorldPosition.x = this.originalWorldPosition.x;
     }
 
     /**
@@ -467,7 +467,7 @@ export class Roll extends Component {
         rollFrameSkeleton.setCompleteListener(() => {
           this.scheduleOnce(() => {
             resolve(true);
-          }, 1.5 / app.manager.global.gameSpeed);
+          }, 1 / app.manager.global.gameSpeed);
         });
       });
     }

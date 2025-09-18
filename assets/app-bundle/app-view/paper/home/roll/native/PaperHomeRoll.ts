@@ -141,7 +141,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     rollFrameNode.layer = this.node.layer;
     rollFrameNode.active = false;
     rollFrameNode.addComponent(UITransform);
-    rollFrameNode.getComponent(UITransform).setContentSize(100, 400);
+    rollFrameNode.getComponent(UITransform).setContentSize(116, 400);
     rollFrameNode.setParent(this.overLayNode);
 
     this.rollFrameSkeleton = rollFrameNode.addComponent(sp.Skeleton);
@@ -608,7 +608,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     /**
      * 添加到顶部然后下落 或者 播放Roll边框动画然后落下然后添加到顶部最后下落
      */
-    if (hasLitghtAnimation.some(item => item)) await delay(200);
     await this.addToTopThenFallDowmOrRunRollFrameAnimationThenFallDownThenAddToTopThenFallDown(rollsScript, symbolAnimationData);
 
     symbolAnimationData = rollsScript.map(roll => roll.symbolAnimationData);
@@ -803,7 +802,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      */
     if (fallDownScript.length > 0) {
       await Promise.all(fallDownScript.map(roll => roll.fallDownSymbol()));
-      await delay(200);
+      await delay(100);
       await Promise.all(fallDownScript.map((roll) =>
         roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[roll.getCurrentIndex()]) || [])
       ));

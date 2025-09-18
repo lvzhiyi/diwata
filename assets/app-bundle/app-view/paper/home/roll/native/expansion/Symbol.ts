@@ -296,10 +296,16 @@ export class Symbol extends Component {
             this.LightSpine.active = false;
             this.iconNode.getComponent(UIOpacity).opacity = 0;
           });
+          removeUpSkeleton.setEventListener((trackEntry, event: sp.spine.Event) => {
+            if (event.data.name === 'xialuo') {
+              resolve();
+              this.LightSpine.active = false;
+              this.removeDownSpineNode.active = false;
+            }
+          });
           removeUpSkeleton.setCompleteListener(() => {
-            resolve();
             removeUpSkeleton.setCompleteListener(null);
-            this.cleanupAnimationNodes();
+            this.removeUpSpineNode.active = false;
           });
 
           // 添加超时保护
@@ -328,8 +334,8 @@ export class Symbol extends Component {
      * 清理动画节点状态
      */
     private cleanupAnimationNodes(): void {
-      this.LightSpine.active = false;
       this.removeUpSpineNode.active = false;
+      this.LightSpine.active = false;
       this.removeDownSpineNode.active = false;
     }
 
