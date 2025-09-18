@@ -336,6 +336,23 @@ export class Roll extends Component {
     }
 
     /**
+     * 播放scatter高亮动画
+    */
+    playScatterHighlightAnimation(): Promise<void> {
+      const children = this.node.children;
+      children.map(itemNode => {
+        const symbol = itemNode.getComponent(Symbol);
+        const symbolId = symbol.getSymbolId() || '';
+
+        if(symbolId === '3001') {
+          symbol.playScatterHighlightAnimation();
+        }
+      });
+
+      return Promise.resolve();
+    }
+
+    /**
      * 当前roll是否存在剑
      */
     currentRollHaveSword(): boolean {
@@ -390,6 +407,7 @@ export class Roll extends Component {
           if (symbol.currentSymbolItem.symbolId  === SymbolType.BOW && symbolId !== SymbolType.WILD ) {
             if (symbol.currentSymbolItem.main === true) {
               symbol.playSwordOrBowAnimation('4011');
+              showBowNode.push(child);
             }else{
               showBowNode.push(child);
             }
@@ -477,21 +495,6 @@ export class Roll extends Component {
         return Promise.resolve();
       }));
     }
-
-    // /**
-    //  * 开始播放落地回弹动画
-    //  */
-    // async startElementFallBackAnimation() {
-    //   return await Promise.all(this.node.children.map(async item => {
-    //     const symbol = item.getComponent(Symbol);
-
-    //     if (symbol) {
-    //       return symbol.startElementFallBackAnimation();
-    //     }
-
-    //     return Promise.resolve();
-    //   }));
-    // }
 
     /**
      * 播放消除闪烁动画

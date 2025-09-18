@@ -34,6 +34,7 @@ export class ButtonScale extends Component {
 
   private onTouchStart() {
     if (this.button && this.button.interactable) {
+      console.log('onTouchStart');
       tween(this.node).to(this.ANIMATION_DURATION, { scale: this.PRESSED_SCALE }).start();
     }
   }

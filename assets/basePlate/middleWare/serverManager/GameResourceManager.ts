@@ -15,7 +15,7 @@ export const SPINE_RESOURCE_NAMES: { [key: string]: string } = {
 export const ROLL_RESOURCE_NAMES: { [key: string]: string } = {
  
   // wild动画
-  LAMANG_WILD: 'bianhuan',
+  LAMANG_WILD: 'gun_in',
   // scatter动画
   LAMANG_ICON_SCATTER: 'symbol_3001',
   // 剑被劈中的动画

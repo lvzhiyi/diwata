@@ -165,7 +165,7 @@ export class Symbol extends Component {
         this.wildAnimationNode.setWorldPosition(originalPos);
 
         // 播放wild动画，动画完成后删除动画，并在wildNode设置图片
-        await this.playWildAnimation(this.wildAnimationNode, 'bianhuan', this.iconNode, '5001');
+        await this.playWildAnimation(this.wildAnimationNode, 'gun_in', this.iconNode, '5001');
 
         resolve();
       });
@@ -235,6 +235,7 @@ export class Symbol extends Component {
           const timeout = setTimeout(() => {
             resolve();
           }, 1000);
+          
           /// 根据当前图片的尺寸，设置LightSpine的尺寸
           const iconSize = this.iconNode.getComponent(UITransform).contentSize;
           this._currentIconSize = iconSize.clone();
@@ -370,12 +371,32 @@ export class Symbol extends Component {
         const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
         skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
         skeleton.setAnimation(0, 'symbol_3001_2', false);
+        console.log('播放scatter高亮动画2');
         skeleton.setCompleteListener(() => {
           this.LightSpine.active = false;
           resolve();
           skeleton.setCompleteListener(null);
           skeleton.skeletonData = null;
         });
+      });
+    }
+
+    /**
+     * 一旦出现了scatter，播放scatter高亮动画
+     */
+    playScatterHighlightAnimation(): Promise<void> {
+      if(this.getSymbolId() !== '3001') {
+        return Promise.resolve();
+      }
+
+      return new Promise<void>(async (resolve) => {
+        this.LightSpine.active = true;
+        const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+        const skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.LAMANG_ICON_SCATTER);
+        skeleton.skeletonData = skeletonData;
+        skeleton.setAnimation(0, 'symbol_3001_3', true);
+        console.log('播放scatter高亮动画3');
+        resolve();
       });
     }
 
@@ -454,6 +475,21 @@ export class Symbol extends Component {
       this.wildAnimationNode = null;
     }
 
+    clearLightNode() {
+      this.LightSpine.active = false;
+      const skeleton = this.LightSpine.getComponent(sp.Skeleton);
+
+      if(skeleton) {
+        // 清除所有事件监听器
+        skeleton.setCompleteListener(null);
+        skeleton.setEventListener(null);
+        // 清除动画数据引用
+        skeleton.skeletonData = null;
+        // 停止所有动画
+        skeleton.clearTracks();
+      }
+    }
+
     /**
      * 播放wild动画，动画完成后删除动画，并在wildNode设置图片
      */
@@ -466,8 +502,9 @@ export class Symbol extends Component {
           skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.LAMANG_WILD);
           skeleton.setAnimation(0, animationName, false);
           console.log('播放wild动画-数据', animationName);
+          iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
           skeleton.setCompleteListener(() => {
-            iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
+            // iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
             this.destoryWildAnimationNode();
             resolve();
           });
@@ -563,7 +600,7 @@ export class Symbol extends Component {
      */
     protected onDisable(): void {
       this.destoryWildNode();
-      // this.destoryLightNode();
+      this.clearLightNode();
       this.destoryWildAnimationNode();
     }
 }
