@@ -465,7 +465,7 @@
       "_spriteFrame"
     ],
     "value": {
-      "__uuid__": "6aaa9b68-2362-46c5-b6fa-bcbba1d6e77a@f9941",
+      "__uuid__": "b40f9617-69d1-4719-8316-a29722f6daa2@f9941",
       "__expectedType__": "cc.SpriteFrame"
     }
   },
@@ -485,8 +485,8 @@
     ],
     "value": {
       "__type__": "cc.Size",
-      "width": 353,
-      "height": 49
+      "width": 349,
+      "height": 70
     }
   },
   {
@@ -1705,7 +1705,7 @@
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "c664bfd4-c274-455f-899c-3157bedbe580@f9941",
+        "__uuid__": "f455f446-310e-4ef4-abd5-d5219cc89aa7@f9941",
         "__expectedType__": "cc.SpriteFrame"
       }
     ],
@@ -1713,16 +1713,12 @@
       "__uuid__": "4b9d07c2-2e2f-44e7-8cf1-6e367232c5b4",
       "__expectedType__": "cc.Prefab"
     },
-    "splitSymbolPrefab": {
-      "__uuid__": "6cd37e65-4bb7-4d43-8816-b0f1da17e145",
-      "__expectedType__": "cc.Prefab"
-    },
     "buttonItemPrefab": {
       "__uuid__": "5c77ab8e-f2b8-4542-84bf-b63df123114f",
       "__expectedType__": "cc.Prefab"
     },
-    "jackpotPrefab": {
-      "__uuid__": "52e88ea5-8606-42f4-b964-3e9fe59cb812",
+    "ruleTitlePrefab": {
+      "__uuid__": "729c4598-94c5-41a7-b2ff-8e9a21704801",
       "__expectedType__": "cc.Prefab"
     },
     "_id": ""

@@ -111,13 +111,9 @@ export class Symbol extends Component {
 
     /** 检查透明度 */
     checkOpacity() {
-      if (this.LightSpine.getComponent(UIOpacity).opacity === 0) {
-        this.LightSpine.getComponent(UIOpacity).opacity = 255;
-      }
+      this.LightSpine.getComponent(UIOpacity).opacity = 255;
 
-      if (this.iconNode.getComponent(UIOpacity).opacity === 0) {
-        this.iconNode.getComponent(UIOpacity).opacity = 255;
-      }
+      this.iconNode.getComponent(UIOpacity).opacity = 255;
     }
 
     initBlurSymbol(symbolId: string) {
@@ -297,10 +293,11 @@ export class Symbol extends Component {
             this.iconNode.getComponent(UIOpacity).opacity = 0;
           });
           removeUpSkeleton.setEventListener((trackEntry, event: sp.spine.Event) => {
-            if (event.data.name === 'xialuo') {
+            if (event.data.name === 'baozha') {
               resolve();
               this.LightSpine.active = false;
               this.removeDownSpineNode.active = false;
+              this.iconNode.getComponent(UIOpacity).opacity = 0;
             }
           });
           removeUpSkeleton.setCompleteListener(() => {

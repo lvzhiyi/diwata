@@ -40,6 +40,7 @@ export class SlotsController extends BaseController<
    */
   async stopRolling(betResult: BetResult) {
     this.betRecordId = betResult?.betRecordId ?? '';
+    console.log('betRecordId', this.betRecordId);
     
     this.emit(SlotsController.Event.StopRolling, betResult);
   }

@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "6cd37e65-4bb7-4d43-8816-b0f1da17e145",
+  "uuid": "729c4598-94c5-41a7-b2ff-8e9a21704801",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "SplitSymbol"
+    "syncNodeName": "RuleTitle"
   }
 }

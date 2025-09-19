@@ -18,6 +18,7 @@ import { app } from 'db://assets/app/app';
 import { SymbolBox } from './expansion/SymbolBox';
 import { ButtonItem } from './expansion/ButtonItem';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
+import { RuleTitle } from './expansion/RuleTitle';
 
 const { ccclass, property } = _decorator;
 
@@ -66,33 +67,27 @@ export class PopRule extends BaseView {
   private symbolBoxPrefab: Prefab = null;
 
   @property(Prefab)
-  private splitSymbolPrefab: Prefab = null;
-
-  @property(Prefab)
   private buttonItemPrefab: Prefab = null;
 
   @property(Prefab)
-  private jackpotPrefab: Prefab = null;
+  private ruleTitlePrefab: Prefab = null;
 
   private ruleData: IRuleData[] = [];
 
   // 初始化的相关逻辑写在这
   onLoad() {
-    // this.initData();
-    // this.drawRule();
+    this.initData();
+    this.drawRule();
   }
 
   initData() {
     this.ruleData = [
       {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            'Symbol',
-          fontSize: 40,
-          color: '#ffe345',
-          bold: true,
-          align: 'center',
+        type: RuleType.PREFAB,
+        prefabOptions: {
+          prefab: this.ruleTitlePrefab,
+          script: RuleTitle,
+          obj: { title: 'Symbol', },
         },
       },
 
@@ -447,7 +442,6 @@ export class PopRule extends BaseView {
           align: 'left',
         },
       },
-      { type: RuleType.PREFAB, prefabOptions: { prefab: this.jackpotPrefab, obj: {} } },
       {
         type: RuleType.TEXT,
         textOptions: {
@@ -459,8 +453,6 @@ export class PopRule extends BaseView {
           align: 'left',
         },
       },
-
-      { type: RuleType.PREFAB, prefabOptions: { prefab: this.splitSymbolPrefab, obj: {} } },
 
       {
         type: RuleType.IMAGE,
