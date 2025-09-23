@@ -40,7 +40,7 @@ export class PopAutosetting extends BaseView {
     // 当前点击的金额按钮
     private amountButton: Node;
 
-    protected onEnable(): void {
+    protected onLoad(): void {
       this.SelectTotalSpins.on(Node.EventType.TOUCH_END, () => this.clickSelectNode('totalSpins', this.SelectTotalSpins), this);
       this.SelectSingleWin.on(Node.EventType.TOUCH_END, () => this.clickSelectNode('singleWin', this.SelectSingleWin), this);
       this.SelectBalanceLess.on(Node.EventType.TOUCH_END, () => this.clickSelectNode('balanceLess', this.SelectBalanceLess), this);
@@ -64,13 +64,13 @@ export class PopAutosetting extends BaseView {
       });
     }
 
-    protected onDestroy(): void {
-      this.SelectTotalSpins.off(Node.EventType.TOUCH_END, () => this.clickSelectNode('totalSpins', this.SelectTotalSpins), this);
-      this.SelectSingleWin.off(Node.EventType.TOUCH_END, () => this.clickSelectNode('singleWin', this.SelectSingleWin), this);
-      this.SelectBalanceLess.off(Node.EventType.TOUCH_END, () => this.clickSelectNode('balanceLess', this.SelectBalanceLess), this);
-      this.SelectBalanceMore.off(Node.EventType.TOUCH_END, () => this.clickSelectNode('balanceMore', this.SelectBalanceMore), this);
-      this.SelectFreeGame.off(Node.EventType.TOUCH_END, () => this.clickSelectNode('isFree', this.SelectFreeGame), this);
-      autoSettingModalEventTarget.off('addOrSubValue', this.addOrSubValue, this);
+    protected onDisable(): void {
+      // this.SelectTotalSpins.off(Node.EventType.TOUCH_END, () => this.clickSelectNode('totalSpins', this.SelectTotalSpins), this);
+      // this.SelectSingleWin.off(Node.EventType.TOUCH_END, () => this.clickSelectNode('singleWin', this.SelectSingleWin), this);
+      // this.SelectBalanceLess.off(Node.EventType.TOUCH_END, () => this.clickSelectNode('balanceLess', this.SelectBalanceLess), this);
+      // this.SelectBalanceMore.off(Node.EventType.TOUCH_END, () => this.clickSelectNode('balanceMore', this.SelectBalanceMore), this);
+      // this.SelectFreeGame.off(Node.EventType.TOUCH_END, () => this.clickSelectNode('isFree', this.SelectFreeGame), this);
+      // autoSettingModalEventTarget.off('addOrSubValue', this.addOrSubValue, this);
     }
 
     clickSelectNode(key: string, SelectNode: Node) {

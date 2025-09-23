@@ -654,7 +654,7 @@
     "__prefab": {
       "__id__": 27
     },
-    "_hideEvent": 2,
+    "_hideEvent": 1,
     "_singleton": true,
     "_captureFocus": true,
     "_shade": true,

@@ -124,20 +124,20 @@ export class AddOrSub extends Component {
       this.node.getChildByName('Number').children[0].getComponent(Label).string = this.value.toString();
     }
 
-    protected onDestroy(): void {
-      this.SubNode.off(Node.EventType.TOUCH_START, this.startSubing, this);
-      this.SubNode.off(Node.EventType.TOUCH_END, this.endSubing, this);
-      this.SubNode.off(Node.EventType.TOUCH_CANCEL, this.endSubing, this);
+  // protected onDisable(): void {
+  //   this.SubNode.off(Node.EventType.TOUCH_START, this.startSubing, this);
+  //   this.SubNode.off(Node.EventType.TOUCH_END, this.endSubing, this);
+  //   this.SubNode.off(Node.EventType.TOUCH_CANCEL, this.endSubing, this);
 
-      this.AddNode.off(Node.EventType.TOUCH_START, this.startAdding, this);
-      this.AddNode.off(Node.EventType.TOUCH_END, this.endAdding, this);
-      this.AddNode.off(Node.EventType.TOUCH_CANCEL, this.endAdding, this);
+  //   this.AddNode.off(Node.EventType.TOUCH_START, this.startAdding, this);
+  //   this.AddNode.off(Node.EventType.TOUCH_END, this.endAdding, this);
+  //   this.AddNode.off(Node.EventType.TOUCH_CANCEL, this.endAdding, this);
 
-      if (this.timerInterval) {
-        clearInterval(this.timerInterval);
-      }
-      if (this.timerTimeout) {
-        clearTimeout(this.timerTimeout);
-      }
-    }
+  //   if (this.timerInterval) {
+  //     clearInterval(this.timerInterval);
+  //   }
+  //   if (this.timerTimeout) {
+  //     clearTimeout(this.timerTimeout);
+  //   }
+  // }
 }

@@ -1675,11 +1675,15 @@
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "eec72359-f16b-4248-b437-40b3d225dc2f@f9941",
+        "__uuid__": "932bdb61-5f29-444d-b915-edb4c28202db@f9941",
         "__expectedType__": "cc.SpriteFrame"
       },
       {
         "__uuid__": "fbb82726-6fc4-45bd-83c4-ad2e3031e87e@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      },
+      {
+        "__uuid__": "8d8bad7b-73f5-4345-9902-bd752e3d4981@f9941",
         "__expectedType__": "cc.SpriteFrame"
       }
     ],
@@ -1709,8 +1713,8 @@
         "__expectedType__": "cc.SpriteFrame"
       }
     ],
-    "symbolBoxPrefab": {
-      "__uuid__": "4b9d07c2-2e2f-44e7-8cf1-6e367232c5b4",
+    "symbolViewPrefab": {
+      "__uuid__": "3ee90eea-1221-436e-a3dc-c6accc533621",
       "__expectedType__": "cc.Prefab"
     },
     "buttonItemPrefab": {

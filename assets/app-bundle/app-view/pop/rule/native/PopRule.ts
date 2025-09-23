@@ -12,6 +12,7 @@ import {
   SpriteAtlas,
   SpriteFrame,
   UITransform,
+  Widget,
 } from 'cc';
 import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { app } from 'db://assets/app/app';
@@ -19,6 +20,7 @@ import { SymbolBox } from './expansion/SymbolBox';
 import { ButtonItem } from './expansion/ButtonItem';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { RuleTitle } from './expansion/RuleTitle';
+import { SymbolView } from './expansion/SymbolView';
 
 const { ccclass, property } = _decorator;
 
@@ -36,6 +38,10 @@ interface IRuleData {
     color: string;
     bold: boolean;
     align?: string;
+    // 悬挂缩进：第一行无缩进，后续行有缩进（像素值）
+    hangingIndent?: number;
+    // 序号文本（如 "1.", "•", "→" 等）
+    numberText?: string;
   };
   imageOptions?: {
     imgNames: SpriteFrame[];
@@ -64,7 +70,7 @@ export class PopRule extends BaseView {
   private homeFrames: SpriteFrame[] = [];
 
   @property(Prefab)
-  private symbolBoxPrefab: Prefab = null;
+  private symbolViewPrefab: Prefab = null;
 
   @property(Prefab)
   private buttonItemPrefab: Prefab = null;
@@ -90,107 +96,36 @@ export class PopRule extends BaseView {
           obj: { title: 'Symbol', },
         },
       },
-
       {
         type: RuleType.PREFAB,
         prefabOptions: {
-          prefab: this.symbolBoxPrefab,
-          script: SymbolBox,
-          obj: {
-            icon: this.getSymbolFrame('1008'), value1: 0.5, value2: 1.5, value3: 2.5 
-          },
+          prefab: this.symbolViewPrefab,
+          script: SymbolView,
+          obj: {},
         },
       },
+      
       {
         type: RuleType.PREFAB,
         prefabOptions: {
-          prefab: this.symbolBoxPrefab,
-          script: SymbolBox,
-          obj: {
-            icon: this.getSymbolFrame('1007'), value1: 0.4, value2: 1.2, value3: 2
-          },
-        },
-      },
-      {
-        type: RuleType.PREFAB,
-        prefabOptions: {
-          prefab: this.symbolBoxPrefab,
-          script: SymbolBox,
-          obj: {
-            icon: this.getSymbolFrame('1006'), value1: 0.3, value2: 0.9, value3: 1.5 
-          },
-        },
-      },
-      {
-        type: RuleType.PREFAB,
-        prefabOptions: {
-          prefab: this.symbolBoxPrefab,
-          script: SymbolBox,
-          obj: {
-            icon: this.getSymbolFrame('1005'), value1: 0.2, value2: 0.6, value3: 1 
-          },
-        },
-      },
-      {
-        type: RuleType.PREFAB,
-        prefabOptions: {
-          prefab: this.symbolBoxPrefab,
-          script: SymbolBox,
-          obj: {
-            icon: this.getSymbolFrame('1004'), value1: 0.1, value2: 0.3, value3: 0.5
-          },
-        },
-      },
-      {
-        type: RuleType.PREFAB,
-        prefabOptions: {
-          prefab: this.symbolBoxPrefab,
-          script: SymbolBox,
-          obj: {
-            icon: this.getSymbolFrame('1003'), value1: 0.1, value2: 0.3, value3: 0.5 
-          },
-        },
-      },
-      {
-        type: RuleType.PREFAB,
-        prefabOptions: {
-          prefab: this.symbolBoxPrefab,
-          script: SymbolBox,
-          obj: {
-            icon: this.getSymbolFrame('1002'), value1: 0.05, value2: 0.15, value3: 0.25 
-          },
-        },
-      },
-      {
-        type: RuleType.PREFAB,
-        prefabOptions: {
-          prefab: this.symbolBoxPrefab,
-          script: SymbolBox,
-          obj: {
-            icon: this.getSymbolFrame('1001'), value1: 0.05, value2: 0.15, value3: 0.25 
-          },
+          prefab: this.ruleTitlePrefab,
+          script: RuleTitle,
+          obj: { title: 'Game Rules', },
         },
       },
       {
         type: RuleType.TEXT,
         textOptions: {
           content:
-            'Game Rules',
-          fontSize: 40,
-          color: '#ffe345',
-          bold: true,
-          align: 'center',
-        },
-      },,
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            '1. This is a 4x5 slot machine with an additional special reel, and there are 1024 paylines.\r\n2. Consecutive symbols, positioned left to right starting on the first reel, will form a winning combination. if in sequence from leftmost to right with no gaps and in combinations according to the pay table.',
+            'This is a 6-reel video slot game (reels 1 & 6 have 3 rows, reels 2 & 5 have 4 rows, and reels 3 & 4 have 5 rows).',
           fontSize: 27,
-          color: '#EAF2C3',
+          color: '#FFFFFF',
           bold: false,
           align: 'left',
+          // 悬挂缩进：30像素
+          hangingIndent: 40,
+          // 序号文本
+          numberText: '1.',
         },
       },
       {
@@ -230,11 +165,30 @@ export class PopRule extends BaseView {
         type: RuleType.TEXT,
         textOptions: {
           content:
-            '1."Golden Symbol" will appear on reels 2, 3, and 4 only.\r\n2."Golden Symbol" and "Normal Symbol" as seen as the same symbol to eliminated and win the payouts.\r\n3.When "Golden Symbol" is eliminated that will flip in its original position and become "Wild Symbol".',
+            'Consecutive symbols from left to right starting on the first reel form a winning combination. The sequence must have no gaps and match the pay table.',
           fontSize: 27,
           color: '#EAF2C3',
           bold: false,
           align: 'left',
+          // 悬挂缩进：25像素
+          hangingIndent: 25,
+          // 使用项目符号
+          numberText: '•',
+        },
+      },
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'Malfunction voids all pays and plays. If any malfunction occurs during the feature game, the system will automatically complete the game and ensure the player receives their winnings.',
+          fontSize: 27,
+          color: '#EAF2C3',
+          bold: false,
+          align: 'left',
+          // 悬挂缩进：35像素
+          hangingIndent: 35,
+          // 使用箭头符号
+          numberText: '→',
         },
       },
       {
@@ -573,7 +527,78 @@ export class PopRule extends BaseView {
 
   getRuleFrame(name: string) {
     return this.ruleFrames.find((frame) => frame.name === name) || null;
-  } 
+  }
+
+  /**
+   * 创建悬挂缩进文本
+   * @param content 文本内容
+   * @param fontSize 字体大小
+   * @param color 颜色
+   * @param bold 是否粗体
+   * @param align 对齐方式
+   * @param hangingIndent 悬挂缩进像素值
+   * @param maxWidth 最大宽度
+   * @param layer 层级
+   * @param numberText 序号文本
+   */
+  createHangingIndentText(content: string, fontSize: number, color: string, bold: boolean, align: string, hangingIndent: number, maxWidth: number, layer: number, numberText?: string) {
+    // 创建主文本节点
+    const textNode = new Node('text');
+    textNode.layer = layer;
+    
+    // 设置文本节点位置和大小
+    const textTransform = textNode.addComponent(UITransform);
+    textTransform.width = maxWidth;
+    
+    // 如果有悬挂缩进，调整文本位置和宽度
+    if (hangingIndent && hangingIndent > 0) {
+      textNode.setPosition(-maxWidth / 2 + hangingIndent, 0);
+      textTransform.width = maxWidth - hangingIndent;
+    } else {
+      textNode.setPosition(-maxWidth / 2, 0);
+    }
+    
+    // 添加主文本Label
+    const mainLabel = textNode.addComponent(Label);
+    mainLabel.string = content;
+    mainLabel.fontSize = fontSize;
+    mainLabel.color = new Color().fromHEX(color);
+    mainLabel.isBold = bold;
+    mainLabel.overflow = Label.Overflow.RESIZE_HEIGHT;
+    mainLabel.horizontalAlign = align === 'left' ? Label.HorizontalAlign.LEFT : Label.HorizontalAlign.CENTER;
+    
+    // 如果有悬挂缩进，添加序号Label
+    if (hangingIndent && hangingIndent > 0) {
+      const numberNode = new Node('numberLabel');
+      numberNode.layer = layer;
+      
+      // 设置序号Label的Transform
+      const numberTransform = numberNode.addComponent(UITransform);
+      numberTransform.width = hangingIndent;
+      numberTransform.height = fontSize * 1.2;
+      
+      // 添加Widget约束组件，实现贴顶效果
+      const widget = numberNode.addComponent(Widget);
+      // 贴顶约束
+      widget.isAlignTop = true;
+      // 贴左约束
+      widget.isAlignLeft = true;
+      // 顶部距离
+      widget.top = -5;
+      // 左侧距离
+      widget.left = -40;
+      
+      const numberLabel = numberNode.addComponent(Label);
+      numberLabel.string = numberText || '1.'; 
+      numberLabel.fontSize = fontSize;
+      numberLabel.color = new Color().fromHEX(color);
+      numberLabel.isBold = bold;
+      
+      textNode.addChild(numberNode);
+    }
+    
+    this.contentNode.addChild(textNode);
+  }
 
   drawRule() {
     const layer = this.contentNode.layer;
@@ -587,20 +612,20 @@ export class PopRule extends BaseView {
 
       if (type === RuleType.TEXT) {
         const {
-          content, fontSize, color, bold, align 
+          content, fontSize, color, bold, align, hangingIndent, numberText 
         } = textOptions ?? {};
-        const node = new Node('text');
-        node.layer = layer;
-        node.addComponent(UITransform).width = maxWidth;
-        const label = node.addComponent(Label);
-        label.string = content ?? '';
-        label.fontSize = fontSize ?? 26;
-        label.color = new Color().fromHEX(color ?? '#EAF2C3');
-        label.isBold = bold ?? false;
-        label.overflow = Label.Overflow.RESIZE_HEIGHT;
-        label.horizontalAlign =
-          align === 'left' ? Label.HorizontalAlign.LEFT : Label.HorizontalAlign.CENTER;
-        this.contentNode.addChild(node);
+        // 创建悬挂缩进文本
+        this.createHangingIndentText(
+          content ?? '', 
+          fontSize ?? 26, 
+          color ?? '#FFFFFF', 
+          bold ?? false, 
+          align ?? 'left', 
+          hangingIndent ?? 0, 
+          maxWidth, 
+          layer,
+          numberText
+        );
       } else if (type === RuleType.IMAGE) {
         const {
           imgNames, widths, heights 

@@ -27,7 +27,7 @@ export class RuleTitle extends Component {
       // 等待一帧确保文本渲染完成
       this.scheduleOnce(() => {
         this.calculateAndUpdateWidth();
-      }, 0);
+      }, 0.5);
     }
 
     /**
@@ -55,18 +55,32 @@ export class RuleTitle extends Component {
       const minWidth = 200;
       const finalWidth = Math.max(titleWidth, minWidth);
       
-      // 设置背景宽度，添加左右边距
-      // 左右各50的边距
-      const padding = 100;
-      bgTransform.setContentSize(finalWidth + padding, bgTransform.height);
-      console.log('calculatedWidth1', bgTransform.width);
-      
-      // 更新widget
+      // 获取 Widget 组件
       const widget = this.titleBgNode.getComponent(Widget);
       
       if (widget) {
-        widget.updateAlignment();
+        // 临时禁用 Widget 组件，避免其覆盖我们的宽度设置
+        widget.enabled = false;
       }
+      
+      // 设置背景宽度，添加左右边距
+      const padding = 100;
+      bgTransform.setContentSize(finalWidth + padding, bgTransform.height);
+      
+      // // 重新启用 Widget 组件
+      // if (widget) {
+      //   widget.enabled = true;
+      //   // 重新配置 Widget 为居中模式
+      //   widget.isAlignLeft = false;
+      //   widget.isAlignRight = false;
+      //   widget.isAlignHorizontalCenter = true;
+      //   widget.isAlignVerticalCenter = true;
+      //   widget.horizontalCenter = 0;
+      //   widget.verticalCenter = 0;
+      //   widget.updateAlignment();
+      // }
+      
+      console.log('calculatedWidth1', finalWidth);
     }
 
     /**
