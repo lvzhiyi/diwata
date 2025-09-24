@@ -1633,13 +1633,10 @@
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "917f26db-cc88-4d63-955e-e2837690f780@f9941",
+        "__uuid__": "e0dbf39f-cd96-43b4-9fdf-4f90afe14aca@f9941",
         "__expectedType__": "cc.SpriteFrame"
       },
-      {
-        "__uuid__": "d5245f06-cba8-4bda-a3c7-159ad113a77c@f9941",
-        "__expectedType__": "cc.SpriteFrame"
-      },
+      null,
       {
         "__uuid__": "05ca8dcc-3d02-4daf-aef9-37bbb66b6033@f9941",
         "__expectedType__": "cc.SpriteFrame"

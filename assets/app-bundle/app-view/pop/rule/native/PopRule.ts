@@ -129,14 +129,28 @@ export class PopRule extends BaseView {
         },
       },
       {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'Consecutive symbols from left to right starting on the first reel form a winning combination. The sequence must have no gaps and match the pay table.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          // 悬挂缩进：30像素
+          hangingIndent: 40,
+          // 序号文本
+          numberText: '2.',
+        },
+      },
+      {
         type: RuleType.IMAGE,
         imageOptions: {
           imgNames: [
-            this.getRuleFrame('rule01'),
-            this.getRuleFrame('rule02'),
+            this.getRuleFrame('rule_xiaochu'),
           ],
-          widths: [265, 265],
-          heights: [185, 185],
+          widths: [447],
+          heights: [343],
         },
       },
       {
