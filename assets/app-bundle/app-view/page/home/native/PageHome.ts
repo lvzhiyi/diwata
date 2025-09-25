@@ -43,7 +43,6 @@ export class PageHome extends BaseView.BindController(SlotsController) {
     this.node.on(
       Node.EventType.TOUCH_END,
       () => {
-        app.manager.event.emit('clickScreen');
         this.clickScreen();
       },
       this

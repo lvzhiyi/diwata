@@ -158,6 +158,11 @@ export class PopGrandPrize extends BaseView {
    */
    private async playGrandPrizeAnimation(animationName: string) {
      // 获取骨骼动画组件和文本节点
+     if(!this.node || !this.node.isValid) {
+       return;
+     }
+
+     // 获取骨骼动画组件和文本节点
      const spine = this.node.getChildByName('Bg').getComponent(sp.Skeleton);
      const textNode = this.node.getChildByName('AmontBox');
     

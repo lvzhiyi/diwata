@@ -815,7 +815,13 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     /**
      * 仅Symbol下落
      */
-    await Promise.all([...fallDownScript.map(roll => roll.fallDownSymbol()), ...rollFrameAnimationScript.map(roll => roll.fallDownSymbol())]);
+    await Promise.all([...fallDownScript.map(async roll => {
+      const falldown = roll.fallDownSymbol();
+
+      return falldown;
+    }), ...rollFrameAnimationScript.map(roll => {
+      return roll.fallDownSymbol();
+    })]);
 
     /**
      * Roll边框动画 之后 再Symbol下落

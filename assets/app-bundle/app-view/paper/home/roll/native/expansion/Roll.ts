@@ -638,15 +638,15 @@ export class Roll extends Component {
             // 根据下落距离调整动画时长，让动画更自然
             const fallDistance = Math.abs(fallDownCount * this.itemHeight);
             // 基础时长
-            const baseDuration = app.manager.global.quikeMode !== IQuickMode.nomal ? 0.1 : 0.3;
+            const baseDuration = app.manager.global.quikeMode !== IQuickMode.nomal ? 0.1 : 0.2;
             // 距离因子，最大为1
             const distanceFactor = Math.min(fallDistance / (this.itemHeight * 2), 1);
             // 0.3-0.5秒之间
-            const animationDuration = baseDuration + distanceFactor * 0.2;
+            const animationDuration = baseDuration + distanceFactor * 0.1;
             
             // 添加轻微的延迟，让不同高度的元素有层次感
             // 每个元素延迟20ms
-            const delayTime = index * 0.02;
+            const delayTime = index * 0.01;
             
             // 主节点动画 - 使用更平滑的缓动
             const symbolTween = tween(symbolNode)
