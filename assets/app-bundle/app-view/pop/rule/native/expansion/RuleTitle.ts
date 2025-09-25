@@ -1,4 +1,5 @@
 import { _decorator, Component, Label, Node, UITransform, Widget } from 'cc';
+import { delay } from 'db://assets/common/script/extra/Utils/common';
 
 const { ccclass, property } = _decorator;
 
@@ -9,6 +10,12 @@ export class RuleTitle extends Component {
 
     @property(Node)
     private titleBgNode: Node = null;
+
+    @property(Node)
+    private leftNode: Node = null;
+
+    @property(Node)
+    private rightNode: Node = null;
 
     start() {
 
@@ -25,9 +32,9 @@ export class RuleTitle extends Component {
      */
     private updateTitleWidth() {
       // 等待一帧确保文本渲染完成
-      this.scheduleOnce(() => {
+      delay(200).then(() => {
         this.calculateAndUpdateWidth();
-      }, 0.5);
+      });
     }
 
     /**
@@ -55,32 +62,13 @@ export class RuleTitle extends Component {
       const minWidth = 200;
       const finalWidth = Math.max(titleWidth, minWidth);
       
-      // 获取 Widget 组件
-      const widget = this.titleBgNode.getComponent(Widget);
-      
-      if (widget) {
-        // 临时禁用 Widget 组件，避免其覆盖我们的宽度设置
-        widget.enabled = false;
-      }
-      
       // 设置背景宽度，添加左右边距
-      const padding = 100;
-      bgTransform.setContentSize(finalWidth + padding, bgTransform.height);
+      bgTransform.setContentSize(finalWidth + 80, bgTransform.height);
+
+      this.leftNode.getComponent(Widget).updateAlignment();
+      this.rightNode.getComponent(Widget).updateAlignment();
       
-      // // 重新启用 Widget 组件
-      // if (widget) {
-      //   widget.enabled = true;
-      //   // 重新配置 Widget 为居中模式
-      //   widget.isAlignLeft = false;
-      //   widget.isAlignRight = false;
-      //   widget.isAlignHorizontalCenter = true;
-      //   widget.isAlignVerticalCenter = true;
-      //   widget.horizontalCenter = 0;
-      //   widget.verticalCenter = 0;
-      //   widget.updateAlignment();
-      // }
-      
-      console.log('calculatedWidth1', finalWidth);
+      console.log('calculatedWidth1', bgTransform.contentSize);
     }
 
     /**

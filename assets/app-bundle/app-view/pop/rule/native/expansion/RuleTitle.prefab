@@ -806,6 +806,12 @@
     "titleBgNode": {
       "__id__": 2
     },
+    "leftNode": {
+      "__id__": 3
+    },
+    "rightNode": {
+      "__id__": 21
+    },
     "_id": ""
   },
   {

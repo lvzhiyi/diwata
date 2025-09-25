@@ -111,20 +111,22 @@ export class HomeTopViewContrl extends Component {
           this.marqueeStartMove();
         });
       } else {
-        // if (this.marqueeRandomTimer) {
-        //   return;
-        // }
-        // // 之前已经播放完毕，间隔30-60秒随机播放一条
-        // this.marqueeRandomTimer = setTimeout(() => {
-        //   message = this.marqueeQueue[Math.floor(Math.random() * this.marqueeQueue.length)];
-        //   MarqueeScript.startMove(message, () => {
-        //     this.marqueeStartMove();
-        //     if (this.marqueeRandomTimer) {
-        //       clearTimeout(this.marqueeRandomTimer);
-        //       this.marqueeRandomTimer = null;
-        //     }
-        //   });
-        // }, (Math.floor(Math.random() * 11) + 20) * 1000);
+        if (this.marqueeRandomTimer) {
+          return;
+        }
+
+        // 之前已经播放完毕，间隔30-60秒随机播放一条
+        this.marqueeRandomTimer = setTimeout(() => {
+          message = this.marqueeQueue[Math.floor(Math.random() * this.marqueeQueue.length)];
+          MarqueeScript.startMove(message, () => {
+            this.marqueeStartMove();
+
+            if (this.marqueeRandomTimer) {
+              clearTimeout(this.marqueeRandomTimer);
+              this.marqueeRandomTimer = null;
+            }
+          });
+        }, (Math.floor(Math.random() * 11) + 20) * 1000);
       }
     }
   }

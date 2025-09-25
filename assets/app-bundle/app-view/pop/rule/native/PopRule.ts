@@ -21,6 +21,7 @@ import { ButtonItem } from './expansion/ButtonItem';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { RuleTitle } from './expansion/RuleTitle';
 import { SymbolView } from './expansion/SymbolView';
+import { delay } from 'db://assets/common/script/extra/Utils/common';
 
 const { ccclass, property } = _decorator;
 
@@ -44,9 +45,9 @@ interface IRuleData {
     numberText?: string;
   };
   imageOptions?: {
-    imgNames: SpriteFrame[];
-    widths?: number[];
-    heights?: number[];
+    imgName: SpriteFrame;
+    width: number;
+    height: number;
   };
   prefabOptions?: {
     prefab: Prefab;
@@ -146,20 +147,34 @@ export class PopRule extends BaseView {
       {
         type: RuleType.IMAGE,
         imageOptions: {
-          imgNames: [
-            this.getRuleFrame('rule_xiaochu'),
-          ],
-          widths: [447],
-          heights: [343],
+          imgName: this.getRuleFrame('rule_xiaochu'),
+          width: 447,
+          height: 343,
         },
       },
       {
         type: RuleType.TEXT,
         textOptions: {
           content:
-            '3. Malfunction voids all pays and plays. If any malfunction occurs during the feature game, the system will automatically complete the game and ensure the player receives their winnings. Where an interruption occurs after the operator receives notification of the customer\'s gamble and where the customer can have no further influence on the outcome of the event or gamble the results of the gamble should stand \r\n\r\nA game round is immediately ended when the Maximum Win Odds is reached, and all winnings will be paid out.\r\n\r\nwin limit is 10000x\r\nMinimum bet: P0.3\r\nMaximum bet: P10,000',
+            "Malfunction voids all pays and plays. If any malfunction occurs during the feature game, the system will automatically complete the game and ensure the player receives their winnings. Where an interruption occurs after the operator receives notification of the customer's gamble and where the customer can have no further influence on the outcome of the event or gamble the results of the gamble should stand.",
           fontSize: 27,
-          color: '#EAF2C3',
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          // 悬挂缩进：30像素
+          hangingIndent: 40,
+          // 序号文本
+          numberText: '3.',
+        },
+      },
+      
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'A game round is immediately ended when the Maximum Win Odds is reached, and all winnings will be paid out.',
+          fontSize: 27,
+          color: '#FFFFFF',
           bold: false,
           align: 'left',
         },
@@ -168,136 +183,9 @@ export class PopRule extends BaseView {
         type: RuleType.TEXT,
         textOptions: {
           content:
-            'Golden Symbol',
-          fontSize: 40,
-          color: '#ffe345',
-          bold: true,
-          align: 'center',
-        },
-      },
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            'Consecutive symbols from left to right starting on the first reel form a winning combination. The sequence must have no gaps and match the pay table.',
+            'win limit is 20000x',
           fontSize: 27,
-          color: '#EAF2C3',
-          bold: false,
-          align: 'left',
-          // 悬挂缩进：25像素
-          hangingIndent: 25,
-          // 使用项目符号
-          numberText: '•',
-        },
-      },
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            'Malfunction voids all pays and plays. If any malfunction occurs during the feature game, the system will automatically complete the game and ensure the player receives their winnings.',
-          fontSize: 27,
-          color: '#EAF2C3',
-          bold: false,
-          align: 'left',
-          // 悬挂缩进：35像素
-          hangingIndent: 35,
-          // 使用箭头符号
-          numberText: '→',
-        },
-      },
-      {
-        type: RuleType.IMAGE,
-        imageOptions: {
-          imgNames: [
-            this.getRuleFrame('rule11'),
-            this.getRuleFrame('rule03'),
-            this.getRuleFrame('rule12'),
-          ],
-          widths: [140, 109, 178],
-          heights: [164, 79, 169],
-        },
-      },
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            'Wild',
-          fontSize: 40,
-          color: '#ffe345',
-          bold: true,
-          align: 'center',
-        },
-      },
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            '1.The "Wild Symbol" will only appear after "Golden Symbol" has been eliminated.\r\n2.The "Joker Symbol" comes in three modes:\n "Normal Wild Symbol"',
-          fontSize: 27,
-          color: '#EAF2C3',
-          bold: false,
-          align: 'left',
-        },
-      },
-      {
-        type: RuleType.IMAGE,
-        imageOptions: {
-          imgNames: [
-            this.getRuleFrame('rule12'),
-          ],
-          widths: [178],
-          heights: [169],
-        },
-      },
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            ' "Big Wild Symbol"',
-          fontSize: 27,
-          color: '#EAF2C3',
-          bold: false,
-          align: 'left',
-        },
-      },
-      {
-        type: RuleType.IMAGE,
-        imageOptions: {
-          imgNames: [
-            this.getRuleFrame('4006'),
-          ],
-          widths: [468],
-          heights: [201],
-        },
-      },
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            ' "Super Wild Symbol"',
-          fontSize: 27,
-          color: '#EAF2C3',
-          bold: false,
-          align: 'left',
-        },
-      },
-      {
-        type: RuleType.IMAGE,
-        imageOptions: {
-          imgNames: [
-            this.getRuleFrame('4007'),
-          ],
-          widths: [417],
-          heights: [325],
-        },
-      },
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            '3.When "Wild Symbol" appear only replace the "Golden Symbol" original position.\r\n4.When "Big Wild Symbol" appears. replace Reel 2, 3, and 4 of the row where the “Golden Symbol”.\r\n5.When “Super Wild Symbol” appears, it replaces the 2X3 position in the middle of Reel 2, 3, 4 and refreshes all Reels with a better probability',
-          fontSize: 27,
-          color: '#EAF2C3',
+          color: '#FFFFFF',
           bold: false,
           align: 'left',
         },
@@ -306,155 +194,320 @@ export class PopRule extends BaseView {
         type: RuleType.TEXT,
         textOptions: {
           content:
-            'Combo Multiplier',
-          fontSize: 40,
-          color: '#ffe345',
-          bold: true,
-          align: 'center',
-        },
-      },
-      {
-        type: RuleType.IMAGE,
-        imageOptions: {
-          imgNames: [
-            this.getRuleFrame('rule04'),
-          ],
-          widths: [435],
-          heights: [269],
-        },
-      },
-
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            '1."The Combo Multiplier" has 4 levels as x1, x2, x3, x5 in Main Game.\r\n2.Points won each matching will be multiplied based on the current "Combo Multiplier"\r\n\r\n"Winning for the first time with each bet" The Multiplier is X1.\r\n"Winning for the Second time with each bet" The Multiplier is X2.\r\n"Winning for the Third time with each bet" The Multiplier is X3.\r\n"Winning for the Fourth time with each bet" The Multiplier is X5.\r\n\r\n3.Win for the fifth time or more in each bet and maintain a multiple of X5\r\n4.When starting a new bet, reset the multiplier',
+            'Minimum bet: P0.3',
           fontSize: 27,
-          color: '#EAF2C3',
+          color: '#FFFFFF',
           bold: false,
           align: 'left',
         },
       },
+      
       {
         type: RuleType.TEXT,
         textOptions: {
           content:
-            'Free Game',
-          fontSize: 40,
-          color: '#ffe345',
-          bold: true,
-          align: 'center',
-        },
-      },
-      {
-        type: RuleType.IMAGE,
-        imageOptions: {
-          imgNames: [
-            this.getRuleFrame('rule05'),
-          ],
-          widths: [450],
-          heights: [240],
-        },
-      },
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            'Scatter +1',
-          fontSize: 40,
-          color: '#ffe345',
-          bold: true,
-          align: 'center',
-        },
-      },
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            '1."Scatter+1" only appears in free games.\r\n2.Each "Scatter+1" that appears will increase the remaining number of free rounds by +1.\r\n3."Scatter+1"will not participate in the winning and will not be eliminated.',
+            'Maximum bet: P10,000',
           fontSize: 27,
-          color: '#EAF2C3',
-          bold: false,
-          align: 'left',
-        },
-      },
-      {
-        type: RuleType.IMAGE,
-        imageOptions: {
-          imgNames: [
-            this.getRuleFrame('rule13'),
-          ],
-          widths: [188],
-          heights: [169],
-        },
-      },
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            'JackPot',
-          fontSize: 40,
-          color: '#ffe345',
-          bold: true,
-          align: 'center',
-        },
-      },
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            '0.5% of the bet amount will be contributed to the progressive jackpots.\r\n0.2% is allocated to the Grand Jackpot.\r\n0.2% is allocated to the Major Jackpot.\r\n0.05%is allocated to the Minor Jackpot.\r\n0.05%is allocated to the Mini Jackpot.',
-          fontSize: 27,
-          color: '#EAF2C3',
-          bold: false,
-          align: 'left',
-        },
-      },
-      {
-        type: RuleType.TEXT,
-        textOptions: {
-          content:
-            '1.The specified betting amount is calculated based on a single game spin.\r\n2.The displayed value of the jackpot might differ from the actual value due to delays in the communication with the server.\r\n3.The jackpot will never be won at the same time.\r\n4.In a single bet, you can only hit the jackpot once at most\r\n5.The cumulative prize pool has no upper limit\r\n6.When the Jackpot is hit, the prize pool will reset to the guaranteed value',
-          fontSize: 27,
-          color: '#EAF2C3',
+          color: '#FFFFFF',
           bold: false,
           align: 'left',
         },
       },
 
       {
-        type: RuleType.IMAGE,
-        imageOptions: {
-          imgNames: [this.getRuleFrame('rule10')],
-          widths: [380],
-          heights: [446],
+        type: RuleType.PREFAB,
+        prefabOptions: {
+          prefab: this.ruleTitlePrefab,
+          script: RuleTitle,
+          obj: { title: 'Stick Symbol', },
         },
       },
-
       {
         type: RuleType.TEXT,
         textOptions: {
           content:
-            '1.Click the Spins button to start the Jackpot spinning wheel.\r\n2.After 3 seconds, the Spins button will be automatically clicked.\r\n3.When stopping the turntable, the position where the pointer stops is the prize hit by the player.\r\n4.If any malfunction occurs during the jackpot game, the system will automatically complete the game and ensure that players receive bonuses.',
+            'The game may feature a “Stick symbol”.',
           fontSize: 27,
-          color: '#EAF2C3',
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '1.',
+        },
+      },
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'When the sword symbol appears, all symbols on the reel will turn into Wild.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '2.',
+        },
+      },
+      {
+        type: RuleType.IMAGE,
+        imageOptions: {
+          imgName: this.getRuleFrame('rule1'),
+          width: 456,
+          height: 282,
+        },
+      },
+
+      {
+        type: RuleType.PREFAB,
+        prefabOptions: {
+          prefab: this.ruleTitlePrefab,
+          script: RuleTitle,
+          obj: { title: 'Sword Symbol', },
+        },
+      },
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'The game may feature a “Sword symbol”.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '1.',
+        },
+      },
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'When the sword symbol appears, all symbols on the reel will turn into Wild.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '2.',
+        },
+      },
+      {
+        type: RuleType.IMAGE,
+        imageOptions: {
+          imgName: this.getRuleFrame('rule2'),
+          width: 456,
+          height: 282,
+        },
+      },
+      {
+        type: RuleType.PREFAB,
+        prefabOptions: {
+          prefab: this.ruleTitlePrefab,
+          script: RuleTitle,
+          obj: { title: 'Wild', },
+        },
+      },
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'WILD only comes from the Sword symbol or the Stick symbol.',
+          fontSize: 27,
+          color: '#FFFFFF',
           bold: false,
           align: 'left',
         },
       },
+      {
+        type: RuleType.IMAGE,
+        imageOptions: {
+          imgName: this.getRuleFrame('5001'),
+          width: 200,
+          height: 200,
+        },
+      },
 
+      {
+        type: RuleType.PREFAB,
+        prefabOptions: {
+          prefab: this.ruleTitlePrefab,
+          script: RuleTitle,
+          obj: { title: 'Combo Multiplier', },
+        },
+      },
+      {
+        type: RuleType.IMAGE,
+        imageOptions: {
+          imgName: this.getRuleFrame('rule3'),
+          width: 381,
+          height: 170,
+        },
+      },
       {
         type: RuleType.TEXT,
         textOptions: {
           content:
-            'Game Button',
-          fontSize: 40,
-          color: '#ffe345',
-          bold: true,
-          align: 'center',
+            'In the normal game, the starting multiplier is X1, and it doubles with each win.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '1.',
         },
       },
-    
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'Points won each matching will be multiplied based on the current "Combo Multiplier"\n"Winning for the first time with each bet" The Multiplier is X1.\n"Winning for the Second time with each bet" The Multiplier is X2.\n"Winning for the Third time with each bet" The Multiplier is X4.\n"Winning for the Fourth time with each bet" The Multiplier is X8.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '2.',
+        },
+      },
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'The maximum multiplier is X1024. Once reached, further wins will keep the multiplier at X1024.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '3.',
+        },
+      },
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'When starting a new bet, the multiplier resets.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '4.',
+        },
+      },
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'In Free Games, the starting multiplier resets to X8',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '5.',
+        },
+      },
+      {
+        type: RuleType.PREFAB,
+        prefabOptions: {
+          prefab: this.ruleTitlePrefab,
+          script: RuleTitle,
+          obj: { title: 'Scatter', },
+        },
+      },
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'The Scatter symbol appears on Reels 1 to 6 in both the main game and Free Games.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '1.',
+        },
+      },
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'If 3 Scatter symbols appear in the main game, the Free Game feature is triggered, awarding 8 free spins. Each additional Scatter symbol grants 1 extra free spin.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '2.',
+        },
+      },
+
+      {
+        type: RuleType.PREFAB,
+        prefabOptions: {
+          prefab: this.ruleTitlePrefab,
+          script: RuleTitle,
+          obj: { title: 'Buy Bonus', },
+        },
+      },
+      {
+        type: RuleType.IMAGE,
+        imageOptions: {
+          imgName: this.getRuleFrame('rule4'),
+          width: 169,
+          height: 152,
+        },
+      },
+      
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'You can spend 75 times the bet amount to purchase a Free Game directly. After purchasing, you will receive at least 3 Scatter symbols.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '1.',
+        },
+      },
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'In free games, the initial game multiplier is x8.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '2.',
+        },
+      },
+      {
+        type: RuleType.TEXT,
+        textOptions: {
+          content:
+            'If you hit 3 or more Scatters in the Free Game round, you will receive free spin rewards again. The remaining Free Game spins will be stacked.',
+          fontSize: 27,
+          color: '#FFFFFF',
+          bold: false,
+          align: 'left',
+          hangingIndent: 40,
+          numberText: '3.',
+        },
+      },
+      {
+        type: RuleType.PREFAB,
+        prefabOptions: {
+          prefab: this.ruleTitlePrefab,
+          script: RuleTitle,
+          obj: { title: 'Game Button', },
+        },
+      },
+
       {
         type: RuleType.PREFAB,
         prefabOptions: {
@@ -462,23 +515,12 @@ export class PopRule extends BaseView {
           script: ButtonItem,
           obj: {
             icon: this.getHomeFrame('home_start'),
-            value: 'Spin: Tap to start spinning base on the current bet. Player can also click the reels or press the spacebar to start or stop the spin. (not available on all operators andjurisdictions)',
+            value: 'Spin: Tap to start spinning base on the current bet.',
             height: 200,
           },
         },
       },
-      {
-        type: RuleType.PREFAB,
-        prefabOptions: {
-          prefab: this.buttonItemPrefab,
-          script: ButtonItem,
-          obj: {
-            icon: this.getHomeFrame('home_buybons'),
-            value: 'Buy Bonus: Tap to buy bonus base on the current bet. The BONSS round can be instantly triggered from the base game by buying it for 35x current total bet.',
-            height: 200,
-          },
-        },
-      },
+      
       {
         type: RuleType.PREFAB,
         prefabOptions: {
@@ -486,7 +528,7 @@ export class PopRule extends BaseView {
           script: ButtonItem,
           obj: {
             icon: this.getHomeFrame('home_auto_off'),
-            value: 'Auto Spin: Tap to start the auto play, and click again to stop the auto spin.',
+            value: 'Tap to start the auto play, and click again to stop the auto spin.',
             height: 140,
           },
         },
@@ -598,7 +640,7 @@ export class PopRule extends BaseView {
       // 贴左约束
       widget.isAlignLeft = true;
       // 顶部距离
-      widget.top = -5;
+      widget.top = 0;
       // 左侧距离
       widget.left = -40;
       
@@ -609,6 +651,9 @@ export class PopRule extends BaseView {
       numberLabel.isBold = bold;
       
       textNode.addChild(numberNode);
+      delay(100).then(() => {
+        numberNode.getComponent(Widget).updateAlignment();
+      });
     }
     
     this.contentNode.addChild(textNode);
@@ -642,27 +687,16 @@ export class PopRule extends BaseView {
         );
       } else if (type === RuleType.IMAGE) {
         const {
-          imgNames, widths, heights 
+          imgName, width, height 
         } = imageOptions ?? {};
         const node = new Node('imgBox');
         node.layer = layer;
-        node.addComponent(Sprite).spriteFrame = null;
+        node.addComponent(Sprite).spriteFrame = imgName;
 
-        if (widths && heights) {
-          node.getComponent(UITransform).setContentSize(widths[0], heights[0]);
+        if (width && height) {
+          node.getComponent(UITransform).setContentSize(width, height);
         }
 
-        const layout = node.addComponent(Layout);
-        layout.type = Layout.Type.HORIZONTAL;
-        layout.resizeMode = Layout.ResizeMode.CONTAINER;
-        layout.spacingX = 30;
-        imgNames.forEach((imgName: SpriteFrame, index: number) => {
-          const img = new Node('img');
-          img.layer = layer;
-          img.addComponent(Sprite).spriteFrame = imgName;
-          img.getComponent(UITransform).setContentSize(widths[index], heights[index]);
-          node.addChild(img);
-        });
         this.contentNode.addChild(node);
       } else if (type === RuleType.PREFAB) {
         const {

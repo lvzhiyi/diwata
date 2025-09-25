@@ -2,7 +2,7 @@
   "name": "lam-cocos",
   "server": "",
   "platform": "web-mobile",
-  "buildPath": "project://build/web-mobile_B",
+  "buildPath": "project://build/web-mobile/B",
   "debug": false,
   "buildMode": "normal",
   "mangleProperties": false,
