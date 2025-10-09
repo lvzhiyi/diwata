@@ -136,7 +136,7 @@ git reset --hard origin/%BRANCH%
 echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
-"C:\Program Files\Cocos\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile.json"
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile.json"
 set "BUILD_RESULT=%errorlevel%"
 echo Cocos Creator single package exit code: %BUILD_RESULT%
 
