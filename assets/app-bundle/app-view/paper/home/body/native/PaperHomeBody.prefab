@@ -276,7 +276,7 @@
       }
     ],
     "_interactable": true,
-    "_transition": 3,
+    "_transition": 0,
     "_normalColor": {
       "__type__": "cc.Color",
       "r": 255,
@@ -6476,14 +6476,6 @@
     },
     "autoBtnOffSprite": {
       "__uuid__": "0786ecd0-0bcb-43d4-b162-fe1c5a791ddf@f9941",
-      "__expectedType__": "cc.SpriteFrame"
-    },
-    "quickBtnOnSprite": {
-      "__uuid__": "b8840c3b-695e-41a8-af7d-55618f9a1094@f9941",
-      "__expectedType__": "cc.SpriteFrame"
-    },
-    "quickBtnOffSprite": {
-      "__uuid__": "55026d72-0a8f-462f-a61c-ac71afbbc059@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "autoModeBtn": {

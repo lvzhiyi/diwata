@@ -166,6 +166,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   initRoll() {
     this.MaskBoxNode.children.forEach((child: Node) => {
       const childRoll = child.getChildByName('Roll');
+      const roll = childRoll.getComponent(Roll);
+      roll.setOverlayNode(this.overLayNode);
 
       if (childRoll) {
         this.Rolls.push(childRoll);
@@ -608,6 +610,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     /**
      * 添加到顶部然后下落 或者 播放Roll边框动画然后落下然后添加到顶部最后下落
      */
+    if (hasLitghtAnimation.some(item => item)) await delay(100);
     await this.addToTopThenFallDowmOrRunRollFrameAnimationThenFallDownThenAddToTopThenFallDown(rollsScript, symbolAnimationData);
 
     symbolAnimationData = rollsScript.map(roll => roll.symbolAnimationData);
@@ -802,7 +805,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      */
     if (fallDownScript.length > 0) {
       await Promise.all(fallDownScript.map(roll => roll.fallDownSymbol()));
-      await Promise.all(fallDownScript.map(roll => roll.removeSymbol())); 
+      await Promise.all(rollsScript.map(roll => roll.removeSymbol())); 
       await delay(100);
       await Promise.all(fallDownScript.map((roll) =>
         roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[roll.getCurrentIndex()]) || [])
@@ -812,7 +815,13 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     /**
      * 仅Symbol下落
      */
-    await Promise.all([...fallDownScript.map(roll => roll.fallDownSymbol()), ...rollFrameAnimationScript.map(roll => roll.fallDownSymbol())]);
+    await Promise.all([...fallDownScript.map(async roll => {
+      const falldown = roll.fallDownSymbol();
+
+      return falldown;
+    }), ...rollFrameAnimationScript.map(roll => {
+      return roll.fallDownSymbol();
+    })]);
 
     /**
      * Roll边框动画 之后 再Symbol下落
@@ -824,7 +833,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
        * 添加Roll边框动画后下落，然后再添加到顶部下落
        * -- 传入下一回合roll的数据
        */
-        await roll.removeSymbol(); 
         await roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[roll.getCurrentIndex()]) || []);
         await roll.fallDownSymbol();
   

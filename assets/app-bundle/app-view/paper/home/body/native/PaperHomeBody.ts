@@ -30,6 +30,7 @@ import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/Ev
 import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
 import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 import globalSpeedCtrl from 'db://assets/common/script/extra/GlobalSpeedCtrl';
+import { PopGrandPrize } from '../../../../pop/grand-prize/native/PopGrandPrize';
 
 const { ccclass, property } = _decorator;
 
@@ -44,12 +45,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
 
   @property({ type: SpriteFrame, tooltip: '自动按钮-off' })
   private autoBtnOffSprite: SpriteFrame = null;
-
-  @property({ type: SpriteFrame, tooltip: '快速模式按钮-on' })
-  private quickBtnOnSprite: SpriteFrame = null;
-
-  @property({ type: SpriteFrame, tooltip: '快速模式按钮-off' })
-  private quickBtnOffSprite: SpriteFrame = null;
 
   @property({ type: Node, tooltip: '自动模式按钮' })
   private autoModeBtn: Node = null;

@@ -338,7 +338,7 @@ export class RouletteWheel extends Component {
   }
     
   public multipleIndexChange(index: number, needAnimation: boolean = true): void {
-    this.overshootAmount = needAnimation ? 0.3 : 0;
+    this.overshootAmount = needAnimation ? 0.1 : 0;
     this.jumpToData(this.dataList[index]);
   }
 

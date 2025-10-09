@@ -5,6 +5,7 @@ import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { app } from 'db://assets/app/app';
 import { HomeRollTool } from './HomeRollTool';
+import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 
 const { ccclass, property } = _decorator;
 
@@ -23,6 +24,8 @@ export class Roll extends Component {
 
     @property(CCInteger)
     private rollIndex: number = 0;
+    
+    private overlayNode: Node = null;
 
     private nodePool: NodePool = new NodePool();
 
@@ -71,6 +74,10 @@ export class Roll extends Component {
       this.rollList = [];
       this.symbolAnimationData = [];
       this.firstSymbolY = 0;
+    }
+
+    setOverlayNode(overlayNode: Node) {
+      this.overlayNode = overlayNode;
     }
 
     /**
@@ -161,11 +168,31 @@ export class Roll extends Component {
     }
 
     /**
+     * 检查当前roll元素是否齐全，不齐全需要补齐
+     */
+    checkRollElement() {
+      const children = this.node.children;
+      
+      if (children.length < this.itemCount - 1) {
+        console.log('补齐roll元素');
+
+        for (let i = children.length; i < this.itemCount - 1; i++) {
+          const node = this.nodePool.get();
+          node.getComponent(Symbol).initSymbol({
+            symbolId: this.randomSymbolId(), symbolType: 'NORMAL', main: false 
+          });
+          this.node.insertChild(node, 0);
+        }
+      }
+    }
+
+    /**
      * 开始滚动动画
      */
     startRollingAnimation() {
       this.canStopRolling = true;
       const parentNode = this.node;
+      // 检查当前roll元素是否齐全，不齐全需要补齐
       const start = tween(parentNode)
         .by(0.15, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quadIn' })
         .call(() => this.updateNode());
@@ -287,7 +314,11 @@ export class Roll extends Component {
 
       // 移除最后一个symbol
       const lastNode = children[lastIndex];
-      this.nodePool.put(lastNode);
+
+      if (lastNode.name === 'Symbol') {
+        this.nodePool.put(lastNode);
+      }
+
       this.node.removeChild(lastNode);
 
       let  resultSymbol =   resultSymbols?.shift();
@@ -465,9 +496,7 @@ export class Roll extends Component {
 
       return new Promise(async resolve => {
         rollFrameSkeleton.setCompleteListener(() => {
-          this.scheduleOnce(() => {
-            resolve(true);
-          }, 1 / app.manager.global.gameSpeed);
+          resolve(true);
         });
       });
     }
@@ -538,7 +567,10 @@ export class Roll extends Component {
         });
          
         removeSymbolNodeList.forEach((node: Node) => {
-          this.nodePool.put(node);
+          if (node.name === 'Symbol') {
+            this.nodePool.put(node);
+          }
+
           this.node.removeChild(node);
         });
         
@@ -606,15 +638,15 @@ export class Roll extends Component {
             // 根据下落距离调整动画时长，让动画更自然
             const fallDistance = Math.abs(fallDownCount * this.itemHeight);
             // 基础时长
-            const baseDuration = 0.3;
+            const baseDuration = app.manager.global.quikeMode !== IQuickMode.nomal ? 0.1 : 0.2;
             // 距离因子，最大为1
             const distanceFactor = Math.min(fallDistance / (this.itemHeight * 2), 1);
             // 0.3-0.5秒之间
-            const animationDuration = baseDuration + distanceFactor * 0.2;
+            const animationDuration = baseDuration + distanceFactor * 0.1;
             
             // 添加轻微的延迟，让不同高度的元素有层次感
             // 每个元素延迟20ms
-            const delayTime = index * 0.02;
+            const delayTime = index * 0.01;
             
             // 主节点动画 - 使用更平滑的缓动
             const symbolTween = tween(symbolNode)
@@ -623,7 +655,7 @@ export class Roll extends Component {
                 // 使用cubicOut让动画更丝滑
                 easing: 'cubicOut'
               });
-  
+           
             // 如果有 wildNode，也添加动画
             if (wildNode) {
               const wildTween = tween(wildNode)
@@ -651,9 +683,15 @@ export class Roll extends Component {
      * 移除顶部多余符号
      */
     removeTopExcessSymbol() {
-      const node = this.node.children[0];
-      this.nodePool.put(node);
-      this.node.removeChild(node);
+      if (this.node.children.length === this.itemCount) {
+        const node = this.node.children[0];
+
+        if (node.name === 'Symbol') {
+          this.nodePool.put(node);
+        }
+
+        this.node.removeChild(node);
+      }
     }
 
     /**
@@ -715,8 +753,8 @@ export class Roll extends Component {
         this.swordAnimationNode = new Node('Animation');
         this.swordAnimationNode.addComponent(UITransform);
         this.swordAnimationNode.getComponent(UITransform).setContentSize(this.node.getComponent(UITransform).contentSize);
-        this.swordAnimationNode.layer = this.node.layer;
-        this.swordAnimationNode.setParent(this.node.parent.parent.parent);
+        this.swordAnimationNode.layer = this.overlayNode.layer;
+        this.swordAnimationNode.setParent(this.overlayNode);
         this.swordAnimationNode.setWorldPosition(originalPos);
         // 播放wild动画，动画完成后删除动画，并在wildNode设置图片
         console.log('播放dao动画');

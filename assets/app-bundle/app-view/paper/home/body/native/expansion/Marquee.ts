@@ -83,11 +83,12 @@ export class Marquee extends Component {
      */
     highlightCurrency(text: string, color: string = '#fff600'): string {
       // 匹配通用货币格式（支持₱$€¥等符号 + 数字 + 可选小数）
-      const currencyRegex = /₱(\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?)/g;
-
+      const currencyRegex = /([₱$€¥])(\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?)/g;
+      console.log('highlighted-text', text);
       const highlighted = text.replace(currencyRegex, (match, symbol, amount) => {
         return `<color=${color}>${symbol}${amount}</color>`;
       });
+      console.log('highlighted', highlighted);
 
       return `<color=#FFFFFF><b><size=28>${highlighted}</size></b></color>`;
     }
