@@ -214,7 +214,6 @@ export class PopGrandPrize extends BaseView {
        case RewardSubTypeEnum.NICE: return '01nice_';
        case RewardSubTypeEnum.MEGA: return '02mega_';
        case RewardSubTypeEnum.SUPER: return '03super_';
-       case RewardSubTypeEnum.SENSATIONAL: return '04sensational_';
        default: return '01nice_';
      }
    }
@@ -303,8 +302,6 @@ export class PopGrandPrize extends BaseView {
        case RewardSubTypeEnum.MEGA: return 10;
          // 高级奖励显示15秒
        case RewardSubTypeEnum.SUPER: return 15;
-         // 顶级奖励显示20秒
-       case RewardSubTypeEnum.SENSATIONAL: return 20;
          // 默认显示5秒
        default: return 5;
      }

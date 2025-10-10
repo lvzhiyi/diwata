@@ -24,7 +24,7 @@ export class CurrentRoundAmount extends Component {
         this.node.setPosition(this.originPosition);
       }
 
-      this.amountNode.getComponent(Label).string = amount.toFixed(3);
+      this.amountNode.getComponent(Label).string = `₱${amount.toFixed(3)}`;
       this.tween = tween(this.node);
 
       this.tween
