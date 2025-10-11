@@ -192,6 +192,23 @@ export class HomeRollTool  {
   }
 
   /**
+   * 播放女神举手动画
+  */
+  async showGoddessPraiseAnimation(
+    goddessNode: Node
+  ): Promise<void> {
+    return new Promise<void>(async (resolve) => {
+      const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
+      goddessSkeleton.premultipliedAlpha = false;
+      goddessSkeleton.setAnimation(0, 'animation5', false);
+      goddessSkeleton.setCompleteListener(() => {
+        goddessSkeleton.setAnimation(0, 'animation', true);
+      });
+      resolve();
+    });
+  }
+
+  /**
    * 根据中的图标决定女神播放什么动效
   */
   getGoddessAnimation(

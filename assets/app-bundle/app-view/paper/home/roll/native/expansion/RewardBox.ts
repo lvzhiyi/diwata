@@ -18,8 +18,8 @@ export class RewardBox extends Component {
     @property({ type: Node, tooltip: 'Tips Image Node' })
     private TipsImageNode: Node = null;
 
-    @property({ type: sp.Skeleton, tooltip: 'SpineWinSkeleton' })
-    private SpineWinSkeleton: sp.Skeleton = null;
+    @property({ type: Node, tooltip: 'SpineWinSkeleton' })
+    private SpineWinSkeleton: Node = null;
   
     start() {
 
@@ -45,7 +45,13 @@ export class RewardBox extends Component {
       this.TipsNode.active = true;
       this.TipsImageNode.active = false;
       // 播放金额动画，如果金额变化小于2倍投注金额，则播放action1，否则播放action2
-      this.SpineWinSkeleton.setAnimation(0,  'action1', false);
+      this.SpineWinSkeleton.active = true;
+      const spine = this.SpineWinSkeleton.getComponent(sp.Skeleton);
+      spine.setAnimation(0,  'jiesuanshanguang', false);
+      spine.setCompleteListener(() => {
+        spine.setCompleteListener(null);
+        this.SpineWinSkeleton.active = false;
+      });
       // 金额滚动效果
       // 金额滚动效果
       const target = { value: startNum };

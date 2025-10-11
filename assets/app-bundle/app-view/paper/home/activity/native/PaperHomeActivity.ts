@@ -38,7 +38,8 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
 
     // 初始化的相关逻辑写在这
     onLoad() {
-     
+      // 播放开屏动画
+      this.playStartHomeSpine();
     }
 
     /**
@@ -127,8 +128,6 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
       }
 
       app.manager.event.on('begainfreeBonusAnimation', this.showFreeBonusSpineAnimation, this);
-      // 播放开屏动画
-      this.playStartHomeSpine();
     }
 
     protected beforeShow(next: (error?: string) => void, data?: any) {

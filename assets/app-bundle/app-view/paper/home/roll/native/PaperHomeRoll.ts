@@ -438,7 +438,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 同时执行棒子和剑光球飞向女神的效果
   */
   private async playBowAndSwordFlyingAnimation() {
-    if (this.changeWildData.length === 0) return Promise.resolve();
+    // 如果changeWildData为空，并且有下一回合，则执行女神举手动画
+    if (this.changeWildData.length === 0 && this.hasNextRound()) {
+      this.homeRollTool.showGoddessPraiseAnimation(
+        this.goddessNode
+      );
+
+      return Promise.resolve();
+    }
+
     // 先根据rollIndex排序
     this.changeWildData.sort((a, b) => a.rollIndex - b.rollIndex);
     const newChangeWildData: Node[] = [];
@@ -591,6 +599,13 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      */
     console.log('开始移除Symbol-数据');
     // await Promise.all(rollsScript.map(roll => roll.removeSymbol()));
+    
+    /**
+     * 更新到下一个轮的倍率
+     */
+    if (this.hasNextRound()) {
+      this.updateNextMultiple();
+    }
 
     /**
      * 更新tips中奖金额
@@ -598,16 +613,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const currentRoundTotalRewardAmount = this.resultList[this.roundIndex].totalRewardAmount;
 
     if (currentRoundTotalRewardAmount > 0) {
+      await delay(app.manager.global.quikeMode === IQuickMode.nomal ? 800 : 400);
       this.changeTipsContent(this.totalRewardAmount, this.totalRewardAmount + currentRoundTotalRewardAmount);
 
       this.totalRewardAmount += currentRoundTotalRewardAmount;
-    }
-  
-    /**
-     * 更新到下一个轮的倍率
-     */
-    if (this.hasNextRound()) {
-      this.updateNextMultiple();
     }
     
     /**
@@ -1178,7 +1187,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * @param amount 金额
    */
   private async showCurrentRoundAmount(amount: number) {
-    await this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(amount);
+    await this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(amount, app.manager.global.multipleIndex);
   }
 
   /**
