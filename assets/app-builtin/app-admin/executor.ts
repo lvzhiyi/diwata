@@ -18,7 +18,7 @@ export const MusicName = SoundManager.MusicName
 /**音效名字枚举(在main、resources、app-model与app-controller所在的Asset Bundle中无法使用此枚举) @deprecated 请使用SoundManager.EffectName*/
 export const EffectName = SoundManager.EffectName
 
-export type IViewName = "PageHome"|"PopAutosetting"|"PopBetamout"|"PopBetrecord"|"PopBetrecorddetail"|"PopBuybonus"|"PopErrorPop"|"PopFreeSpinResult"|"PopGrandPrize"|"PopRule"|"PopSettings"
+export type IViewName = "PageHome"|"PopAutosetting"|"PopBetamout"|"PopBetrecord"|"PopBetrecorddetail"|"PopBuybonus"|"PopErrorPop"|"PopFreeSpinResult"|"PopGrandPrize"|"PopRule"|"PopSettings"|"PopStarthome"
 export type IViewNames = IViewName[]
 export type IMiniViewName = "PaperHomeActivity"|"PaperHomeBody"|"PaperHomeRoll"
 export type IMiniViewNames = IMiniViewName[]

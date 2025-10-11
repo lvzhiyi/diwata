@@ -438,7 +438,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 同时执行棒子和剑光球飞向女神的效果
   */
   private async playBowAndSwordFlyingAnimation() {
-    if (this.changeWildData.length === 0) return Promise.resolve();
+    // 如果changeWildData为空，并且有下一回合，则执行女神举手动画
+    if (this.changeWildData.length === 0 && this.hasNextRound()) {
+      this.homeRollTool.showGoddessPraiseAnimation(
+        this.goddessNode
+      );
+
+      return Promise.resolve();
+    }
+
     // 先根据rollIndex排序
     this.changeWildData.sort((a, b) => a.rollIndex - b.rollIndex);
     const newChangeWildData: Node[] = [];
@@ -568,6 +576,11 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      */
     if (this.currentRoundIsMaxMultiple()) { 
       this.endRemoveSymbol();
+      const currentRoundTotalRewardAmount = this.resultList[this.roundIndex].totalRewardAmount;
+
+      if (currentRoundTotalRewardAmount > 0) {
+        this.changeTipsContent(this.totalRewardAmount, this.totalRewardAmount + currentRoundTotalRewardAmount);
+      }
 
       return;
     }
@@ -585,12 +598,14 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       }
 
       return lightAndRemoveAnimation;
-    }));  
+    }));
+
     /**
-     * 移除Symbol
+     * 更新到下一个轮的倍率
      */
-    console.log('开始移除Symbol-数据');
-    // await Promise.all(rollsScript.map(roll => roll.removeSymbol()));
+    if (this.hasNextRound()) {
+      this.updateNextMultiple();
+    }
 
     /**
      * 更新tips中奖金额
@@ -599,21 +614,13 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     if (currentRoundTotalRewardAmount > 0) {
       this.changeTipsContent(this.totalRewardAmount, this.totalRewardAmount + currentRoundTotalRewardAmount);
-
       this.totalRewardAmount += currentRoundTotalRewardAmount;
     }
   
     /**
-     * 更新到下一个轮的倍率
-     */
-    if (this.hasNextRound()) {
-      this.updateNextMultiple();
-    }
-    
-    /**
      * 添加到顶部然后下落 或者 播放Roll边框动画然后落下然后添加到顶部最后下落
      */
-    if (hasLitghtAnimation.some(item => item)) await delay(100);
+    if (hasLitghtAnimation.some(item => item)) await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 100 : 200);
     await this.addToTopThenFallDowmOrRunRollFrameAnimationThenFallDownThenAddToTopThenFallDown(rollsScript, symbolAnimationData);
 
     symbolAnimationData = rollsScript.map(roll => roll.symbolAnimationData);
@@ -1159,17 +1166,18 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   /**
    * 修改Tips内容
    */
-  private async changeTipsContent(startNum: number, endNum: number) {
+  private async changeTipsContent(startNum: number, endNum: number): Promise<void> {
     if (endNum === null) {
-      this.rewardBox.getComponent(RewardBox).showGoodLuck();
+      return this.rewardBox.getComponent(RewardBox).showGoodLuck();
     } else if (endNum === 0) {
-      this.rewardBox.getComponent(RewardBox).showPlace();
+      return this.rewardBox.getComponent(RewardBox).showPlace();
     } else {
       const amount = calculateWithBase(endNum - startNum);
 
       // 展示当前轮次金额弹出提示
       await this.showCurrentRoundAmount(amount);
-      this.rewardBox.getComponent(RewardBox).showWinNumber(startNum, endNum);
+
+      return this.rewardBox.getComponent(RewardBox).showWinNumber(startNum, endNum);
     }
   } 
 
@@ -1178,7 +1186,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * @param amount 金额
    */
   private async showCurrentRoundAmount(amount: number) {
-    await this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(amount);
+    await this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(amount, app.manager.global.multipleIndex);
   }
 
   /**
@@ -1188,14 +1196,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   private currentRoundIsMaxMultiple() {
     return this.resultList[this.roundIndex].accumulateReachMaxMultiple;
   }
-
-  /**
-   * 获取中奖线
-   * @returns 中奖线
-   */
-  private getRewardLine = () => {
-    return this.resultList[this.roundIndex].rewardLineList ?? [];
-  };
 
   /**
    * 普通轮中，本回合是否命中免费轮

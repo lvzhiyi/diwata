@@ -42,6 +42,11 @@ class EventTrackManager extends Component {
       game_ver: params.gameVer,
     });
   }
+ 
+  // 用户点击‘Play’按钮
+  public trackClickPlay(balance: number) {
+    eventTrack.track('click_play', { balance });
+  }
 
   /**
    * 发送引导页用户点击切换事件
