@@ -1107,7 +1107,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     const { allWheelRewardSubType } = this.resultData.resultDetail;
 
-    return allWheelRewardSubType !== RewardSubTypeEnum.NONE && allWheelRewardSubType !== RewardSubTypeEnum.OTHER && allWheelRewardSubType !== RewardSubTypeEnum.SENSATIONAL;
+    return allWheelRewardSubType === RewardSubTypeEnum.NICE || allWheelRewardSubType === RewardSubTypeEnum.MEGA && allWheelRewardSubType === RewardSubTypeEnum.SUPER;
   }
 
   /**

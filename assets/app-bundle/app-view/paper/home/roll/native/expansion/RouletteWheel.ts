@@ -13,6 +13,9 @@ export class RouletteWheel extends Component {
   private ItemNode: Node = null;
 
   @property(Node)
+  private textSpineNode: Node = null;
+
+  @property(Node)
   private bgSpineNode: Node = null;
 
   @property(Node)
@@ -56,6 +59,8 @@ export class RouletteWheel extends Component {
   private bgAnimationDuration: number = 1.0;
 
   private bgEasingType: TweenEasing = 'backOut';
+
+  private firstItemPostion: Vec3 = new Vec3(0, 0, 0);
   
   // 弧形参数
   // 圆环半径 (直径 780)
@@ -175,6 +180,10 @@ export class RouletteWheel extends Component {
       
       item.active = true;
       this.setItemPosition(item, itemAngle);
+
+      if (i === 0) {
+        this.firstItemPostion = item.position.clone();
+      }
     }
 
     // 更新选中 / 未选中精灵
@@ -205,11 +214,15 @@ export class RouletteWheel extends Component {
       if (!sprite) continue;
 
       if (i === selectedIndex) {
-        tween(this.items[i])
+        const item = this.items[i];
+        tween(item)
           .to(0.5, { scale: new Vec3(1.2, 1.2, 1) }, { easing: 'bounceOut' })
           .start();
-        this.items[i].getChildByName('text').getComponent(Label).isBold = true;
+        item.getChildByName('text').getComponent(Label).isBold = true;
+        this.textSpineNode.setPosition(item.position);
         if (this.chooseSprite) sprite.spriteFrame = this.chooseSprite;
+        this.textSpineNode.active = true;
+        this.textSpineNode.getComponent(sp.Skeleton).setAnimation(0, 'beilvshuzishanguang', false);
       } else {
         this.items[i].getChildByName('text').getComponent(Label).isBold = false;
         this.items[i].setScale(1, 1, 1);
