@@ -67,9 +67,9 @@ export class CurrentRoundAmount extends Component {
           // 第二步：multipleNode显示，amountNode左移100像素，multipleNode移动到amountNode右边
           tween().parallel(
             // amountNode左移100像素
-            tween(this.amountNode).to(0.5, { position: new Vec3(-textWidth / 4, 0, 0) }, { easing: 'quadOut' }),
+            tween(this.amountNode).to(0.3, { position: new Vec3(-textWidth / 4, 0, 0) }, { easing: 'quadOut' }),
             // multipleNode移动到amountNode右边（amountNode的y轴平级，x轴+100）
-            tween(this.multipleNode).to(0.5, { position: new Vec3(textWidth / 4, this.spineWinNode.position.y, 0) }, { easing: 'quadOut' })
+            tween(this.multipleNode).to(0.3, { position: new Vec3(textWidth / 4, this.spineWinNode.position.y, 0) }, { easing: 'quadOut' })
           ),
           
           // 第三步：播放spineWinNode动画
@@ -90,8 +90,8 @@ export class CurrentRoundAmount extends Component {
               tween(this.node).to(0.3, { scale: new Vec3(1.5, 1.5, 1) }, { easing: 'quadOut' })
             )
             .parallel(
-              tween(this.node).to(0.5, { position: new Vec3(0, -380, 0) }, { easing: 'quintIn' }),
-              tween(this.node).to(0.5, { scale: new Vec3(0, 0, 1) }, { easing: 'quintIn' })
+              tween(this.node).to(0.3, { position: new Vec3(0, -380, 0) }, { easing: 'quintIn' }),
+              tween(this.node).to(0.3, { scale: new Vec3(0, 0, 1) }, { easing: 'quintIn' })
             ),
           
           // 动画结束，重置状态

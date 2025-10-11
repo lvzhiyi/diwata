@@ -29,37 +29,48 @@ export class RewardBox extends Component {
         
     }
 
-    showGoodLuck() {
-      this.TipsNode.active = false;
-      this.TipsImageNode.active = true;
-      this.TipsImageNode.getComponent(Sprite).spriteFrame = this.goodLuckImageNode;
-    }
-
-    showPlace() {
-      this.TipsNode.active = false;
-      this.TipsImageNode.active = true;
-      this.TipsImageNode.getComponent(Sprite).spriteFrame = this.placeImageNode;
-    }
-
-    showWinNumber(startNum: number, endNum: number) {
-      this.TipsNode.active = true;
-      this.TipsImageNode.active = false;
-      // 播放金额动画，如果金额变化小于2倍投注金额，则播放action1，否则播放action2
-      this.SpineWinSkeleton.active = true;
-      const spine = this.SpineWinSkeleton.getComponent(sp.Skeleton);
-      spine.setAnimation(0,  'jiesuanshanguang', false);
-      spine.setCompleteListener(() => {
-        spine.setCompleteListener(null);
-        this.SpineWinSkeleton.active = false;
+    showGoodLuck(): Promise<void> {
+      return new Promise<void>(resolve => {
+        this.TipsNode.active = false;
+        this.TipsImageNode.active = true;
+        this.TipsImageNode.getComponent(Sprite).spriteFrame = this.goodLuckImageNode;
+        resolve();
       });
-      // 金额滚动效果
-      // 金额滚动效果
-      const target = { value: startNum };
-      const label = this.TipsNode.getComponent(Label);
-      tween(target).to(
-        2 / app.manager.global.gameSpeed,
-        { value: endNum },
-        { onUpdate: () => label.string = `WIN ₱${numberToMoney(calculateWithBase(target.value), 3, false)}` }
-      ).start();
+    }
+
+    showPlace(): Promise<void> {
+      return new Promise<void>(resolve => {
+        this.TipsNode.active = false;
+        this.TipsImageNode.active = true;
+        this.TipsImageNode.getComponent(Sprite).spriteFrame = this.placeImageNode;
+        resolve();
+      });
+    }
+
+    showWinNumber(startNum: number, endNum: number): Promise<void> {
+      return new Promise<void>(resolve => {
+        this.TipsNode.active = true;
+        this.TipsImageNode.active = false;
+        // 播放金额动画，如果金额变化小于2倍投注金额，则播放action1，否则播放action2
+        this.SpineWinSkeleton.active = true;
+        const spine = this.SpineWinSkeleton.getComponent(sp.Skeleton);
+        spine.setAnimation(0,  'jiesuanshanguang', false);
+        spine.setCompleteListener(() => {
+          spine.setCompleteListener(null);
+          this.SpineWinSkeleton.active = false;
+        });
+        // 金额滚动效果
+        // 金额滚动效果
+        const target = { value: startNum };
+        const label = this.TipsNode.getComponent(Label);
+        tween(target).to(
+          2 / app.manager.global.gameSpeed,
+          { value: endNum },
+          { onUpdate: () => label.string = `WIN ₱${numberToMoney(calculateWithBase(target.value), 3, false)}` }
+        ).call(() => {
+          resolve();
+        })
+          .start();
+      });
     }
 }
