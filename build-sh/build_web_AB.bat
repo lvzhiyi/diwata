@@ -2,17 +2,6 @@
 chcp 65001 >nul
 setlocal EnableDelayedExpansion
 
-REM 强制清理 temp 目录 - 使用多种方法确保彻底清理
-echo 开始清理 temp 目录...
-
-REM 终止可能运行的 Cocos Creator 进程
-echo 检查并终止 Cocos Creator 进程...
-taskkill /f /im "CocosCreator.exe" >nul 2>&1
-taskkill /f /im "Creator.exe" >nul 2>&1
-
-call :force_cleanup_temp
-
-
 echo 开始构建 web 版本
 echo 当前分支: %1
 echo 当前 common 分支: %2
@@ -100,7 +89,7 @@ echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
 echo Building A package...
-call :build_with_retry ".\buildConfig_web-mobile_A.json" "A包"
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_A.json"
 
 
 REM 提取A包hash值
@@ -114,7 +103,7 @@ echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
 echo Building B package...
-call :build_with_retry ".\buildConfig_web-mobile_B.json" "B包"
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_B.json"
 set "BUILD_RESULT=%errorlevel%"
 echo Cocos Creator B package exit code: %BUILD_RESULT%
 
@@ -147,7 +136,7 @@ git reset --hard origin/%BRANCH%
 echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
-call :build_with_retry ".\buildConfig_web-mobile.json" "单包"
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile.json"
 set "BUILD_RESULT=%errorlevel%"
 echo Cocos Creator single package exit code: %BUILD_RESULT%
 
@@ -168,100 +157,6 @@ echo 单包构建完成！Hash配置已直接注入到 build\web-mobile\index.ht
 goto :end_script
 
 REM ========== 函数定义区域 ==========
-
-REM 强制清理 temp 目录的函数
-:force_cleanup_temp
-set "TEMP_DIR=C:\Users\Administrator\Documents\dev\workspace\mayari-cocos\temp"
-set "CLEANUP_ATTEMPTS=0"
-set "MAX_ATTEMPTS=5"
-
-:cleanup_retry
-set /a CLEANUP_ATTEMPTS+=1
-echo 清理尝试 %CLEANUP_ATTEMPTS%/%MAX_ATTEMPTS%...
-
-REM 方法1: 使用 takeown 获取所有权
-echo 获取文件所有权...
-takeown /f "%TEMP_DIR%" /r /d y >nul 2>&1
-icacls "%TEMP_DIR%" /grant administrators:F /t >nul 2>&1
-
-REM 方法2: 使用 rmdir 删除
-echo 删除 temp 目录...
-rmdir /s /q "%TEMP_DIR%" >nul 2>&1
-
-REM 方法3: 使用 PowerShell 强制删除
-echo 使用 PowerShell 强制删除...
-powershell -Command "if (Test-Path '%TEMP_DIR%') { Remove-Item '%TEMP_DIR%' -Recurse -Force -ErrorAction SilentlyContinue }" >nul 2>&1
-
-REM 检查是否还有残留文件
-if exist "%TEMP_DIR%" (
-    echo 警告: temp 目录仍存在，尝试删除残留文件...
-
-    REM 方法4: 逐个删除文件
-    for /f "delims=" %%i in ('dir "%TEMP_DIR%" /b /s /a-d 2^>nul') do (
-        del "%%i" /f /q >nul 2>&1
-    )
-
-    REM 方法5: 使用 robocopy 清空目录
-    echo 使用 robocopy 清空目录...
-    mkdir "%TEMP_DIR%_empty" >nul 2>&1
-    robocopy "%TEMP_DIR%_empty" "%TEMP_DIR%" /mir >nul 2>&1
-    rmdir "%TEMP_DIR%_empty" >nul 2>&1
-    rmdir "%TEMP_DIR%" /s /q >nul 2>&1
-
-    if exist "%TEMP_DIR%" (
-        if %CLEANUP_ATTEMPTS% LSS %MAX_ATTEMPTS% (
-            echo 清理失败，等待 2 秒后重试...
-            timeout /t 2 /nobreak >nul
-            goto :cleanup_retry
-        ) else (
-            echo 错误: 无法完全清理 temp 目录，但继续构建...
-        )
-    ) else (
-        echo temp 目录清理成功
-    )
-) else (
-    echo temp 目录清理成功
-)
-
-REM 确保 temp 目录存在
-if not exist "%TEMP_DIR%" (
-    mkdir "%TEMP_DIR%" >nul 2>&1
-)
-goto :eof
-
-REM 带重试机制的构建函数
-:build_with_retry
-set "CONFIG_PATH=%~1"
-set "PACKAGE_NAME=%~2"
-set "BUILD_ATTEMPTS=0"
-set "MAX_BUILD_ATTEMPTS=3"
-
-:build_retry
-set /a BUILD_ATTEMPTS+=1
-echo 构建尝试 %BUILD_ATTEMPTS%/%MAX_BUILD_ATTEMPTS% - %PACKAGE_NAME%...
-
-REM 构建前再次清理 temp 目录
-echo 构建前清理 temp 目录...
-call :force_cleanup_temp
-
-REM 执行构建
-"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=%CONFIG_PATH%"
-set "BUILD_RESULT=%errorlevel%"
-
-if %BUILD_RESULT% neq 0 (
-    echo 构建失败，退出代码: %BUILD_RESULT%
-    if %BUILD_ATTEMPTS% LSS %MAX_BUILD_ATTEMPTS% (
-        echo 等待 3 秒后重试...
-        timeout /t 3 /nobreak >nul
-        goto :build_retry
-    ) else (
-        echo 错误: %PACKAGE_NAME% 构建失败，已达到最大重试次数
-        exit /b 1
-    )
-) else (
-    echo %PACKAGE_NAME% 构建成功
-)
-goto :eof
 
 REM 提取hash值的函数
 :extract_hash_values
