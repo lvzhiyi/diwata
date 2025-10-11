@@ -2,6 +2,9 @@
 chcp 65001 >nul
 setlocal EnableDelayedExpansion
 
+rmdir /s /q "C:\Users\Administrator\Documents\dev\workspace\mayari-cocos\temp"
+
+
 echo 开始构建 web 版本
 echo 当前分支: %1
 echo 当前 common 分支: %2
