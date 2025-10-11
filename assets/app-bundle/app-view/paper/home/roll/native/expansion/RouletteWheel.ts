@@ -12,6 +12,15 @@ export class RouletteWheel extends Component {
   @property(Node)
   private ItemNode: Node = null;
 
+  @property(Node)
+  private textSpineNode: Node = null;
+
+  @property(Node)
+  private bgSpineNode: Node = null;
+
+  @property(Node)
+  private bg2SpineNode: Node = null;
+
   @property(SpriteFrame)
   private chooseSprite: SpriteFrame = null;
 
@@ -24,6 +33,8 @@ export class RouletteWheel extends Component {
   private dataList: number[] = [];
 
   private currentRotation: number = 0;
+
+  private currentIndex: number = 0;
 
   // 动画相关属性
   private isAnimating: boolean = false;
@@ -39,6 +50,17 @@ export class RouletteWheel extends Component {
  
   // 过冲量（0-1之间）
   private overshootAmount: number = 0.5; 
+  
+  // 背景旋转相关属性
+  private bgCurrentRotation: number = 0;
+
+  private isBgAnimating: boolean = false;
+
+  private bgAnimationDuration: number = 1.0;
+
+  private bgEasingType: TweenEasing = 'backOut';
+
+  private firstItemPostion: Vec3 = new Vec3(0, 0, 0);
   
   // 弧形参数
   // 圆环半径 (直径 780)
@@ -57,6 +79,7 @@ export class RouletteWheel extends Component {
 
   protected onLoad(): void {
     app.manager.event.on('multipleIndexChange', this.multipleIndexChange, this);
+    this.initSpine();
     this.initData();
     this.createItems();
     this.updateItemsPosition();
@@ -64,12 +87,21 @@ export class RouletteWheel extends Component {
     this.setupViewClipping();
   }
 
+  private initSpine(): void {
+    const spine = this.bgSpineNode.getComponent(sp.Skeleton);
+    spine.setAnimation(0, 'zhuanpan', false);
+    spine.timeScale = 0;
+    const spine2 = this.bg2SpineNode.getComponent(sp.Skeleton);
+    spine2.setAnimation(0, 'gunzhoudi', false);
+    spine2.timeScale = 0;
+  }
+
   /**
    * 初始化数据：x1, x2, x4, x8, ..., x1024
    */
   private initData(): void {
     // 固定数据序列
-    this.dataList = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 1, 2, 512, 1024];
+    this.dataList = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 128, 256, 512, 1024];
 
     // 根据数据数量动态计算角度步长
     this.DATA_ANGLE_STEP = 360 / this.dataList.length;
@@ -79,7 +111,7 @@ export class RouletteWheel extends Component {
    * 创建item节点
    */
   private createItems(): void {
-    if (!this.ItemNode || !this.wheelNode) {
+    if (!this.ItemNode || !this.bgSpineNode) {
       console.error('ItemNode或wheelNode未设置');
 
       return;
@@ -90,7 +122,7 @@ export class RouletteWheel extends Component {
     
     for (let i = 0; i < totalItems; i++) {
       const item = instantiate(this.ItemNode);
-      item.setParent(this.wheelNode);
+      item.setParent(this.bgSpineNode);
       //   // 设置item的label文本
       const label = item.getChildByName('text').getComponent(Label);
 
@@ -106,6 +138,7 @@ export class RouletteWheel extends Component {
           label.fontSize = 24;
         } else {
           label.fontSize = 18;
+          label.color = new Color().fromHEX('#C50909');
         }
 
         label.string = `x${this.dataList[i]}`;
@@ -147,6 +180,10 @@ export class RouletteWheel extends Component {
       
       item.active = true;
       this.setItemPosition(item, itemAngle);
+
+      if (i === 0) {
+        this.firstItemPostion = item.position.clone();
+      }
     }
 
     // 更新选中 / 未选中精灵
@@ -160,6 +197,32 @@ export class RouletteWheel extends Component {
         this.items[i].setScale(1.2, 1.2, 1);
         this.items[i].getChildByName('text').getComponent(Label).isBold = true;
         if (this.chooseSprite) sprite.spriteFrame = this.chooseSprite;
+      } else {
+        this.items[i].getChildByName('text').getComponent(Label).isBold = false;
+        this.items[i].setScale(1, 1, 1);
+        if (this.unChooseSprite) sprite.spriteFrame = this.unChooseSprite;
+      }
+    }
+  }
+
+  updateSelectedItem(): void {
+    const totalItems = this.items.length;
+    const selectedIndex = this.currentIndex;
+
+    for (let i = 0; i < totalItems; i++) {
+      const sprite = this.items[i].getComponent(Sprite);
+      if (!sprite) continue;
+
+      if (i === selectedIndex) {
+        const item = this.items[i];
+        tween(item)
+          .to(0.5, { scale: new Vec3(1.2, 1.2, 1) }, { easing: 'bounceOut' })
+          .start();
+        item.getChildByName('text').getComponent(Label).isBold = true;
+        this.textSpineNode.setPosition(item.position);
+        if (this.chooseSprite) sprite.spriteFrame = this.chooseSprite;
+        this.textSpineNode.active = true;
+        this.textSpineNode.getComponent(sp.Skeleton).setAnimation(0, 'beilvshuzishanguang', false);
       } else {
         this.items[i].getChildByName('text').getComponent(Label).isBold = false;
         this.items[i].setScale(1, 1, 1);
@@ -189,108 +252,127 @@ export class RouletteWheel extends Component {
   }
 
   /**
-   * 旋转到下一个位置
-   * @param direction 方向：1为顺时针，-1为逆时针
+   * 背景转盘顺时针旋转
+   * @param angle 旋转角度（度）
+   * @param duration 动画持续时间（可选，默认使用bgAnimationDuration）
    */
-  public rotateToNext(direction: number): void {
-    if (this.isAnimating) return;
+  public rotateBgClockwise(angle: number, duration?: number): void {
+    if (this.isBgAnimating) return;
     
-    // 每次旋转一个item的角度
-    const targetRotation = this.currentRotation + (direction * this.DATA_ANGLE_STEP);
-    this.animateToRotation(targetRotation);
+    const targetRotation = this.bgCurrentRotation + angle;
+    this.animateBgToRotation(targetRotation, duration);
   }
 
-  private animateToRotation(targetRotation: number): void {
-    if (this.isAnimating) return;
-    
-    this.isAnimating = true;
-    const startRotation = this.currentRotation;
-    
-    // 计算过冲角度（如果需要）
-    let finalTargetRotation = targetRotation;
+  /**
+   * 多倍索引改变
+   * @param index 索引
+   * @param needAnimation 是否需要动画
+  */
+  public multipleIndexChange(index: number, needAnimation: boolean = true): void {
+    this.overshootAmount = needAnimation ? 0.1 : 0;
 
-    if (this.enableOvershoot && this.easingType.includes('back')) {
-      const overshootAngle = this.DATA_ANGLE_STEP * this.overshootAmount;
-      finalTargetRotation = targetRotation + overshootAngle;
+    if (this.currentIndex === index) {
+      return;
     }
+    // 盘面进行发光
+    if (needAnimation === false) {
+      const spine = this.bgSpineNode.getComponent(sp.Skeleton);
+      spine.timeScale = 1;
+      spine.setAnimation(0, 'zhuanpan', false);
+   
+      const spine2 = this.bg2SpineNode.getComponent(sp.Skeleton);
+      spine2.timeScale = 1;
+      spine2.setAnimation(0, 'gunzhoudi', false);
+    }
+
+    this.jumpToData(this.dataList[index]);
+    this.currentIndex = index;
+  }
+
+  /**
+   * 背景转盘逆时针旋转
+   * @param angle 旋转角度（度）
+   * @param duration 动画持续时间（可选，默认使用bgAnimationDuration）
+   */
+  public rotateBgCounterClockwise(angle: number, duration?: number): void {
+    if (this.isBgAnimating) return;
     
-    // 使用弹性缓动函数，创建更自然的旋转效果
-    tween({ rotation: startRotation })
-      .to(this.animationDuration, { rotation: finalTargetRotation }, {
-        easing: this.easingType, 
-        onUpdate: (target) => {
-          this.currentRotation = target.rotation;
-          this.updateItemsPosition();
-        }
-      })
+    const targetRotation = this.bgCurrentRotation - angle;
+    this.animateBgToRotation(targetRotation, duration);
+  }
+
+  /**
+   * 背景转盘旋转到指定角度
+   * @param targetRotation 目标旋转角度（度）
+   * @param duration 动画持续时间（可选，默认使用bgAnimationDuration）
+   */
+  public rotateBgToAngle(targetRotation: number, duration?: number): void {
+    if (this.isBgAnimating) return;
+    
+    this.animateBgToRotation(targetRotation, duration);
+  }
+
+  /**
+   * 背景转盘动画到指定角度
+   * @param targetRotation 目标旋转角度（度）
+   * @param duration 动画持续时间（可选）
+   */
+  private animateBgToRotation(targetRotation: number, duration?: number): void {
+    if (this.isBgAnimating) return;
+    
+    this.isBgAnimating = true;
+    const animDuration = duration || this.bgAnimationDuration;
+    
+    tween(this.bgSpineNode)
+      .to(animDuration, { eulerAngles: new Vec3(0, 0, targetRotation) }, { easing: this.bgEasingType })
       .call(() => {
-        // 如果启用了过冲，需要平滑回到最终位置
-        if (this.enableOvershoot && this.easingType.includes('back')) {
-          this.smoothReturnToTarget(targetRotation);
-        } else {
-          this.finishAnimation(targetRotation);
-        }
+        this.updateSelectedItem();
+        this.finishBgAnimation(targetRotation);
       })
       .start();
   }
 
   /**
-   * 平滑回到目标位置
+   * 完成背景动画
+   * @param targetRotation 目标旋转角度
    */
-  private smoothReturnToTarget(targetRotation: number): void {
-    const startRotation = this.currentRotation;
-    const returnDuration = 0.15; 
-      
-    tween({ rotation: startRotation })
-      .to(returnDuration, { rotation: targetRotation }, {
-        easing: 'quadOut', 
-        onUpdate: (target) => {
-          this.currentRotation = target.rotation;
-          this.updateItemsPosition();
-        }
-      })
-      .call(() => {
-        this.finishAnimation(targetRotation);
-      })
-      .start();
+  private finishBgAnimation(targetRotation: number): void {
+    this.isBgAnimating = false;
+    this.bgCurrentRotation = targetRotation;
   }
 
   /**
-   * 完成动画
+   * 设置背景旋转动画参数
+   * @param duration 动画持续时间
+   * @param easing 缓动类型
    */
-  private finishAnimation(targetRotation: number): void {
-    this.isAnimating = false;
-    // 标准化旋转角度，避免角度过大
-    this.currentRotation = ((targetRotation % 360) + 360) % 360;
-    
-    // 打印当前中心item的值
-    const currentData = this.getCurrentData();
-    console.log('滑动完成后的中心item值:', currentData);
+  public setBgAnimationParams(duration: number = 1.0, easing: TweenEasing = 'quadOut'): void {
+    this.bgAnimationDuration = duration;
+    this.bgEasingType = easing;
   }
 
   /**
-   * 向左滑动（顺时针旋转）
+   * 停止背景旋转动画
    */
-  public swipeLeft(): void {
-    this.rotateToNext(1);
+  public stopBgAnimation(): void {
+    if (this.isBgAnimating) {
+      tween(this.bgSpineNode).stop();
+      this.isBgAnimating = false;
+    }
   }
 
   /**
-   * 向右滑动（逆时针旋转）
+   * 获取背景当前旋转角度
    */
-  public swipeRight(): void {
-    this.rotateToNext(-1);
+  public getBgCurrentRotation(): number {
+    return this.bgCurrentRotation;
   }
 
   /**
-   * 获取当前中心item的数据
+   * 检查背景是否正在动画中
    */
-  public getCurrentData(): number {
-    // 根据当前旋转角度计算中心item
-    const centerItemIndex = Math.round(-this.currentRotation / this.DATA_ANGLE_STEP);
-    const dataIndex = ((centerItemIndex % this.dataList.length) + this.dataList.length) % this.dataList.length;
-
-    return this.dataList[dataIndex];
+  public isBgAnimatingNow(): boolean {
+    return this.isBgAnimating;
   }
 
   /**
@@ -304,42 +386,36 @@ export class RouletteWheel extends Component {
     }
 
     // 获取当前中心item的数据值
-    const currentData = this.getCurrentData();
-    const currentIndex = this.dataList.findIndex(data => data === currentData);
     
+    const currentIndex = this.currentIndex;
+    const currentData = this.dataList[currentIndex];
+
     if (currentIndex === -1) {
       console.warn('无法获取当前数据');
 
       return;
     }
 
-    // 如果已经在目标位置，不需要旋转
-    if (targetData === currentData) {
-      return;
-    }
-
+    console.log('currentIndex', currentIndex, targetData);
+   
     // 根据数值大小关系决定旋转方向
     let rotationSteps: number;
 
     if (targetData > currentData) {
       // 目标值更大，逆时针旋转
-      rotationSteps = -(targetIndex - currentIndex);
+      rotationSteps = (targetIndex - currentIndex);
     } else {
       // 目标值更小，顺时针旋转
-      rotationSteps = currentIndex - targetIndex;
+      rotationSteps = - ( currentIndex - targetIndex);
     }
     
     // 计算目标旋转角度
-    const targetRotation = this.currentRotation + (rotationSteps * this.DATA_ANGLE_STEP);
+    const targetRotation = this.bgCurrentRotation + (rotationSteps * this.DATA_ANGLE_STEP);
     
-    console.log(`从${currentData}跳转到${targetData}，旋转步骤：${rotationSteps}（${rotationSteps > 0 ? '顺时针' : '逆时针'}）`);
+    console.log(`背景从${currentData}跳转到${targetData}，旋转步骤：${rotationSteps}（${rotationSteps > 0 ? '顺时针' : '逆时针'}）,${targetRotation}`);
     
-    this.animateToRotation(targetRotation);
-  }
-    
-  public multipleIndexChange(index: number, needAnimation: boolean = true): void {
-    this.overshootAmount = needAnimation ? 0.1 : 0;
-    this.jumpToData(this.dataList[index]);
+    // this.animateToRotation(targetRotation);
+    this.animateBgToRotation(targetRotation);
   }
 
   /**

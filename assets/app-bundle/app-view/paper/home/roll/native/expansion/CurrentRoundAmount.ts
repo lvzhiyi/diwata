@@ -24,19 +24,23 @@ export class CurrentRoundAmount extends Component {
         this.node.setPosition(this.originPosition);
       }
 
-      this.amountNode.getComponent(Label).string = amount.toFixed(3);
+      this.amountNode.getComponent(Label).string = `₱${amount.toFixed(3)}`;
       this.tween = tween(this.node);
-
-      this.tween
-        .timeScale(app.manager.global.gameSpeed)
-        .sequence(
-          tween(this.node.getComponent(UIOpacity)).to(0.25, { opacity: 255 }),
-          tween(this.node).delay(1).to(0.25, { position: new Vec3(0, -380, 0) }, { easing: 'quintIn' })
-        )
+      tween(this.amountNode)
+        .to(0.25, { scale: new Vec3(1.5, 1.5, 1) }, { easing: 'quadOut' })
         .call(() => {
-          this.node.getComponent(UIOpacity).opacity = 0;
-          this.node.setPosition(this.originPosition);
-          resolve(true);
+          this.tween
+            .timeScale(app.manager.global.gameSpeed)
+            .sequence(
+              tween(this.node.getComponent(UIOpacity)).to(0.25, { opacity: 255 }),
+              tween(this.node).delay(1).to(0.25, { position: new Vec3(0, -380, 0) }, { easing: 'quintIn' })
+            )
+            .call(() => {
+              this.node.getComponent(UIOpacity).opacity = 0;
+              this.node.setPosition(this.originPosition);
+              resolve(true);
+            })
+            .start();
         })
         .start();
     });

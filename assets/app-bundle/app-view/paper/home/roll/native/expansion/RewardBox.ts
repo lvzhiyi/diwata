@@ -1,0 +1,59 @@
+import { _decorator, Component, Label, Node, sp, Sprite, SpriteFrame, tween } from 'cc';
+import { app } from 'db://assets/app/app';
+import { calculateWithBase, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
+
+const { ccclass, property } = _decorator;
+
+@ccclass('RewardBox')
+export class RewardBox extends Component {
+    @property({ type: SpriteFrame, tooltip: 'Tips Image Node' })
+    private placeImageNode: SpriteFrame = null;
+  
+    @property({ type: SpriteFrame, tooltip: 'Tips Image Node' })
+    private goodLuckImageNode: SpriteFrame = null;
+
+    @property({ type: Node, tooltip: 'Tips Node' })
+    private TipsNode: Node = null;
+  
+    @property({ type: Node, tooltip: 'Tips Image Node' })
+    private TipsImageNode: Node = null;
+
+    @property({ type: sp.Skeleton, tooltip: 'SpineWinSkeleton' })
+    private SpineWinSkeleton: sp.Skeleton = null;
+  
+    start() {
+
+    }
+
+    update(deltaTime: number) {
+        
+    }
+
+    showGoodLuck() {
+      this.TipsNode.active = false;
+      this.TipsImageNode.active = true;
+      this.TipsImageNode.getComponent(Sprite).spriteFrame = this.goodLuckImageNode;
+    }
+
+    showPlace() {
+      this.TipsNode.active = false;
+      this.TipsImageNode.active = true;
+      this.TipsImageNode.getComponent(Sprite).spriteFrame = this.placeImageNode;
+    }
+
+    showWinNumber(startNum: number, endNum: number) {
+      this.TipsNode.active = true;
+      this.TipsImageNode.active = false;
+      // 播放金额动画，如果金额变化小于2倍投注金额，则播放action1，否则播放action2
+      this.SpineWinSkeleton.setAnimation(0,  'action1', false);
+      // 金额滚动效果
+      // 金额滚动效果
+      const target = { value: startNum };
+      const label = this.TipsNode.getComponent(Label);
+      tween(target).to(
+        2 / app.manager.global.gameSpeed,
+        { value: endNum },
+        { onUpdate: () => label.string = `WIN ₱${numberToMoney(calculateWithBase(target.value), 3, false)}` }
+      ).start();
+    }
+}
