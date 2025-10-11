@@ -1,4 +1,4 @@
-import { _decorator, EventTouch, Label, Node, Prefab, sp,  tween, UIOpacity, UITransform, Vec3 } from 'cc';
+import { _decorator, EventTouch, Label, Node, Prefab, sp,  SpriteFrame,  tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import BaseView from 'db://app/base/BaseView';
 import { Roll } from './expansion/Roll';
 import { Symbol } from './expansion/Symbol';
@@ -20,6 +20,7 @@ import { BousView } from './expansion/BousView';
 import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
 import GameProcessCtrl, { GameState } from 'db://assets/common/script/extra/GameProcessCtrl';
 import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
+import { RewardBox } from './expansion/RewardBox';
 
 const { ccclass, property } = _decorator;
 
@@ -37,6 +38,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   @property({ type: Node, tooltip: 'rollBgView节点' })
   private rollBgViewNode: Node = null;
 
+  @property({ type: Node, tooltip: 'rollContainer节点' })
+  private rollContainerNode: Node = null;
+
   /// 悬浮节点用于做动画 
   @property({ type: Node, tooltip: 'overLayNode' })
   private overLayNode: Node = null;
@@ -53,14 +57,11 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   @property({ type: Node, tooltip: '' })
   private freeSpinView: Node = null;
 
-  @property({ type: Node, tooltip: 'Tips Node' })
-  private TipsNode: Node = null;
-
   @property(Prefab)
   private lightPrefab: Prefab = null;
 
-  @property({ type: sp.Skeleton, tooltip: 'SpineWinSkeleton' })
-  private SpineWinSkeleton: sp.Skeleton = null;
+  @property({ type: Node, tooltip: 'RewardBox' })
+  private rewardBox: Node = null;
 
   @property({ type: Node, tooltip: 'CurrentRoundAmount' })
   private CurrentRoundAmount: Node = null;
@@ -173,6 +174,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         this.Rolls.push(childRoll);
       }
     });
+    const  rollSpine = this.rollContainerNode.getComponent(sp.Skeleton);
+    rollSpine.setAnimation(0, 'gunzhou', false);
+    rollSpine.timeScale = 0;
   }
 
   initEvents() {
@@ -597,7 +601,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       this.changeTipsContent(this.totalRewardAmount, this.totalRewardAmount + currentRoundTotalRewardAmount);
 
       this.totalRewardAmount += currentRoundTotalRewardAmount;
-      // this.changeTipsContent(`<color=#FF50E4><b>WIN</b></color> <color=#FFFFFF>₱ ${calculateWithBase(this.totalRewardAmount)}</color>`, true);
     }
   
     /**
@@ -988,6 +991,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   private updateNextMultiple() {
     if (app.manager.global.multipleIndex >= 10) return;
+    const rollSpine = this.rollContainerNode.getComponent(sp.Skeleton);
+    rollSpine.setAnimation(0, 'gunzhou', false);
+    rollSpine.timeScale = 1;
     app.manager.global.setMultipleIndex(app.manager.global.multipleIndex + 1, false);
   }
 
@@ -1101,7 +1107,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     const { allWheelRewardSubType } = this.resultData.resultDetail;
 
-    return allWheelRewardSubType !== RewardSubTypeEnum.NONE && allWheelRewardSubType !== RewardSubTypeEnum.OTHER;
+    return allWheelRewardSubType === RewardSubTypeEnum.NICE || allWheelRewardSubType === RewardSubTypeEnum.MEGA && allWheelRewardSubType === RewardSubTypeEnum.SUPER;
   }
 
   /**
@@ -1155,25 +1161,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   private async changeTipsContent(startNum: number, endNum: number) {
     if (endNum === null) {
-      this.TipsNode.getComponent(Label).string = 'GOOD LUCKY';
+      this.rewardBox.getComponent(RewardBox).showGoodLuck();
     } else if (endNum === 0) {
-      this.TipsNode.getComponent(Label).string = 'PLACE YOUR BETS!';
+      this.rewardBox.getComponent(RewardBox).showPlace();
     } else {
       const amount = calculateWithBase(endNum - startNum);
 
       // 展示当前轮次金额弹出提示
       await this.showCurrentRoundAmount(amount);
-
-      // 播放金额动画，如果金额变化小于2倍投注金额，则播放action1，否则播放action2
-      this.SpineWinSkeleton.setAnimation(0, amount < 2 * app.manager.global.betCount ? 'action1' : 'action2', false);
-      // 金额滚动效果
-      const target = { value: startNum };
-      const label = this.TipsNode.getComponent(Label);
-      tween(target).to(
-        2 / app.manager.global.gameSpeed,
-        { value: endNum },
-        { onUpdate: () => label.string = `WIN ₱ ${numberToMoney(calculateWithBase(target.value), 3, false)}` }
-      ).start();
+      this.rewardBox.getComponent(RewardBox).showWinNumber(startNum, endNum);
     }
   } 
 
