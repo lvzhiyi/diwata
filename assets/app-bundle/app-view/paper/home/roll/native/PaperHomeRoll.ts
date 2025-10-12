@@ -816,7 +816,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     if (fallDownScript.length > 0) {
       await Promise.all(fallDownScript.map(roll => roll.fallDownSymbol()));
       await Promise.all(rollsScript.map(roll => roll.removeSymbol())); 
-      await delay(100);
+      // await delay(100);
       await Promise.all(fallDownScript.map((roll) =>
         roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[roll.getCurrentIndex()]) || [])
       ));
