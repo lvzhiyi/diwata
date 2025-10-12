@@ -14,7 +14,7 @@ import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTra
 import { IQuickMode } from '../app-manager/global/GlobalManager';
 
 // TODO 测试用
-const useMock = true;
+const useMock = false;
 
 export class HomeController extends BaseController<
   HomeController,
