@@ -60,7 +60,7 @@ export class RewardBox extends Component {
           this.SpineWinSkeleton.active = false;
         });
         // 金额滚动效果
-        // 金额滚动效果
+        console.log('startNum', startNum, endNum);
         const target = { value: startNum };
         const label = this.TipsNode.getComponent(Label);
         tween(target).to(

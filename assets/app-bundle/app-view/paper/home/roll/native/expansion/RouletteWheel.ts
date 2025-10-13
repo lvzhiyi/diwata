@@ -101,7 +101,7 @@ export class RouletteWheel extends Component {
    */
   private initData(): void {
     // 固定数据序列
-    this.dataList = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 128, 256, 512, 1024];
+    this.dataList = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 1, 2, 4, 8];
 
     // 根据数据数量动态计算角度步长
     this.DATA_ANGLE_STEP = 360 / this.dataList.length;

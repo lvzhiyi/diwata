@@ -1,6 +1,6 @@
 
 mayali_zhuanchang.png
-size: 2050,1568
+size: 2045,1568
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
@@ -40,8 +40,8 @@ Beijing
   offset: 0, 0
   index: -1
 Beijing1
-  rotate: false
-  xy: 1957, 577
+  rotate: 270
+  xy: 1933, 562
   size: 91, 84
   orig: 91, 84
   offset: 0, 0
@@ -257,8 +257,8 @@ closeeyes_01
   offset: 0, 0
   index: -1
 closeeyes_02
-  rotate: false
-  xy: 2022, 1525
+  rotate: true
+  xy: 855, 1540
   size: 26, 17
   orig: 26, 17
   offset: 0, 0
@@ -271,8 +271,8 @@ clothing_01
   offset: 0, 0
   index: -1
 clothing_02
-  rotate: false
-  xy: 1973, 491
+  rotate: 270
+  xy: 786, 1380
   size: 75, 87
   orig: 75, 87
   offset: 0, 0
@@ -299,8 +299,8 @@ hair_01
   offset: 0, 0
   index: -1
 hair_02
-  rotate: false
-  xy: 1981, 832
+  rotate: true
+  xy: 1973, 857
   size: 67, 65
   orig: 67, 65
   offset: 0, 0
@@ -328,7 +328,7 @@ head
   index: -1
 headwear_01
   rotate: false
-  xy: 767, 1405
+  xy: 779, 1169
   size: 94, 44
   orig: 94, 44
   offset: 0, 0
@@ -454,14 +454,14 @@ jmFX/lizibao/lizibao_00014
   index: -1
 necklace_01
   rotate: false
-  xy: 419, 890
+  xy: 1973, 807
   size: 69, 51
   orig: 69, 51
   offset: 0, 0
   index: -1
 necklace_02
   rotate: false
-  xy: 1967, 131
+  xy: 1933, 477
   size: 81, 83
   orig: 81, 83
   offset: 0, 0
@@ -481,8 +481,8 @@ tuoju_10
   offset: 0, 0
   index: -1
 tuoju_2
-  rotate: false
-  xy: 1975, 863
+  rotate: true
+  xy: 419, 886
   size: 72, 69
   orig: 72, 69
   offset: 0, 0
@@ -517,7 +517,7 @@ tuoju_6
   index: -1
 tuoju_7
   rotate: false
-  xy: 782, 1172
+  xy: 953, 675
   size: 91, 54
   orig: 91, 54
   offset: 0, 0
@@ -531,7 +531,7 @@ tuoju_8
   index: -1
 tuoju_9
   rotate: false
-  xy: 953, 675
+  xy: 586, 657
   size: 95, 54
   orig: 95, 54
   offset: 0, 0
