@@ -8,6 +8,9 @@ export class CurrentRoundAmount extends Component {
   @property({ type: Node, tooltip: '当前轮次金额' })
   private amountNode: Node = null;
 
+  @property({ type: Node, tooltip: '最后显示的金额' })
+  private finalAmountNode: Node = null;
+
   @property({ type: Node, tooltip: '当前轮次倍率' })
   private multipleNode: Node = null;
 
@@ -43,15 +46,12 @@ export class CurrentRoundAmount extends Component {
       
       console.log('文本宽度:', textWidth);
       this.multipleNode.getComponent(Label).string = `x ${Math.pow(2, multiple)}`;
+
+      // 最终展示的金额
+      this.finalAmountNode.getComponent(Label).string = `₱${amount.toFixed(3)}`;
       
       // 重置节点状态
-      this.node.scale = new Vec3(1, 1, 1);
-      this.node.getComponent(UIOpacity).opacity = 255;
-      this.amountNode.scale = new Vec3(0.5, 0.5, 1);
-      this.amountNode.setPosition(Vec3.ZERO);
-      this.multipleNode.scale = new Vec3(1, 1, 1);
-      this.multipleNode.setPosition(new Vec3(0, 162, 0));
-      this.multipleNode.getComponent(UIOpacity).opacity = 0;
+      this.resetState();
 
       this.tween = tween(this.node)
         .timeScale(app.manager.global.gameSpeed)
@@ -74,10 +74,26 @@ export class CurrentRoundAmount extends Component {
           
           // 第三步：播放spineWinNode动画
           tween().call(() => {
-            // 这里可以播放spine动画，假设动画播放时间为1秒
             // 实际播放spine动画的代码需要根据具体的spine组件来实现
+            this.finalAmountNode.getComponent(UIOpacity).opacity = 0;
             const spine = this.spineWinNode.getComponent(sp.Skeleton);
             spine.setAnimation(0, 'jineshanguang', false);
+            spine.setCompleteListener(() => {
+        
+            });
+            // 同时执行所有动画（简洁版）
+            const amountUIOpacity = this.amountNode.getComponent(UIOpacity);
+            const multipleUIOpacity = this.multipleNode.getComponent(UIOpacity);
+            const finalAmountUIOpacity = this.finalAmountNode.getComponent(UIOpacity);
+            tween(amountUIOpacity)
+              .to(0.2, { opacity: 0 })
+              .start();
+            tween(multipleUIOpacity)
+              .to(0.2, { opacity: 0 })
+              .start();
+            tween(finalAmountUIOpacity)
+              .to(0.2, { opacity: 255 })
+              .start();
           }),
           
           // 等待spine动画播放完毕（假设1秒）
@@ -86,12 +102,12 @@ export class CurrentRoundAmount extends Component {
           // 第四步：父节点同时向下位移50像素并放大1.5，然后移到-380并缩小到0
           tween(this.node)
             .parallel(
-              tween(this.node).to(0.3, { position: new Vec3(0, -10, 0) }, { easing: 'quadOut' }),
-              tween(this.node).to(0.3, { scale: new Vec3(1.5, 1.5, 1) }, { easing: 'quadOut' })
+              tween(this.node).to(0.3, { position: new Vec3(0, -10, 0) }, { easing: 'quintIn' }),
+              tween(this.node).to(0.3, { scale: new Vec3(1.5, 1.5, 1) }, { easing: 'quadOut' }),
             )
-            .parallel(
-              tween(this.node).to(0.3, { position: new Vec3(0, -380, 0) }, { easing: 'quintIn' }),
-              tween(this.node).to(0.3, { scale: new Vec3(0, 0, 1) }, { easing: 'quintIn' })
+            .parallel(  
+              tween(this.node).to(0.4, { position: new Vec3(0, -380, 0) }, { easing: 'sineOut' }),
+              tween(this.node).to(0.4, { scale: new Vec3(0.2, 0.2, 1) }, { easing: 'sineOut' })
             ),
           
           // 动画结束，重置状态
@@ -107,6 +123,22 @@ export class CurrentRoundAmount extends Component {
         )
         .start();
     });
+  }
+
+  /**
+   * 重置状态
+   */
+  resetState() {
+    this.node.scale = new Vec3(1, 1, 1);
+    this.node.getComponent(UIOpacity).opacity = 255;
+    this.amountNode.scale = new Vec3(0.5, 0.5, 1);
+    this.amountNode.setPosition(Vec3.ZERO);
+    this.multipleNode.scale = new Vec3(1, 1, 1);
+    this.multipleNode.setPosition(new Vec3(0, 162, 0));
+    this.multipleNode.getComponent(UIOpacity).opacity = 0;
+    this.finalAmountNode.getComponent(UIOpacity).opacity = 0;
+    this.amountNode.getComponent(UIOpacity).opacity = 255;
+    this.multipleNode.getComponent(UIOpacity).opacity = 255;
   }
 
   /**
