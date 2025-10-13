@@ -6,7 +6,7 @@ const { ccclass, property } = _decorator;
 
 export const SPINE_RESOURCE_NAMES: { [key: string]: string } = {
   // 开始动画
-  LAMANG_START: 'mayali_zhuanchang',
+  // LAMANG_START: 'mayali_zhuanchang',
   // 大奖弹框动画
   GRAND_PRIZE: 'win',
 

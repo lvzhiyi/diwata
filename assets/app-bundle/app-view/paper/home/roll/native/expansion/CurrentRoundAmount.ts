@@ -26,7 +26,7 @@ export class CurrentRoundAmount extends Component {
     this.node.scale = new Vec3(0.5, 0.5, 1);
   }
 
-  async showAmount(amount: number, multiple: number) {
+  async showAmount(amount: number, multiple: number):Promise<void> {
     return new Promise((resolve) => {
       if (this.tween?.running) {
         this.tween.stop();
@@ -35,6 +35,11 @@ export class CurrentRoundAmount extends Component {
         this.amountNode.setPosition(Vec3.ZERO);
         this.multipleNode.setPosition(Vec3.ZERO);
         this.multipleNode.getComponent(UIOpacity).opacity = 0;
+        // 重要：被中断的动画也需要 resolve，否则 Promise 永远不会完成
+        console.log('startNum-动画被中断');
+        resolve();
+        
+        return;
       }
 
       const label = this.amountNode.getComponent(Label);
@@ -44,7 +49,6 @@ export class CurrentRoundAmount extends Component {
       // 方法1：使用 UITransform 获取文本宽度
       const textWidth = this.calculateEnglishTextWidth();
       
-      console.log('文本宽度:', textWidth);
       this.multipleNode.getComponent(Label).string = `x ${Math.pow(2, multiple)}`;
 
       // 最终展示的金额
@@ -52,7 +56,7 @@ export class CurrentRoundAmount extends Component {
       
       // 重置节点状态
       this.resetState();
-
+      console.log('startNum-开始动画');
       this.tween = tween(this.node)
         .timeScale(app.manager.global.gameSpeed)
         .sequence(
@@ -112,13 +116,14 @@ export class CurrentRoundAmount extends Component {
           
           // 动画结束，重置状态
           tween().call(() => {
+            console.log('startNum-结束动画');
             this.node.getComponent(UIOpacity).opacity = 0;
             this.node.setPosition(this.originPosition);
             this.amountNode.setPosition(Vec3.ZERO);
             this.multipleNode.setPosition(new Vec3(0, 162, 0));
             this.multipleNode.getComponent(UIOpacity).opacity = 0;
           
-            resolve(true);
+            resolve();
           })
         )
         .start();

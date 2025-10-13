@@ -104,9 +104,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.initRollFrameSpine();
 
     // 如果有开屏动画线隐藏节点
-    if (app.manager.global.canPlayStartAnimation()) {
-      this.hiddenAllNodes();
-    }
+    this.hiddenAllNodes();
   }
 
   private hiddenAllNodes() {
@@ -116,6 +114,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   startHomeRollAnimation() {
+    console.log('startHomeRollAnimation');
     this.node.active = true;
     // 女神节点渐显
     tween(this.goddessNode.getComponent(UIOpacity))
@@ -129,6 +128,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   startHomeAnimationComplete(needAnimation: boolean = true) {
+    console.log('startHomeAnimationComplete');
     this.node.active = true;
     this.node.scale = new Vec3(1, 1, 1);
     this.goddessNode.getComponent(UIOpacity).opacity = 255;
@@ -638,6 +638,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     // 开始免费轮动画
     if (isNormalRoundHitFreeSpin) {
+      if (this.hasGrandPrize()) {
+        await this.showGrandPrize();
+      }
+
       await this.startHitFreeSpinScatterAnimation(symbolAnimationData);
     }
 
@@ -680,15 +684,17 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
        */
       if (this.currentRoundIsMaxMultiple()) {
         this.totalRewardAmount = app.controller.slots.isFreeBonusSpin ? app.manager.global.freeBonusTotalAmount : this.resultData.totalPayoutAmount;
-        // this.changeTipsContent(`<color=#FF50E4><b>WIN</b></color> <color=#FFFFFF>₱ ${calculateWithBase(this.totalRewardAmount)}</color>`, true);
-        await delay(50);
+        await this.maxWinProcess();
       }
 
       /**
        * 大奖弹窗
        * 免费轮的结束轮，并且当前轮达到最大倍率，不展示大奖弹窗
        */
-      if (this.hasGrandPrize() && !(this.isFreeBonusEnd() && this.resultList[this.roundIndex]?.accumulateReachMaxMultiple)) {
+      const isNormalRoundHitFreeSpin = await this.normalRoundHitFreeSpin();
+      const hasGrandPrize = this.hasGrandPrize();
+
+      if (hasGrandPrize && !(this.resultList[this.roundIndex]?.accumulateReachMaxMultiple) && !isNormalRoundHitFreeSpin) {
         await this.showGrandPrize();
       }
 
@@ -1114,7 +1120,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     const { allWheelRewardSubType } = this.resultData.resultDetail;
 
-    return allWheelRewardSubType === RewardSubTypeEnum.NICE || allWheelRewardSubType === RewardSubTypeEnum.MEGA && allWheelRewardSubType === RewardSubTypeEnum.SUPER;
+    return allWheelRewardSubType === RewardSubTypeEnum.NICE || allWheelRewardSubType === RewardSubTypeEnum.MEGA || allWheelRewardSubType === RewardSubTypeEnum.SUPER;
   }
 
   /**
@@ -1124,11 +1130,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const { overallRewardAmount, resultDetail } = this.resultData;
     const { allWheelRewardSubType } = resultDetail;
     const { accumulateReachMaxMultiple } = this.resultList[this.roundIndex];
-
-    // 如果当前轮命中免费轮，则不展示大奖弹窗
-    if (app.controller.slots.isFreeBonusSpin && accumulateReachMaxMultiple) {
-      return Promise.resolve();
-    }
 
     return new Promise<void>(resolve => {
       app.manager.ui.show<PopGrandPrize>({
@@ -1141,6 +1142,26 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         onHide: () => resolve(),
       });
     });
+  }
+
+  /**
+	 * 最高倍率中奖处理
+	 */
+  async maxWinProcess()  {
+    // 展示最大倍率结果弹窗
+    await this.showGrandPrize();
+    // 清空免费轮游戏记录Id
+    app.manager.global.setGameRecordIds([]);
+    // 更新购买免费轮状态
+    this.BonusView.getComponent(BousView).updateBuyBonusStatus(1);
+
+    // 更新免费轮次数为 0
+    this.FreeBonusSpinTimesNode.getComponent(Label).string = `${0}`;
+
+    // 设置为非免费轮
+    app.manager.global.setGameRecordIndex(0);
+    // 设置为非免费轮
+    app.controller.slots.freeBonusSpinChange(false);
   }
 
   /**
@@ -1166,28 +1187,20 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   /**
    * 修改Tips内容
    */
-  private async changeTipsContent(startNum: number, endNum: number): Promise<void> {
+  private async changeTipsContent(startNum: number, endNum: number) {
     if (endNum === null) {
       return this.rewardBox.getComponent(RewardBox).showGoodLuck();
     } else if (endNum === 0) {
       return this.rewardBox.getComponent(RewardBox).showPlace();
     } else {
       const amount = calculateWithBase(endNum - startNum);
-
+      console.log('startNum-动画', amount);
       // 展示当前轮次金额弹出提示
-      await this.showCurrentRoundAmount(amount);
-
-      return this.rewardBox.getComponent(RewardBox).showWinNumber(startNum, endNum);
+      await  this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(amount, app.manager.global.multipleIndex);
+      console.log('startNum-动画AA');
+      this.rewardBox.getComponent(RewardBox).showWinNumber(startNum, endNum);
     }
   } 
-
-  /**
-   * 展示当前轮次金额弹出提示
-   * @param amount 金额
-   */
-  private async showCurrentRoundAmount(amount: number) {
-    await this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(amount, app.manager.global.multipleIndex);
-  }
 
   /**
    * 当前回合是否达到最大倍率

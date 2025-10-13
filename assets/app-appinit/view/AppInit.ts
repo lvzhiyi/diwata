@@ -17,6 +17,9 @@ import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTra
 import {  getApiUrl, getGameEnv } from '../../common/script/extra/config/envConfig';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from '../../basePlate/middleWare/serverManager/GameResourceManager';
 import { Environment } from '../../common/script/extra/config/env';
+import { BGMManager } from '../../basePlate/middleWare/serverManager/BGMManager';
+import { EffectManager } from '../../basePlate/middleWare/serverManager/EffectManager';
+import { PopStarthome } from '../../app-bundle/app-view/pop/starthome/native/PopStarthome';
 
 const { ccclass, property } = _decorator;
 @ccclass('AppInit')
@@ -53,7 +56,7 @@ export class AppInit extends BaseAppInit {
    * 获得用户资源总量，这里返回几，就需要用户自行调用几次nextInit
    */
   protected getUserAssetNum(): number {
-    return 5;
+    return 7;
   }
 
   protected async onLoad() {
@@ -69,8 +72,11 @@ export class AppInit extends BaseAppInit {
     this.progressBarNode.active = false;
 
     if (this.isDontShowNextTime) {  
-      Core.inst.manager.ui.showDefault(() => {
-        this.node.destroy();
+      this.hideGuideNode();
+      this.showStartHome().then(() => {
+        Core.inst.manager.ui.showDefault(() => {
+          this.node.destroy();
+        });
       });
     }else{
       setTimeout(() => {
@@ -157,11 +163,6 @@ export class AppInit extends BaseAppInit {
    * 预加载spine动画
    */
   private async preloadSpineAnimation() {
-    // 则可预加载开场动画，
-    if (app.manager.global.canPlayStartAnimation()) {
-      await GameResourceManager.instance.preloadLocalAnimations([SPINE_RESOURCE_NAMES.LAMANG_START]);
-    }
-
     await GameResourceManager.instance.preloadLocalAnimations();
     await GameResourceManager.instance.preloadAllRollAnimations();
   }
@@ -353,7 +354,9 @@ export class AppInit extends BaseAppInit {
       [
         { type: Prefab, bundle: 'PaperHomeRoll' },
         { type: Prefab, bundle: 'PaperHomeBody' },
+        { type: Prefab, bundle: 'PaperHomeActivity' },
         { type: Prefab, bundle: 'PopSettings' },
+        { type: Prefab, bundle: 'PopStarthome' },
       ]
     ];
 
@@ -427,9 +430,30 @@ export class AppInit extends BaseAppInit {
 
   clickPlay() {
     this.btnPlayNode.active = false;
-    Core.inst.manager.ui.showDefault(() => {
-      this.node.destroy();
+    this.showStartHome().then(() => {
+      Core.inst.manager.ui.showDefault(() => {
+        // 埋点-用户点击Play按钮
+        EventTrackManager.inst.trackClickPlay(app.manager.global.creditCount);
+        this.node.destroy();
+      });
     });
+  }
+   
+  async hideGuideNode() {
+    // this.destoryAnimationNode(this.guide1Node);
+    // this.destoryAnimationNode(this.guide2Node);
+    // this.destoryAnimationNode(this.guide3Node);
+    // this.swipeNode.active = false;
+    // 音量
+    // BGMManager.inst.initializeBGMVolume();
+    // // 执行完成操作
+    // EffectManager.inst.initializeEffectVolume();
+
+    // // 初始化背景音频
+    // if (app.manager.global.canPlayStartAnimation() === false) {
+    //   console.log('initBGM');
+    //   await BGMManager.inst.initBGM();
+    // }
   }
 
   /**
@@ -454,6 +478,23 @@ export class AppInit extends BaseAppInit {
     );
     eventTrack.track('sys_load_init');
     eventTrack.track('sys_login');
+  }
+
+  /**
+   * 展示开屏弹窗
+   */
+  private async showStartHome(): Promise<void> {
+    if (app.manager.global.canPlayStartAnimation()) {
+      return new Promise<void>(resolve => {
+        app.manager.ui.show<PopStarthome>({
+          name: 'PopStarthome',
+          data: {},
+          onHide: () => resolve(),
+        });
+      });
+    }else{
+      return Promise.resolve();
+    }
   }
 
   private appInitArms() {

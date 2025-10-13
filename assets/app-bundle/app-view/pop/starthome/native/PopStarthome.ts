@@ -51,16 +51,15 @@ export class PopStarthome extends BaseView {
           const skeleton = this.startHomeSpine.getComponent(sp.Skeleton);
           skeleton.setAnimation(0, 'show', false);
           // 监听自定义事件 "sz"
-          skeleton.setEventListener((trackEntry: sp.spine.TrackEntry, event: sp.spine.Event) => {
-            if (event.data.name === 'guadian') {
-              app.manager.event.emit('startHomeRollAnimation');
-            }
-          });
+          //   skeleton.setEventListener((trackEntry: sp.spine.TrackEntry, event: sp.spine.Event) => {
+          //     if (event.data.name === 'guadian') {
+          //       app.manager.event.emit('startHomeRollAnimation');
+          //     }
+          //   });
           skeleton.setCompleteListener(() => {
             this.playStartAnimationComplete(true);
           });
         } catch (error) {
-          app.manager.event.emit('startHomeAnimationComplete');
           this.playStartAnimationComplete(true);
         }
       }
@@ -73,11 +72,8 @@ export class PopStarthome extends BaseView {
       SpineTool.destoryAnimationNode(this.startHomeSpine);
     }
 
-    GlobalActivity.showEntryDialog();
-    freeSpinManager.init();
-
-    app.manager.event.emit('startHomeAnimationComplete', needAnimation);
     // 播放背景音乐
+    this.hide();
   }
 
   // 界面关闭时的相关逻辑写在这(已经关闭的界面不会触发onHide)
