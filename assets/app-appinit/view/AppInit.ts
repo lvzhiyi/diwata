@@ -449,7 +449,7 @@ export class AppInit extends BaseAppInit {
         player_name: app.manager.global.playerName,
         game_id: app.config.app.GAME_ID,
         game_ver: app.config.app.APP_VERSION,
-        provider_id: ''
+        provider_id: 'Spin Master'
       }
     );
     eventTrack.track('sys_load_init');

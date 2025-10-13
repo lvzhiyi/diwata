@@ -142,9 +142,9 @@ export class PopBetrecord extends BaseView {
 
     addSearchAndDeleteListener() {
       this.DateSearchIcon.on(Node.EventType.TOUCH_END, this.searchFromDate, this);
-      this.DateClearIcon.on(Node.EventType.TOUCH_END, this.clearDay, this);
+      this.DateClearIcon.on(Node.EventType.TOUCH_END, this.clearDayAction, this);
       this.NumberSearchIcon.on(Node.EventType.TOUCH_END, this.searchFromRoundNumber, this);
-      this.NumberClearIcon.on(Node.EventType.TOUCH_END, this.clearRoundNumber, this);
+      this.NumberClearIcon.on(Node.EventType.TOUCH_END, this.clearRoundNumberAction, this);
     }
 
     addBackIconListener() {
@@ -430,12 +430,20 @@ export class PopBetrecord extends BaseView {
     }
 
     private clearDay() {
-      // 上报清除日期事件
-      EventTrackManager.inst.trackBetRecordFilterFieldClear({
-        cleared_field: 'date',
-        cleared_value: dayjs(this._selectedDate).format('YYYY-MM-DD'),
-      });
       const DataLabel = this.ClickToSelectADateLabel.getComponent(Label);
+      DataLabel.color = new Color().fromHEX('#7F7F7F');
+      DataLabel.string = 'Click to select a date';
+    }
+
+    private clearDayAction() {
+      // 上报清除日期事件
+      // 埋点-用户点击日期清除按钮
+      const DataLabel = this.ClickToSelectADateLabel.getComponent(Label);
+      EventTrackManager.inst.trackClearBetRecordField({
+        cleared_field: 'date',
+        cleared_value: DataLabel.string
+      });
+      // EffectManager.inst.playEffect(AudioPath.UI.OPEN);
       DataLabel.color = new Color().fromHEX('#7F7F7F');
       DataLabel.string = 'Click to select a date';
     }
@@ -473,6 +481,12 @@ export class PopBetrecord extends BaseView {
     }
 
     private clearRoundNumber() {
+      const roundNumberScprit = this.RoundNumberNode.getComponent(EditBox);
+      roundNumberScprit.string = '';
+      roundNumberScprit.blur();
+    }
+
+    private clearRoundNumberAction() {
       const roundNumberScript = this.RoundNumberNode.getComponent(EditBox);
       EventTrackManager.inst.trackBetRecordFilterFieldClear({
         cleared_field: 'round_number',
@@ -486,9 +500,9 @@ export class PopBetrecord extends BaseView {
     protected onDisable(): void {
       this.cardScrollViewNode.off(Node.EventType.TOUCH_MOVE, this.onScroll, this);
       this.DateSearchIcon.off(Node.EventType.TOUCH_END, this.getData, this);
-      this.DateClearIcon.off(Node.EventType.TOUCH_END, this.clearDay, this);
+      this.DateClearIcon.off(Node.EventType.TOUCH_END, this.clearDayAction, this);
       this.NumberSearchIcon.off(Node.EventType.TOUCH_END, this.searchFromRoundNumber, this);
-      this.NumberClearIcon.off(Node.EventType.TOUCH_END, this.clearRoundNumber, this);
+      this.NumberClearIcon.off(Node.EventType.TOUCH_END, this.clearRoundNumberAction, this);
       this.BackIconNode.off(Node.EventType.TOUCH_END, this.closeRecordLayout, this);
       this.node.off(Node.EventType.ACTIVE_CHANGED, this.activeChangedListener, this);
       this._nodePool.clear();

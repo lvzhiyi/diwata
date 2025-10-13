@@ -257,7 +257,7 @@ class EventTrackManager extends Component {
    * 发送点击投注规则按钮的事件
    */
   public trackOpenBetRules() {
-    this.$track.track('click_settings_rules', { rules: 'rule_malakas', });
+    this.$track.track('click_settings_rules', { rules: 'rule_mayari', });
   }
 
   /**
@@ -316,6 +316,14 @@ class EventTrackManager extends Component {
       cleared_field: data.cleared_field,
       cleared_value: data.cleared_value,
     });
+  }
+
+  // 用户点击‘垃圾桶’按钮时
+  public trackClearBetRecordField(params: {
+    cleared_field: 'date' | 'round_number',
+    cleared_value: string,
+  }) {
+    eventTrack.track('clear_bet_record_field', params);
   }
   
   /**
