@@ -11,8 +11,8 @@ import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsCon
 import { GlobalActivity, GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
 import { calculateWithBase } from 'db://assets/common/script/extra/Utils/common';
 import { freeSpinManager } from 'db://assets/res-native/script/FreeSpinManager';
-import { HomeRollTool } from '../../roll/native/expansion/HomeRollTool';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { SpineTool } from 'db://assets/res-native/script/SpineTool';
 
 const { ccclass, property } = _decorator;
 @ccclass('PaperHomeActivity')
@@ -89,7 +89,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
     private playStartAnimationComplete(needAnimation: boolean = true) {
       if(this.startHomeSpine) {
         this.skipView.active = false;
-        HomeRollTool.destoryAnimationNode(this.startHomeSpine);
+        SpineTool.destoryAnimationNode(this.startHomeSpine);
       }
 
       GlobalActivity.showEntryDialog();
