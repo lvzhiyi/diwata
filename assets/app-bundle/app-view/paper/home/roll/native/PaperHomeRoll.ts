@@ -1131,6 +1131,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const { allWheelRewardSubType } = resultDetail;
     const { accumulateReachMaxMultiple } = this.resultList[this.roundIndex];
 
+    // 当前没有展示投注记录和记录详情的时候，调整层级
     return new Promise<void>(resolve => {
       app.manager.ui.show<PopGrandPrize>({
         name: 'PopGrandPrize',
@@ -1196,7 +1197,13 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       const amount = calculateWithBase(endNum - startNum);
       console.log('startNum-动画', amount);
       // 展示当前轮次金额弹出提示
-      await  this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(amount, app.manager.global.multipleIndex);
+      let multipleIndex = app.manager.global.multipleIndex - 1;
+
+      if(app.manager.global.multipleIndex >= 10){
+        multipleIndex = 10;
+      }
+
+      await  this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(amount, multipleIndex);
       console.log('startNum-动画AA');
       this.rewardBox.getComponent(RewardBox).showWinNumber(startNum, endNum);
     }

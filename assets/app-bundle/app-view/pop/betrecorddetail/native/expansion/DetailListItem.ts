@@ -11,11 +11,13 @@ import {
   SpriteFrame,
   Vec3,
   Vec2,
+  Widget,
 } from 'cc';
 import { MoneyUtil } from 'db://assets/basePlate/core/baseUtil/MoneyUtil';
 import { BetRewardLineItem } from 'db://assets/basePlate/middleWare/services/bet';
 import { RecordItemCard } from './RecordItemCard';
 import { RewardLine } from './RewardLine';
+import { calculateEnglishTextWidth } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 
 const { ccclass, property } = _decorator;
 
@@ -60,6 +62,10 @@ export class DetailListItem extends Component {
     this.title.string = item.freeWheelFlag ? 'Free Game' : 'Main Game';
     this.win.string = `Win:₱ ${MoneyUtil.internalToDisplayAndFormat(item.rewardAmount)}`;
     this.odd.string = `${item.multiple || 1}X`;
+    const oddWidth = calculateEnglishTextWidth(this.odd.string, this.odd.fontSize);
+    this.odd.node.getComponent(UITransform).width = oddWidth + 10;
+    const winWidth = calculateEnglishTextWidth(this.win.string, this.win.fontSize);
+    this.win.node.getComponent(UITransform).width = winWidth + 10;
 
     if (imgSprite) {
       // 过滤掉null值的二维数组
@@ -94,10 +100,23 @@ export class DetailListItem extends Component {
 
       this.imageBox.getComponent(Layout).updateLayout();
     }
-    
+
+    // 更新约束
+    const winWidget = this.win.node.getComponent(Widget);
+
+    if(winWidget) {
+      winWidget.updateAlignment();
+    }
+
+    const oddWidget = this.odd.node.getComponent(Widget);
+
+    if(oddWidget) {
+      console.log('oddWidget', oddWidget);
+      oddWidget.updateAlignment();
+    }
+
     // 中奖线
-   
-    this.rewardLineList.getComponent(UITransform).height = maxRewardLineCount * 60 + 10;
+    this.rewardLineList.getComponent(UITransform).height = maxRewardLineCount * 68 + 5;
     this.addRewardItems(item.rewardLineList, cards);
     // this.node.getComponent(UITransform).height = maxRewardLineCount * 60 + 380;
   }
