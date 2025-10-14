@@ -445,9 +445,9 @@ export class AppInit extends BaseAppInit {
     // this.destoryAnimationNode(this.guide3Node);
     // this.swipeNode.active = false;
     // 音量
-    // BGMManager.inst.initializeBGMVolume();
+    BGMManager.inst.initializeBGMVolume();
     // // 执行完成操作
-    // EffectManager.inst.initializeEffectVolume();
+    EffectManager.inst.initializeEffectVolume();
 
     // // 初始化背景音频
     // if (app.manager.global.canPlayStartAnimation() === false) {

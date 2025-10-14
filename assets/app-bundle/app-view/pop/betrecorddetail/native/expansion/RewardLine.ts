@@ -54,11 +54,12 @@ export class RewardLine extends Component {
     if (item) {
       const label = textNode.getComponent(Label);
       const betNumber = MoneyUtil.formatDisplayAmount(MoneyUtil.internalToDisplay(item.betAmount) * item.odds);
-      let content = `₱ ${betNumber} X ${item.rewardLineCount}WAYS = ₱${MoneyUtil.internalToDisplay(item.rewardAmount)
+      let content = `₱ ${betNumber} X ${item.rewardLineCount} = ₱${MoneyUtil.internalToDisplay(item.rewardAmount)
       }`;
 
       if (item.multiple > 1 && item.symbolId != '3001') {
-        content = `₱ ${betNumber} X ${item.rewardLineCount}WAYS X ${item.multiple
+        const betNewNumber =  MoneyUtil.internalToDisplay(item.betAmount * item.odds);
+        content = `₱ ${betNewNumber * item.rewardLineCount} X ${item.multiple
         } = ₱ ${MoneyUtil.internalToDisplay(item.rewardAmount)}`;
       }
 

@@ -130,6 +130,21 @@ export const showServerMaintenanceTip = (start: number, end: number) => {
   });
 };
 
+export function calculateEnglishTextWidth(textStr: string, fontSize: number): number {
+  if (!textStr || fontSize <= 0) {
+    return 0;
+  }
+
+  // 简单算法：每个字符平均宽度约为字体大小的0.6倍
+  // 大写字母稍宽，小写字母稍窄，但平均下来0.6比较准确
+  const averageCharWidth = fontSize * 0.6;
+  const textWidth = textStr.length * averageCharWidth;
+  
+  return Math.ceil(textWidth);
+}
+
+;
+
 export function preventRapidClickDecorator(clickDelay: number = 1000) {
   let lastClickTime = 0;
 
