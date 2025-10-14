@@ -54,12 +54,12 @@
 			"useWebGPU": false,
 			"orientation": "auto",
 			"embedWebDebugger": false,
-			"__version__": "1.0.1"
+			"__version__": "1.0.2"
 		},
 		"adsense-h5g-plugin": {
 			"enableAdsense": false,
 			"enableTestAd": false,
-			"__version__": "1.0.1",
+			"__version__": "1.0.2",
 			"AFPHostPropertyCode": "ca-host-pub-5396158963872751",
 			"AFPHostDomain": "douyougame.com",
 			"otherAFPHostPropertyCode": "",
