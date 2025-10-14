@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
 
-    <title>Maria Makiling</title>
+    <title><%= projectName %></title>
 
     <!--http://www.html5rocks.com/en/mobile/mobifying/-->
     <meta
@@ -13,10 +13,7 @@
 
     <!--https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html-->
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="format-detection" content="telephone=no" />
 
     <!-- force webkit on 360 -->
@@ -135,21 +132,12 @@
           var bgWidth = bgOriginWidth * minScale;
           // 缩放后的背景图高度
           var bgHeight = bgOriginHeight * minScale;
-          document.documentElement.style.setProperty(
-            '--window-width',
-            innerWidth + 'px'
-          );
-          document.documentElement.style.setProperty(
-            '--window-content-width',
-            contentWidth + 'px'
-          );
-          document.documentElement.style.setProperty(
-            '--render-ui-scale',
-            minScale
-          );
+          document.documentElement.style.setProperty('--window-width', innerWidth + 'px');
+          document.documentElement.style.setProperty('--window-content-width', contentWidth + 'px');
+          document.documentElement.style.setProperty('--render-ui-scale', minScale);
           document.documentElement.style.setProperty(
             '--bg-size',
-            bgWidth + 'px ' + bgHeight + 'px'
+            bgWidth + 'px ' + bgHeight + 'px',
           );
           // 设计稿尺寸是 1125 * 2436, 以1rem = 100px 为基准
           // 然后屏幕的全屏就等于1125 / 100 = 11.25rem
@@ -164,8 +152,7 @@
         };
 
         window.ccEngineProgress = (progress) => {
-          document.getElementById('progress-val').style.width =
-            progress * 1.72 + 'rem';
+          document.getElementById('progress-val').style.width = progress * 1.72 + 'rem';
         };
         console.time('Game init total time');
       })();
@@ -249,36 +236,15 @@
   </head>
   <body>
     <script>
-      !(function(c,b,d,a){c[a]||(c[a]={});c[a]=
-      {
-        pid: '1hlahoc4rpc@9224ac96a5dd623',
-        endpoint: 'https://1hlahoc4rpc-default-sea.rum.aliyuncs.com',
-        // 设置环境信息，参考值：'prod' | 'gray' | 'pre' | 'daily' | 'local'
-        env: 'prod',
-        // 设置路由模式， 参考值：'history' | 'hash'
-        spaMode: 'history',
-        collectors: {
-          // 页面性能指标监听开关，默认开启
-          perf: true,
-          // WebVitals指标监听开关，默认开启
-          webVitals: true,
-          // Ajax监听开关，默认开启
-          api: true,
-          // 静态资源开关，默认开启
-          staticResource: true,
-          // JS错误监听开关，默认开启
-          jsError: true,
-          // 控制台错误监听开关，默认开启
-          consoleError: true,
-          // 用户行为监听开关，默认开启
-          action: true,
-        },
-        // 链路追踪配置开关，默认关闭
-        tracing: true,
-      }
-      with(b)with(body)with(insertBefore(createElement("script"),firstChild))setAttribute("crossorigin","",src=d)
-  })(window, document, "https://sdk.rum.aliyuncs.com/v2/browser-sdk.js", "__rum");
-  </script>
+      !(function (c, b, d, a) {
+        c[a] || (c[a] = {});
+        c[a] = {};
+        with (b)
+          with (body)
+            with (insertBefore(createElement('script'), firstChild))
+              setAttribute('crossorigin', '', (src = d));
+      })(window, document, 'https://sdk.rum.aliyuncs.com/v2/browser-sdk.js', '__rum');
+    </script>
     <div class="loading-page" id="loading-page">
       <div class="loading-page-logo">
         <img src="./images/logo.ico" alt="logo" />
@@ -290,26 +256,20 @@
     </div>
     <div id="GameDiv" cc_exact_fit_screen="true">
       <div id="Cocos3dGameContainer">
-        <canvas
-          id="GameCanvas"
-          oncontextmenu="event.preventDefault()"
-          tabindex="99"
-        ></canvas>
+        <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
       </div>
     </div>
 
+    <!-- Polyfills bundle. -->
 
-<!-- Polyfills bundle. -->
+    <script src="src/polyfills.bundle.5adbf.js" charset="utf-8"></script>
 
-<script src="src/polyfills.bundle.5adbf.js" charset="utf-8"> </script>
+    <!-- SystemJS support. -->
+    <script src="src/system.bundle.543e6.js" charset="utf-8"></script>
 
-
-<!-- SystemJS support. -->
-<script src="src/system.bundle.543e6.js" charset="utf-8"> </script>
-
-{{ buildHashes }}
-<!-- 构建时生成的hash配置 -->
-<script src="getAB.js"></script>
+    {{ buildHashes }}
+    <!-- 构建时生成的hash配置 -->
+    <script src="getAB.js"></script>
 
     <script>
       (function () {
@@ -327,15 +287,15 @@
         };
       })();
 
-      if(window.location.hostname.includes('.com')){
+      if (window.location.hostname.includes('.com')) {
         // 重写 console 对象, 屏蔽所有 console 方法
         Object.defineProperty(console, 'log', {
-          get: function() {
-            return function() {
+          get: function () {
+            return function () {
               // 空函数，什么都不做
             };
-          }
-        })
+          },
+        });
       }
     </script>
   </body>
