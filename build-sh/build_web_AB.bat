@@ -93,7 +93,7 @@ echo Cleaning temp folder before build...
 if exist "temp" rmdir /s /q "temp"
 if exist "library" rmdir /s /q "library"
 timeout /t 2 /nobreak >nul
-"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_A.json" --force
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_A.json" --clear
 
 
 REM 提取A包hash值
@@ -111,7 +111,7 @@ echo Cleaning temp folder before build...
 if exist "temp" rmdir /s /q "temp"
 if exist "library" rmdir /s /q "library"
 timeout /t 2 /nobreak >nul
-"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_B.json" --force
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_B.json" --clear
 set "BUILD_RESULT=%errorlevel%"
 echo Cocos Creator B package exit code: %BUILD_RESULT%
 
@@ -148,7 +148,7 @@ echo Cleaning temp folder before build...
 if exist "temp" rmdir /s /q "temp"
 if exist "library" rmdir /s /q "library"
 timeout /t 2 /nobreak >nul
-"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile.json" --force
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile.json" --clear
 set "BUILD_RESULT=%errorlevel%"
 echo Cocos Creator single package exit code: %BUILD_RESULT%
 
