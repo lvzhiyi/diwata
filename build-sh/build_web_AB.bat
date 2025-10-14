@@ -89,6 +89,10 @@ echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
 echo Building A package...
+echo Cleaning temp folder before build...
+if exist "temp" rmdir /s /q "temp"
+if exist "library" rmdir /s /q "library"
+timeout /t 2 /nobreak >nul
 "C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_A.json" --force
 
 
@@ -103,6 +107,10 @@ echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
 echo Building B package...
+echo Cleaning temp folder before build...
+if exist "temp" rmdir /s /q "temp"
+if exist "library" rmdir /s /q "library"
+timeout /t 2 /nobreak >nul
 "C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_B.json" --force
 set "BUILD_RESULT=%errorlevel%"
 echo Cocos Creator B package exit code: %BUILD_RESULT%
@@ -136,6 +144,10 @@ git reset --hard origin/%BRANCH%
 echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
+echo Cleaning temp folder before build...
+if exist "temp" rmdir /s /q "temp"
+if exist "library" rmdir /s /q "library"
+timeout /t 2 /nobreak >nul
 "C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile.json" --force
 set "BUILD_RESULT=%errorlevel%"
 echo Cocos Creator single package exit code: %BUILD_RESULT%
