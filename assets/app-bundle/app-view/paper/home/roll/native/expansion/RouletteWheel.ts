@@ -101,7 +101,7 @@ export class RouletteWheel extends Component {
    */
   private initData(): void {
     // 固定数据序列
-    this.dataList = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 128, 256, 512, 1024];
+    this.dataList = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 1, 2, 4, 8];
 
     // 根据数据数量动态计算角度步长
     this.DATA_ANGLE_STEP = 360 / this.dataList.length;
@@ -219,10 +219,16 @@ export class RouletteWheel extends Component {
           .to(0.5, { scale: new Vec3(1.2, 1.2, 1) }, { easing: 'bounceOut' })
           .start();
         item.getChildByName('text').getComponent(Label).isBold = true;
-        this.textSpineNode.setPosition(item.position);
+        const textString = item.getChildByName('text').getComponent(Label).string;
         if (this.chooseSprite) sprite.spriteFrame = this.chooseSprite;
         this.textSpineNode.active = true;
-        this.textSpineNode.getComponent(sp.Skeleton).setAnimation(0, 'beilvshuzishanguang', false);
+        const textSpine = this.textSpineNode.getComponent(sp.Skeleton);
+        const animationName = textString.indexOf('x1024') === -1 ? 'beilvshuzishanguang' : 'beilvshuzishanguang2';
+        textSpine.setAnimation(0, animationName, false);
+        textSpine.setCompleteListener(() => {
+          textSpine.setCompleteListener(null);
+          this.textSpineNode.active = false;
+        });
       } else {
         this.items[i].getChildByName('text').getComponent(Label).isBold = false;
         this.items[i].setScale(1, 1, 1);
@@ -395,8 +401,6 @@ export class RouletteWheel extends Component {
 
       return;
     }
-
-    console.log('currentIndex', currentIndex, targetData);
    
     // 根据数值大小关系决定旋转方向
     let rotationSteps: number;
@@ -411,10 +415,7 @@ export class RouletteWheel extends Component {
     
     // 计算目标旋转角度
     const targetRotation = this.bgCurrentRotation + (rotationSteps * this.DATA_ANGLE_STEP);
-    
-    console.log(`背景从${currentData}跳转到${targetData}，旋转步骤：${rotationSteps}（${rotationSteps > 0 ? '顺时针' : '逆时针'}）,${targetRotation}`);
-    
-    // this.animateToRotation(targetRotation);
+
     this.animateBgToRotation(targetRotation);
   }
 

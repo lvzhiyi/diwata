@@ -9,7 +9,7 @@
   "subMetas": {},
   "userData": {
     "_fntConfig": {
-      "commonHeight": 83,
+      "commonHeight": 72,
       "fontSize": 72,
       "atlasName": "number.png",
       "fontDefDictionary": {
@@ -156,16 +156,16 @@
           "yOffset": -1,
           "xAdvance": 34
         },
-        "8369": {
+        "120": {
           "rect": {
-            "x": 74,
-            "y": 59,
-            "width": 45,
-            "height": 57
+            "x": 137,
+            "y": 118,
+            "width": 35,
+            "height": 39
           },
           "xOffset": -1,
-          "yOffset": 0,
-          "xAdvance": 43
+          "yOffset": 9,
+          "xAdvance": 33
         }
       },
       "kerningDict": {}

@@ -14,7 +14,7 @@ import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTra
 import { IQuickMode } from '../app-manager/global/GlobalManager';
 
 // TODO 测试用
-const useMock = true;
+const useMock = false;
 
 export class HomeController extends BaseController<
   HomeController,
@@ -211,15 +211,15 @@ export class HomeController extends BaseController<
    * @param isAutoSpin 是否为自动投注
    * @param useFreespin 是否是freespin模式
    */
-  private trackSpinStart(oldBalance: number, useFreespin: boolean) {
+  private trackSpinStart(oldBalance: number, useBonus:  boolean) {
     const autoSpin = app.manager.global.allwaysAutoPlay;
     EventTrackManager.inst.trackSpinStart({
       old_balance: oldBalance,
-      new_balance: useFreespin ? oldBalance : oldBalance - app.manager.global.betCount,
+      new_balance: app.manager.global.creditCount,
       round_number: this.betResult ? this.betResult.betRecordId : '',
       bet_amount: app.manager.global.betCount,
       auto_spin: autoSpin,
-      bonus_type: useFreespin ? 'free_spin' : 'normal',
+      bonus_type: useBonus ? 'free_spin' : 'normal',
       bet_success: !!this.betResult,
     });
   }
@@ -247,6 +247,8 @@ export class HomeController extends BaseController<
     });
 
     if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data) {
+      const old_balance = app.manager.global.creditCount;
+
       if(isFreeSpin == false) {
         app.manager.global.setCreditCount(
           app.manager.global.creditCount - (app.manager.global.betCount * (betType === BetTypes.buy ? app.config.app.BUY_FREE_SPIN_TIMES_RATIO : 1))
@@ -270,7 +272,7 @@ export class HomeController extends BaseController<
       }
       
       // 埋点
-      this.trackSpinStart(app.manager.global.creditCount, true);
+      this.trackSpinStart(old_balance, false);
     } else {
       this.credit = calculateWithBase(app.manager.global.creditCount, false);
       this.betResult = mockFailedData;
@@ -327,6 +329,7 @@ export class HomeController extends BaseController<
     }
 
     if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data) {
+      const old_balance = app.manager.global.creditCount;
       app.manager.global.setCreditCount(
         app.manager.global.creditCount - (app.manager.global.betCount * (betType === BetTypes.buy ? app.config.app.BUY_FREE_SPIN_TIMES_RATIO : 1))
       );
@@ -334,7 +337,7 @@ export class HomeController extends BaseController<
       this.betResult = res.data;
       await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 0 : 500);
       // 埋点
-      this.trackSpinStart(app.manager.global.creditCount, true);
+      this.trackSpinStart(old_balance, true);
 
       if (isUseStarCard) {
         // 星卡使用成功
