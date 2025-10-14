@@ -89,7 +89,7 @@ echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
 echo Building A package...
-"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_A.json"
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_A.json" --force
 
 
 REM 提取A包hash值
@@ -103,7 +103,7 @@ echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
 echo Building B package...
-"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_B.json"
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_B.json" --force
 set "BUILD_RESULT=%errorlevel%"
 echo Cocos Creator B package exit code: %BUILD_RESULT%
 
@@ -136,7 +136,7 @@ git reset --hard origin/%BRANCH%
 echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
-"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile.json"
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile.json" --force
 set "BUILD_RESULT=%errorlevel%"
 echo Cocos Creator single package exit code: %BUILD_RESULT%
 
