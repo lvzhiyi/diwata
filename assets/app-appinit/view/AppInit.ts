@@ -71,7 +71,7 @@ export class AppInit extends BaseAppInit {
     EventTrackManager.inst.trackGameStart(app.manager.global.creditCount);
     this.progressBarNode.active = false;
 
-    if (this.isDontShowNextTime) {  
+    if (this.isDontShowNextTime) {
       this.hideGuideNode();
       this.showStartHome().then(() => {
         Core.inst.manager.ui.showDefault(() => {
@@ -402,7 +402,7 @@ export class AppInit extends BaseAppInit {
         const {
           bundle, path, type
         } = item;
-        
+
         if (type === sp.SkeletonData) {
           await loadResource('preloadDir', bundle, path, type);
         } else if (type === SpriteFrame) {
@@ -438,7 +438,7 @@ export class AppInit extends BaseAppInit {
       });
     });
   }
-   
+
   async hideGuideNode() {
     // this.destoryAnimationNode(this.guide1Node);
     // this.destoryAnimationNode(this.guide2Node);
@@ -500,17 +500,8 @@ export class AppInit extends BaseAppInit {
   private appInitArms() {
     if (DEBUG) return;
     const env = getGameEnv();
-    // 线上环境单独一个上报应用，其他环境一个
-    const pidMap = {
-      prod: '1hlahoc4rpc@9224ac96a5dd623',
-      info: '1hlahoc4rpc@f3b191fb36fbb85',
-      dev: '1hlahoc4rpc@f3b191fb36fbb85',
-      uat: '1hlahoc4rpc@f3b191fb36fbb85',
-      qat: '1hlahoc4rpc@f3b191fb36fbb85',
-      test: '1hlahoc4rpc@f3b191fb36fbb85',
-      trial: '1hlahoc4rpc@f3b191fb36fbb85',
-    };
-    const pid = pidMap[env as Environment] || 'default_pid';
+
+    const pid = '1hlahoc4rpc@a0f20c14591e2db';
     initARMS({
       pid: pid,
       endpoint: 'https://1hlahoc4rpc-default-sea.rum.aliyuncs.com',

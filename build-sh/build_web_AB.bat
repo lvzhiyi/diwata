@@ -89,7 +89,11 @@ echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
 echo Building A package...
-"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_A.json"
+echo Cleaning temp folder before build...
+if exist "temp" rmdir /s /q "temp"
+if exist "library" rmdir /s /q "library"
+timeout /t 2 /nobreak >nul
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_A.json" --clear
 
 
 REM 提取A包hash值
@@ -103,7 +107,11 @@ echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
 echo Building B package...
-"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_B.json"
+echo Cleaning temp folder before build...
+if exist "temp" rmdir /s /q "temp"
+if exist "library" rmdir /s /q "library"
+timeout /t 2 /nobreak >nul
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile_B.json" --clear
 set "BUILD_RESULT=%errorlevel%"
 echo Cocos Creator B package exit code: %BUILD_RESULT%
 
@@ -136,7 +144,11 @@ git reset --hard origin/%BRANCH%
 echo "run pre-build.js %ENV%"
 node build-sh/pre-build.js %ENV%
 
-"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile.json"
+echo Cleaning temp folder before build...
+if exist "temp" rmdir /s /q "temp"
+if exist "library" rmdir /s /q "library"
+timeout /t 2 /nobreak >nul
+"C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe" --project .\ --build "configPath=.\buildConfig_web-mobile.json" --clear
 set "BUILD_RESULT=%errorlevel%"
 echo Cocos Creator single package exit code: %BUILD_RESULT%
 
