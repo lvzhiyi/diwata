@@ -740,8 +740,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 711,
-      "height": 727
+      "width": 150,
+      "height": 150
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -777,10 +777,10 @@
       "a": 255
     },
     "_skeletonData": {
-      "__uuid__": "377649e0-e572-4745-a456-a968114b3af1",
+      "__uuid__": "c6318144-c563-4c9f-adc2-996fbb944c65",
       "__expectedType__": "sp.SkeletonData"
     },
-    "defaultSkin": "",
+    "defaultSkin": "default",
     "defaultAnimation": "",
     "_premultipliedAlpha": false,
     "_timeScale": 1,
