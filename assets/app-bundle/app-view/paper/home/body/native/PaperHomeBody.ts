@@ -428,7 +428,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   /// 开始游戏
   startGame(event?: EventTouch) {
     // 余额不足时，无法开始游戏
-    if (app.manager.global.creditCount < app.manager.global.betCount) {
+    if (app.manager.global.creditCount < app.manager.global.betCount && app.manager.global.isFreespinMode === false) {
       showInsufficientCreditAlert();
 
       return;
@@ -460,7 +460,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       this.scheduleOnce(() => {
         this.startGame();
       }, 0.5);
-    } else if (globalManager.allwaysAutoPlay) {
+    } else if (globalManager.allwaysAutoPlay && this.isCanAutoPlay()) {
       // 普通自动游戏模式
       this.scheduleOnce(() => {
         this.startGame();
@@ -483,6 +483,13 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       ToastManager.inst.show('Auto spin disabled');
       EventTrackManager.inst.trackAutoSpin(false, app.manager.global.isFreespinMode ? 'free_spin' : 'normal');
     } else {
+      // 如果余额小于投注额，不能开启自动投注
+      if(app.manager.global.creditCount < app.manager.global.betCount){
+        showInsufficientCreditAlert();
+
+        return;
+      }
+
       app.manager.global.setAllwaysAutoPlay(true);
       this.startGame();
       ToastManager.inst.show('Auto spin enabled');
@@ -595,14 +602,19 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       }
     }
 
-    console.log(
-      '自动轮总次数' +
-      globalManager.autoSetting.totalSpins.value +
-      ' 当前执行' +
-      globalManager.currentAutoPlayTimes
-    );
-
     return bool;
+  }
+
+  // 是否可以自动游戏,余额不足需暂停
+  public isCanAutoPlay() {
+    if (app.manager.global.creditCount < app.manager.global.betCount && app.manager.global.isFreespinMode === false) {
+      this.stopAutoPlay();
+      showInsufficientCreditAlert();
+
+      return false;
+    }
+
+    return true;
   }
 
   // 停止自动游戏
