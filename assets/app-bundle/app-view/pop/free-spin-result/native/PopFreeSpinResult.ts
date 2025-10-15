@@ -4,6 +4,8 @@ import { NumberAnimator } from 'db://assets/basePlate/middleWare/commonUI/Number
 import { numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { app } from 'db://assets/app/app';
 import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
+import { SpineTool } from 'db://assets/res-native/script/SpineTool';
+import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 
 const { ccclass, property } = _decorator;
 @ccclass('PopFreeSpinResult')
@@ -23,15 +25,19 @@ export class PopFreeSpinResult extends BaseView {
   @property({ type: SpriteFrame, tooltip: 'maxWin SpriteFrame' })
   private maxWinSpriteFrame: SpriteFrame = null;
 
-  @property({ type: sp.Skeleton, tooltip: 'spineSkeleton' })
-  private spineSkeleton: sp.Skeleton = null;
+  @property({ type: Node, tooltip: 'spineSkeleton' })
+  private spineNode:Node = null;
 
   private numberWinBgAnimator: NumberAnimator = null;
+
+  private spineSkeleton:sp.Skeleton = null;
 
   private amount: number = 0;
 
   protected onLoad(): void {
     this.numberWinBgAnimator = new NumberAnimator(this.AmountLabel);
+    console.log('this.spineNode', this.spineNode);
+    this.spineSkeleton = this.spineNode.getComponent(sp.Skeleton);
   }
 
   onShow(params: any) {
@@ -51,10 +57,23 @@ export class PopFreeSpinResult extends BaseView {
     this.subTitleNode.getComponent(Sprite).spriteFrame = accumulateReachMaxMultiple ? this.maxWinSpriteFrame : this.haveWinSpriteFrame;
   }
 
-  showAmountAnimation() {
-    this.scheduleOnce(() => {
+  async showAmountAnimation() {
+    // 获取骨骼动画组件和文本节点
+    if(!this.spineNode || !this.spineNode.isValid) {
+      return;
+    }
+    try {
+      // 根据奖励类型加载对应的骨骼动画资源
+      const spineAtlas: sp.SkeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.FREE_SPIN_RESULT);
+   
+      // 设置骨骼动画数据
+      this.spineSkeleton.skeletonData = spineAtlas;
+
+      this.spineSkeleton.timeScale = app.manager.global.gameSpeed;
       this.startAnimation();
-    });
+    } catch (error) {
+      console.error('showAmountAnimation error', error);
+    }
 
     return new Promise<void>(async (resolve) => {
       await this.numberWinBgAnimator.animateTo(
@@ -87,6 +106,7 @@ export class PopFreeSpinResult extends BaseView {
   
   onHide(result: undefined) {
     this.numberWinBgAnimator.stopAnimation(true);
+    SpineTool.destoryAnimationNode(this.spineNode);
 
     return result;
   }

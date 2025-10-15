@@ -163,12 +163,11 @@ export class AppInit extends BaseAppInit {
    * 预加载spine动画
    */
   private async preloadSpineAnimation() {
-    await GameResourceManager.instance.preloadLocalAnimations();
     await GameResourceManager.instance.preloadAllRollAnimations();
   }
 
   private async preloadOtherResources() {
-    GameResourceManager.instance.preloadLocalAnimations([SPINE_RESOURCE_NAMES.GRAND_PRIZE]);
+    GameResourceManager.instance.preloadLocalAnimations();
     this.preloadOtherPopResources();
   }
 
