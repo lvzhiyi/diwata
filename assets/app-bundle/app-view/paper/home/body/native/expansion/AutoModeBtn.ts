@@ -25,7 +25,7 @@ export class AutoModeBtn extends Component {
     protected update(dt: number): void {
       if (this.touchStartTime > 0 && Date.now() - this.touchStartTime > 1500) {
         // 长按1.5秒打开自动模式设置弹窗
-        if (app.manager.global.isGoing === false && !app.manager.global.isFreespinMode && !app.manager.global.allwaysAutoPlay) {
+        if (app.manager.global.isGoing === false && !app.manager.global.isFreespinMode && !app.manager.global.allwaysAutoPlay  && !app.manager.global.isBuyFreeBonusMode) {
           app.manager.ui.show({ name: 'PopAutosetting' });
           this.touchStartTime = 0;
         }

@@ -79,9 +79,7 @@ export class AppInit extends BaseAppInit {
         });
       });
     }else{
-      setTimeout(() => {
-        this.btnPlayNode.active = true;
-      }, 500);
+      this.btnPlayNode.active = true;
     }
 
     this.initEffectVolume();

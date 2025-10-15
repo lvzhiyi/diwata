@@ -247,7 +247,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   // 防止快速点击
   @preventRapidClickDecorator(1000)
   canClickBuyBonus() {
-    if (app.manager.global.isGoing || this.freeTimesView.active) {
+    if (app.manager.global.isGoing || this.freeTimesView.active || app.manager.global.allwaysAutoPlay || app.manager.global.startAutoPlay) {
       if (app.controller.slots.betType === BetTypes.buy) {
         ToastManager.inst.show('The purchased free game is in use, and this function is temporarily unavailable');
       } else {
@@ -601,13 +601,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     }));
 
     /**
-     * 更新到下一个轮的倍率
-     */
-    if (this.hasNextRound()) {
-      this.updateNextMultiple();
-    }
-
-    /**
      * 更新tips中奖金额
      */
     const currentRoundTotalRewardAmount = this.resultList[this.roundIndex].totalRewardAmount;
@@ -629,6 +622,12 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     if (this.needPlayRollsFrameSpine.some(item => item)) {  
       await delay(1000 / app.manager.global.gameSpeed);
+    }
+    /**
+     * 更新到下一个轮的倍率
+     */
+    if (this.hasNextRound()) {
+      this.updateNextMultiple();
     }
 
     /**
@@ -1197,7 +1196,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       const amount = calculateWithBase(endNum - startNum);
       console.log('startNum-动画', amount);
       // 展示当前轮次金额弹出提示
-      let multipleIndex = app.manager.global.multipleIndex - 1;
+      let multipleIndex = app.manager.global.multipleIndex ;
 
       if(app.manager.global.multipleIndex >= 10){
         multipleIndex = 10;

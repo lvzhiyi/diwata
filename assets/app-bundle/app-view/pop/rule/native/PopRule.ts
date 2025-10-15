@@ -194,7 +194,7 @@ export class PopRule extends BaseView {
         type: RuleType.TEXT,
         textOptions: {
           content:
-            'Minimum bet: P0.3',
+            'Minimum bet: ₱0.3',
           fontSize: 27,
           color: '#FFFFFF',
           bold: false,
@@ -206,7 +206,7 @@ export class PopRule extends BaseView {
         type: RuleType.TEXT,
         textOptions: {
           content:
-            'Maximum bet: P10,000',
+            'Maximum bet: ₱10,000',
           fontSize: 27,
           color: '#FFFFFF',
           bold: false,
