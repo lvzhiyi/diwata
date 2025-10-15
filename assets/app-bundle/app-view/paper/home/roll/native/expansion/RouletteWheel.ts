@@ -415,6 +415,7 @@ export class RouletteWheel extends Component {
     
     // 计算目标旋转角度
     const targetRotation = this.bgCurrentRotation + (rotationSteps * this.DATA_ANGLE_STEP);
+    console.log('targetRotation', targetRotation, this.bgCurrentRotation, currentIndex, targetIndex);
 
     this.animateBgToRotation(targetRotation);
   }

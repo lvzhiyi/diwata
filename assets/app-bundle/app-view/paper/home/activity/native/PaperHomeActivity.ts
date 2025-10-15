@@ -216,7 +216,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         GlobalActivity.setEntryDialogActive(true);
         Skeleton.clearAnimations();
         callback();
-      }, 4000);
+      }, 9000);
 
       Skeleton.setCompleteListener((track: sp.spine.TrackEntry) => {
         console.log('动画播放完成');

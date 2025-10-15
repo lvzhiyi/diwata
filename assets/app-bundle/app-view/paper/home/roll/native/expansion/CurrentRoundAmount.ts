@@ -42,6 +42,11 @@ export class CurrentRoundAmount extends Component {
         return;
       }
 
+      // 设置一个超时定时器，4秒后执行callback
+      const timeoutId = setTimeout(() => {
+        resolve();
+      }, 2200);
+
       const label = this.amountNode.getComponent(Label);
       const originalAmount = amount / Math.pow(2, multiple);
       label.string = `₱${originalAmount.toFixed(3)}`;
@@ -117,6 +122,7 @@ export class CurrentRoundAmount extends Component {
           // 动画结束，重置状态
           tween().call(() => {
             console.log('startNum-结束动画');
+            clearTimeout(timeoutId); 
             this.node.getComponent(UIOpacity).opacity = 0;
             this.node.setPosition(this.originPosition);
             this.amountNode.setPosition(Vec3.ZERO);

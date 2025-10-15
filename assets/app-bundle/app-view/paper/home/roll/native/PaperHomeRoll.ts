@@ -86,6 +86,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   // 动画管理工具类
   private homeRollTool: HomeRollTool = null;
 
+  // 异步操作状态跟踪
+  private isAsyncOperationInProgress: boolean = false;
+
   // 是否是免费轮
   private isFreeBonusSpin: boolean = false;
 
@@ -599,7 +602,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
       return lightAndRemoveAnimation;
     }));
-
     /**
      * 更新tips中奖金额
      */
@@ -609,7 +611,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       this.changeTipsContent(this.totalRewardAmount, this.totalRewardAmount + currentRoundTotalRewardAmount);
       this.totalRewardAmount += currentRoundTotalRewardAmount;
     }
-  
+
     /**
      * 添加到顶部然后下落 或者 播放Roll边框动画然后落下然后添加到顶部最后下落
      */
@@ -622,12 +624,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     if (this.needPlayRollsFrameSpine.some(item => item)) {  
       await delay(1000 / app.manager.global.gameSpeed);
-    }
-    /**
-     * 更新到下一个轮的倍率
-     */
-    if (this.hasNextRound()) {
-      this.updateNextMultiple();
     }
 
     /**
@@ -645,10 +641,28 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     }
 
     this.changeWildData = [];
+    
     /**
      * 结束本回合消除
      */
     this.endRemoveSymbol();
+  }
+
+  /**
+   * 检查并开始下一轮
+   * 轮询检查异步操作状态，完成后执行下一轮
+   */
+  private checkAndStartNextRound() {
+    if (this.isAsyncOperationInProgress) {
+      console.log('异步操作仍在进行中，继续等待...');
+      // 继续轮询检查
+      this.scheduleOnce(() => {
+        this.checkAndStartNextRound();
+      }, 0.1);
+    } else {
+      console.log('异步操作已完成，开始下一轮');
+      this.startRemoveSymbol();
+    }
   }
 
   /**
@@ -668,9 +682,20 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     if (this.hasNextRound()) {
       // 更新到下一个回合
       this.updateNextRound();
+      this.updateNextMultiple();
       console.log('========开启下一轮的数据========', this.roundIndex);
-      // 处理当前回合是否需要展示剑和棒子的动画
-      this.startRemoveSymbol();
+
+      // 处理当前回合是否需要展示剑和棒子的动画,如果中奖金额的动画还没执行完就等着执行完后再进入下一轮
+      // 检查异步操作是否完成，如果未完成则等待
+      if (this.isAsyncOperationInProgress) {
+        console.log('异步操作进行中，等待完成...');
+        // 使用轮询方式检查异步操作状态
+        this.scheduleOnce(() => {
+          this.checkAndStartNextRound();
+        }, 0.1);
+      } else {
+        this.startRemoveSymbol();
+      }
     } else {
       /** 
        * 结束游戏
@@ -1187,7 +1212,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   /**
    * 修改Tips内容
    */
-  private async changeTipsContent(startNum: number, endNum: number) {
+  private async changeTipsContent(startNum: number, endNum: number): Promise<void> {
     if (endNum === null) {
       return this.rewardBox.getComponent(RewardBox).showGoodLuck();
     } else if (endNum === 0) {
@@ -1202,9 +1227,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         multipleIndex = 10;
       }
 
+      // 设置异步操作进行中状态
+      this.isAsyncOperationInProgress = true;
+
       await  this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(amount, multipleIndex);
-      console.log('startNum-动画AA');
-      this.rewardBox.getComponent(RewardBox).showWinNumber(startNum, endNum);
+    
+      // 设置异步操作进行中状态
+      this.isAsyncOperationInProgress = false;
+
+      return this.rewardBox.getComponent(RewardBox).showWinNumber(startNum, endNum);
     }
   } 
 
