@@ -4,6 +4,7 @@ import { Symbol } from './Symbol';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 import { Roll } from './Roll';
+import { app } from 'db://assets/app/app';
 
 const { ccclass,  } = _decorator;
 
@@ -46,6 +47,7 @@ export class HomeRollTool  {
           const skeleton = spineNode.getComponent(sp.Skeleton) || spineNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
           skeleton.skeletonData = skeleonData;
+          skeleton.timeScale = app.manager.global.gameSpeed;
        
           // 播放多个动画序列
           HomeRollTool.playAnimationSequence(skeleton, ['dao_atk', 'dao_hit'], async () => {
@@ -175,6 +177,7 @@ export class HomeRollTool  {
             const skeleton = spineNode.getComponent(sp.Skeleton) || spineNode.addComponent(sp.Skeleton);
             skeleton.premultipliedAlpha = false;
             skeleton.skeletonData = skeleonData;
+            skeleton.timeScale = app.manager.global.gameSpeed;
             skeleton.setAnimation(0, 'gun_atk', false);
             skeleton.setCompleteListener((track) => {
               if (track.animation.name === 'gun_atk') {
