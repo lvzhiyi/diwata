@@ -151,6 +151,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.rollFrameSkeleton = rollFrameNode.addComponent(sp.Skeleton);
     this.rollFrameSkeleton.premultipliedAlpha = false;
     this.rollFrameSkeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.LAMANG_RUN);
+    this.rollFrameSkeleton.timeScale = app.manager.global.gameSpeed;
   }
 
   /** *监听freespin按钮状态**/
@@ -703,8 +704,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
       /**
        * 如果当前轮命中最大倍率，则设置tips内容
-       * 免费轮总金额为 app.manager.global.freeSpinTotalAmount
-       * 普通轮总金额为 this.resultData.totalPayoutAmount
        */
       if (this.currentRoundIsMaxMultiple()) {
         this.totalRewardAmount = app.controller.slots.isFreeBonusSpin ? app.manager.global.freeBonusTotalAmount : this.resultData.totalPayoutAmount;
@@ -746,8 +745,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
         app.manager.global.setFreeBonusTimes(gameRecordIds.length);
         app.manager.global.setGameRecordIds([...gameRecordIds]);
-        // ToastManager.inst.show(`FREE SPIN ${gameRecordIds.length} TIMES`);
-
         await this.setFreeBonusData(this.resultData.totalPayoutAmount);
         this.startFreeSpinGame();
 

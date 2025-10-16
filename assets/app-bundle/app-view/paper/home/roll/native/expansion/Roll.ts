@@ -737,9 +737,7 @@ export class Roll extends Component {
      */
     async symbolChangeToSingleWild(index: number) {
       // 将当前symbol变为小wild
-      this.node.children[index].getComponent(Symbol).changeToSingleWild();
-
-      return Promise.resolve();
+      return  await this.node.children[index].getComponent(Symbol).changeToSingleWild();
     }
 
     /**
@@ -773,10 +771,12 @@ export class Roll extends Component {
           // 添加动画
           const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
+          skeleton.timeScale = app.manager.global.gameSpeed;
           const  skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SWORD_HIT);
 
           if (skeletonData) {
             skeleton.skeletonData = skeletonData;
+            
             skeleton.setAnimation(0, animationName, false);
           }
 

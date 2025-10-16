@@ -59,7 +59,8 @@ export class RewardLine extends Component {
 
       if (item.multiple > 1 && item.symbolId != '3001') {
         const betNewNumber =  MoneyUtil.internalToDisplay(item.betAmount * item.odds);
-        content = `₱ ${betNewNumber * item.rewardLineCount} X ${item.multiple
+        const rewardAmount = betNewNumber * item.rewardLineCount;
+        content = `₱ ${MoneyUtil.formatDisplayAmount(rewardAmount)} X ${item.multiple
         } = ₱ ${MoneyUtil.internalToDisplay(item.rewardAmount)}`;
       }
 
