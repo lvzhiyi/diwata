@@ -125,28 +125,6 @@ export class HomeController extends BaseController<
   }
 
   /**
-   * 消费星卡
-   * @param starCardData 星卡的数据
-   */
-  public onUseStarCard(starCardData: any) {
-    if (starCardData == null) {
-      return;
-    }
-
-    console.log('消费星卡', starCardData);
-  
-    this.autoPlayType = BetTypes.buy;
-    const betAmount = starCardData.bet;
-    // 关闭结算弹窗
-    app.controller.slots.closeFreeSpinSettlementDialog();
-    // 改变游戏状态
-    app.controller.slots.freeBonusSpinChange(true);
-    this.gameStart();
-    // 发起购买免费轮
-    this.buyBonusBetResult(betAmount, BetTypes.buy, BetSubTypes.buySpinNormal, starCardData);
-  }
-
-  /**
    * 设置点击屏幕
    */
   private setClickScreenFlase() {

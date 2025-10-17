@@ -137,8 +137,10 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         this.betCountChange(betAmout);
       }
 
+      // 关闭结算弹窗
+      app.controller.slots.closeFreeSpinSettlementDialog();
       // 发生一次购买免费轮
-      app.controller.home.onUseStarCard(starCardData);
+      app.manager.event.emit('buyFreeSpinTimes', betAmout, 1, starCardData);
     }
 
     /**

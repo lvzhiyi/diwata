@@ -86,10 +86,14 @@ export class SlotsController extends BaseController<
   /**
    * 购买免费轮按钮点击
    */
-  betBuyFreeSpin() {
+  betBuyFreeSpin(starCardData?: any) {
     app.controller.home.gameStart();
 
-    app.controller.home.getBetResult(app.manager.global.betCount, BetTypes.buy, BetSubTypes.buySpinNormal);
+    if (starCardData) {
+      app.controller.home.buyBonusBetResult(app.manager.global.betCount, BetTypes.buy, BetSubTypes.buySpinNormal, starCardData);
+    }else{
+      app.controller.home.getBetResult(app.manager.global.betCount, BetTypes.buy, BetSubTypes.buySpinNormal);
+    }
   }
 
   /**

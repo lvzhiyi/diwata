@@ -1062,19 +1062,20 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * @param betCount 投注金额
    * @param quantity 数量
    */
-  buyFreeSpinTimes(betCount: number, quantity: number) {
+  buyFreeSpinTimes(betCount: number, quantity: number, starCardData?: any) {
     app.manager.global.setQuantity(quantity);
     app.manager.global.setBetCount(betCount);
 
-    this.startBuyFreeSpinGame();
+    this.startBuyFreeSpinGame(starCardData);
   }
 
   /**
    * 开始购买免费轮游戏
    */
-  private startBuyFreeSpinGame() {
+  private startBuyFreeSpinGame(starCardData?: any)  {
     app.manager.global.setQuantity(app.manager.global.quantity - 1);
-    app.controller.slots.betBuyFreeSpin();
+    app.controller.slots.betBuyFreeSpin(starCardData);
+    this.showFreeBonusTimes();
   }
 
   /**
