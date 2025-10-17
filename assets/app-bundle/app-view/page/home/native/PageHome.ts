@@ -23,7 +23,13 @@ export class PageHome extends BaseView.BindController(SlotsController) {
   private normalBg: SpriteFrame | null = null;
 
    @property(Node)
-   private animationView: Node | null = null;
+  private cloudupNode: Node | null = null;
+
+  @property(SpriteFrame)
+  private bgImageSpriteFrame: SpriteFrame | null = null;
+
+  @property(SpriteFrame)
+  private freeBgImageSpriteFrame: SpriteFrame | null = null;
   
   private homeBgNode: Node | null = null;
 
@@ -47,10 +53,23 @@ export class PageHome extends BaseView.BindController(SlotsController) {
       },
       this
     );
+    this.controller.on(SlotsController.Event.FreeBonusSpinChange, this.showFreeBonusSpinmation, this);
   }
 
   protected start(): void {
 
+  }
+
+  showFreeBonusSpinmation(isFreeBonusSpin: boolean) {
+    if (isFreeBonusSpin) {
+      this.homeBgNode.getComponent(Sprite).spriteFrame = this.freeBgImageSpriteFrame;
+      this.blurBgNode.getComponent(Sprite).spriteFrame = this.freeBgImageSpriteFrame;
+      this.cloudupNode.active = false;
+    } else {
+      this.homeBgNode.getComponent(Sprite).spriteFrame = this.bgImageSpriteFrame;
+      this.blurBgNode.getComponent(Sprite).spriteFrame = this.bgImageSpriteFrame;
+      this.cloudupNode.active = true; 
+    }
   }
 
   /**

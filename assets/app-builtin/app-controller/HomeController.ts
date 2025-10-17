@@ -260,7 +260,7 @@ export class HomeController extends BaseController<
 
       this.credit = res.data.credit;
       this.betResult = res.data;
-      if (app.manager.global.quikeMode === IQuickMode.nomal) await delay(500);
+      await delay(app.manager.global.quikeMode === IQuickMode.nomal ? 500 : 200);
       const resultDetail = res.data?.resultDetail;
 
       // resultDetail 有数据才进入游戏结束逻辑
@@ -335,7 +335,7 @@ export class HomeController extends BaseController<
       );
       this.credit = res.data.credit;
       this.betResult = res.data;
-      await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 0 : 500);
+      await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 200 : 500);
       // 埋点
       this.trackSpinStart(old_balance, true);
 

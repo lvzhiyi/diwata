@@ -9,7 +9,8 @@ export const SPINE_RESOURCE_NAMES: { [key: string]: string } = {
   // LAMANG_START: 'mayali_zhuanchang',
   // 大奖弹框动画
   GRAND_PRIZE: 'win',
-
+  // 免费轮结果动画
+  FREE_SPIN_RESULT: 'congratlilation',
 };
 /// 滚动元素
 export const ROLL_RESOURCE_NAMES: { [key: string]: string } = {

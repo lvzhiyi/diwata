@@ -79,9 +79,7 @@ export class AppInit extends BaseAppInit {
         });
       });
     }else{
-      setTimeout(() => {
-        this.btnPlayNode.active = true;
-      }, 500);
+      this.btnPlayNode.active = true;
     }
 
     this.initEffectVolume();
@@ -163,12 +161,11 @@ export class AppInit extends BaseAppInit {
    * 预加载spine动画
    */
   private async preloadSpineAnimation() {
-    await GameResourceManager.instance.preloadLocalAnimations();
     await GameResourceManager.instance.preloadAllRollAnimations();
   }
 
   private async preloadOtherResources() {
-    GameResourceManager.instance.preloadLocalAnimations([SPINE_RESOURCE_NAMES.GRAND_PRIZE]);
+    GameResourceManager.instance.preloadLocalAnimations();
     this.preloadOtherPopResources();
   }
 

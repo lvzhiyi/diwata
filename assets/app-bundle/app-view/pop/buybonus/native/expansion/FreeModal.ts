@@ -190,7 +190,6 @@ export class FreeModal extends Component {
 
     this.setLabelText(this.quantityLabelNode, this.currentQuantityVal.toString());
     this.updateTotalPrice();
-    app.manager.global.setQuantity(this.currentQuantityVal);
   }
 
   /**
@@ -206,6 +205,7 @@ export class FreeModal extends Component {
       return;
     }
 
+    app.manager.global.setQuantity(this.currentQuantityVal);
     app.manager.event.emit('buyFreeSpinTimes', this.currentBetVal, this.currentQuantityVal);
     // 埋点
     EventTrackManager.inst.trackBuyBonus({

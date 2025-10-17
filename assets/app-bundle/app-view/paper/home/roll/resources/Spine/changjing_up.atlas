@@ -1,0 +1,20 @@
+
+changjing_up.png
+size: 1384,864
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cloud3
+  rotate: false
+  xy: 2, 375
+  size: 1380, 487
+  orig: 1380, 561
+  offset: 0, 0
+  index: -1
+cloud4
+  rotate: false
+  xy: 2, 2
+  size: 1380, 371
+  orig: 1380, 386
+  offset: 0, 0
+  index: -1

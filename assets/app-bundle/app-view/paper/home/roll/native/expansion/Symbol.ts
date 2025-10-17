@@ -206,6 +206,7 @@ export class Symbol extends Component {
         this.iconNode.active = false;
         const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
         const animationName = 'symbol_' + symbolId;
+        skeleton.timeScale = app.manager.global.gameSpeed;
         skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
         const animationPlayName = animationName + '_2';
         skeleton.setAnimation(0, animationPlayName, false);
@@ -240,6 +241,7 @@ export class Symbol extends Component {
           this.iconNode.active = false;
           const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
           const animationName = 'symbol_' + symbolId;
+          skeleton.timeScale = app.manager.global.gameSpeed;
           skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
           const animationPlayName = animationName + '_1';
           skeleton.setAnimation(0, animationPlayName, false);
@@ -275,8 +277,11 @@ export class Symbol extends Component {
 
           // 获取或添加Skeleton组件
           const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+          skeleton.timeScale = app.manager.global.gameSpeed;
           const removeUpSkeleton = this.removeUpSpineNode.getComponent(sp.Skeleton) || this.removeUpSpineNode.addComponent(sp.Skeleton);
+          removeUpSkeleton.timeScale = app.manager.global.gameSpeed;
           const removeDownSkeleton = this.removeDownSpineNode.getComponent(sp.Skeleton) || this.removeDownSpineNode.addComponent(sp.Skeleton);
+          removeDownSkeleton.timeScale = app.manager.global.gameSpeed;
           // 播放消除动画
           removeUpSkeleton.setAnimation(0, 'xiaochu_up', false);
           removeDownSkeleton.setAnimation(0, 'xiaochu_down', false);
@@ -372,6 +377,7 @@ export class Symbol extends Component {
       return new Promise<void>(async (resolve) => {
         this.LightSpine.active = true;
         const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+        skeleton.timeScale = app.manager.global.gameSpeed;
         skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
         skeleton.setAnimation(0, 'symbol_3001_2', false);
         console.log('播放scatter高亮动画2');
@@ -395,6 +401,7 @@ export class Symbol extends Component {
       return new Promise<void>(async (resolve) => {
         this.LightSpine.active = true;
         const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+        skeleton.timeScale = app.manager.global.gameSpeed;
         const skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.LAMANG_ICON_SCATTER);
         skeleton.skeletonData = skeletonData;
         skeleton.setAnimation(0, 'symbol_3001_3', true);
@@ -502,6 +509,7 @@ export class Symbol extends Component {
           // 添加动画
           const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
+          skeleton.timeScale = app.manager.global.gameSpeed;
           skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.LAMANG_WILD);
           skeleton.setAnimation(0, animationName, false);
           console.log('播放wild动画-数据', animationName);
@@ -528,6 +536,7 @@ export class Symbol extends Component {
           // 添加动画
           const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
+          skeleton.timeScale = app.manager.global.gameSpeed;
           const  skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.BOW_EXPLODE);
 
           if (skeletonData) {

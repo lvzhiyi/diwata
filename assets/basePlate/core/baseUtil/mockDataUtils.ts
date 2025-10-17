@@ -6,7 +6,7 @@ export const mockSuccessData: any = {
   gameId: 'zhumeng006',
   betType: 'NORMAL_BET',
   betSubType: 'FREE_SPINS_NORMAL_BET',
-  credit: 999999999,
+  credit: 300000,
   overallRewardAmount: 7278000,
   totalPayoutAmount: 0,
   resultDetail: {
