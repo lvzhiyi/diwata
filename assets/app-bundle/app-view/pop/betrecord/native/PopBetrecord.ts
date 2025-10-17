@@ -11,6 +11,8 @@ import { calculateWithBase, getTimestampsNowAgoMinutes, numberToMoney } from 'db
 import { IntersectionObserver } from 'db://assets/res-native/script/IntersectionObserver';
 import GameProcessCtrl from 'db://assets/common/script/extra/GameProcessCtrl';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
+import { preventRapidClickDecorator } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
+import { ToastView } from 'db://assets/basePlate/middleWare/commonUI/ToastView';
 
 const { ccclass, property } = _decorator;
 
@@ -351,6 +353,8 @@ export class PopBetrecord extends BaseView {
     }
 
     // 点击选择时间tab
+    // 防止快速点击
+    @preventRapidClickDecorator(1000)
     private selectTabTime(currentTab: Node) {
       this.TimeTabs.children.forEach(tab => {
         if (currentTab === tab) {
@@ -448,6 +452,8 @@ export class PopBetrecord extends BaseView {
       DataLabel.string = 'Click to select a date';
     }
 
+// 防止快速点击
+@preventRapidClickDecorator(1000)
     private searchFromRoundNumber() {
       const roundNumberScprit = this.RoundNumberNode.getComponent(EditBox);
       // 清空时间
@@ -475,36 +481,35 @@ export class PopBetrecord extends BaseView {
         });
         this.getData(roundNumberScprit.string);
       } else {
-        this.content.removeAllChildren();
-        this._hasMoreData = false;
+        ToastView.showCommonToast('Please input round number');
       }
     }
 
-    private clearRoundNumber() {
-      const roundNumberScprit = this.RoundNumberNode.getComponent(EditBox);
-      roundNumberScprit.string = '';
-      roundNumberScprit.blur();
-    }
+private clearRoundNumber() {
+  const roundNumberScprit = this.RoundNumberNode.getComponent(EditBox);
+  roundNumberScprit.string = '';
+  roundNumberScprit.blur();
+}
 
-    private clearRoundNumberAction() {
-      const roundNumberScript = this.RoundNumberNode.getComponent(EditBox);
-      EventTrackManager.inst.trackBetRecordFilterFieldClear({
-        cleared_field: 'round_number',
-        cleared_value: roundNumberScript.string,
-      });
-      const roundNumberScprit = this.RoundNumberNode.getComponent(EditBox);
-      roundNumberScprit.string = '';
-      roundNumberScprit.blur();
-    }
+private clearRoundNumberAction() {
+  const roundNumberScript = this.RoundNumberNode.getComponent(EditBox);
+  EventTrackManager.inst.trackBetRecordFilterFieldClear({
+    cleared_field: 'round_number',
+    cleared_value: roundNumberScript.string,
+  });
+  const roundNumberScprit = this.RoundNumberNode.getComponent(EditBox);
+  roundNumberScprit.string = '';
+  roundNumberScprit.blur();
+}
 
-    protected onDisable(): void {
-      this.cardScrollViewNode.off(Node.EventType.TOUCH_MOVE, this.onScroll, this);
-      this.DateSearchIcon.off(Node.EventType.TOUCH_END, this.getData, this);
-      this.DateClearIcon.off(Node.EventType.TOUCH_END, this.clearDayAction, this);
-      this.NumberSearchIcon.off(Node.EventType.TOUCH_END, this.searchFromRoundNumber, this);
-      this.NumberClearIcon.off(Node.EventType.TOUCH_END, this.clearRoundNumberAction, this);
-      this.BackIconNode.off(Node.EventType.TOUCH_END, this.closeRecordLayout, this);
-      this.node.off(Node.EventType.ACTIVE_CHANGED, this.activeChangedListener, this);
-      this._nodePool.clear();
-    }
+protected onDisable(): void {
+  this.cardScrollViewNode.off(Node.EventType.TOUCH_MOVE, this.onScroll, this);
+  this.DateSearchIcon.off(Node.EventType.TOUCH_END, this.getData, this);
+  this.DateClearIcon.off(Node.EventType.TOUCH_END, this.clearDayAction, this);
+  this.NumberSearchIcon.off(Node.EventType.TOUCH_END, this.searchFromRoundNumber, this);
+  this.NumberClearIcon.off(Node.EventType.TOUCH_END, this.clearRoundNumberAction, this);
+  this.BackIconNode.off(Node.EventType.TOUCH_END, this.closeRecordLayout, this);
+  this.node.off(Node.EventType.ACTIVE_CHANGED, this.activeChangedListener, this);
+  this._nodePool.clear();
+}
 }

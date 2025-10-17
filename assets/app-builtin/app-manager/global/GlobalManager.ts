@@ -1,6 +1,7 @@
 import { _decorator, Node, director, find, sys, UITransform } from 'cc';
 import BaseManager from '../../../../extensions/app/assets/base/BaseManager';
 import { app } from 'db://assets/app/app';
+import { GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
 
 const { ccclass } = _decorator;
 
@@ -316,6 +317,7 @@ export class GlobalManager extends BaseManager {
    public setStartAutoPlay(bool: boolean) {
      this._startAutoplay = bool;
      app.manager.event.emit('startAutoPlayChange', bool);
+     GlobalMgr.instance.autoPlayMode = bool;
    }
 
    public get currentAutoPlayTimes() {
@@ -402,6 +404,7 @@ export class GlobalManager extends BaseManager {
   public setAllwaysAutoPlay(bool: boolean) {
     this._allwaysAutoPlay = bool;
     app.manager.event.emit('allwaysAutoPlayChange', bool);
+    GlobalMgr.instance.autoPlayMode = bool;
   }
 
   public get isGoing() {

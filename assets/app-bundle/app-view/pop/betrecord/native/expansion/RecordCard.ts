@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, Label, Node, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Color, Component, Label, Node, Sprite, SpriteFrame, UITransform } from 'cc';
 import dayjs from 'dayjs';
 import { app } from 'db://assets/app/app';
 import { ToastView } from 'db://assets/basePlate/middleWare/commonUI/ToastView';
@@ -36,6 +36,12 @@ export class RecordCard extends Component {
 
   @property(Node)
   private AccumulateReachMaxMultipleNode: Node;
+
+  /**
+   * freespin 模式投注的图标
+   */
+  @property(SpriteFrame)
+  private FreespinIcon: SpriteFrame;
 
   private RoundNumber: string;
 
@@ -75,6 +81,11 @@ export class RecordCard extends Component {
       this.starNode.getComponent(Sprite).spriteFrame = null;
     }
 
+    // 初始化 freespin 模式投注的图标
+    if (dataInfo.betPromotionType === 3) {
+      this.initFreespinIcon(this.starNode);
+    }
+
     NetSpecialValueLabel.string = netSpecialValue;
     this.BetWinValue.getComponent(Label).string = `₱ ${numberToMoney(dataInfo.payAmount / multiBetAmount)}/₱ ${numberToMoney(dataInfo.payOutAmount / multiBetAmount)}`;
     this.RoundNumberValue.getComponent(Label).string = dataInfo.id;
@@ -85,6 +96,14 @@ export class RecordCard extends Component {
     }else{
       this.AccumulateReachMaxMultipleNode.active = false;
     }
+  }
+
+  /**
+   * 初始化 freespin 模式投注的图标
+   */
+  private  async initFreespinIcon(iconNode: Node) {
+    iconNode.getComponent(UITransform).setContentSize(56, 56);
+    iconNode.getComponent(Sprite).spriteFrame = this.FreespinIcon;
   }
 
   private copy() {

@@ -6,7 +6,7 @@ export interface BetRecordListModel {
   userId: string;
   playerId: string;
   playerName: string;
-  betPromotionType: string | null;
+  betPromotionType: number | null;
   betAmount: number;
   payAmount: number;
   payOutAmount: number;

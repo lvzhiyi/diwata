@@ -3912,6 +3912,10 @@
     "AccumulateReachMaxMultipleNode": {
       "__id__": 151
     },
+    "FreespinIcon": {
+      "__uuid__": "f9f9069c-1497-4257-afd6-be457693fa5e@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
     "_id": ""
   },
   {
