@@ -180,6 +180,8 @@ class FreeSpinManager {
     this.updateStartButtonState(false);
     // 禁用自动投注按钮
     this.updateAutoButtonEnableState(false);
+    // 修改freeSpin按钮状态
+    app.manager.event.emit('freespin:buttonState', true);
   }
 
   /**
@@ -294,7 +296,7 @@ class FreeSpinManager {
    */
   private showFreespinTotalRewardAmount() {
     // 通过事件系统通知UI显示累计奖励
-    app.manager.event.emit('freespin:showTotalReward', this.freespinRewardAmount);
+    app.manager.event.emit('freespin:showTotalReward', this.freespinRewardAmount.toFixed(3));
   }
 
   /**

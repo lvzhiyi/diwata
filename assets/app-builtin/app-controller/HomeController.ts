@@ -331,7 +331,7 @@ export class HomeController extends BaseController<
     if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data) {
       const old_balance = app.manager.global.creditCount;
       app.manager.global.setCreditCount(
-        app.manager.global.creditCount - (app.manager.global.betCount * (betType === BetTypes.buy ? app.config.app.BUY_FREE_SPIN_TIMES_RATIO : 1))
+        app.manager.global.creditCount - (app.manager.global.betCount * (isUseStarCard ?  1 : app.config.app.BUY_FREE_SPIN_TIMES_RATIO ))
       );
       this.credit = res.data.credit;
       this.betResult = res.data;
@@ -343,6 +343,7 @@ export class HomeController extends BaseController<
         // 星卡使用成功
         ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.useGoodsSuccess);
         // 复原投注金额
+        app.manager.global.setBetCount(app.manager.global.tempBetCount);
       }
 
       app.controller.slots.stopRolling(this.betResult);

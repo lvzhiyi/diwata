@@ -156,7 +156,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
   /** *监听freespin按钮状态**/
   onFreeBonusSpinButtonState(enabled: boolean) {
-    if (enabled && app.manager.global.isBuyFreeBonusMode) {
+    if (enabled) {
       this.showFreeSpinView(true);
     } else {
       this.showFreeSpinView(false);
@@ -189,6 +189,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.controller.on(SlotsController.Event.StopRolling, this.stopGame, this);
     app.manager.event.on('buyFreeSpinTimes', this.buyFreeSpinTimes, this);
     app.manager.event.on('freespin:state:change', this.showFreespinView, this);
+    app.manager.event.on('freespin:buttonState', this.onFreeBonusSpinButtonState, this);
     app.manager.event.on('startHomeRollAnimation', this.startHomeRollAnimation, this);
     app.manager.event.on('startHomeAnimationComplete', this.startHomeAnimationComplete, this);
     // 盘面添加点击事件
@@ -1265,6 +1266,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.controller.off(SlotsController.Event.FreeBonusSpinChange, this.startFreeBonusChange, this);
     this.controller.off(SlotsController.Event.StartRolling, this.startGame, this);
     this.controller.off(SlotsController.Event.StopRolling, this.stopGame, this);
+    app.manager.event.off('freespin:buttonState', this.onFreeBonusSpinButtonState, this);
     app.manager.event.off('buyFreeSpinTimes', this.buyFreeSpinTimes, this);
   }
 }
