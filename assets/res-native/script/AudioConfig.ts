@@ -1,0 +1,115 @@
+/**
+ * 音频类型枚举
+ */
+export enum AudioType {
+  // 背景音乐
+  BGM = 'BGM',
+  // UI音效
+  UI = 'UI',
+  // 弹窗音效
+  POPUP = 'POPUP',
+  // 游戏音效
+  GAME = 'GAME',
+}
+
+// export enum AudioBaseUrl {
+//   // 资源CDN基础路径
+//   URL = 'https://resource.makillingslot.info/Audio/',
+// }
+
+/**
+ * 音频资源路径配置
+ */
+export const AudioPath = {
+  // 背景音乐
+  BGM: {
+    // 主界面背景音乐
+    MAIN: 'BGM/bg_audio',
+  },
+
+  // UI音效
+  UI: {
+    // 按钮点击
+    BET: 'UI/Bet',
+    // 购买免费轮
+    BETFREESPIN: 'UI/BetFreeSpin',
+    // 打开免费轮
+    OPENBETFREE: 'UI/OpenBetFree',
+    // 打开界面
+    OPEN: 'UI/Open',
+    // 关闭界面
+    CLOSE: 'UI/Close',
+    // 开屏金币掉落
+    HOMEGOLDDROP: 'UI/homeOpenGold',
+    // 开屏引导
+    HOMEOPENGUIDE: 'UI/homeOpenGuide',
+    // 无声
+    WUSHENG: 'UI/Wusheng',
+  },
+
+  // 弹窗音效
+  POPUP: {
+    // 结算弹窗打开
+    SETTLE_OPEN: 'PopAudio/Settle_Bg',
+    // 结算弹窗打开（无金币）
+    SETTLE_BG_NO_COIN: 'PopAudio/Settle_Bg_No_Coin',
+    // Mega弹窗打开
+    MEGA_OPEN: 'PopAudio/Mega_Bg',
+    // Nice弹窗打开
+    NICE_OPEN: 'PopAudio/Nice_Bg',
+    // Super弹窗打开
+    SUPER_OPEN: 'PopAudio/Super_Bg',
+    // SESTION弹窗打开
+    SENSTION_OPEN: 'PopAudio/Senstion_Bg',
+    // Mega弹窗结束
+    MEGA_END: 'PopAudio/Mega_End',
+    // Nice弹窗结束
+    NICE_END: 'PopAudio/Nice_End',
+    // Super弹窗结束
+    SUPER_END: 'PopAudio/Super_End',
+    // SESTION弹窗结束
+    SENSTION_END: 'PopAudio/Senstion_End',
+    // 开场音效
+    OPEN_HOME_AUDIO: 'PopAudio/openHome',
+  },
+
+  // 游戏音效
+  GAME: {
+    // 倍率盘旋转
+    SPINE_ROTATE: 'Game/MultipleRotate',
+    // 变成WIld
+    CHANGE_WILD: 'Game/ChangeWild',
+    // 触发挥剑和挥棒
+    SWORD_AND_STICK: 'Game/SwordAndStick',
+    // 挥棒
+    STICK_RETURN: 'Game/Stick',
+    // 挥剑
+    SWORD_RETURN: 'Game/Sword',
+    // 按钮开始旋转
+    SPIN_ROTATE: 'Game/SpinStartRoll',
+    // 滚轴停止旋转
+    ROLL_STOP_ROTATE: 'Game/RollStop',
+    // 数字翻倍
+    DOUBLE_NUMBER: 'Game/DoubleNumber',
+    // 免费轮转场
+    FREE_BONUS_TRANSITION: 'Game/FreeBonusShow',
+    // scatter 出现
+    SCATTER_SHOW: 'Game/ScatterShow',
+    // scatter 中奖
+    SCATTER_WIN: 'Game/ScatterWin',
+    // scatter 期待
+    SCATTER_EXPECT: 'Game/ScatterExpect',
+    // 元素消除 音效
+    SYMBOL_CLEAR: 'Game/SymbolRemove',
+    // 元素中奖
+    SYMBOL_WIN: 'Game/SymbolWin',
+    // Mega双倍幸运音效
+    MEGA_DUB: 'Game/MegaDUB',
+    // Nice双倍幸运音效
+    NICE_DUB: 'Game/NiceDUB',
+    // Super双倍幸运音效
+    SUPER_DUB: 'Game/SuperDUB',
+    // SESTION双倍幸运音效
+    SENSTION_DUB: 'Game/SenstionDUB',
+  },
+};

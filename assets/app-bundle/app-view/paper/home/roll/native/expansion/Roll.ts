@@ -6,6 +6,8 @@ import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from '
 import { app } from 'db://assets/app/app';
 import { HomeRollTool } from './HomeRollTool';
 import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -493,6 +495,7 @@ export class Roll extends Component {
       rollFrameSkeleton.timeScale = app.manager.global.gameSpeed;
       const scatterAnimationName = HomeRollTool.getScatterRunAnimationName(this.rollIndex);
       rollFrameSkeleton.setAnimation(0, scatterAnimationName, true);
+      EffectManager.inst.playEffect(AudioPath.GAME.SCATTER_EXPECT, false, null, true);
 
       return new Promise(async resolve => {
         rollFrameSkeleton.setCompleteListener(() => {
@@ -737,6 +740,7 @@ export class Roll extends Component {
      */
     async symbolChangeToSingleWild(index: number) {
       // 将当前symbol变为小wild
+
       return  await this.node.children[index].getComponent(Symbol).changeToSingleWild();
     }
 

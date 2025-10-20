@@ -21,6 +21,8 @@ import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
 import GameProcessCtrl, { GameState } from 'db://assets/common/script/extra/GameProcessCtrl';
 import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 import { RewardBox } from './expansion/RewardBox';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -373,6 +375,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       const onRollComplete = () => {
         resolve(true);
 
+        EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_ROTATE, false, null, true);
+
         if (this.isAllRollsStopped()) {
           // 如果rollFrameSpine动画播放中，则停止
           if (this.rollFrameSkeleton.node.active) {
@@ -487,7 +491,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.changeWildData.sort((a, b) => a.rollIndex - b.rollIndex);
 
     for (let [index, itemMap] of this.changeWildData.entries()) {
-      // 元素之间添加1秒间隔（第一个除外）
       if (itemMap.hasShow) {
         continue;
       }
@@ -571,6 +574,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * symbol变为wild,先清空overlayNode上面的发光节点
      */
     this.homeRollTool.destoryOverlayNodeLight(this.overLayNode);
+
     const hasSymbolChangeToWilds = await Promise.all(rollsScript.map(roll => roll.symbolChangeToWild()));
    
     console.log('symbol变为wild-数据', hasSymbolChangeToWilds);
@@ -593,7 +597,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     /**
      * 开始执行闪烁和消除动画
      */
-    console.log('开始执行闪烁-数据');
+    console.log('开始执行闪烁消除动画');
     const hasLitghtAnimation = await Promise.all(rollsScript.map(async roll => {
       const lightAndRemoveAnimation = await roll.startLightAndRemoveAnimation();
       const rollRemoveData = roll.getRollRemoveData();
@@ -639,6 +643,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         await this.showGrandPrize();
       }
 
+      EffectManager.inst.playEffect(AudioPath.GAME.SCATTER_WIN);
       await this.startHitFreeSpinScatterAnimation(symbolAnimationData);
     }
 
@@ -776,7 +781,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 监听RollContianer点击事件
     this.rollBgViewNode.on(Node.EventType.TOUCH_END, this.rollClick, this);
     app.manager.event.emit('roll:reward', 'end');
-    console.log('结束游戏');
+    console.log('结束游戏-AAA');
   }
 
   /**
@@ -993,8 +998,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   private setFreeBonusData(freeBonusTotalAmount: number):Promise<void> {
     return new Promise<void>(resolve => {
-    // 设置免费轮状态
+      // 设置免费轮状态
       app.controller.slots.freeBonusSpinChange(true);
+      console.log('开始免费动画执行-AAA');
       app.manager.event.emit('begainfreeBonusAnimation', () => {
         console.log('转场动画执行完成');
         app.manager.event.emit('roll:reward', 'end');

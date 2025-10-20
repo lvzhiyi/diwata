@@ -56,7 +56,7 @@ export class AppInit extends BaseAppInit {
    * 获得用户资源总量，这里返回几，就需要用户自行调用几次nextInit
    */
   protected getUserAssetNum(): number {
-    return 7;
+    return 7 + EffectManager.getPreloadedEffectCount() + BGMManager.getPreloadedBGMCount();
   }
 
   protected async onLoad() {
@@ -109,6 +109,8 @@ export class AppInit extends BaseAppInit {
     commonInit.init();
     // 预加载资源
     this._preloadResources();
+    // 预加载音效资源
+    this.preloadMusicEffects();
     this.isDontShowNextTime = app.manager.global.isDontShowNextTime;
     this.updateToggleDontShowNextTimeButton();
 
@@ -327,16 +329,16 @@ export class AppInit extends BaseAppInit {
   }
 
   /**
-   * 加载音效资源
+   * 预加载加载音效资源
    */
-  // private _loadSound() {
-  //   for (const sound of this.soundAssetList) {
-  //     app.manager.sound.load(sound as IEffectName, (result) => {
-  //       console.log('sound', sound, result);
-  //       this.nextInit();
-  //     });
-  //   }
-  // }
+  async preloadMusicEffects() {
+    BGMManager.preloadCommonBGMs(() => {
+      this.nextInit();
+    });
+    EffectManager.preloadCommonEffects(() => {
+      this.nextInit();
+    });
+  }
 
   /**
    * 预加载资源
@@ -447,10 +449,10 @@ export class AppInit extends BaseAppInit {
     EffectManager.inst.initializeEffectVolume();
 
     // // 初始化背景音频
-    // if (app.manager.global.canPlayStartAnimation() === false) {
-    //   console.log('initBGM');
-    //   await BGMManager.inst.initBGM();
-    // }
+    if (app.manager.global.canPlayStartAnimation() === false) {
+      console.log('initBGM');
+      await BGMManager.inst.initBGM();
+    }
   }
 
   /**

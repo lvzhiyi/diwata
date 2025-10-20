@@ -31,6 +31,9 @@ import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
 import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 import globalSpeedCtrl from 'db://assets/common/script/extra/GlobalSpeedCtrl';
 import { PopGrandPrize } from '../../../../pop/grand-prize/native/PopGrandPrize';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
+import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
 
 const { ccclass, property } = _decorator;
 
@@ -309,6 +312,8 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     app.manager.ui.show<PopSettings>({ name: 'PopSettings', onShow: () => { } });
     // 设置按钮点击
     EventTrackManager.inst.trackClickSetting(true);
+    // 播放音效
+    EffectManager.inst.playEffect(AudioPath.UI.OPEN);
   }
 
   // 展示选择金额视图
@@ -316,15 +321,17 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     app.manager.ui.show({ name: 'PopBetamout' });
     // 投注金额设置按钮点击
     EventTrackManager.inst.trackBetAmountSetting(true);
+    // 播放音效
+    EffectManager.inst.playEffect(AudioPath.UI.OPEN);
   }
 
   /// 快速模式
   clickQuickMode(event: EventTouch) {
-    // if(app.manager.global.quikeMode !== IQuickMode.nomal){
-    //   EffectManager.inst.playEffect(AudioPath.UI.OPEN);
-    // }else{
-    //   EffectManager.inst.playEffect(AudioPath.UI.CLOSE);
-    // }
+    if(app.manager.global.quikeMode !== IQuickMode.nomal){
+      EffectManager.inst.playEffect(AudioPath.UI.OPEN);
+    }else{
+      EffectManager.inst.playEffect(AudioPath.UI.CLOSE);
+    }
 
     const quickModes = [IQuickMode.nomal, IQuickMode.quick, IQuickMode.turbo];
     const findIndex = quickModes.findIndex((item) => item === app.manager.global.quikeMode);
@@ -333,12 +340,13 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
 
     if(quickModes[nextIndex] === IQuickMode.turbo){
       globalSpeedCtrl.startAcceleratedMode(2);
-
-      // BGMManager.inst.pauseBGM();
+      EffectManager.inst.setTurboMode(true);
+      BGMManager.inst.pauseBGM();
       this.scheduleOnce(() => {
-        // BGMManager.inst.resumeBGM();
+        BGMManager.inst.resumeBGM();
       }, 0.5);
     }else{
+      EffectManager.inst.setTurboMode(false);
       globalSpeedCtrl.stopAcceleratedMode();
     }
 
@@ -448,6 +456,8 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       return;
     }
 
+    // 播放音效
+    EffectManager.inst.playEffect(AudioPath.GAME.SPIN_ROTATE);
     app.controller.slots.betNormal();
   }
 

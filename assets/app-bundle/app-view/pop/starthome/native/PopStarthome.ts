@@ -4,6 +4,9 @@ import { app } from 'db://assets/app/app';
 import { GlobalActivity } from 'db://assets/common/script/extra/GlobalMgr';
 import { freeSpinManager } from 'db://assets/res-native/script/FreeSpinManager';
 import { SpineTool } from 'db://assets/res-native/script/SpineTool';
+import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 @ccclass('PopStarthome')
@@ -30,6 +33,7 @@ export class PopStarthome extends BaseView {
    * 点击跳过开屏动画
   */
   clickSkipStartAnimation() {
+    EffectManager.inst.stopAllEffectsByName(AudioPath.POPUP.OPEN_HOME_AUDIO);
     this.playStartAnimationComplete(false);
   }
 
@@ -49,6 +53,8 @@ export class PopStarthome extends BaseView {
 
         try {
           const skeleton = this.startHomeSpine.getComponent(sp.Skeleton);
+          // 播放音效
+          EffectManager.inst.playEffect(AudioPath.POPUP.OPEN_HOME_AUDIO);
           skeleton.setAnimation(0, 'show', false);
           // 监听自定义事件 "sz"
           //   skeleton.setEventListener((trackEntry: sp.spine.TrackEntry, event: sp.spine.Event) => {
@@ -72,6 +78,7 @@ export class PopStarthome extends BaseView {
       SpineTool.destoryAnimationNode(this.startHomeSpine);
     }
 
+    BGMManager.inst.initBGM();
     // 播放背景音乐
     this.hide();
   }

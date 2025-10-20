@@ -3,6 +3,7 @@ import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalMan
 import { app } from 'db://assets/app/app';
 import { GameDataMgrEventsType } from 'db://assets/common/script/data/ActivityDataMgr';
 import { GlobalActivity } from 'db://assets/common/script/extra/GlobalMgr';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass } = _decorator;
 
@@ -76,6 +77,9 @@ export class EffectManager extends Component {
   /** 最小保留音频源数量 */
   private readonly MIN_AUDIO_SOURCES = 5;
 
+  /** 当前正在播放的音乐 */
+  private playingMusic = { uuid: -1, name: '' };
+
   public static get inst(): EffectManager {
     return EffectManager._instance;
   }
@@ -84,50 +88,22 @@ export class EffectManager extends Component {
    * 预加载的音效列表
    */
   public static effectList: string[] = [
-    'Game/BagOpen',
-    'Game/Boom',
-    'Game/Double',
-    'Game/FiveTime',
-    'Game/LightFly',
-    'Game/LightOn',
-    'Game/LightShow',
-    'Game/LuckForYou',
-    'Game/MegaDUB',
-    'Game/NiceDUB',
-    'Game/NumberRoll',
-    'Game/NumberToFreeSpin',
-    'Game/Once',
-    'Game/Prize',
-    'Game/ReelStop',
-    'Game/Scatter1',
-    'Game/Scatter2',
-    'Game/Scatter3',
-    'Game/ScatterEnd',
-    'Game/SenstionDUB',
-    'Game/SuperDUB',
-    'Game/TenTime',
-    'Game/ToGold',
-    'Game/Triple',
-    'Game/WaitScatter',
-    'Game/Woman',
-    'PopAudio/Mega_Bg',
-    'PopAudio/Mega_End',
-    'PopAudio/Nice_Bg',
-    'PopAudio/Nice_End',
-    'PopAudio/Senstion_Bg',
-    'PopAudio/Senstion_End',
-    'PopAudio/Settle_Bg',
-    'PopAudio/Settle_Bg_No_Coin',
-    'PopAudio/Super_Bg',
-    'PopAudio/Super_End',
-    'UI/Bet',
-    'UI/BetFreeSpin',
-    'UI/Close',
-    'UI/Open',
-    'UI/OpenBetFree',
-    'UI/Wusheng',
-    'UI/homeOpenGold',
-    'UI/homeOpenGuide'
+    AudioPath.POPUP.OPEN_HOME_AUDIO,
+    AudioPath.GAME.SPINE_ROTATE,
+    AudioPath.GAME.CHANGE_WILD,
+    AudioPath.GAME.SWORD_AND_STICK,
+    AudioPath.GAME.STICK_RETURN,
+    AudioPath.GAME.SWORD_RETURN,
+    AudioPath.GAME.SPIN_ROTATE,
+    AudioPath.GAME.ROLL_STOP_ROTATE,
+    AudioPath.GAME.DOUBLE_NUMBER,
+    AudioPath.GAME.FREE_BONUS_TRANSITION,
+    AudioPath.GAME.SCATTER_SHOW,
+    AudioPath.GAME.SCATTER_EXPECT,
+    AudioPath.GAME.SCATTER_WIN,
+    AudioPath.GAME.SYMBOL_CLEAR,
+    AudioPath.GAME.SYMBOL_WIN,
+   
   ];
 
   /**
@@ -168,13 +144,13 @@ export class EffectManager extends Component {
             return;
           }
 
-          soundBundle.load(`sound/${effectName}`, AudioClip, (err, audioClip) => {
+          soundBundle.load(`Audio/${effectName}`, AudioClip, (err, audioClip) => {
             if (err) {
               // console.error(`EffectManager.preloadEffects: 加载音效失败 ${effectName}`, err);
             } else if (audioClip) {
               // 存储到全局缓存
               EffectManager._globalAudioClipCache.set(effectName, audioClip);
-              // console.log(`EffectManager.preloadEffects: 预加载音效成功 ${effectName}`);
+              console.log(`EffectManager.preloadEffects: 预加载音效成功 ${effectName}`);
             }
 
             callback?.();
@@ -380,7 +356,7 @@ export class EffectManager extends Component {
 
     if (soundBundle) {
       return new Promise((resolve) => {
-        soundBundle.load(`sound/${name}`, AudioClip, (err, clip) => {
+        soundBundle.load(`Audio/${name}`, AudioClip, (err, clip) => {
           if (err) {
             console.error(`EffectManager: 从bundle加载音频失败 sound/${name}`, err);
             resolve(null);
@@ -402,7 +378,7 @@ export class EffectManager extends Component {
 
     // 降级到resources加载
     return new Promise((resolve) => {
-      resources.load(`sound/${name}`, AudioClip, (err, clip) => {
+      resources.load(`Audio/${name}`, AudioClip, (err, clip) => {
         if (err) {
           console.error(`EffectManager: 从resources加载音频失败 sound/${name}`, err);
           resolve(null);
@@ -471,151 +447,6 @@ export class EffectManager extends Component {
   }
 
   /**
-   * 播放scatter元素音效
-   */
-  public async playScatterSymbolEffect(
-    scatterCount: number = 1,
-  ): Promise<void> {
-    const scatterEffectNames = ['scatter_1', 'scatter_2', 'scatter_3', 'scatter_4', 'scatter_1', 'scatter_2'];
-    await this.playEffect(
-      `effect/scatter/${scatterEffectNames[scatterCount - 1]}` as string,
-    );
-  }
-
-  /**
-   * 播放一次scatter元素音效
-   */
-  public async playScatterOnceEffect(): Promise<void> {
-    await this.playScatterSymbolEffect(this.scatterPlayIndex);
-    this.scatterPlayIndex++;
-  }
-
-  /**
-   * 重置scatter元素音效播放索引
-   */
-  public resetScatterPlayIndex(): void {
-    this.scatterPlayIndex = 1;
-  }
-
-  /**
-   * 播放竹子碎裂动画音效
-   */
-  public async playBambooBreakEffect(): Promise<void> {
-    await this.playEffectOnCompleted('effect/FreeSpinTransition/BambooBreak');
-  }
-
-  /**
-   * 播放中奖免费轮次音效
-   */
-  public async playFreeSpinRewardEffect() {
-    await this.playEffectOnCompleted('effect/FreeSpinInFreeSpinsV2');
-  }
-
-  /**
-   * 播放老鹰鸣叫音效
-   */
-  public async playEagleCallEffect() {
-    await this.playEffectOnCompleted('effect/FreeSpinTransition/EagleCall');
-  }
-
-  /**
-   * 播放老鹰鸣叫音效(剪短版本)
-   */
-  public async playEagleCallEffectShort() {
-    await this.playEffectOnCompleted('effect/Common/EagleCall');
-  }
-
-  /**
-   * 播放老鹰展翅飞翔音效
-   */
-  public async playEagleFly() {
-    await this.playEffect('effect/splash/EagleFly');
-  }
-
-  /**
-   * 播放免费轮转场结束音效（中奖次数显示音效）
-   */
-  public async playFreeSpinTransitionEndEffect() {
-    await this.playEffectOnCompleted('effect/FreeSpinTransition/End');
-  }
-
-  /**
-   * 播放每两次消除轮的神鹰展翅音效
-   * @param type 类型，freeSpin表示免费轮，normal表示普通轮
-   */
-  public async playRewardRound2Effect(type: 'freeSpin' | 'normal') {
-    if (type === 'freeSpin') {
-      await this.playCoinDropEffect();
-    } else {
-      await this.playEagleCallEffectShort();
-    }
-  }
-
-  /**
-   * 播放金币掉落音效
-   */
-  public async playCoinDropEffect(delay: number = 0) {
-    this.scheduleOnce(() => {
-      this.playEffectOnCompleted('effect/Common/CoinDrop');
-    }, delay);
-  }
-
-  /**
-   * 播放大奖弹窗打开音效
-   */
-  public async playGrandPrizeEffect(prizeType: string, onCompleted?: () => void) {
-    const effectName = `effect/prize/${prizeType}`;
-    const effectId = await this.playEffect(effectName, false, onCompleted);
-    
-    return effectId;
-  }
-
-  /**
-   * 播放大奖背景音乐
-   */
-  public async playGrandPrizeBgm(prizeType: string) {
-    await this.playEffect(
-      `effect/prize/${prizeType}_bgm`,
-      true,
-      null,
-      true,
-    );
-  }
-
-  /**
-   * 停止大奖背景音乐
-   */
-  public stopGrandPrizeBgm(prizeType: string) {
-    this.stopEffect(`effect/prize/${prizeType}_bgm` as string);
-  }
-
-  /**
-   * 播放大奖结束音效
-   */
-  public async playGrandPrizeEndEffect(prizeType: string) {
-    await this.playEffectOnCompleted(
-      `effect/prize/${prizeType}_end` as string,
-    );
-  }
-
-  /**
-   * 播放音效并包装音效播放完成
-   * @param name 音效资源名称
-   * @param isLoop 是否循环播放
-   * @returns
-   */
-  private playEffectOnCompleted(
-    name: string,
-    isLoop?: boolean,
-  ): Promise<number> {
-    return new Promise(async (resolve) => {
-      const effectId = await this.playEffect(name, isLoop, () => {
-        resolve(effectId);
-      });
-    });
-  }
-
-  /**
    * 播放音效
    * @param name 音效资源名称
    * @param isLoop 是否循环播放
@@ -644,6 +475,13 @@ export class EffectManager extends Component {
       onEnded?.();
 
       return -1;
+    }
+
+    // 该音乐正在播放中则返回
+    if (!isForcePlay && this.playingMusic.uuid !== -1 && this.playingMusic.name === name) {
+      console.log('该音乐正在播放');
+
+      return ;
     }
 
     // 加载音频剪辑
@@ -697,6 +535,9 @@ export class EffectManager extends Component {
       onEnded,
       name,
     };
+   
+    // 记录要播放音乐的名字
+    this.playingMusic.name = name;
 
     // 设置播放完成回调
     if (!isLoop && onEnded) {
@@ -704,6 +545,9 @@ export class EffectManager extends Component {
       const onAudioEnded = () => {
         // 移除事件监听器，避免重复调用
         audioSource.node.off('audio-ended', onAudioEnded);
+        // 播放完成状态重置
+        this.playingMusic.name = '';
+        this.playingMusic.uuid = -1;
 
         if (AudioSource.EventType && AudioSource.EventType.ENDED) {
           audioSource.node.off(AudioSource.EventType.ENDED, onAudioEnded);
@@ -759,6 +603,7 @@ export class EffectManager extends Component {
       this.scheduleOnce(() => {
         try {
           audioSource.play();
+          this.playingMusic.uuid = effectId;
           
           // 稍微延迟检查播放状态，因为play()可能是异步的
           this.scheduleOnce(() => {

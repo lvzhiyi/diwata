@@ -2,6 +2,8 @@ import { _decorator, Node, director, find, sys, UITransform } from 'cc';
 import BaseManager from '../../../../extensions/app/assets/base/BaseManager';
 import { app } from 'db://assets/app/app';
 import { GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
 
 const { ccclass } = _decorator;
 
@@ -357,6 +359,7 @@ export class GlobalManager extends BaseManager {
      console.log('setVoice', val); 
      this._voice = val;
      sys.localStorage.setItem('voice', val.toString());
+     EffectManager.inst.setEffectVolume(val / 100);
      app.manager.event.emit('voiceChange', val);
    }
 
@@ -374,6 +377,7 @@ export class GlobalManager extends BaseManager {
      if (val > 100 || val < 0) return;
      this._music = val;
      sys.localStorage.setItem('music', val.toString());
+     BGMManager.inst.volume = val / 100;
      app.manager.event.emit('musicChange', val);
    }
 

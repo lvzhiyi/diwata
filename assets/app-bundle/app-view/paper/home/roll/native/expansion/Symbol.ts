@@ -5,6 +5,8 @@ import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 import { HomeRollTool } from './HomeRollTool';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const SYMBOL_NORMAL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010'];
 export const SYMBOL_WILD_IDS = ['4001', '4010', '4011'];
@@ -245,6 +247,12 @@ export class Symbol extends Component {
           skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
           const animationPlayName = animationName + '_1';
           skeleton.setAnimation(0, animationPlayName, false);
+
+          // 如果当前元素是3001，则播放scatter出现音频
+          if(symbolId === '3001') {
+            EffectManager.inst.playEffect(AudioPath.GAME.SCATTER_SHOW, false, null, true);
+          }
+
           skeleton.setCompleteListener(() => {
             clearTimeout(timeout);
             this.LightSpine.active = false;
@@ -290,6 +298,7 @@ export class Symbol extends Component {
           const animationName = 'symbol_' + this.getSymbolId();
           skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
           const animationPlayName = animationName + '_2';
+          EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_WIN);
           skeleton.setAnimation(0, animationPlayName, false);
           skeleton.setCompleteListener(() => {
             skeleton.setCompleteListener(null);
@@ -299,6 +308,7 @@ export class Symbol extends Component {
           });
           removeUpSkeleton.setEventListener((trackEntry, event: sp.spine.Event) => {
             if (event.data.name === 'baozha') {
+              EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_CLEAR);
               resolve();
               this.LightSpine.active = false;
               this.removeDownSpineNode.active = false;
@@ -373,7 +383,10 @@ export class Symbol extends Component {
       });
     }
 
-    startScatterActionAnimation(animationName: string): Promise<void> {
+    /**
+     * 播放scatter中奖动画
+     */
+    async startScatterActionAnimation(animationName: string): Promise<void> {
       return new Promise<void>(async (resolve) => {
         this.LightSpine.active = true;
         const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
@@ -514,6 +527,7 @@ export class Symbol extends Component {
           skeleton.setAnimation(0, animationName, false);
           console.log('播放wild动画-数据', animationName);
           iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
+          EffectManager.inst.playEffect(AudioPath.GAME.CHANGE_WILD);
           skeleton.setCompleteListener(() => {
             // iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
             this.destoryWildAnimationNode();

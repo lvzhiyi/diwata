@@ -44,10 +44,13 @@
       },
       {
         "__id__": 306
+      },
+      {
+        "__id__": 308
       }
     ],
     "_prefab": {
-      "__id__": 308
+      "__id__": 310
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -5831,6 +5834,24 @@
     "fileId": "9buzyxZFJDVJ9AWBJafb8r"
   },
   {
+    "__type__": "d077dJ72V5M+ZgW7IN2NNh+",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 309
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "961zdt3o1EfJNBC/F4g4vj"
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -5842,19 +5863,19 @@
     "instance": null,
     "targetOverrides": [
       {
-        "__id__": 309
+        "__id__": 311
       },
       {
-        "__id__": 312
+        "__id__": 314
       },
       {
-        "__id__": 315
+        "__id__": 317
       },
       {
-        "__id__": 318
+        "__id__": 320
       },
       {
-        "__id__": 321
+        "__id__": 323
       }
     ],
     "nestedPrefabInstanceRoots": [
@@ -5890,7 +5911,7 @@
       "__id__": 14
     },
     "sourceInfo": {
-      "__id__": 310
+      "__id__": 312
     },
     "propertyPath": [
       "wheelNode"
@@ -5899,7 +5920,7 @@
       "__id__": 14
     },
     "targetInfo": {
-      "__id__": 311
+      "__id__": 313
     }
   },
   {
@@ -5920,7 +5941,7 @@
       "__id__": 14
     },
     "sourceInfo": {
-      "__id__": 313
+      "__id__": 315
     },
     "propertyPath": [
       "ItemNode"
@@ -5929,7 +5950,7 @@
       "__id__": 14
     },
     "targetInfo": {
-      "__id__": 314
+      "__id__": 316
     }
   },
   {
@@ -5950,7 +5971,7 @@
       "__id__": 14
     },
     "sourceInfo": {
-      "__id__": 316
+      "__id__": 318
     },
     "propertyPath": [
       "textSpineNode"
@@ -5959,7 +5980,7 @@
       "__id__": 14
     },
     "targetInfo": {
-      "__id__": 317
+      "__id__": 319
     }
   },
   {
@@ -5980,7 +6001,7 @@
       "__id__": 14
     },
     "sourceInfo": {
-      "__id__": 319
+      "__id__": 321
     },
     "propertyPath": [
       "bgSpineNode"
@@ -5989,7 +6010,7 @@
       "__id__": 14
     },
     "targetInfo": {
-      "__id__": 320
+      "__id__": 322
     }
   },
   {
@@ -6010,7 +6031,7 @@
       "__id__": 14
     },
     "sourceInfo": {
-      "__id__": 322
+      "__id__": 324
     },
     "propertyPath": [
       "bg2SpineNode"
@@ -6019,7 +6040,7 @@
       "__id__": 14
     },
     "targetInfo": {
-      "__id__": 323
+      "__id__": 325
     }
   },
   {

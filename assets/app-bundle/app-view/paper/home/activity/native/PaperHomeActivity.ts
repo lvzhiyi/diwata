@@ -13,6 +13,8 @@ import { calculateWithBase } from 'db://assets/common/script/extra/Utils/common'
 import { freeSpinManager } from 'db://assets/res-native/script/FreeSpinManager';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { SpineTool } from 'db://assets/res-native/script/SpineTool';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 @ccclass('PaperHomeActivity')
@@ -200,6 +202,10 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
       // 开始播放动画
       const Skeleton = this.BousSpineView.getComponent(sp.Skeleton);
       Skeleton.setAnimation(0, 'show', false);
+      const timeOut = setTimeout(() => {
+        EffectManager.inst.playEffect(AudioPath.GAME.FREE_BONUS_TRANSITION);
+        clearTimeout(timeOut);
+      }, 1000);
       // 监听自定义事件 "sz"
       Skeleton.setEventListener((trackEntry: sp.spine.TrackEntry, event: sp.spine.Event) => {
         if (event.data.name === 'sz') {

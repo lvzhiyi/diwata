@@ -125,7 +125,7 @@ export class BGMManager extends Component {
             return;
           }
 
-          soundBundle.load(`sound/${musicName}`, AudioClip, (err, audioClip) => {
+          soundBundle.load(`Audio/${musicName}`, AudioClip, (err, audioClip) => {
             if (err) {
               console.error(`BGMManager.preloadBGMs: 加载BGM失败 ${musicName}`, err);
             } else if (audioClip) {
@@ -259,7 +259,7 @@ export class BGMManager extends Component {
 
     if (soundBundle) {
       return new Promise((resolve) => {
-        soundBundle.load(`sound/${name}`, AudioClip, (err, clip) => {
+        soundBundle.load(`Audio/${name}`, AudioClip, (err, clip) => {
           if (err) {
             // console.error(`Failed to load BGM clip from bundle: ${name}`, err);
             resolve(null);
@@ -276,7 +276,7 @@ export class BGMManager extends Component {
 
     // 降级到resources加载
     return new Promise((resolve) => {
-      resources.load(`sound/${name}`, AudioClip, (err, clip) => {
+      resources.load(`Audio/${name}`, AudioClip, (err, clip) => {
         if (err) {
           // console.error(`Failed to load BGM clip from resources: ${name}`, err);
           resolve(null);

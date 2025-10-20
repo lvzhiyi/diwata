@@ -1,5 +1,7 @@
 import { _decorator, Component, Label, Node, sp, tween, Tween, UIOpacity, Vec3 } from 'cc';
 import { app } from 'db://assets/app/app';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -76,6 +78,7 @@ export class CurrentRoundAmount extends Component {
             .call(() => {
               // multipleNode动画完成后立马隐藏
               this.multipleNode.getComponent(UIOpacity).opacity = 0;
+              EffectManager.inst.playEffect(AudioPath.GAME.DOUBLE_NUMBER);
               // 播放spine动画
               const spine = this.spineWinNode.getComponent(sp.Skeleton);
               spine.setAnimation(0, 'jineshanguang', false);

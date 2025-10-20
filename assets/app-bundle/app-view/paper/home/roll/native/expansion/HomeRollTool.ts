@@ -5,6 +5,8 @@ import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 import { Roll } from './Roll';
 import { app } from 'db://assets/app/app';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass,  } = _decorator;
 
@@ -50,6 +52,7 @@ export class HomeRollTool  {
           skeleton.timeScale = app.manager.global.gameSpeed;
        
           // 播放多个动画序列
+        
           HomeRollTool.playAnimationSequence(skeleton, ['dao_atk', 'dao_hit'], async () => {
             console.log('播放剑动画序列完成');
           });
@@ -179,6 +182,7 @@ export class HomeRollTool  {
             skeleton.skeletonData = skeleonData;
             skeleton.timeScale = app.manager.global.gameSpeed;
             skeleton.setAnimation(0, 'gun_atk', false);
+           
             skeleton.setCompleteListener((track) => {
               if (track.animation.name === 'gun_atk') {
               }
@@ -221,11 +225,26 @@ export class HomeRollTool  {
     const hasMainBow = changeWildData.some(item => item.getComponent(Symbol).currentSymbolItem.symbolId === SymbolType.BOW);
 
     if (hasSword && !hasMainBow) {
+      const timeOut = setTimeout(() => {
+        EffectManager.inst.playEffect(AudioPath.GAME.SWORD_RETURN);
+        clearTimeout(timeOut);
+      }, 500);
+
       return 'animation3';
     // 返回女神挥剑animation3
     } else if (!hasSword && hasMainBow) {
+      const timeOut = setTimeout(() => {
+        EffectManager.inst.playEffect(AudioPath.GAME.STICK_RETURN);
+        clearTimeout(timeOut);
+      }, 500);
+
       return 'animation2';
     } else if (hasSword && hasMainBow) {
+      const timeOut = setTimeout(() => {
+        EffectManager.inst.playEffect(AudioPath.GAME.SWORD_AND_STICK);
+        clearTimeout(timeOut);
+      }, 500);
+
       return 'animation4';
     }
   }

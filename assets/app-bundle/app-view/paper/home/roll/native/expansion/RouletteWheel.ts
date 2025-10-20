@@ -1,6 +1,8 @@
 // eslint-disable-next-line max-len
 import { _decorator, Component, Node, Label, tween, UITransform, view, instantiate, Prefab, Vec3, Sprite, Color, input, Input, EventTouch, math, sp, SpriteFrame, TweenEasing } from 'cc';
 import { app } from 'db://assets/app/app';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -266,6 +268,7 @@ export class RouletteWheel extends Component {
     if (this.isBgAnimating) return;
     
     const targetRotation = this.bgCurrentRotation + angle;
+    EffectManager.inst.playEffect(AudioPath.GAME.SPINE_ROTATE);
     this.animateBgToRotation(targetRotation, duration);
   }
 
