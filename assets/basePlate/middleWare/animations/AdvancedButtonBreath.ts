@@ -1,4 +1,5 @@
 import { _decorator, Button, Component, NodeEventType, Vec3, tween, Tween, UIOpacity, TweenEasing, Enum, CCFloat, CCBoolean, CCString } from 'cc';
+import { app } from 'db://assets/app/app';
 
 const { ccclass, property } = _decorator;
 
@@ -229,6 +230,7 @@ export class AdvancedButtonBreath extends Component {
     const maxScaleVec = new Vec3(this.maxScale, this.maxScale, 1);
 
     this.breathTween = tween(this.node)
+      .timeScale(app.manager.global.gameSpeed)
       .to(this.duration / 2, { scale: maxScaleVec }, { easing: this.easing as TweenEasing })
       .to(this.duration / 2, { scale: minScaleVec }, { easing: this.easing as TweenEasing })
       .call(() => {
@@ -250,6 +252,7 @@ export class AdvancedButtonBreath extends Component {
     }
 
     this.breathTween = tween(this.uiOpacity)
+      .timeScale(app.manager.global.gameSpeed)
       .to(this.duration / 2, { opacity: this.maxOpacity }, { easing: this.easing as TweenEasing })
       .to(this.duration / 2, { opacity: this.minOpacity }, { easing: this.easing as TweenEasing })
       .call(() => {

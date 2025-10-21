@@ -195,7 +195,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     app.manager.event.on('startHomeRollAnimation', this.startHomeRollAnimation, this);
     app.manager.event.on('startHomeAnimationComplete', this.startHomeAnimationComplete, this);
     // 盘面添加点击事件
-    this.rollBgViewNode.on(Node.EventType.TOUCH_END, this.rollClick, this);
+    // this.rollBgViewNode.on(Node.EventType.TOUCH_END, this.rollClick, this);
   }
 
   /**

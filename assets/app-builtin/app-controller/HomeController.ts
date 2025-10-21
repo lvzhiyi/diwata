@@ -12,6 +12,7 @@ import { GlobalMgr } from '../../common/script/extra/GlobalMgr';
 import { MoneyUtil } from '../../basePlate/core/baseUtil/MoneyUtil';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
 import { IQuickMode } from '../app-manager/global/GlobalManager';
+import { ActivityDataMgr } from '../../common/script/data/ActivityDataMgr';
 
 // TODO 测试用
 const useMock = false;
@@ -320,8 +321,6 @@ export class HomeController extends BaseController<
       if (isUseStarCard) {
         // 星卡使用成功
         ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.useGoodsSuccess);
-        // 复原投注金额
-        app.manager.global.setBetCount(app.manager.global.tempBetCount);
       }
 
       app.controller.slots.stopRolling(this.betResult);
@@ -346,7 +345,7 @@ export class HomeController extends BaseController<
   async getBetFreeSpinResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, betRecordId: string) {
     this.autoPlayType = betType;
     const betAmount = calculateWithBase(amount, false);
-
+    const starCardData = ActivityDataMgr.instance.getGoodsData() || null;
     const res = await doBet({
       gameId: app.config.app.GAME_ID,
       betType,
@@ -356,6 +355,7 @@ export class HomeController extends BaseController<
         gameRecordId: app.manager.global.gameRecordIds[app.manager.global.gameRecordIndex],
         betAmount: betAmount,
         payAmount: 0,
+        useStarCard: starCardData ? true : false,
       },
     });
     console.log('getBetFreeSpinResult', app.manager.global.gameRecordIds[app.manager.global.gameRecordIndex]);

@@ -290,7 +290,7 @@
         };
       })();
 
-      if (window.location.hostname.includes('.com')) {
+      if (window.location.hostname.includes('prod')) {
         // 重写 console 对象, 屏蔽所有 console 方法
         Object.defineProperty(console, 'log', {
           get: function () {

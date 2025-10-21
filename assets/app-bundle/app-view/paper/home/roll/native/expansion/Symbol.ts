@@ -367,10 +367,12 @@ export class Symbol extends Component {
 
           // 创建渐隐动画 - 同时进行
           tween(lightUIOpacity)
+            .timeScale(app.manager.global.gameSpeed)
             .to(0.5, { opacity: 0 })
             .start();
 
           tween(iconUIOpacity)
+            .timeScale(app.manager.global.gameSpeed)
             .to(0.5, { opacity: 0 })
             .call(() => {
               resolve();

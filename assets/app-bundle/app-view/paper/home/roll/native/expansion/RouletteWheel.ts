@@ -218,6 +218,7 @@ export class RouletteWheel extends Component {
       if (i === selectedIndex) {
         const item = this.items[i];
         tween(item)
+          .timeScale(app.manager.global.gameSpeed)
           .to(0.5, { scale: new Vec3(1.2, 1.2, 1) }, { easing: 'bounceOut' })
           .start();
         item.getChildByName('text').getComponent(Label).isBold = true;
@@ -333,6 +334,7 @@ export class RouletteWheel extends Component {
     const animDuration = duration || this.bgAnimationDuration;
     
     tween(this.bgSpineNode)
+      .timeScale(app.manager.global.gameSpeed)
       .to(animDuration, { eulerAngles: new Vec3(0, 0, targetRotation) }, { easing: this.bgEasingType })
       .call(() => {
         this.updateSelectedItem();
@@ -365,7 +367,7 @@ export class RouletteWheel extends Component {
    */
   public stopBgAnimation(): void {
     if (this.isBgAnimating) {
-      tween(this.bgSpineNode).stop();
+      tween(this.bgSpineNode).timeScale(app.manager.global.gameSpeed).stop();
       this.isBgAnimating = false;
     }
   }

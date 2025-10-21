@@ -136,7 +136,6 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         let tempBetCount = app.manager.global.betCount;
         app.manager.global.setTempBetCount(tempBetCount);
         app.manager.global.setBetCount(betAmout);
-        this.betCountChange(betAmout);
       }
 
       // 关闭结算弹窗
@@ -186,7 +185,6 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
           ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.hideStarCard, null);
           // 恢复投注金额
           app.manager.global.setBetCount(app.manager.global.tempBetCount);
-          this.betCountChange(app.manager.global.tempBetCount);
         }
       }
     }
@@ -253,14 +251,6 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         const quikeModeScreenPosition = GameUtilTool.getCardPos();
         GlobalActivity.setStarCardPosData(betCountScreenPosition, quikeModeScreenPosition);
       }, 0);
-    }
-
-    /**
-   * 投注金额变化UI处理
-   * @param val 新的投注金额
-   */
-    private betCountChange(val: number) {
-      app.manager.event.emit('betCountChange', val);
     }
 
     // 界面关闭时的相关逻辑写在这(已经关闭的界面不会触发onHide)

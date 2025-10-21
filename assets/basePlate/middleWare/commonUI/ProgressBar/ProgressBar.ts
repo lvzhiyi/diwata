@@ -1,4 +1,5 @@
 import { _decorator, Component, Label, Node, tween, UITransform, Widget } from 'cc';
+
 const { ccclass, property } = _decorator;
 
 @ccclass('ProgressBar')
@@ -26,13 +27,12 @@ export class ProgressBar extends Component {
     } else if (percent > 1) {
       percent = 1;
     }
+
     percent = percent * 100;
     const tweenTarget = { currentPercent: this.currentPercent };
     tween(this.node)
       .parallel(
-        tween(this.ProgressNode.getComponent(UITransform)).to(0.5, {
-          width: (this.maxWidth * percent) / 100,
-        }),
+        tween(this.ProgressNode.getComponent(UITransform)).to(0.5, { width: (this.maxWidth * percent) / 100, }),
         tween(tweenTarget).to(
           0.5,
           { currentPercent: percent },

@@ -120,6 +120,7 @@ export class HomeRollTool  {
         lightNode.setParent(overlayNode);
         lightNode.setWorldPosition(node.getWorldPosition());
         tween(lightNode)
+          .timeScale(app.manager.global.gameSpeed)
           .to(
             0.65,
             { worldPosition: goddessTargetNode.getWorldPosition(), scale: v3(0.6, 0.6, 1) },

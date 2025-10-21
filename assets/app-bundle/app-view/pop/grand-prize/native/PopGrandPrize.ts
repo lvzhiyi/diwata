@@ -278,6 +278,7 @@ export class PopGrandPrize extends BaseView {
    */
    private GrandprizeScaleAnimation() {
      tween(this.node)
+       .timeScale(app.manager.global.gameSpeed)
        .to(
          // 动画持续时间与奖励类型相关
          this.getDisplayTimeByRewardType(),
@@ -371,6 +372,7 @@ export class PopGrandPrize extends BaseView {
      return new Promise<void>((resolve) => {
        // 文本放大动画：放大并略微下移
        tween(textNode)
+         .timeScale(app.manager.global.gameSpeed)
          .to(
            0.3,
            {
@@ -382,6 +384,7 @@ export class PopGrandPrize extends BaseView {
          .call(() => {
            // 文本缩小并上移动画：快速缩小到0并上移
            tween(textNode)
+             .timeScale(app.manager.global.gameSpeed)
              .to(
                0.06,
                {
