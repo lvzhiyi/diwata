@@ -17,6 +17,10 @@ export class PopBetrecorddetail extends BaseView {
    * 显示弹窗时的回调函数
    * @param data 传入的数据，包含记录ID
    */
+  protected onLoad(): void {
+ 
+  }
+
   protected onShow(data?: any) {
     console.log('onShow', data);
   }

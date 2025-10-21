@@ -101,7 +101,7 @@ export class PopSettings extends BaseView {
     // 上报打开投注记录事件
     EventTrackManager.inst.trackOpenBetRecord();
     this.subMenus.add('PopBetrecord');
-    app.manager.ui.show<PopBetrecord>({ name: 'PopBetrecord' });
+    app.manager.ui.show<PopBetrecord>({ name: 'PopBetrecord', attr:{ zIndex:10 } });
   }
 
   // 显示规则

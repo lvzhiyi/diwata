@@ -528,30 +528,30 @@ export class Roll extends Component {
       }));
     }
 
-    /**
-     * 播放消除闪烁动画
-     */
-    async endLightAnimation() {
-      // 获取需要消除的数组
-      const needRemoveSymbolData = this.symbolAnimationData.filter(item => item.isNeedRemove);
+    // /**
+    //  * 播放消除闪烁动画
+    //  */
+    // async endLightAnimation() {
+    //   // 获取需要消除的数组
+    //   const needRemoveSymbolData = this.symbolAnimationData.filter(item => item.isNeedRemove);
 
-      if (needRemoveSymbolData.length === 0) {
-        return Promise.resolve();
-      }
+    //   if (needRemoveSymbolData.length === 0) {
+    //     return Promise.resolve();
+    //   }
 
-      const endLightAnimationPromises = needRemoveSymbolData.map(item => {
-        const { symbolNode } = item;
-        const symbol = symbolNode?.getComponent(Symbol);
+    //   const endLightAnimationPromises = needRemoveSymbolData.map(item => {
+    //     const { symbolNode } = item;
+    //     const symbol = symbolNode?.getComponent(Symbol);
         
-        if (symbol) {
-          return symbol.beginDestoryLightNode();
-        }
+    //     if (symbol) {
+    //       return symbol.beginDestoryLightNode();
+    //     }
 
-        return Promise.resolve();
-      });
+    //     return Promise.resolve();
+    //   });
 
-      await Promise.all(endLightAnimationPromises);
-    }
+    //   await Promise.all(endLightAnimationPromises);
+    // }
 
     /**
      * 消除Smybol

@@ -577,7 +577,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     const hasSymbolChangeToWilds = await Promise.all(rollsScript.map(roll => roll.symbolChangeToWild()));
    
-    console.log('symbol变为wild-数据', hasSymbolChangeToWilds);
     if (hasSymbolChangeToWilds.some(item => item)) await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 500 : 1000);
    
     /**
@@ -797,8 +796,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   private async endGame() {
     const rollsScript = this.Rolls.map(roll => roll.getComponent(Roll));
-    // 结束闪烁动画
-    await Promise.all(rollsScript.map(roll => roll.endLightAnimation()));
+    // await Promise.all(rollsScript.map(roll => roll.endLightAnimation()));
     // 添加顶部多余符号
     await Promise.all(rollsScript.map(roll => roll.addTopExcessSymbol()));
     // 初始化数据

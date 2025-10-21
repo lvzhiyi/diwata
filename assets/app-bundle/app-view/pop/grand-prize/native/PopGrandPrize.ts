@@ -397,6 +397,10 @@ export class PopGrandPrize extends BaseView {
                // 重置并清理资源
                textNode.setPosition(originalPosition);
                spine.skeletonData = null;
+               spine.setCompleteListener(null);
+               spine.setEventListener(null);
+               spine.clearTracks();
+             
                this.numberWinBgAnimator.stopAnimation(true);
                this.node.setScale(new Vec3(1, 1, 1));
                this.hide();

@@ -40,4 +40,35 @@ export class SpineTool  {
       animationNode = null;
     }
   }
+
+  /**
+   * 清除动画Node
+   */
+  static clearAnimationNode(animationNode: Node) {
+    if (!animationNode || !animationNode.isValid) {
+      return;
+    }
+
+    try {
+      const skeleton = animationNode.getComponent(sp.Skeleton);
+
+      if (skeleton) {
+        // 清除所有事件监听器
+        skeleton.setCompleteListener(null);
+        skeleton.setEventListener(null);
+        skeleton.setToSetupPose();
+        
+        // 清除动画数据引用
+        skeleton.skeletonData = null;
+        
+        // 停止所有动画
+        skeleton.clearTracks();
+        
+        // 销毁组件
+        skeleton.destroy();
+      }
+    } catch (error) {
+      console.error('销毁动画节点失败:', error);
+    }
+  }
 }

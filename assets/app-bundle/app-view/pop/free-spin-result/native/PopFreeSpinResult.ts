@@ -65,7 +65,8 @@ export class PopFreeSpinResult extends BaseView {
     try {
       // 根据奖励类型加载对应的骨骼动画资源
       const spineAtlas: sp.SkeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.FREE_SPIN_RESULT);
-   
+      this.spineSkeleton = this.spineNode.getComponent(sp.Skeleton) || this.spineNode.addComponent(sp.Skeleton);
+      this.spineSkeleton.premultipliedAlpha = false;
       // 设置骨骼动画数据
       this.spineSkeleton.skeletonData = spineAtlas;
 
@@ -106,7 +107,7 @@ export class PopFreeSpinResult extends BaseView {
   
   onHide(result: undefined) {
     this.numberWinBgAnimator.stopAnimation(true);
-    SpineTool.destoryAnimationNode(this.spineNode);
+    SpineTool.clearAnimationNode(this.spineNode);
 
     return result;
   }

@@ -530,7 +530,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 200,
+      "y": -20,
       "z": 0
     },
     "_lrot": {
@@ -654,7 +654,7 @@
     "__prefab": {
       "__id__": 27
     },
-    "_hideEvent": 1,
+    "_hideEvent": 2,
     "_singleton": true,
     "_captureFocus": true,
     "_shade": true,

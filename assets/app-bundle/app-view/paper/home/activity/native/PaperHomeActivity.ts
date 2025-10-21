@@ -1,4 +1,4 @@
-import { _decorator, Label, Node, sp } from 'cc';
+import { _decorator, find, Label, Node, sp, Vec3 } from 'cc';
 import BaseView from '../../../../../../../extensions/app/assets/base/BaseView';
 import { GameUtilTool } from 'db://assets/common/script/extra/GameUtilTool';
 import { ActivityEventMgr, ActivityEventMgrEventsType } from 'db://assets/common/script/ActivityEventMgr';
@@ -99,6 +99,12 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
       }
 
       app.manager.event.on('begainfreeBonusAnimation', this.showFreeBonusSpineAnimation, this);
+      // 调整免费轮动画节点的层级
+      this.scheduleOnce(() => {
+        this.BousSpineView.setSiblingIndex(
+          this.BousSpineView.parent.children.length - 1
+        );
+      });
     }
 
     protected beforeShow(next: (error?: string) => void, data?: any) {
@@ -110,14 +116,14 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
      * 添加活动视图的根节点
     */
     addActivityRootNode() {
-      const activityRootNode = GameUtilTool.createXforgeActivityRootNode(this.activityEntry);
-      activityRootNode.setSiblingIndex(199);
-      // 下一帧再次确认（防止其他代码覆盖）
-      this.scheduleOnce(() => {
-        activityRootNode.setSiblingIndex(
-          activityRootNode.parent.children.length - 1
-        );
-      });
+      GameUtilTool.createXforgeActivityRootNode(this.activityEntry);
+      // activityRootNode.setSiblingIndex(199);
+      // // 下一帧再次确认（防止其他代码覆盖）
+      // this.scheduleOnce(() => {
+      //   activityRootNode.setSiblingIndex(
+      //     activityRootNode.parent.children.length - 1
+      //   );
+      // });
     }
 
     /**
@@ -247,9 +253,12 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
     setupStarCardPostion() {
       // 延迟设置星卡特效飞行终点位置
       this.scheduleOnce(() => {
-        const betCountScreenPosition = GameUtilTool.getMoveToPos();
-        const quikeModeScreenPosition = GameUtilTool.getCardPos();
-        GlobalActivity.setStarCardPosData(betCountScreenPosition, quikeModeScreenPosition);
+        const betBtn = find('Canvas/UserInterface/Paper/PaperHomeBody/bottomView/buttonBox/hboxLayout/BetAmoutView');
+        const betCountScreenPosition = GameUtilTool.getCardPosByNode(betBtn);
+        const amoutBtnScreenNewPosition = new Vec3(betCountScreenPosition.x, betCountScreenPosition.y - 160, 0);
+        const quickBtn = find('Canvas/UserInterface/Paper/PaperHomeBody/bottomView/buttonBox/quickBtnView/quickBtn');
+        const quikeModeScreenPosition = GameUtilTool.getCardPosByNode(quickBtn);
+        GlobalActivity.setStarCardPosData(amoutBtnScreenNewPosition, quikeModeScreenPosition);
       }, 0);
     }
 

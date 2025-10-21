@@ -319,7 +319,9 @@ export class PopBetrecord extends BaseView {
         win: calculateWithBase(item.payOutAmount),
         time: dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss'),
       });
-      app.manager.ui.show<PopBetrecorddetail>({ name: 'PopBetrecorddetail', data: { id: item.id } });
+      app.manager.ui.show<PopBetrecorddetail>({
+        name: 'PopBetrecorddetail', data: { id: item.id }, attr:{ zIndex:11 }
+      });
     }
 
     // 创建当前layout size
