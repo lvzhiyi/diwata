@@ -747,7 +747,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       await this.endGame();
 
       /**
-       * 如果命中免费轮，则设置免费轮数据，并开始免费轮游戏
+       * 如果命中免费轮，则设置免费轮数据，并开始免费轮游戏,如果免费轮再中免费轮，数据需要相加
        */
       if (this.checkIsFreeRound()) {
         const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
@@ -757,6 +757,18 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         this.startFreeSpinGame();
 
         return;
+      }
+      // 是否免费轮中，又中了免费轮
+      if (this.checkIsFreeRoundInFreeSpin()) {
+        const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
+        const oldRecordIds = app.manager.global.gameRecordIds.filter((_, index) =>  index > app.manager.global.gameRecordIndex);
+        const newGameRecordIds = [...oldRecordIds, ...gameRecordIds];
+        const newFreeBonusTimes = newGameRecordIds.length;
+        app.manager.global.setGameRecordIds(newGameRecordIds);
+        app.manager.global.setFreeBonusTimes(newFreeBonusTimes);
+        app.manager.global.setGameRecordIndex(app.manager.global.gameRecordIndex - 1);
+        // 更新文案
+        this.FreeBonusSpinTimesNode.getComponent(Label).string = `${newFreeBonusTimes}`;
       }
   
       // 免费轮有剩余次数，开始免费轮下一轮游戏
@@ -992,6 +1004,14 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   private checkIsFreeRound() {
     return !!this.resultList[this.roundIndex].freeWheelFlag && !this.hasFreeSpin();
+  }
+
+  /**
+   * 检查当前轮是否再命中免费轮（免费轮中，freeWheelFlag的值为1则为命中免费轮）
+   * @returns 检查是否命中免费轮
+   */
+  private checkIsFreeRoundInFreeSpin() {
+    return !!this.resultList[this.roundIndex].freeWheelFlag && app.controller.slots.isFreeBonusSpin && app.manager.global.gameRecordIds.length > 0;
   }
 
   /**

@@ -325,7 +325,7 @@ class ServerHookManager {
       token: token,
       gameID: app.config.app.GAME_ID,
       effect: { volume: parseFloat(localStorage.getItem('audioSFXVolume') || '1'), audioClip: null },
-      gameEnv: getGameEnv(),
+      gameEnv: getGameEnv() as any,
       listener: GlobalActivity.getEventTarget(),
       moveToPos: new Vec3(),
       cardPos: new Vec3(),

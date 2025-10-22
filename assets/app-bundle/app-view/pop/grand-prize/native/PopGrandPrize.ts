@@ -341,7 +341,7 @@ export class PopGrandPrize extends BaseView {
       
        // 延迟2秒，让结束音效有时间播放
        await delay(2000);
-       //  EffectManager.inst.playEffect(AudioPath.POPUP.WIN_END);
+       EffectManager.inst.playEffect(AudioPath.POPUP.WIN_END);
 
        // 如果节点仍然有效，播放关闭动画
        if (this.node && this.node.isValid) {

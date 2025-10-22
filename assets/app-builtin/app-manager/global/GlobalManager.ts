@@ -295,7 +295,8 @@ export class GlobalManager extends BaseManager {
    public setGameRecordIndex(index: number) {
      this._gameRecordIndex = index;
    }
-  
+
+   // 总次数
    public get freeBonusTimes() {
      return this._freeBonusTimes;
    }
