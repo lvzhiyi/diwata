@@ -6,6 +6,8 @@ import { app } from 'db://assets/app/app';
 import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 import { SpineTool } from 'db://assets/res-native/script/SpineTool';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 @ccclass('PopFreeSpinResult')
@@ -42,7 +44,7 @@ export class PopFreeSpinResult extends BaseView {
 
   onShow(params: any) {
     this.init(params);
-
+    EffectManager.inst.playEffect(AudioPath.POPUP.SETTLE_OPEN);
     this.showAmountAnimation();
   }
 
@@ -106,6 +108,7 @@ export class PopFreeSpinResult extends BaseView {
   }
   
   onHide(result: undefined) {
+    EffectManager.inst.stopAllEffectsByName(AudioPath.POPUP.SETTLE_OPEN);
     this.numberWinBgAnimator.stopAnimation(true);
     SpineTool.clearAnimationNode(this.spineNode);
 

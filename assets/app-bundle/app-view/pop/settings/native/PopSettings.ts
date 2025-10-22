@@ -6,6 +6,8 @@ import { PopBetrecord } from '../../betrecord/native/PopBetrecord';
 import { PopRule } from '../../rule/native/PopRule';
 import { Progress } from './expansion/Progress';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 @ccclass('PopSettings')
@@ -100,12 +102,14 @@ export class PopSettings extends BaseView {
   showPopBetRecord() {
     // 上报打开投注记录事件
     EventTrackManager.inst.trackOpenBetRecord();
+    EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
     this.subMenus.add('PopBetrecord');
     app.manager.ui.show<PopBetrecord>({ name: 'PopBetrecord', attr:{ zIndex:10 } });
   }
 
   // 显示规则
   showPopRule() {
+    EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
     EventTrackManager.inst.trackOpenBetRules();
     this.subMenus.add('PopRule');
     app.manager.ui.show<PopRule>({ name: 'PopRule' });
@@ -114,6 +118,7 @@ export class PopSettings extends BaseView {
   // 显示自动设置
   showAutoSetting() {
     if (this.canClickAutoSetting()) {
+      EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
       EventTrackManager.inst.trackOpenAutoBetSetting();
       this.subMenus.add('PopAutosetting');
       app.manager.ui.show<PopAutosetting>({ name: 'PopAutosetting' });
@@ -124,6 +129,7 @@ export class PopSettings extends BaseView {
    * 关闭按钮
   */
   closebtnClick() {
+    EffectManager.inst.playEffect(AudioPath.UI.CLOSE, false, null, true);
     app.manager.ui.hide({
       name: 'PopSettings',
       onHide: () => {

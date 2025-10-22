@@ -3,6 +3,8 @@ import { AddOrSub } from './expansion/AddOrSub';
 import { app } from 'db://assets/app/app';
 import BaseView from 'db://app/base/BaseView';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -135,6 +137,7 @@ export class PopAutosetting extends BaseView {
         enabled_stop_if_balance_ge: app.manager.global.autoSetting.balanceMore.selected,
         enabled_stop_on_free_game: app.manager.global.autoSetting.isFree.selected,
       });
+      EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
       // 隐藏自动设置弹窗
       app.manager.ui.hide({
         name: 'PopAutosetting',
@@ -151,6 +154,7 @@ export class PopAutosetting extends BaseView {
     }
 
     protected closebtnClick() {
+      EffectManager.inst.playEffect(AudioPath.UI.CLOSE, false, null, true);
       app.manager.ui.hide({ name: 'PopAutosetting' });
       EventTrackManager.inst.trackAutoBetSettingCancel();
     }

@@ -10,8 +10,10 @@ import {
   SpriteFrame,
 } from 'cc';
 import { app } from 'db://assets/app/app';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { numberToMoney } from 'db://assets/common/script/extra/Utils/common';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -64,7 +66,7 @@ export class BetAmountGrid extends Component {
     // 埋点
     EventTrackManager.inst.trackChangeAmount(app.manager.global.betCount, val);
     app.manager.global.setBetCount(val);
-   
+    EffectManager.inst.playEffect(AudioPath.UI.CLOSE, false, null, true);
     this.list.forEach((val, index) => {
       const label = this.listLabel[index];
 

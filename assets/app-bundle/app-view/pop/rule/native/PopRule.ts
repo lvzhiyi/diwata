@@ -22,6 +22,8 @@ import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/Ev
 import { RuleTitle } from './expansion/RuleTitle';
 import { SymbolView } from './expansion/SymbolView';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -722,6 +724,7 @@ export class PopRule extends BaseView {
    * @param data 传入的数据，包含记录ID
    */
   onHide() {
+    EffectManager.inst.playEffect(AudioPath.UI.CLOSE, false, null, true);
     EventTrackManager.inst.trackExitBetRules();
   }
 }

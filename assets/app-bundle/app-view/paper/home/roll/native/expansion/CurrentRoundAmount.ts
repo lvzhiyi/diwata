@@ -51,10 +51,7 @@ export class CurrentRoundAmount extends Component {
       label.string = `₱${originalAmount.toFixed(3)}`;
       
       this.multipleNode.getComponent(Label).string = `x ${Math.pow(2, multiple)}`;
-
-      // 最终展示的金额
-      // this.finalAmountNode.getComponent(Label).string = `₱${amount.toFixed(3)}`;
-      
+      this.multipleNode.active = multiple > 1;
       // 重置节点状态
       this.resetState();
       console.log('startNum-开始动画');

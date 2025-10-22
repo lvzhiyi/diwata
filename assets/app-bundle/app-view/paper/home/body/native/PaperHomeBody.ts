@@ -309,28 +309,32 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
 
   // 点击设置按钮
   clickSettingBtn() {
+    // 播放音效
+    EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
     app.manager.ui.show<PopSettings>({ name: 'PopSettings', onShow: () => { } });
     // 设置按钮点击
     EventTrackManager.inst.trackClickSetting(true);
     // 播放音效
-    EffectManager.inst.playEffect(AudioPath.UI.OPEN);
+    EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
   }
 
   // 展示选择金额视图
   clickBetAmount() {
+    // 播放音效
+    EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
     app.manager.ui.show({ name: 'PopBetamout' });
     // 投注金额设置按钮点击
     EventTrackManager.inst.trackBetAmountSetting(true);
     // 播放音效
-    EffectManager.inst.playEffect(AudioPath.UI.OPEN);
+    EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
   }
 
   /// 快速模式
   clickQuickMode(event: EventTouch) {
     if(app.manager.global.quikeMode !== IQuickMode.nomal){
-      EffectManager.inst.playEffect(AudioPath.UI.OPEN);
+      EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
     }else{
-      EffectManager.inst.playEffect(AudioPath.UI.CLOSE);
+      EffectManager.inst.playEffect(AudioPath.UI.CLOSE, false, null, true);
     }
 
     const quickModes = [IQuickMode.nomal, IQuickMode.quick, IQuickMode.turbo];
@@ -375,6 +379,9 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   /// 点击免费轮购买
   clickBuyBonus() {
     if (this.canClickBuyBonus()) {
+      // 播放音效
+      EffectManager.inst.playEffect(AudioPath.UI.OPENBETFREE);
+
       if(!app.manager.global.isBuyFreeBonusMode){
         app.manager.ui.show({ name: 'PopBuybonus' });
       }

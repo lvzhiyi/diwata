@@ -2,9 +2,11 @@ import { _decorator, Color, Component, Label, Node } from 'cc';
 import dayjs from 'dayjs';
 import { MoneyUtil } from 'db://assets/basePlate/core/baseUtil/MoneyUtil';
 import { ToastView } from 'db://assets/basePlate/middleWare/commonUI/ToastView';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { copyText } from 'db://assets/common/script/extra/Utils/common';
 import { CopyUtils } from 'db://assets/common/script/extra/Utils/CopyUtils';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -70,6 +72,7 @@ export class DetailCard extends Component {
         ToastView.showCommonToast('Copy failed');
       }
 
+      EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
       EventTrackManager.inst.trackCopyRoundNumber(text, bool, 'game_detail');
     });
   }

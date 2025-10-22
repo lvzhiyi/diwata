@@ -8,6 +8,8 @@ import { app } from 'db://assets/app/app';
 import { PopBetrecorddetail } from '../PopBetrecorddetail';
 import { IntersectionObserver } from 'db://assets/res-native/script/IntersectionObserver';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -220,7 +222,7 @@ export class RecordDetailLayout extends Component {
   */
   public onBackClick() {
     EventTrackManager.inst.trackExitBetRecordDetail(this.id);
-    console.log('onBackClick', this.id);
+    EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
     app.manager.ui.hide<PopBetrecorddetail>({ name: 'PopBetrecorddetail' });
   }
 }

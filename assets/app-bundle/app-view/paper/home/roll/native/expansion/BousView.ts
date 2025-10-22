@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, Sprite, SpriteFrame } from 'cc';
 
 const { ccclass, property } = _decorator;
 
@@ -12,6 +12,13 @@ export class BousView extends Component {
 
   @property({ type: Node, tooltip: 'FreeSpineView' })
   private FreeSpineView: Node = null;
+
+  // 成就的免费的freeSpineBg
+  @property(SpriteFrame)
+  private freeSpineBg: SpriteFrame = null;
+
+  @property(SpriteFrame)
+  private NormalBg: SpriteFrame = null;
 
   start() {
 
@@ -32,14 +39,17 @@ export class BousView extends Component {
       this.BuyBonusView.active = true;
       this.FreeTimeView.active = false;
       this.FreeSpineView.active = false;
+      this.node.getComponent(Sprite).spriteFrame = this.NormalBg;
     } else if (status == 2) {
       this.BuyBonusView.active = false;
       this.FreeTimeView.active = false;
       this.FreeSpineView.active = true;
+      this.node.getComponent(Sprite).spriteFrame = this.freeSpineBg;
     } else if (status == 3) {
       this.BuyBonusView.active = false;
       this.FreeTimeView.active = true;
       this.FreeSpineView.active = false;
+      this.node.getComponent(Sprite).spriteFrame = this.NormalBg;
     }
   }
 }

@@ -1,10 +1,14 @@
 import { _decorator, Component, Node, Label, log, color, Button, Sprite, EventTouch, UITransform, Color } from 'cc';
+import { EffectManager } from '../../serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
 export enum SelectDateType {
-    Single = 0,         // 当天的
-    Designated,         // 指定N-M天
+   // 当天的
+    Single = 0,      
+    // 指定N-M天  
+    Designated,         
 }
 
 @ccclass('SelectDateView')
@@ -44,22 +48,30 @@ export class SelectDateView extends Component {
 
     @property(Node)
     private scrollViewContent: Node | null = null;
-    
-    private _dateList: Date[] = [];              // 日期列表
 
-    private _selectDateList: Date[] = [];        // 选择中的日期范围列表
+    // 日期列表
+    private _dateList: Date[] = [];
+             
+    // 选择中的日期范围列表
+    private _selectDateList: Date[] = [];
+       
+    // 选择月份日期
+    private _selectMonthDate: Date | null = null;
+    // 今天日期
 
-    private _selectMonthDate: Date | null = null;// 选择月份日期
+    private _currentDate: Date | null = null;
+  
+    // 最小可选日期
+    private _minSelectDate: Date | null = null;
+ 
+    // 选择日期完成回调
+    private _onSelectComplete?: Function;
+        
+    // 选择日期类型   
+    private _selectDateType: SelectDateType | null = null;
 
-    private _currentDate: Date | null = null;    // 今天日期
-
-    private _minSelectDate: Date | null = null;  // 最小可选日期
-
-    private _onSelectComplete?: Function;        // 选择日期完成回调
-
-    private _selectDateType: SelectDateType | null = null; // 选择日期类型   
-
-    private _selectYears: number[] = [];           // 选择年份列表
+    // 选择年份列表
+    private _selectYears: number[] = [];           
 
     onLoad(){
       // this.node.active = false;
@@ -110,6 +122,7 @@ export class SelectDateView extends Component {
 
     /** 隐藏日期 */
     public hide(){
+      EffectManager.inst.playEffect(AudioPath.UI.CLOSE, false, null, true);
       this.node.active = false;
     }
     
@@ -232,6 +245,7 @@ export class SelectDateView extends Component {
 
     /** 天数点击 */
     private onDayClick(event: any){
+      // eslint-disable-next-line max-len
       if (this._selectDateType == SelectDateType.Single && this._selectDateList.length >= 1 || this._selectDateType == SelectDateType.Designated && this._selectDateList.length >= 2) {
         return;
       }
@@ -248,6 +262,7 @@ export class SelectDateView extends Component {
 
       this.updateUI(this._selectMonthDate);
  
+      // eslint-disable-next-line max-len
       if (this._selectDateType == SelectDateType.Single && this._selectDateList.length >= 1 || this._selectDateType == SelectDateType.Designated && this._selectDateList.length >= 2) {
         this.scheduleOnce(this.hide, 0.2 );
       }
@@ -291,10 +306,12 @@ export class SelectDateView extends Component {
       this.scrollViewContent.setPosition(this.scrollViewContent.position.x, this.scrollViewContent.position.y + event.getDeltaY());
       this._moveDistance += event.getDeltaY();
 
+      // eslint-disable-next-line max-len
       if (this._moveDistance >= this.scrollViewContent.getComponent(UITransform).height / this.scrollViewContent.children.length && this._selectYears[this._selectYears.length - 1] == this._currentDate.getFullYear() + 1) {
         this.scrollViewContent.children[this.scrollViewContent.children.length - 1].active = false;
       }
 
+      // eslint-disable-next-line max-len
       if (this._moveDistance >= this.scrollViewContent.getComponent(UITransform).height / this.scrollViewContent.children.length && this._selectYears[this._selectYears.length - 1] < this._currentDate.getFullYear() + 1) {
         this.scrollViewContent.setPosition(0, 0, 0);
         this._moveDistance  = 0;
@@ -367,7 +384,8 @@ export class SelectDateView extends Component {
     /**  获取当月第一天是星期几 // 0 = Sunday, 1 = Monday, ..., 6 = Saturday */
     private getFirstDayOfWeek(now: Date): number {
       const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-      const dayOfWeek = firstDay.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+      // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+      const dayOfWeek = firstDay.getDay(); 
 
       return dayOfWeek;
     }
@@ -377,7 +395,8 @@ export class SelectDateView extends Component {
       // 设置为下个月的第一天，然后减去一天
       const lastDayOfCurrentMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-      return lastDayOfCurrentMonth.getDate(); // 获取日期
+      // 获取日期
+      return lastDayOfCurrentMonth.getDate(); 
     }
 
     /** 获取上个月的最后一天 */

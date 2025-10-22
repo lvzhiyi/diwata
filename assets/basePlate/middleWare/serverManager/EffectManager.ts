@@ -89,6 +89,7 @@ export class EffectManager extends Component {
    */
   public static effectList: string[] = [
     AudioPath.POPUP.OPEN_HOME_AUDIO,
+
     AudioPath.GAME.SPINE_ROTATE,
     AudioPath.GAME.CHANGE_WILD,
     AudioPath.GAME.SWORD_AND_STICK,
@@ -103,7 +104,34 @@ export class EffectManager extends Component {
     AudioPath.GAME.SCATTER_WIN,
     AudioPath.GAME.SYMBOL_CLEAR,
     AudioPath.GAME.SYMBOL_WIN,
-   
+    AudioPath.GAME.MEGA_DUB,
+    AudioPath.GAME.NICE_DUB,
+    AudioPath.GAME.SUPER_DUB,
+    AudioPath.UI.BETFREESPIN,
+    // 购买免费轮
+    AudioPath.UI.OPENBETFREE,
+    // 打开界面
+    AudioPath.UI.OPEN,
+    // 关闭界面
+    AudioPath.UI.CLOSE,
+    // 结算弹窗打开（无金币）
+    AudioPath.POPUP.SETTLE_BG_NO_COIN,
+    AudioPath.POPUP.SETTLE_OPEN,
+    
+    AudioPath.POPUP.MEGA_OPEN,
+    AudioPath.POPUP.NICE_OPEN,
+    AudioPath.POPUP.SUPER_OPEN,
+    AudioPath.POPUP.WIN_END,
+
+    AudioPath.GAME.GODDESS_CHEER1,
+    // 女神欢呼2
+    AudioPath.GAME.GODDESS_CHEER2,
+    // 女神欢呼3
+    AudioPath.GAME.GODDESS_CHEER3,
+    // 女神欢呼4
+    AudioPath.GAME.GODDESS_CHEER4,
+    // 女神欢呼
+    AudioPath.GAME.GODDESS_CHEER5,
   ];
 
   /**

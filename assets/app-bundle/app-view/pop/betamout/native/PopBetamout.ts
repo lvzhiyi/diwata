@@ -1,7 +1,9 @@
 import { _decorator } from 'cc';
 import BaseView from 'db://app/base/BaseView';
 import { app } from 'db://assets/app/app';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass } = _decorator;
 
@@ -19,6 +21,7 @@ export class PopBetamout extends BaseView {
 
   // 关闭视图
   closeView() {
+    EffectManager.inst.playEffect(AudioPath.UI.CLOSE, false, null, true);
     EventTrackManager.inst.trackChangeAmountCancel({
       current_bet: this._betAmount,
       selected_bet_before: this._betAmount,

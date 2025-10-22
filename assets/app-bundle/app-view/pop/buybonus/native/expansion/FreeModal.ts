@@ -4,6 +4,8 @@ import { numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { PopBuybonus } from '../PopBuybonus';
 import { showInsufficientCreditAlert } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -197,6 +199,9 @@ export class FreeModal extends Component {
    * 检查余额是否足够，发送购买事件并关闭弹窗
    */
   public buyFreeSpinTimes() {
+    // 播放音效
+    EffectManager.inst.playEffect(AudioPath.UI.BETFREESPIN);
+
     const totalCost = this.currentBetVal * BUY_FREE_SPIN_TIMES_RATIO * this.currentQuantityVal;
     
     if (app.manager.global.creditCount < totalCost) {
@@ -223,6 +228,7 @@ export class FreeModal extends Component {
    * 关闭弹窗
    */
   public closeClickAction() {
+    EffectManager.inst.playEffect(AudioPath.UI.CLOSE, false, null, true);
     const totalCost = this.currentBetVal * BUY_FREE_SPIN_TIMES_RATIO * this.currentQuantityVal;
     EventTrackManager.inst.trackBuyBonusCancel({
       balance: app.manager.global.creditCount,

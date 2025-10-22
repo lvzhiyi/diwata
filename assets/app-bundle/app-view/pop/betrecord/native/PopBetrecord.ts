@@ -13,6 +13,8 @@ import GameProcessCtrl from 'db://assets/common/script/extra/GameProcessCtrl';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { preventRapidClickDecorator } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { ToastView } from 'db://assets/basePlate/middleWare/commonUI/ToastView';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -175,6 +177,7 @@ export class PopBetrecord extends BaseView {
         search_used: this._isSearched,
         clicked_record_detail: this._isClickedRecordDetail,
       });
+      EffectManager.inst.playEffect(AudioPath.UI.CLOSE, false, null, true);
       app.manager.ui.hide({ name: 'PopBetrecord' });
     }
 
@@ -200,15 +203,18 @@ export class PopBetrecord extends BaseView {
         new Date(),
         (selectDateList: Date[]) => {
           console.log(selectDateList);
+          EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
           this.selectDate(selectDateList[0]);
         },
         0,
         30
       );
       this.SelectDateView.active = true;
+      EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
     }
 
     hideCalendar() {
+      EffectManager.inst.playEffect(AudioPath.UI.CLOSE, false, null, true);
       this.SelectDateView.getComponent(SelectDateView).hide();
     }
 
@@ -358,6 +364,7 @@ export class PopBetrecord extends BaseView {
     // 防止快速点击
     @preventRapidClickDecorator(1000)
     private selectTabTime(currentTab: Node) {
+      EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
       this.TimeTabs.children.forEach(tab => {
         if (currentTab === tab) {
           tab.getComponent(Sprite).spriteFrame = this.SelectIconOn;
@@ -425,6 +432,7 @@ export class PopBetrecord extends BaseView {
         selected_date: dayjs(this._selectedDate).format('YYYY-MM-DD'),
         round_number: '',
       });
+      EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
       this._pageParams = {
         ...this._pageParams,
         pageNo: 0,
@@ -449,7 +457,7 @@ export class PopBetrecord extends BaseView {
         cleared_field: 'date',
         cleared_value: DataLabel.string
       });
-      // EffectManager.inst.playEffect(AudioPath.UI.OPEN);
+      EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
       DataLabel.color = new Color().fromHEX('#7F7F7F');
       DataLabel.string = 'Click to select a date';
     }
@@ -471,6 +479,7 @@ export class PopBetrecord extends BaseView {
         startCreateTime: null,
         endCreateTime: null,
       };
+      EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
 
       // 如果输入框有值，则获取数据
       if (roundNumberScprit.string) {
@@ -495,6 +504,7 @@ private clearRoundNumber() {
 
 private clearRoundNumberAction() {
   const roundNumberScript = this.RoundNumberNode.getComponent(EditBox);
+  EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
   EventTrackManager.inst.trackBetRecordFilterFieldClear({
     cleared_field: 'round_number',
     cleared_value: roundNumberScript.string,

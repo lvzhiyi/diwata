@@ -7,6 +7,9 @@ import { NumberAnimator } from 'db://assets/basePlate/middleWare/commonUI/Number
 import { loadResource } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { delay, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
+import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
 
 const { ccclass, property } = _decorator;
 
@@ -16,23 +19,17 @@ const animationMap: any = {
   [RewardSubTypeEnum.SUPER]: ['01nice_', '02mega_', '03super_'],
 };
 
-// const effectBGMap :any = {
-//   bigwin: AudioPath.POPUP.NICE_OPEN,
-//   megawin:  AudioPath.POPUP.MEGA_OPEN,
-//   superwin:  AudioPath.POPUP.SUPER_OPEN,
-// };
+const effectBGMap :any = {
+  '01nice_': AudioPath.POPUP.NICE_OPEN,
+  '02mega_':  AudioPath.POPUP.MEGA_OPEN,
+  '03super_':  AudioPath.POPUP.SUPER_OPEN,
+};
 
-// const effectMap :any = {
-//   bigwin: AudioPath.GAME.NICE_DUB,
-//   megawin:  AudioPath.GAME.MEGA_DUB,
-//   superwin:  AudioPath.GAME.SUPER_DUB,
-// };
-
-// const effectOverMap :any = {
-//   bigwin: AudioPath.POPUP.NICE_END,
-//   megawin:  AudioPath.POPUP.MEGA_END,
-//   superwin:  AudioPath.POPUP.SUPER_END,
-// };
+const effectMap :any = {
+  '01nice_': AudioPath.GAME.NICE_DUB,
+  '02mega_':  AudioPath.GAME.MEGA_DUB,
+  '03super_':  AudioPath.GAME.SUPER_DUB,
+};
 /**
  * 大奖弹窗组件
  * 用于显示游戏中的大奖信息和动画效果
@@ -116,6 +113,7 @@ export class PopGrandPrize extends BaseView {
    async onShow(params: any) {
      if (!params) return;
      this.isPlayEnd = false;
+     this.pauseBGM();
      // 初始化UI并播放大奖动画
      await this.initializeUI(params);
      this.playAmountAnimation();
@@ -167,6 +165,8 @@ export class PopGrandPrize extends BaseView {
      const textNode = this.node.getChildByName('AmontBox');
     
      try {
+       // 显示金额文本并播放循环动画
+       textNode.active = true;
        // 根据奖励类型加载对应的骨骼动画资源
        const spineAtlas: sp.SkeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.GRAND_PRIZE);
     
@@ -178,19 +178,21 @@ export class PopGrandPrize extends BaseView {
 
        // 设置骨骼动画数据
        spine.setSkin(animationName);
+       console.log('animationName', animationName);
 
        spine.timeScale = app.manager.global.gameSpeed;
     
        // 播放音效和背景音乐
-       // this.playGrandPrizeSound();
+       const musicName = effectMap[animationName];
+       this.playGrandPrizeSound(musicName);
+       const musicBGName = effectBGMap[animationName];
+       this.playGrandPrizeBGSound(musicBGName);
 
        this.currentAnimationName = animationName;
     
        // 播放入场动画
        await this.playSpineAnimation(spine, `${animationName}in`, false);
-    
-       // 显示金额文本并播放循环动画
-       textNode.active = true;
+       
        this.playSpineAnimation(spine, 'loop', true);
        this.playSpineAnimation(spine, `${animationName}loop`, true);
     
@@ -227,27 +229,31 @@ export class PopGrandPrize extends BaseView {
      );
    }
 
+   private pauseBGM() {
+     BGMManager.inst.pauseBGM();
+   }
+
+   private resumeBGM() {
+     BGMManager.inst.resumeBGM();
+   }
+
    /**
    * 播放大奖配音音效和大奖背景音效
    * 根据奖励类型选择不同的音效
    */
-   // private playGrandPrizeSound() {
-   //   // 先停止正在播放的背景音乐
-   //   app.manager.sound.pauseMusic();
+   private playGrandPrizeSound(animationName: string) {
+     // 播放大奖配音音效（如"NICE!"、"MEGA!"等）
+     console.log('animationPrizeName', animationName);
+     EffectManager.inst.playEffect(animationName, false, null, true);
+   }
 
-   //   // 播放大奖配音音效（如"NICE!"、"MEGA!"等）
-   //   app.manager.sound.playEffect({
-   //     name: `effect/grandPrize/${this.rewardSubType}` as IEffectName,
-   //     volume: app.manager.sound.effectVolumeScale,
-   //   });
-    
-   //   // 播放大奖背景音效，并保存ID以便后续停止
-   //   app.manager.sound.playEffectAsync({
-   //     name: `effect/grandPrize/${this.rewardSubType}_bgm` as IEffectName,
-   //     volume: app.manager.sound.effectVolumeScale,
-   //     loop: true,
-   //   }).then(id => this.bgm_id = id);
-   // }
+   /**
+   * 播放大奖配音音效和大奖背景音效
+   * 根据奖励类型选择不同的音效
+   */
+   private playGrandPrizeBGSound(animationName: string) {
+     EffectManager.inst.playEffect(animationName, false, null, true);
+   }
 
    /**
    * 播放骨骼动画
@@ -319,32 +325,31 @@ export class PopGrandPrize extends BaseView {
      const lastAnimationName = this.animationQueue[this.animationQueue.length - 1];
 
      if (this.currentAnimationName !== lastAnimationName) {
+       // 先把当前的音效停止
+       const musicName = effectMap[this.currentAnimationName];
+       const musicBGName = effectBGMap[this.currentAnimationName];
+       EffectManager.inst.stopAllEffectsByName(musicName);
+       EffectManager.inst.stopAllEffectsByName(musicBGName);
        this.playGrandPrizeAnimation(lastAnimationName);
      }
 
      try {
        // 停止数字动画和背景音乐
        this.numberWinBgAnimator.stopAnimation(true);
-       // app.manager.sound.stopEffect(this.bgm_id);
-      
-       // 播放结束音效
-       // app.manager.sound.playEffect({
-       //   name: `effect/grandPrize/${this.rewardSubType}_end` as IEffectName,
-       //   volume: app.manager.sound.effectVolumeScale,
-       // });
 
        this.isPlayEnd = true;
       
        // 延迟2秒，让结束音效有时间播放
        await delay(2000);
-      
+       //  EffectManager.inst.playEffect(AudioPath.POPUP.WIN_END);
+
        // 如果节点仍然有效，播放关闭动画
        if (this.node && this.node.isValid) {
          await this.playCloseAnimation();
        }
 
        // 恢复背景音乐
-       app.manager.sound.resumeMusic();
+       BGMManager.inst.playNormalModeBGM();
      } catch (error) {
        console.error('hideGrandPrize error:', error);
      } finally {
@@ -418,6 +423,9 @@ export class PopGrandPrize extends BaseView {
    * @returns 返回结果
    */
    onHide(result: undefined) {
+     EffectManager.inst.stopAllEffects();
+     this.resumeBGM();
+
      return result;
    }
 }

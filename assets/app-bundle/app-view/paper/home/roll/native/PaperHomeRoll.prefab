@@ -4854,8 +4854,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 74,
-      "height": 75
+      "width": 90,
+      "height": 59
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -4891,12 +4891,12 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "53d740e6-b981-415d-a433-4a847c009fce@f9941",
+      "__uuid__": "6b753cf8-f0f7-43c1-bb7c-34403bc99ca5@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 1,
     "_fillType": 0,
-    "_sizeMode": 0,
+    "_sizeMode": 1,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -5704,6 +5704,14 @@
     },
     "FreeSpineView": {
       "__id__": 258
+    },
+    "freeSpineBg": {
+      "__uuid__": "2edab693-502c-4c89-af4f-5e581d13fee0@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "NormalBg": {
+      "__uuid__": "26174d9a-a719-4e71-96b1-6d4f0c2be804@f9941",
+      "__expectedType__": "cc.SpriteFrame"
     },
     "_id": ""
   },

@@ -25,12 +25,13 @@ export const AudioPath = {
   BGM: {
     // 主界面背景音乐
     MAIN: 'BGM/bg_audio',
+    // 免费轮背景音乐
+    FREE: 'BGM/free_audio',
   },
 
   // UI音效
   UI: {
-    // 按钮点击
-    BET: 'UI/Bet',
+   
     // 购买免费轮
     BETFREESPIN: 'UI/BetFreeSpin',
     // 打开免费轮
@@ -39,10 +40,6 @@ export const AudioPath = {
     OPEN: 'UI/Open',
     // 关闭界面
     CLOSE: 'UI/Close',
-    // 开屏金币掉落
-    HOMEGOLDDROP: 'UI/homeOpenGold',
-    // 开屏引导
-    HOMEOPENGUIDE: 'UI/homeOpenGuide',
     // 无声
     WUSHENG: 'UI/Wusheng',
   },
@@ -59,16 +56,17 @@ export const AudioPath = {
     NICE_OPEN: 'PopAudio/Nice_Bg',
     // Super弹窗打开
     SUPER_OPEN: 'PopAudio/Super_Bg',
-    // SESTION弹窗打开
-    SENSTION_OPEN: 'PopAudio/Senstion_Bg',
+  
     // Mega弹窗结束
     MEGA_END: 'PopAudio/Mega_End',
     // Nice弹窗结束
     NICE_END: 'PopAudio/Nice_End',
     // Super弹窗结束
     SUPER_END: 'PopAudio/Super_End',
-    // SESTION弹窗结束
-    SENSTION_END: 'PopAudio/Senstion_End',
+
+    // 中奖弹框关闭
+    WIN_END: 'PopAudio/Win_End',
+   
     // 开场音效
     OPEN_HOME_AUDIO: 'PopAudio/openHome',
   },
@@ -109,7 +107,16 @@ export const AudioPath = {
     NICE_DUB: 'Game/NiceDUB',
     // Super双倍幸运音效
     SUPER_DUB: 'Game/SuperDUB',
-    // SESTION双倍幸运音效
-    SENSTION_DUB: 'Game/SenstionDUB',
+    // 女神欢呼1
+    GODDESS_CHEER1: 'Game/Goddess1',
+    // 女神欢呼2
+    GODDESS_CHEER2: 'Game/Goddess2',
+    // 女神欢呼3
+    GODDESS_CHEER3: 'Game/Goddess3',
+    // 女神欢呼4
+    GODDESS_CHEER4: 'Game/Goddess4',
+    // 女神欢呼
+    GODDESS_CHEER5: 'Game/Goddess5',
+  
   },
 };

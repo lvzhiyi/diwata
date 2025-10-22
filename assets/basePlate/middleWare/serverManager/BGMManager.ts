@@ -54,6 +54,7 @@ export class BGMManager extends Component {
 
   public static bgmList: string[] = [
     'BGM/bg_audio',
+    'BGM/free_audio',
   ];
 
   public get isMute() {
@@ -398,7 +399,7 @@ export class BGMManager extends Component {
    * 播放免费模式背景音乐
    */
   public async playFreeModeBGM(): Promise<void> {
-    await this.playBGM('BGM/bg_audio');
+    await this.playBGM('BGM/free_audio');
   }
    
   /** 播放大奖弹框的背景音乐 */

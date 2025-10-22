@@ -23,6 +23,7 @@ import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalMan
 import { RewardBox } from './expansion/RewardBox';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
+import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
 
 const { ccclass, property } = _decorator;
 
@@ -195,7 +196,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     app.manager.event.on('startHomeRollAnimation', this.startHomeRollAnimation, this);
     app.manager.event.on('startHomeAnimationComplete', this.startHomeAnimationComplete, this);
     // 盘面添加点击事件
-    // this.rollBgViewNode.on(Node.EventType.TOUCH_END, this.rollClick, this);
+    this.rollBgViewNode.on(Node.EventType.TOUCH_END, this.rollClick, this);
   }
 
   /**
@@ -736,6 +737,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         app.manager.global.setGameRecordIndex(0);
         // 设置为非免费轮
         app.controller.slots.freeBonusSpinChange(false);
+        // 停止免费轮音乐
+        BGMManager.inst.playNormalModeBGM();
       } 
 
       /**
@@ -1001,6 +1004,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       console.log('开始免费动画执行-AAA');
       app.manager.event.emit('begainfreeBonusAnimation', () => {
         console.log('转场动画执行完成');
+        // 播放免费轮音乐
+        BGMManager.inst.playFreeModeBGM();
         app.manager.event.emit('roll:reward', 'end');
         resolve();
       });

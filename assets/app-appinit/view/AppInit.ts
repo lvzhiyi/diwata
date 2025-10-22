@@ -20,12 +20,19 @@ import { Environment } from '../../common/script/extra/config/env';
 import { BGMManager } from '../../basePlate/middleWare/serverManager/BGMManager';
 import { EffectManager } from '../../basePlate/middleWare/serverManager/EffectManager';
 import { PopStarthome } from '../../app-bundle/app-view/pop/starthome/native/PopStarthome';
+import { SpineTool } from '../../res-native/script/SpineTool';
 
 const { ccclass, property } = _decorator;
 @ccclass('AppInit')
 export class AppInit extends BaseAppInit {
   @property(Node)
-  private logo: Node;
+  private swipeNode: Node;
+
+  @property(Node)
+  private guide1Node: Node;
+
+  @property(Node)
+  private guide2Node: Node;
 
   @property(Node)
   private progressBarNode: Node;
@@ -429,6 +436,7 @@ export class AppInit extends BaseAppInit {
 
   clickPlay() {
     this.btnPlayNode.active = false;
+    this.hideGuideNode();
     this.showStartHome().then(() => {
       Core.inst.manager.ui.showDefault(() => {
         // 埋点-用户点击Play按钮
@@ -439,10 +447,10 @@ export class AppInit extends BaseAppInit {
   }
 
   async hideGuideNode() {
-    // this.destoryAnimationNode(this.guide1Node);
-    // this.destoryAnimationNode(this.guide2Node);
-    // this.destoryAnimationNode(this.guide3Node);
-    // this.swipeNode.active = false;
+    SpineTool.destoryAnimationNode(this.guide1Node);
+    SpineTool.destoryAnimationNode(this.guide2Node);
+
+    this.swipeNode.active = false;
     // 音量
     BGMManager.inst.initializeBGMVolume();
     // // 执行完成操作

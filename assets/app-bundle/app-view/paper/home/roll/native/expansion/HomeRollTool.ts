@@ -208,6 +208,7 @@ export class HomeRollTool  {
     return new Promise<void>(async (resolve) => {
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
       goddessSkeleton.premultipliedAlpha = false;
+      EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER5);
       goddessSkeleton.setAnimation(0, 'animation5', false);
       goddessSkeleton.setCompleteListener(() => {
         goddessSkeleton.setAnimation(0, 'animation', true);
@@ -226,6 +227,7 @@ export class HomeRollTool  {
     const hasMainBow = changeWildData.some(item => item.getComponent(Symbol).currentSymbolItem.symbolId === SymbolType.BOW);
 
     if (hasSword && !hasMainBow) {
+      EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER1);
       const timeOut = setTimeout(() => {
         EffectManager.inst.playEffect(AudioPath.GAME.SWORD_RETURN);
         clearTimeout(timeOut);
@@ -234,6 +236,7 @@ export class HomeRollTool  {
       return 'animation3';
     // 返回女神挥剑animation3
     } else if (!hasSword && hasMainBow) {
+      EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER2);
       const timeOut = setTimeout(() => {
         EffectManager.inst.playEffect(AudioPath.GAME.STICK_RETURN);
         clearTimeout(timeOut);
@@ -241,6 +244,7 @@ export class HomeRollTool  {
 
       return 'animation2';
     } else if (hasSword && hasMainBow) {
+      EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER3);
       const timeOut = setTimeout(() => {
         EffectManager.inst.playEffect(AudioPath.GAME.SWORD_AND_STICK);
         clearTimeout(timeOut);
