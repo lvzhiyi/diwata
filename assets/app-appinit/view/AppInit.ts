@@ -21,6 +21,7 @@ import { BGMManager } from '../../basePlate/middleWare/serverManager/BGMManager'
 import { EffectManager } from '../../basePlate/middleWare/serverManager/EffectManager';
 import { PopStarthome } from '../../app-bundle/app-view/pop/starthome/native/PopStarthome';
 import { SpineTool } from '../../res-native/script/SpineTool';
+import { ArmsReportUtil } from '../../common/script/extra/armsSDK/reportUtil';
 
 const { ccclass, property } = _decorator;
 @ccclass('AppInit')
@@ -526,6 +527,10 @@ export class AppInit extends BaseAppInit {
 
   protected onProgress(completed: number, total: number) {
     this.progressBarNode.getComponent(ProgressBar).startMove(completed / total);
+
+		if(completed === total - 1) {
+      ArmsReportUtil.reportLoadTime();
+    }
   }
 
   protected onDisable(): void {
