@@ -368,9 +368,14 @@ export class HomeController extends BaseController<
     } else {
       this.betResult = mockFailedData;
       ToastView.showCommonToast('Unstable Network,Bet failed');
-      app.controller.slots.resetBetAmount();
+
+      if(starCardData){
+        app.controller.slots.resetBetAmount();
+      }
+
       // 免费中的子轮其中一个中断后，设置为非免费轮，修改状态
       app.controller.slots.freeBonusSpinChange(false);
+      
       app.controller.slots.stopRolling(this.betResult);
     }
   }

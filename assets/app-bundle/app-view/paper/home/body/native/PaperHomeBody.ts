@@ -612,7 +612,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
         return false;
       }
       // 如果选中免费轮，并且当前是免费轮，则停止
-      if (globalManager.autoSetting.isFree.selected && app.manager.global.freeBonusTimes > 0) {
+      if (globalManager.autoSetting.isFree.selected && app.manager.global.isBuyFreeBonusMode) {
         this.stopAutoPlay();
 
         return false;
