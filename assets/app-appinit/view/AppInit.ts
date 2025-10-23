@@ -528,7 +528,7 @@ export class AppInit extends BaseAppInit {
   protected onProgress(completed: number, total: number) {
     this.progressBarNode.getComponent(ProgressBar).startMove(completed / total);
 
-		if(completed === total - 1) {
+    if(completed === total - 1) {
       ArmsReportUtil.reportLoadTime();
     }
   }

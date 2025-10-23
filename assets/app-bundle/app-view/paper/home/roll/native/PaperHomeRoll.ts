@@ -1194,6 +1194,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 展示大奖弹窗
    */
   private async showGrandPrize() {
+    console.log('showGrandPrize', this.resultData);
     const { overallRewardAmount, resultDetail } = this.resultData;
     const { allWheelRewardSubType } = resultDetail;
     const { accumulateReachMaxMultiple } = this.resultList[this.roundIndex];

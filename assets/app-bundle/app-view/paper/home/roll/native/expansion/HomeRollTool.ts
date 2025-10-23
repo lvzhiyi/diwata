@@ -138,6 +138,7 @@ export class HomeRollTool  {
       goddessSkeleton.premultipliedAlpha = false;
       const animationName = this.getGoddessAnimation(targetNodes);
       console.log('女神执行动画', animationName);
+      console.log('游戏速度', app.manager.global.gameSpeed);
       goddessSkeleton.setAnimation(0, animationName, false);
       goddessSkeleton.setCompleteListener(() => {
         // 女神执行待机动画
@@ -161,36 +162,35 @@ export class HomeRollTool  {
     if (skeleonData != null) {
       return new Promise<void>(async (resolve) => {
         // 0.3秒后执行
-        setTimeout(() => {
+        const time = setTimeout(() => {
+          clearTimeout(time);
           resolve();
-        }, 600);
-
-        targetNodes.forEach(item => {
+        }, 600 / app.manager.global.gameSpeed);
+        targetNodes.map(item => {
           // 过滤主元素
           const isMain = item.getComponent(Symbol).currentSymbolItem.main;
 
-          if(isMain){
-            return;
-          }
+          if(!isMain){
+            // 创建spine节点并设置大小
+            const spineNode = this.createSpineNode(item, overlayNode, false);
+            console.log('spineNode', spineNode.name);
 
-          // 创建spine节点并设置大小
-          const spineNode = this.createSpineNode(item, overlayNode, false);
-
-          try {
-          // 添加动画
-            const skeleton = spineNode.getComponent(sp.Skeleton) || spineNode.addComponent(sp.Skeleton);
-            skeleton.premultipliedAlpha = false;
-            skeleton.skeletonData = skeleonData;
-            skeleton.timeScale = app.manager.global.gameSpeed;
-            skeleton.setAnimation(0, 'gun_atk', false);
+            try {
+              // 添加动画
+              const skeleton = spineNode.getComponent(sp.Skeleton) || spineNode.addComponent(sp.Skeleton);
+              skeleton.premultipliedAlpha = false;
+              skeleton.skeletonData = skeleonData;
+              skeleton.timeScale = app.manager.global.gameSpeed;
+              skeleton.setAnimation(0, 'gun_atk', false);
            
-            skeleton.setCompleteListener((track) => {
-              if (track.animation.name === 'gun_atk') {
-              }
-            });
-          } catch (error) {
-            console.error('加载spine/gun动画失败', error);
-            this.destoryAnimationNode(spineNode);
+              skeleton.setCompleteListener((track) => {
+                if (track.animation.name === 'gun_atk') {
+                }
+              });
+            } catch (error) {
+              console.error('加载spine/gun动画失败', error);
+              this.destoryAnimationNode(spineNode);
+            }
           }
         });
       });

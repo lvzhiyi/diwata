@@ -21,6 +21,12 @@ export enum IQuickMode {
 	turbo = 'turbo',
 }
 
+const speedMap :any = {
+  nomal: 1,
+  quick: 2,
+  turbo: 3,
+};
+
 @ccclass('GlobalManager')
 export class GlobalManager extends BaseManager {
   // [无序] 自身初始化完成, init执行完毕后被调用
@@ -403,6 +409,7 @@ export class GlobalManager extends BaseManager {
 
   public setQuikeMode(quickMode: IQuickMode) {
     this._quikeMode = quickMode;
+    this.setGameSpeed(speedMap[quickMode]);
     app.manager.event.emit('quikeModeChange', quickMode);
   }
 

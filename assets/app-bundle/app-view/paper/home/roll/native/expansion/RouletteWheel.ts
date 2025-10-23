@@ -99,6 +99,96 @@ export class RouletteWheel extends Component {
   }
 
   /**
+   * 多倍索引改变
+   * @param index 索引
+   * @param needAnimation 是否需要动画
+  */
+  public multipleIndexChange(index: number, needAnimation: boolean = true): void {
+    if (this.currentIndex === index) {
+      return;
+    }
+    // 盘面进行发光
+    if (needAnimation === false) {
+      const spine = this.bgSpineNode.getComponent(sp.Skeleton);
+      spine.timeScale = 1;
+      spine.setAnimation(0, 'zhuanpan', false);
+   
+      const spine2 = this.bg2SpineNode.getComponent(sp.Skeleton);
+      spine2.timeScale = 1;
+      spine2.setAnimation(0, 'gunzhoudi', false);
+    }
+    // 如果 index 为 0 和，3，强制复原到起始位置
+    if(index === 0 || index === 3) {
+      this.currentIndex = index;
+      this.jumpToOriginalPosition(index);
+    }else{
+      this.jumpToData(this.dataList[index]);
+      this.currentIndex = index;
+    }
+  }
+
+  /**
+   * 跳转到指定的数据
+   */
+  public jumpToData(targetData: number): void {
+    const targetIndex = this.dataList.findIndex(data => data === targetData);
+    
+    if (targetIndex === -1) {
+      return;
+    }
+
+    // 获取当前中心item的数据值
+    
+    const currentIndex = this.currentIndex;
+    const currentData = this.dataList[currentIndex];
+
+    if (currentIndex === -1) {
+      console.warn('无法获取当前数据');
+
+      return;
+    }
+   
+    // 根据数值大小关系决定旋转方向
+    let rotationSteps: number;
+
+    if (targetData > currentData) {
+      // 目标值更大，逆时针旋转
+      rotationSteps = (targetIndex - currentIndex);
+    } 
+    
+    // 计算目标旋转角度
+    const targetRotation = this.bgCurrentRotation + (rotationSteps * this.DATA_ANGLE_STEP);
+    console.log('targetRotation', targetRotation, this.bgCurrentRotation, currentIndex, targetIndex);
+
+    this.animateBgToRotation(targetRotation);
+  }
+
+  /** 跳到原始位置 */ 
+  jumpToOriginalPosition(index: number): void {
+    if(index === 0 ) {
+      tween(this.bgSpineNode)
+        .timeScale(app.manager.global.gameSpeed)
+        .to(0.5, { eulerAngles: new Vec3(0, 0, 0) }, { easing: this.bgEasingType })
+        .call(() => {
+          this.updateSelectedItem();
+          this.bgCurrentRotation = 0;
+        })
+        .start();
+    }
+    if(index === 3) {
+      const targetRotation = this.DATA_ANGLE_STEP * 3;
+      tween(this.bgSpineNode)
+        .timeScale(app.manager.global.gameSpeed)
+        .to(0.5, { eulerAngles: new Vec3(0, 0, targetRotation) }, { easing: this.bgEasingType })
+        .call(() => {
+          this.updateSelectedItem();
+          this.bgCurrentRotation = targetRotation;
+        })
+        .start();
+    }
+  }
+
+  /**
    * 初始化数据：x1, x2, x4, x8, ..., x1024
    */
   private initData(): void {
@@ -259,68 +349,7 @@ export class RouletteWheel extends Component {
     
     // 若需按距离中心调整透明度或缩放，可在此处添加逻辑
   }
-
-  /**
-   * 背景转盘顺时针旋转
-   * @param angle 旋转角度（度）
-   * @param duration 动画持续时间（可选，默认使用bgAnimationDuration）
-   */
-  public rotateBgClockwise(angle: number, duration?: number): void {
-    if (this.isBgAnimating) return;
-    
-    const targetRotation = this.bgCurrentRotation + angle;
-    EffectManager.inst.playEffect(AudioPath.GAME.SPINE_ROTATE);
-    this.animateBgToRotation(targetRotation, duration);
-  }
-
-  /**
-   * 多倍索引改变
-   * @param index 索引
-   * @param needAnimation 是否需要动画
-  */
-  public multipleIndexChange(index: number, needAnimation: boolean = true): void {
-    if (this.currentIndex === index) {
-      return;
-    }
-    // 盘面进行发光
-    if (needAnimation === false) {
-      const spine = this.bgSpineNode.getComponent(sp.Skeleton);
-      spine.timeScale = 1;
-      spine.setAnimation(0, 'zhuanpan', false);
-   
-      const spine2 = this.bg2SpineNode.getComponent(sp.Skeleton);
-      spine2.timeScale = 1;
-      spine2.setAnimation(0, 'gunzhoudi', false);
-    }
-    // 如果 index 为 0 和，3，强制复原到起始位置
-
-    this.jumpToData(this.dataList[index]);
-    this.currentIndex = index;
-  }
-
-  /**
-   * 背景转盘逆时针旋转
-   * @param angle 旋转角度（度）
-   * @param duration 动画持续时间（可选，默认使用bgAnimationDuration）
-   */
-  public rotateBgCounterClockwise(angle: number, duration?: number): void {
-    if (this.isBgAnimating) return;
-    
-    const targetRotation = this.bgCurrentRotation - angle;
-    this.animateBgToRotation(targetRotation, duration);
-  }
-
-  /**
-   * 背景转盘旋转到指定角度
-   * @param targetRotation 目标旋转角度（度）
-   * @param duration 动画持续时间（可选，默认使用bgAnimationDuration）
-   */
-  public rotateBgToAngle(targetRotation: number, duration?: number): void {
-    if (this.isBgAnimating) return;
-    
-    this.animateBgToRotation(targetRotation, duration);
-  }
-
+  
   /**
    * 背景转盘动画到指定角度
    * @param targetRotation 目标旋转角度（度）
@@ -349,79 +378,6 @@ export class RouletteWheel extends Component {
   private finishBgAnimation(targetRotation: number): void {
     this.isBgAnimating = false;
     this.bgCurrentRotation = targetRotation;
-  }
-
-  /**
-   * 设置背景旋转动画参数
-   * @param duration 动画持续时间
-   * @param easing 缓动类型
-   */
-  public setBgAnimationParams(duration: number = 1.0, easing: TweenEasing = 'quadOut'): void {
-    this.bgAnimationDuration = duration;
-    this.bgEasingType = easing;
-  }
-
-  /**
-   * 停止背景旋转动画
-   */
-  public stopBgAnimation(): void {
-    if (this.isBgAnimating) {
-      tween(this.bgSpineNode).timeScale(app.manager.global.gameSpeed).stop();
-      this.isBgAnimating = false;
-    }
-  }
-
-  /**
-   * 获取背景当前旋转角度
-   */
-  public getBgCurrentRotation(): number {
-    return this.bgCurrentRotation;
-  }
-
-  /**
-   * 检查背景是否正在动画中
-   */
-  public isBgAnimatingNow(): boolean {
-    return this.isBgAnimating;
-  }
-
-  /**
-   * 跳转到指定的数据
-   */
-  public jumpToData(targetData: number): void {
-    const targetIndex = this.dataList.findIndex(data => data === targetData);
-    
-    if (targetIndex === -1) {
-      return;
-    }
-
-    // 获取当前中心item的数据值
-    
-    const currentIndex = this.currentIndex;
-    const currentData = this.dataList[currentIndex];
-
-    if (currentIndex === -1) {
-      console.warn('无法获取当前数据');
-
-      return;
-    }
-   
-    // 根据数值大小关系决定旋转方向
-    let rotationSteps: number;
-
-    if (targetData > currentData) {
-      // 目标值更大，逆时针旋转
-      rotationSteps = (targetIndex - currentIndex);
-    } else {
-      // 目标值更小，顺时针旋转
-      rotationSteps = - ( currentIndex - targetIndex);
-    }
-    
-    // 计算目标旋转角度
-    const targetRotation = this.bgCurrentRotation + (rotationSteps * this.DATA_ANGLE_STEP);
-    console.log('targetRotation', targetRotation, this.bgCurrentRotation, currentIndex, targetIndex);
-
-    this.animateBgToRotation(targetRotation);
   }
 
   /**
@@ -460,17 +416,6 @@ export class RouletteWheel extends Component {
       // 圆形缓出
       'circOut',     
     ];
-  }
-
-  /**
-   * 快速切换到下一个位置（无动画）
-   */
-  public snapToNext(direction: number): void {
-    if (this.isAnimating) return;
-    
-    const targetRotation = this.currentRotation + (direction * this.DATA_ANGLE_STEP);
-    this.currentRotation = ((targetRotation % 360) + 360) % 360;
-    this.updateItemsPosition();
   }
 
   update(deltaTime: number) {

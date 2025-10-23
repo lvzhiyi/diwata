@@ -63,9 +63,6 @@ export class SpineTool  {
         
         // 停止所有动画
         skeleton.clearTracks();
-        
-        // 销毁组件
-        skeleton.destroy();
       }
     } catch (error) {
       console.error('销毁动画节点失败:', error);
