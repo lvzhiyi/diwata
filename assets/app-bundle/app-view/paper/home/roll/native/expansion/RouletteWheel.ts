@@ -309,7 +309,7 @@ export class RouletteWheel extends Component {
         const item = this.items[i];
         tween(item)
           .timeScale(app.manager.global.gameSpeed)
-          .to(0.5, { scale: new Vec3(1.2, 1.2, 1) }, { easing: 'bounceOut' })
+          .to(0.2, { scale: new Vec3(1.2, 1.2, 1) }, { easing: 'bounceOut' })
           .start();
         item.getChildByName('text').getComponent(Label).isBold = true;
         const textString = item.getChildByName('text').getComponent(Label).string;
@@ -360,7 +360,7 @@ export class RouletteWheel extends Component {
     
     this.isBgAnimating = true;
     const animDuration = duration || this.bgAnimationDuration;
-    
+
     tween(this.bgSpineNode)
       .timeScale(app.manager.global.gameSpeed)
       .to(animDuration, { eulerAngles: new Vec3(0, 0, targetRotation) }, { easing: this.bgEasingType })
