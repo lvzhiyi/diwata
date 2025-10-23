@@ -5,7 +5,7 @@ import { doBet } from '../../basePlate/middleWare/services/bet';
 import { HTTP_STATUS_CODES } from '../../common/script/extra/Request';
 import GameProcessCtrl, { GameState } from '../../common/script/extra/GameProcessCtrl';
 import { sys } from 'cc';
-import { mockFailedData, mockSuccessData } from '../../basePlate/core/baseUtil/mockDataUtils';
+import { mockFailedData, mockSuccessData, mockSuccessData1 } from '../../basePlate/core/baseUtil/mockDataUtils';
 import { ToastView } from '../../basePlate/middleWare/commonUI/ToastView';
 import { ActivityEventMgr, ActivityEventMgrEventsType } from '../../common/script/ActivityEventMgr';
 import { GlobalMgr } from '../../common/script/extra/GlobalMgr';
@@ -164,7 +164,7 @@ export class HomeController extends BaseController<
     if (useMock) {
       await delay(1000);
 
-      this.betResult = mockSuccessData;
+      this.betResult = mockSuccessData1;
 
       app.manager.global.setCreditCount(
         app.manager.global.creditCount - app.manager.global.betCount
@@ -356,6 +356,7 @@ export class HomeController extends BaseController<
         betAmount: betAmount,
         payAmount: 0,
         useStarCard: starCardData ? true : false,
+        useFreeSpin:app.manager.global.isFreespinMode,
       },
     });
     console.log('getBetFreeSpinResult', app.manager.global.gameRecordIds[app.manager.global.gameRecordIndex]);

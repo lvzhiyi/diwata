@@ -1,6 +1,7 @@
 /**
  * 模拟成功数据
  */
+export const mockSuccessData1: any = null;
 export const mockSuccessData: any = {
   betRecordId: '1977661323763085312',
   gameId: 'zhumeng006',

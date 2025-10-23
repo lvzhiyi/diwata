@@ -120,7 +120,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   startHomeRollAnimation() {
-    console.log('startHomeRollAnimation');
     this.node.active = true;
     // 女神节点渐显
     tween(this.goddessNode.getComponent(UIOpacity))
@@ -914,15 +913,17 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const analyzeWheel = wheel[0].map((_: any, colIndex: number) => wheel.map((row: any) => row[colIndex]));
 
     analyzeWheel.forEach((item: any, index: number) => {
-      if (item.find((item: any) => item?.symbolId === '3001')) {
-        scatterCount++;
+      item.map((item1: any) => {
+        if (item1?.symbolId === '3001') { 
+          scatterCount++;
 
-        if (scatterCount === 2) {
-          secondScatterIndex = index;
+          if (scatterCount === 2) {
+            secondScatterIndex = index;
+          }
         }
-      }
+      });
     });
-
+   
     let hasMoreThanOneScatter;
 
     // 第一轮，找到第 2 个 scatter，并且不是最后一个roll中
@@ -1093,7 +1094,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   buyFreeSpinTimes(betCount: number, quantity: number, starCardData?: any) {
     app.manager.global.setQuantity(quantity);
-    app.manager.global.setBetCount(betCount);
+    app.manager.global.setBetCount(betCount, starCardData === null ? true : false);
 
     this.startBuyFreeSpinGame(starCardData);
   }

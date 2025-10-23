@@ -108,9 +108,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     this.onResizeScreen();
 
     // 如果有开屏动画线隐藏节点
-    if (app.manager.global.canPlayStartAnimation()) {
-      this.hiddenAllNodes();
-    }
+    this.hiddenAllNodes();
 
     app.manager.event.on('startHomeAnimationComplete', this.startHomeAnimationComplete, this);
 
@@ -354,7 +352,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       globalSpeedCtrl.stopAcceleratedMode();
     }
 
-    EventTrackManager.inst.trackTurboSpin(quickModes[nextIndex] === IQuickMode.quick);
+    EventTrackManager.inst.trackTurboSpin(quickModes[nextIndex] !== IQuickMode.nomal);
   }
 
   /**
@@ -547,7 +545,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   enabledPlayButton() {
     this.autoModeBtn.getComponent(Button).interactable = true;
 
-    if(app.manager.global.isBuyFreeBonusMode == false){
+    if(app.manager.global.isFreespinMode == false || app.manager.global.isBuyFreeBonusMode == false){
       this.betAmountIcon.getComponent(Button).interactable = true;
     }
   }

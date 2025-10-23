@@ -39,7 +39,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
     }
 
     private async playStartHomeSpine() {
-      if (this.startHomeSpine.isValid) {
+      if (this.startHomeSpine && this.startHomeSpine.isValid) {
         this.startHomeSpine.active = true;
 
         try {
@@ -60,9 +60,9 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
     }
   
     private playStartAnimationComplete(needAnimation: boolean = true) {
-      if(this.startHomeSpine) {
-        SpineTool.destoryAnimationNode(this.startHomeSpine);
-      }
+      SpineTool.destoryAnimationNode(this.startHomeSpine);
+      this.startHomeSpine = null;
+      console.log('playStartAnimationComplete');
 
       app.manager.event.emit('startHomeAnimationComplete');
 
@@ -141,7 +141,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         // 临时记录修改投注金额变化
         let tempBetCount = app.manager.global.betCount;
         app.manager.global.setTempBetCount(tempBetCount);
-        app.manager.global.setBetCount(betAmout);
+        app.manager.global.setBetCount(betAmout, false);
       }
 
       // 关闭结算弹窗
@@ -206,10 +206,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
       // 开始播放动画
       const Skeleton = this.BousSpineView.getComponent(sp.Skeleton);
       Skeleton.setAnimation(0, 'show', false);
-      const timeOut = setTimeout(() => {
-        EffectManager.inst.playEffect(AudioPath.GAME.FREE_BONUS_TRANSITION);
-        clearTimeout(timeOut);
-      }, 1000);
+      EffectManager.inst.playEffect(AudioPath.GAME.FREE_BONUS_TRANSITION);
       // 监听自定义事件 "sz"
       Skeleton.setEventListener((trackEntry: sp.spine.TrackEntry, event: sp.spine.Event) => {
         if (event.data.name === 'sz') {
@@ -226,24 +223,17 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         GlobalActivity.setEntryDialogActive(true);
         Skeleton.clearAnimations();
         callback();
-      }, 9000);
+      }, 4400);
 
       Skeleton.setCompleteListener((track: sp.spine.TrackEntry) => {
-        console.log('动画播放完成');
+        clearTimeout(timeoutId); 
         Skeleton.setCompleteListener(null);
-        // 播放 show_free_game 动效，不循环
-        Skeleton.setAnimation(0, 'show_free_game', false);
-        // 监听 show_free_game 播放完成
-        Skeleton.setCompleteListener((showFreeGameTrack: sp.spine.TrackEntry) => {
-          console.log('show_free_game 动效播放完成');
-          // 移除动效
-          clearTimeout(timeoutId); 
-          this.BousSpineView.active = false;
-          this.NumberLable.active = false;
-          GlobalActivity.setEntryDialogActive(true);
-          Skeleton.clearAnimations();
-          callback();
-        });
+        clearTimeout(timeoutId); 
+        this.BousSpineView.active = false;
+        this.NumberLable.active = false;
+        GlobalActivity.setEntryDialogActive(true);
+        Skeleton.clearAnimations();
+        callback();
       });
     }
 

@@ -256,8 +256,12 @@ export class GlobalManager extends BaseManager {
      return this._isFreespinMode ? this._freespinBetAmount : betCount;
    }
 
-   public setBetCount(val: number) {
-     sys.localStorage.setItem('betCount_' + this.playerId, val.toString());
+   public setBetCount(val: number, needSave: boolean = true) {
+     if(needSave){
+       console.log('setBetCount-保存', val);
+       sys.localStorage.setItem('betCount_' + this.playerId, val.toString());
+     }
+
      this._betCount = val;
      app.manager.event.emit('betCountChange', val);
    }
