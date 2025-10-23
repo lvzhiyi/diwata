@@ -545,7 +545,9 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   enabledPlayButton() {
     this.autoModeBtn.getComponent(Button).interactable = true;
 
-    if(app.manager.global.isFreespinMode == false || app.manager.global.isBuyFreeBonusMode == false){
+    if(app.manager.global.isFreespinMode  || app.manager.global.isBuyFreeBonusMode ){
+      this.betAmountIcon.getComponent(Button).interactable = false;
+    }else{
       this.betAmountIcon.getComponent(Button).interactable = true;
     }
   }

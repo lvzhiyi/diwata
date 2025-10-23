@@ -82,7 +82,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         );
         this.controller.on(SlotsController.Event.GameOver, (a: BetResult) => {
           // 当前轮游戏结束，更新freeSpin次数
-          if(app.controller.slots.isFreeBonusSpin === false) {
+          if(app.controller.slots.isFreeBonusSpin === false && app.manager.global.isFreespinMode === true && a.credit !== -1) {
             freeSpinManager.onRoundEnd();
           }
 

@@ -1852,7 +1852,7 @@ export const mockFailedData: any = {
   gameId: 'zhumeng006',
   betType: 'NORMAL_BET',
   betSubType: 'NORMAL_BET',
-  credit: 0,
+  credit: -1,
   overallRewardAmount: 0,
   totalPayoutAmount: 0,
   resultDetail: {
