@@ -92,6 +92,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   // 异步操作状态跟踪
   private isAsyncOperationInProgress: boolean = false;
 
+  // 是否正在执行免费轮动画
+  private isExecutingFreeBonusAnimation: boolean = false;
+
   // 是否是免费轮
   private isFreeBonusSpin: boolean = false;
 
@@ -219,6 +222,13 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 盘面点击roll
    */
   rollClick(e: EventTouch) {
+    // 如果正在执行免费轮动画，则不处理点击事件
+    if (this.isExecutingFreeBonusAnimation) {
+      console.warn('正在执行免费轮动画，不处理点击事件');
+
+      return;
+    }
+
     // 处理点击事件的逻辑
     const isIn = HomeRollTool.isCheckAreaSuccess(this.rollBgViewNode, e);
 
@@ -752,6 +762,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
         app.manager.global.setFreeBonusTimes(gameRecordIds.length);
         app.manager.global.setGameRecordIds([...gameRecordIds]);
+        this.isExecutingFreeBonusAnimation = true;
         await this.setFreeBonusData(this.resultData.totalPayoutAmount);
         this.startFreeSpinGame();
 
@@ -924,20 +935,22 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       });
     });
    
-    let hasMoreThanOneScatter;
+    let hasMoreThanOneScatter = false;
 
     // 第一轮，找到第 2 个 scatter，并且不是最后一个roll中
     if (this.roundIndex === 0) {
       hasMoreThanOneScatter = 
         secondScatterIndex !== -1 && 
         secondScatterIndex < this.needPlayRollsFrameSpine.length - 1;
-    } else {
-      // 非第一轮，找到第 2 个 scatter，并且不是最后一个roll中
-      hasMoreThanOneScatter = 
-      scatterCount == 2 && 
-      secondScatterIndex !== -1 && 
-      secondScatterIndex < this.needPlayRollsFrameSpine.length - 1;
-    }
+    } 
+    // 非第一轮，不展示期待
+    // else {
+    //   // 非第一轮，找到第 2 个 scatter，并且不是最后一个roll中
+    //   hasMoreThanOneScatter = 
+    //   scatterCount == 2 && 
+    //   secondScatterIndex !== -1 && 
+    //   secondScatterIndex < this.needPlayRollsFrameSpine.length - 1;
+    // }
 
     if (hasMoreThanOneScatter) {
       for (let i = secondScatterIndex + 1; i < this.needPlayRollsFrameSpine.length; i++) {
@@ -1025,6 +1038,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       console.log('开始免费动画执行-AAA');
       app.manager.event.emit('begainfreeBonusAnimation', () => {
         console.log('转场动画执行完成');
+        this.isExecutingFreeBonusAnimation = false;
         // 播放免费轮音乐
         BGMManager.inst.playFreeModeBGM();
         app.manager.event.emit('roll:reward', 'end');

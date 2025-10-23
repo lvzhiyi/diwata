@@ -2,6 +2,7 @@ import { _decorator, CCFloat, CCInteger, Component, Node, ScrollView, sys, UITra
 import { Pagination } from './Pagination';
 import { IntersectionObserver } from 'db://assets/res-native/script/IntersectionObserver';
 import { getViewportSize } from 'db://assets/common/script/extra/Utils/common';
+import EventTrackManager from '../../serverManager/EventTrackManager';
 
 const { ccclass, property } = _decorator;
 
@@ -150,12 +151,16 @@ export class Swiper extends Component {
       if (this.currentIndex > 0) {
         this.scrollToIndex(this.currentIndex - 1);
       }
+
+      EventTrackManager.inst.trackTutorialSwitch('left');
     }
 
     public clickNext() {
       if (this.currentIndex < this.content.children.length - 1) {
         this.scrollToIndex(this.currentIndex + 1);
       }
+
+      EventTrackManager.inst.trackTutorialSwitch('right');
     }
 
     protected onDisable(): void {

@@ -163,7 +163,7 @@ export class HomeRollTool  {
         // 0.3秒后执行
         setTimeout(() => {
           resolve();
-        }, 300);
+        }, 600);
 
         targetNodes.forEach(item => {
           // 过滤主元素

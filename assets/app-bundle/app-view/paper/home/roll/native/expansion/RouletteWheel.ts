@@ -279,8 +279,6 @@ export class RouletteWheel extends Component {
    * @param needAnimation 是否需要动画
   */
   public multipleIndexChange(index: number, needAnimation: boolean = true): void {
-    this.overshootAmount = needAnimation ? 0.1 : 0;
-
     if (this.currentIndex === index) {
       return;
     }
@@ -294,6 +292,7 @@ export class RouletteWheel extends Component {
       spine2.timeScale = 1;
       spine2.setAnimation(0, 'gunzhoudi', false);
     }
+    // 如果 index 为 0 和，3，强制复原到起始位置
 
     this.jumpToData(this.dataList[index]);
     this.currentIndex = index;
@@ -423,25 +422,6 @@ export class RouletteWheel extends Component {
     console.log('targetRotation', targetRotation, this.bgCurrentRotation, currentIndex, targetIndex);
 
     this.animateBgToRotation(targetRotation);
-  }
-
-  /**
-   * 设置动画参数
-   * @param duration 动画持续时间
-   * @param easing 缓动类型
-   * @param enableOvershoot 是否启用过冲效果
-   * @param overshootAmount 过冲量（0-1之间）
-   */
-  public setAnimationParams(
-    duration: number = 0.6, 
-    easing: TweenEasing = 'backOut', 
-    enableOvershoot: boolean = true,
-    overshootAmount: number = 0.1
-  ): void {
-    this.animationDuration = duration;
-    this.easingType = easing;
-    this.enableOvershoot = enableOvershoot;
-    this.overshootAmount = Math.max(0, Math.min(1, overshootAmount));
   }
 
   /**

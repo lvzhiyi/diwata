@@ -117,6 +117,8 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
 
   private hiddenAllNodes() {
     // 为两个节点添加渐显动画
+    this.bottomView.active = false;
+    this.topView.active = false;
     const nodes = [this.topView, this.bottomView];
     nodes.forEach((node) => {
       let uiOpacity = node.getComponent(UIOpacity);
@@ -131,6 +133,8 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   }
 
   startHomeAnimationComplete(needAnimation: boolean = true) {
+    this.bottomView.active = true;
+    this.topView.active = true;
     // 为两个节点添加渐显动画
     const nodes = [this.topView, this.bottomView];
     nodes.forEach((node) => {
