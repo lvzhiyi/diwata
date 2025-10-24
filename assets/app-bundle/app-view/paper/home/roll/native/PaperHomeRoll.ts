@@ -631,6 +631,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 添加到顶部然后下落 或者 播放Roll边框动画然后落下然后添加到顶部最后下落
      */
     if (hasLitghtAnimation.some(item => item)) await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 100 : 200);
+   
     await this.addToTopThenFallDowmOrRunRollFrameAnimationThenFallDownThenAddToTopThenFallDown(rollsScript, symbolAnimationData);
 
     symbolAnimationData = rollsScript.map(roll => roll.symbolAnimationData);
@@ -800,12 +801,12 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
         return;
       }
-    }
 
-    // 监听RollContianer点击事件
-    this.rollBgViewNode.on(Node.EventType.TOUCH_END, this.rollClick, this);
-    app.manager.event.emit('roll:reward', 'end');
-    console.log('结束游戏-AAA');
+      // 监听RollContianer点击事件
+      this.rollBgViewNode.on(Node.EventType.TOUCH_END, this.rollClick, this);
+      app.manager.event.emit('roll:reward', 'end');
+      console.log('结束游戏-AAA');
+    }
   }
 
   /**
@@ -843,10 +844,11 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     /**
      * 处理this.needPlayRollsFrameSpine哪些roll需要播放滚轮动画的数据
      */
-    this.currentNormalRoundHasMoreThanOneScatter();
-    this.needPlayRollsFrameSpine = this.needPlayRollsFrameSpine.map((needPlayRollsFrameSpine, index) => {
-      return !!(needPlayRollsFrameSpine && symbolAnimationData[index].find(item => item.isNeedRemove));
-    });
+    // this.currentNormalRoundHasMoreThanOneScatter();
+    // this.needPlayRollsFrameSpine = this.needPlayRollsFrameSpine.map((needPlayRollsFrameSpine, index) => {
+    //   return !!(needPlayRollsFrameSpine && symbolAnimationData[index].find(item => item.isNeedRemove));
+    // });
+    this.needPlayRollsFrameSpine.fill(false);
 
     /**
      * 处理仅下落的Roll和播放Roll边框动画后再下落的Roll的数据
@@ -942,7 +944,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       hasMoreThanOneScatter = 
         secondScatterIndex !== -1 && 
         secondScatterIndex < this.needPlayRollsFrameSpine.length - 1;
-    } 
+    }
+ 
     // 非第一轮，不展示期待
     // else {
     //   // 非第一轮，找到第 2 个 scatter，并且不是最后一个roll中
@@ -951,6 +954,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     //   secondScatterIndex !== -1 && 
     //   secondScatterIndex < this.needPlayRollsFrameSpine.length - 1;
     // }
+    console.log('hasMoreThanOneScatter', hasMoreThanOneScatter, this.roundIndex);
 
     if (hasMoreThanOneScatter) {
       for (let i = secondScatterIndex + 1; i < this.needPlayRollsFrameSpine.length; i++) {
