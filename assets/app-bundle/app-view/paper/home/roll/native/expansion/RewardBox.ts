@@ -71,6 +71,7 @@ export class RewardBox extends Component {
           { value: endNum },
           { onUpdate: () => label.string = `WIN ₱${numberToMoney(calculateWithBase(target.value), 3, false)}` }
         ).call(() => {
+          EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD);
           resolve();
         })
           .start();

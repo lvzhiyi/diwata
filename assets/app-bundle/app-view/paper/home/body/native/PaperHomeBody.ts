@@ -94,8 +94,8 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   // 记录点击停止滚动，防止快速点击，每次点击间隔300ms
   private clickToStopTime: number = new Date().getTime();
 
-  // 连续点击页面停止投注的次数
-  private clickStopCount: number = 0;
+  // 当前是否命中过免费轮
+  private isHitFreeBonusSpin: boolean = false;
 
   // 初始化的相关逻辑写在这
   onLoad() {
@@ -192,6 +192,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     /// 监听开始按钮状态
     this.controller.on(HomeController.Event.StartButtonState, this.changeStartButtonState, this);
     /// 监听免费轮状态
+    app.manager.event.on('freeBonusModeChange', this.freeBonusModeChange, this);
     /// 监听投注金额变化
     app.manager.event.on('creditCountChange', this.creditCountChange, this);
    
@@ -234,6 +235,15 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
    */
   creditCountChange(val: number) {
     this.creditLable.getComponent(Label).string = '₱' + numberToMoney(val);
+  }
+  
+  /**
+   * 免费轮状态变化
+   */
+  freeBonusModeChange(val: boolean) {
+    if(val) {
+      this.isHitFreeBonusSpin = true;
+    }
   }
 
   /**
@@ -616,7 +626,8 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
         return false;
       }
       // 如果选中免费轮，并且当前是免费轮，则停止
-      if (globalManager.autoSetting.isFree.selected && app.manager.global.isBuyFreeBonusMode) {
+      if (globalManager.autoSetting.isFree.selected && this.isHitFreeBonusSpin) {
+        this.isHitFreeBonusSpin = false;
         this.stopAutoPlay();
 
         return false;
