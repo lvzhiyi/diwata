@@ -1,7 +1,6 @@
-import { _decorator, CCFloat, CCInteger, Component, Node, ScrollView, sys, UITransform, v2, view } from 'cc';
+import { _decorator, CCFloat, CCInteger, Component, Node, ScrollView, UITransform, v2, view } from 'cc';
 import { Pagination } from './Pagination';
 import { IntersectionObserver } from 'db://assets/res-native/script/IntersectionObserver';
-import { getViewportSize } from 'db://assets/common/script/extra/Utils/common';
 import EventTrackManager from '../../serverManager/EventTrackManager';
 
 const { ccclass, property } = _decorator;
@@ -33,7 +32,12 @@ export class Swiper extends Component {
     timer: any = null;
 
     protected onLoad(): void {
-      this.itemWidth = getViewportSize().width;
+      this.itemWidth = this.scrollView.getComponent(UITransform).width;
+
+      this.node.getComponent(UITransform).width = this.itemWidth;
+
+      // 配置 ScrollView 居中显示
+      this.configScrollViewCentering();
 
       // 初始化item的可见性监听
       this.initIntersectionObservers();
@@ -62,7 +66,11 @@ export class Swiper extends Component {
       }
 
       this.timer = setTimeout(() => {
-        this.itemWidth = getViewportSize().width;
+        // 重新获取 ScrollView 的宽度，而不是视口宽度
+        this.itemWidth = this.scrollView.getComponent(UITransform).width;
+        
+        // 更新当前节点的宽度
+        this.node.getComponent(UITransform).width = this.itemWidth;
             
         // 预分配数组避免动态扩容
         const children = this.content.children;
@@ -72,6 +80,9 @@ export class Swiper extends Component {
           const IntersectionObserverNode = children[i];
           IntersectionObserverNode.getComponent(UITransform).width = this.itemWidth;
         }
+
+        // 重新配置居中
+        this.configScrollViewCentering();
    
         this.timer = null;
       }, 100);
@@ -79,6 +90,28 @@ export class Swiper extends Component {
 
     initPagination() {
       this.paginationScript.init(this.content.children.length, this.currentIndex);
+    }
+
+    // 配置 ScrollView 居中显示
+    private configScrollViewCentering(): void {
+      const scrollView = this.scrollView.getComponent(ScrollView);
+
+      if (scrollView) {
+        // 获取视口和内容的宽度
+        const viewportWidth = this.scrollView.getComponent(UITransform).width;
+        const contentWidth = this.content.getComponent(UITransform).width;
+        
+        if (contentWidth > viewportWidth) {
+          // 如果内容宽度大于视口宽度，不需要居中
+          // 重置内容位置
+          this.content.setPosition(0, 0, 0);
+        } else {
+          // 计算左右边距使内容居中
+          const margin = (viewportWidth - contentWidth) / 2;
+          // 设置内容位置来实现居中
+          this.content.setPosition(margin, 0, 0);
+        }
+      }
     }
 
     // 初始化item的可见性监听，距离可见区域this.itemWidth * this.slidesPerView的距离才渲染，离开这个距离移除
@@ -164,7 +197,8 @@ export class Swiper extends Component {
     }
 
     protected onDisable(): void {
-      this.scrollView.off(ScrollView.EventType.SCROLLING, this.onScrollEnded, this);
+      // 修复：移除正确的事件监听器
+      this.scrollView.off(ScrollView.EventType.SCROLL_ENDED, this.onScrollEnded, this);
       this.scrollView.off(Node.EventType.TOUCH_START, this.onTouchStart, this);
       view.off('design-resolution-changed', this.onResize, this);
 
