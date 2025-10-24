@@ -1,6 +1,8 @@
 import { _decorator, Component, Label, Node, sp, Sprite, SpriteFrame, tween } from 'cc';
 import { app } from 'db://assets/app/app';
+import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { calculateWithBase, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -49,6 +51,7 @@ export class RewardBox extends Component {
 
     showWinNumber(startNum: number, endNum: number): Promise<void> {
       return new Promise<void>(resolve => {
+        EffectManager.inst.playEffect(AudioPath.UI.COIN_ADD);
         this.TipsNode.active = true;
         this.TipsImageNode.active = false;
         // 播放金额动画，如果金额变化小于2倍投注金额，则播放action1，否则播放action2

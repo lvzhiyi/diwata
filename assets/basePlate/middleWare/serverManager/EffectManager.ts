@@ -114,6 +114,8 @@ export class EffectManager extends Component {
     AudioPath.UI.OPEN,
     // 关闭界面
     AudioPath.UI.CLOSE,
+    // 金币增加的音效
+    AudioPath.UI.COIN_ADD,
     // 结算弹窗打开（无金币）
     AudioPath.POPUP.SETTLE_BG_NO_COIN,
     AudioPath.POPUP.SETTLE_OPEN,

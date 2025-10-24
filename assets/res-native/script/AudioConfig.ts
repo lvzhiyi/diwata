@@ -42,6 +42,8 @@ export const AudioPath = {
     CLOSE: 'UI/Close',
     // 无声
     WUSHENG: 'UI/Wusheng',
+    // 金币增加的音效
+    COIN_ADD: 'UI/NumberRoll',
   },
 
   // 弹窗音效
