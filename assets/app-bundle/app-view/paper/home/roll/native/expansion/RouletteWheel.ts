@@ -166,22 +166,28 @@ export class RouletteWheel extends Component {
   /** 跳到原始位置 */ 
   jumpToOriginalPosition(index: number): void {
     if(index === 0 ) {
+      const timeout = setTimeout(() => {
+        this.updateSelectedItem();
+        clearTimeout(timeout);
+      }, 300);
       tween(this.bgSpineNode)
         .timeScale(app.manager.global.gameSpeed)
         .to(0.5, { eulerAngles: new Vec3(0, 0, 0) }, { easing: this.bgEasingType })
         .call(() => {
-          this.updateSelectedItem();
           this.bgCurrentRotation = 0;
         })
         .start();
     }
     if(index === 3) {
       const targetRotation = this.DATA_ANGLE_STEP * 3;
+      const timeout = setTimeout(() => {
+        this.updateSelectedItem();
+        clearTimeout(timeout);
+      }, 300);
       tween(this.bgSpineNode)
         .timeScale(app.manager.global.gameSpeed)
         .to(0.5, { eulerAngles: new Vec3(0, 0, targetRotation) }, { easing: this.bgEasingType })
         .call(() => {
-          this.updateSelectedItem();
           this.bgCurrentRotation = targetRotation;
         })
         .start();
@@ -360,12 +366,14 @@ export class RouletteWheel extends Component {
     
     this.isBgAnimating = true;
     const animDuration = duration || this.bgAnimationDuration;
-
+    const timeout = setTimeout(() => {
+      this.updateSelectedItem();
+      clearTimeout(timeout);
+    }, 300);
     tween(this.bgSpineNode)
       .timeScale(app.manager.global.gameSpeed)
       .to(animDuration, { eulerAngles: new Vec3(0, 0, targetRotation) }, { easing: this.bgEasingType })
       .call(() => {
-        this.updateSelectedItem();
         this.finishBgAnimation(targetRotation);
       })
       .start();

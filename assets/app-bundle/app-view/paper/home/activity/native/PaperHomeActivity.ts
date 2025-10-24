@@ -198,22 +198,27 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
     /**
      * 展示免费轮中奖动画
      */
-    private showFreeBonusSpineAnimation(callback: () => void) {
+    private async showFreeBonusSpineAnimation(callback: () => void) {
       // sm节点隐藏
       GlobalActivity.setEntryDialogActive(false);
       this.BousSpineView.active = true;
       this.NumberLable.getComponent(Label).string = app.manager.global.freeBonusTimes.toString();
       // 开始播放动画
       const Skeleton = this.BousSpineView.getComponent(sp.Skeleton);
-      Skeleton.setAnimation(0, 'show', false);
-      EffectManager.inst.playEffect(AudioPath.GAME.FREE_BONUS_TRANSITION);
-      // 监听自定义事件 "sz"
-      Skeleton.setEventListener((trackEntry: sp.spine.TrackEntry, event: sp.spine.Event) => {
-        if (event.data.name === 'sz') {
-          console.log('监听到 sz 事件:', event);
-          this.NumberLable.active = true;
-        }
-      });
+      const spineData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.FREE_BONUS_TRANSITION);
+
+      if(Skeleton && spineData) {
+        Skeleton.skeletonData = spineData;
+        Skeleton.setAnimation(0, 'show', false);
+        EffectManager.inst.playEffect(AudioPath.GAME.FREE_BONUS_TRANSITION);
+        // 监听自定义事件 "sz"
+        Skeleton.setEventListener((trackEntry: sp.spine.TrackEntry, event: sp.spine.Event) => {
+          if (event.data.name === 'sz') {
+            console.log('监听到 sz 事件:', event);
+            this.NumberLable.active = true;
+          }
+        });
+      }
 
       // 设置一个超时定时器，4秒后执行callback
       const timeoutId = setTimeout(() => {
@@ -222,6 +227,8 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         this.NumberLable.active = false;
         GlobalActivity.setEntryDialogActive(true);
         Skeleton.clearAnimations();
+        Skeleton.skeletonData = null;
+        Skeleton.setEventListener(null);
         callback();
       }, 4400);
 
@@ -233,6 +240,8 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         this.NumberLable.active = false;
         GlobalActivity.setEntryDialogActive(true);
         Skeleton.clearAnimations();
+        Skeleton.skeletonData = null;
+        Skeleton.setEventListener(null);
         callback();
       });
     }

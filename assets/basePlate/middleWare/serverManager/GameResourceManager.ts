@@ -5,8 +5,8 @@ import { loadResource } from '../../core/baseUtil/BaseCommonUtil';
 const { ccclass, property } = _decorator;
 
 export const SPINE_RESOURCE_NAMES: { [key: string]: string } = {
-  // 开始动画
-  // LAMANG_START: 'mayali_zhuanchang',
+  // 免费轮转场动画
+  FREE_BONUS_TRANSITION: 'nvshen_zhuanchang',
   // 大奖弹框动画
   GRAND_PRIZE: 'win',
   // 免费轮结果动画
