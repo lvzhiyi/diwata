@@ -773,12 +773,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       // 是否免费轮中，又中了免费轮
       if (this.checkIsFreeRoundInFreeSpin()) {
         const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
+        const gameOldRecordIds = app.manager.global.gameRecordIds;
         const oldRecordIds = app.manager.global.gameRecordIds.filter((_, index) =>  index > app.manager.global.gameRecordIndex);
         const newGameRecordIds = [...oldRecordIds, ...gameRecordIds];
-        const newFreeBonusTimes = newGameRecordIds.length;
+        const newFreeBonusTimes = newGameRecordIds.length + gameOldRecordIds.length;
+        // 重置免费轮索引
+        app.manager.global.setGameRecordIndex(0);
         app.manager.global.setGameRecordIds(newGameRecordIds);
         app.manager.global.setFreeBonusTimes(newFreeBonusTimes);
-        app.manager.global.setGameRecordIndex(app.manager.global.gameRecordIndex - 1);
+       
         // 更新文案
         this.FreeBonusSpinTimesNode.getComponent(Label).string = `${newFreeBonusTimes}`;
       }
@@ -1030,7 +1033,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * @returns 检查是否命中免费轮
    */
   private checkIsFreeRoundInFreeSpin() {
-    return !!this.resultList[this.roundIndex].freeWheelFlag && app.controller.slots.isFreeBonusSpin && app.manager.global.gameRecordIds.length > 0;
+    // eslint-disable-next-line max-len
+    return !!this.resultList[this.roundIndex].freeWheelFlag && app.controller.slots.isFreeBonusSpin && app.manager.global.gameRecordIds.length > 0 && this.resultList[this.roundIndex].gameRecordIds.length > 0;
   }
 
   /**
