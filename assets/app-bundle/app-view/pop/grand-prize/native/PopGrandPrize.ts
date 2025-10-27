@@ -354,9 +354,6 @@ export class PopGrandPrize extends BaseView {
       if (this.node && this.node.isValid) {
         await this.playCloseAnimation();
       }
-     
-      // 恢复背景音乐
-      BGMManager.inst.playNormalModeBGM();
     } catch (error) {
       console.error('hideGrandPrize error:', error);
     } finally {

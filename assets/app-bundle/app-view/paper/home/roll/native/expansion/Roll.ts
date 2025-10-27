@@ -401,8 +401,8 @@ export class Roll extends Component {
         return false;
       }
 
-      return this.rollList.every(item => {
-        return item.symbolId === SymbolType.SWORD || item.symbolId === SymbolType.OVERLAP;
+      return !!this.rollList.find(item => {
+        return item.symbolId === SymbolType.SWORD && item.main === true;
       });
     }
 
@@ -412,43 +412,55 @@ export class Roll extends Component {
     showSwordSymbol(): Promise<Node> {
       let hasShowSwordNode = this.currentRollHaveSword()  ;
 
-      // 如果剑的数量等于符号数量，则展示剑,随机任意一个节点变成剑的符号
-      if (hasShowSwordNode) {
-        const symbolNode = this.node.children.find(child => child.getComponent(Symbol).currentSymbolItem.main === true );
+      return new Promise<Node>(resolve => {
+        // 如果剑的数量等于符号数量，则展示剑,随机任意一个节点变成剑的符号
+        if (hasShowSwordNode) {
+          let symbolNode: Node = null;
+         
+          this.rollList.forEach((item, index) => {
+            if(item.main === true && item.symbolId === SymbolType.SWORD ) {
+              symbolNode = this.node.children[index] || null;
+              symbolNode?.getComponent(Symbol)?.playSwordOrBowAnimation('4010');
+              const timeOut = setTimeout(() => {
+                EffectManager.inst.playEffect(AudioPath.GAME.SWORD_RETURN);
+                clearTimeout(timeOut);
+              }, 1200 / app.manager.global.gameSpeed);
+            }
+          });
 
-        // 播放剑的动画
-        if (symbolNode) {
-          symbolNode.getComponent(Symbol).playSwordOrBowAnimation('4010');
+          return resolve(symbolNode);
+        }else{
+          resolve(null);
         }
-
-        return Promise.resolve(symbolNode);
-      }
-
-      return Promise.resolve(null);
+      });
     }
 
     /**
      * 处理是否需要展示拍打棒子,并把棒子的节点返回用于储存
      */
     showBowSymbol(): Promise<Node[]> {
-      let showBowNode: Node[] = [];
-      this.node.children.forEach((child, index) => {
-        const symbol = child.getComponent(Symbol);
-        const symbolId = symbol.getSymbolId() || '';
-
-        if(symbol.currentSymbolItem) {
-          if (symbol.currentSymbolItem.symbolId  === SymbolType.BOW && symbolId !== SymbolType.WILD ) {
-            if (symbol.currentSymbolItem.main === true) {
-              symbol.playSwordOrBowAnimation('4011');
+      return new Promise<Node[]>(resolve => {
+        let showBowNode: Node[] = [];
+        this.rollList.forEach((Item, index) => {
+          const child = this.node.children[index] || null;
+          const symbol = child?.getComponent(Symbol) || null;
+          const symbolId = symbol?.getSymbolId() || '';
+  
+          if (Item.symbolId  === SymbolType.BOW && (symbolId !== SymbolType.WILD && symbolId !== '')) {
+            if (Item.main === true) {
+              symbol?.playSwordOrBowAnimation('4011');
               showBowNode.push(child);
+              const timeOut = setTimeout(() => {
+                EffectManager.inst.playEffect(AudioPath.GAME.STICK_RETURN);
+                clearTimeout(timeOut);
+              }, 1200 / app.manager.global.gameSpeed);
             }else{
               showBowNode.push(child);
             }
           }
-        }
+        });
+        resolve(showBowNode);
       });
-
-      return Promise.resolve(showBowNode);
     }
 
     /**

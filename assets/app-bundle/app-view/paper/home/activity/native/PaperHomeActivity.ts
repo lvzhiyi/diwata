@@ -82,7 +82,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         );
         this.controller.on(SlotsController.Event.GameOver, (a: BetResult) => {
           // 当前轮游戏结束，更新freeSpin次数
-          if(app.controller.slots.isFreeBonusSpin === false && app.manager.global.isFreespinMode === true && a.credit !== -1) {
+          if(app.controller.slots.isFreeBonusSpin === false && app.manager.global.isFreespinMode === true && this.checkFreeSpinisRealEnd(a)) {
             freeSpinManager.onRoundEnd();
           }
 
@@ -113,17 +113,24 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
     }
 
     /**
+     * freeSpin结束的需要判断当前不是mock的faild数据，credit 为 -1，并且当前轮没有中免费轮，则也不需要任务是结束
+    */
+    private checkFreeSpinisRealEnd(result: BetResult) {
+      // 先遍历result.resultDetail.resultList，判断是否中免费轮
+      const isFreeRound = result.resultDetail.resultList.some(item => item.freeWheelFlag === 1);
+
+      if(result.credit !== -1 && !isFreeRound) {
+        return true;
+      }
+
+      return false;
+    }
+
+    /**
      * 添加活动视图的根节点
     */
     addActivityRootNode() {
       GameUtilTool.createXforgeActivityRootNode(this.activityEntry);
-      // activityRootNode.setSiblingIndex(199);
-      // // 下一帧再次确认（防止其他代码覆盖）
-      // this.scheduleOnce(() => {
-      //   activityRootNode.setSiblingIndex(
-      //     activityRootNode.parent.children.length - 1
-      //   );
-      // });
     }
 
     /**

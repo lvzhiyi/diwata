@@ -13,6 +13,7 @@ import { MoneyUtil } from '../../basePlate/core/baseUtil/MoneyUtil';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
 import { IQuickMode } from '../app-manager/global/GlobalManager';
 import { ActivityDataMgr } from '../../common/script/data/ActivityDataMgr';
+import { BGMManager } from '../../basePlate/middleWare/serverManager/BGMManager';
 
 // TODO 测试用
 const useMock = false;
@@ -377,6 +378,7 @@ export class HomeController extends BaseController<
       app.controller.slots.freeBonusSpinChange(false);
 
       app.controller.slots.stopRolling(this.betResult);
+      BGMManager.inst.playNormalModeBGM();
     }
   }
 

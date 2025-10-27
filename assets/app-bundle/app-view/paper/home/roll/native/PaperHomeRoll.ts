@@ -448,8 +448,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       }
     });
 
-    console.log('changeWildData-数据', this.changeWildData);
-
     return hasShowSwordNode.some(item => item !== null) || hasShowBowNode.some(item => item !== null);
   }
 
@@ -468,6 +466,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     // 先根据rollIndex排序
     this.changeWildData.sort((a, b) => a.rollIndex - b.rollIndex);
+    
     const newChangeWildData: Node[] = [];
     // 把剑和主棒子节点储存到newChangeWildData中
     this.changeWildData.map((itemMap) => {
@@ -481,6 +480,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         }
       }
     });
+  
     if (newChangeWildData.length === 0) return Promise.resolve();
     await this.homeRollTool.showFlyingToGoddessAnimation(
       newChangeWildData,
@@ -738,9 +738,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       }
 
       /**
-       * 如果免费轮的结束轮，则展示免费轮总金额弹窗
+       * 如果免费轮的结束轮，则展示免费轮总金额弹窗,并且当前轮没有再中免费轮
        */
-      if (this.isFreeBonusEnd()) { 
+      if (this.isFreeBonusEnd() && !this.checkIsFreeRoundInFreeSpin()) { 
         await this.showPopFreeSpinResult();
         // 重置免费轮数据
         app.manager.global.setGameRecordIds([]);
@@ -761,6 +761,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
        */
       if (this.checkIsFreeRound()) {
         const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
+        app.manager.global.setGameRecordIndex(0);
         app.manager.global.setFreeBonusTimes(gameRecordIds.length);
         app.manager.global.setGameRecordIds([...gameRecordIds]);
         this.isExecutingFreeBonusAnimation = true;

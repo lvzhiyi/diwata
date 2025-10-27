@@ -137,8 +137,7 @@ export class HomeRollTool  {
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
       goddessSkeleton.premultipliedAlpha = false;
       const animationName = this.getGoddessAnimation(targetNodes);
-      console.log('女神执行动画', animationName);
-      console.log('游戏速度', app.manager.global.gameSpeed);
+     
       goddessSkeleton.setAnimation(0, animationName, false);
       goddessSkeleton.setCompleteListener(() => {
         // 女神执行待机动画
@@ -228,19 +227,19 @@ export class HomeRollTool  {
 
     if (hasSword && !hasMainBow) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER1);
-      const timeOut = setTimeout(() => {
-        EffectManager.inst.playEffect(AudioPath.GAME.SWORD_RETURN);
-        clearTimeout(timeOut);
-      }, 500);
+      // const timeOut = setTimeout(() => {
+      //   EffectManager.inst.playEffect(AudioPath.GAME.SWORD_RETURN);
+      //   clearTimeout(timeOut);
+      // }, 500);
 
       return 'animation3';
     // 返回女神挥剑animation3
     } else if (!hasSword && hasMainBow) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER2);
-      const timeOut = setTimeout(() => {
-        EffectManager.inst.playEffect(AudioPath.GAME.STICK_RETURN);
-        clearTimeout(timeOut);
-      }, 500);
+      // const timeOut = setTimeout(() => {
+      //   EffectManager.inst.playEffect(AudioPath.GAME.STICK_RETURN);
+      //   clearTimeout(timeOut);
+      // }, 500);
 
       return 'animation2';
     } else if (hasSword && hasMainBow) {
