@@ -448,8 +448,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       }
     });
 
-    console.log('changeWildData-数据', this.changeWildData);
-
     return hasShowSwordNode.some(item => item !== null) || hasShowBowNode.some(item => item !== null);
   }
 
@@ -468,6 +466,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     // 先根据rollIndex排序
     this.changeWildData.sort((a, b) => a.rollIndex - b.rollIndex);
+    
     const newChangeWildData: Node[] = [];
     // 把剑和主棒子节点储存到newChangeWildData中
     this.changeWildData.map((itemMap) => {
@@ -481,6 +480,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         }
       }
     });
+  
     if (newChangeWildData.length === 0) return Promise.resolve();
     await this.homeRollTool.showFlyingToGoddessAnimation(
       newChangeWildData,

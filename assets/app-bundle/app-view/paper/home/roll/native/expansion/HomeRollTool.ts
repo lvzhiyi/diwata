@@ -137,8 +137,7 @@ export class HomeRollTool  {
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
       goddessSkeleton.premultipliedAlpha = false;
       const animationName = this.getGoddessAnimation(targetNodes);
-      console.log('女神执行动画', animationName);
-      console.log('游戏速度', app.manager.global.gameSpeed);
+     
       goddessSkeleton.setAnimation(0, animationName, false);
       goddessSkeleton.setCompleteListener(() => {
         // 女神执行待机动画
