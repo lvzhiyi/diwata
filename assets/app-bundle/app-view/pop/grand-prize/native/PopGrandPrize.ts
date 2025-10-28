@@ -33,6 +33,11 @@ const effectMap :any = {
   '03super_':  AudioPath.GAME.SUPER_DUB,
 };
 
+const effectBGMapEnd :any = {
+  '01nice_': AudioPath.POPUP.NICE_END,
+  '02mega_':  AudioPath.POPUP.MEGA_END,
+  '03super_':  AudioPath.POPUP.SUPER_END,
+};
 /**
  * 大奖弹窗组件
  * 用于显示游戏中的大奖信息和动画效果
@@ -379,6 +384,9 @@ export class PopGrandPrize extends BaseView {
     const animationName = this.currentAnimationName + 'out';
     // 播放关闭骨骼动画
     this.playSpineAnimation(spine, animationName, false);
+    // 播放完毕音乐
+    const musicName = effectBGMapEnd[this.currentAnimationName];
+    EffectManager.inst.playEffect(musicName);
 
     return new Promise<void>((resolve) => {
       // 文本放大动画：放大并略微下移

@@ -54,20 +54,13 @@ export const AudioPath = {
     SETTLE_BG_NO_COIN: 'PopAudio/Settle_Bg_No_Coin',
     // Mega弹窗打开
     MEGA_OPEN: 'PopAudio/Mega_Bg',
+    MEGA_END: 'PopAudio/Mega_end',
     // Nice弹窗打开
     NICE_OPEN: 'PopAudio/Nice_Bg',
+    NICE_END: 'PopAudio/Nice_end',
     // Super弹窗打开
     SUPER_OPEN: 'PopAudio/Super_Bg',
-  
-    // Mega弹窗结束
-    MEGA_END: 'PopAudio/Mega_End',
-    // Nice弹窗结束
-    NICE_END: 'PopAudio/Nice_End',
-    // Super弹窗结束
-    SUPER_END: 'PopAudio/Super_End',
-
-    // 中奖弹框关闭
-    WIN_END: 'PopAudio/Win_End',
+    SUPER_END: 'PopAudio/Super_end',
    
     // 开场音效
     OPEN_HOME_AUDIO: 'PopAudio/openHome',
