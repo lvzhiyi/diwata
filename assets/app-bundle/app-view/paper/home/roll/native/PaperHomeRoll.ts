@@ -774,11 +774,12 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       if (this.checkIsFreeRoundInFreeSpin()) {
         const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
         const gameOldRecordIds = app.manager.global.gameRecordIds;
+        const newFreeBonusTimes = gameRecordIds.length + gameOldRecordIds.length;
         const oldRecordIds = app.manager.global.gameRecordIds.filter((_, index) =>  index > app.manager.global.gameRecordIndex);
         const newGameRecordIds = [...oldRecordIds, ...gameRecordIds];
-        const newFreeBonusTimes = newGameRecordIds.length + gameOldRecordIds.length;
-        // 重置免费轮索引
-        app.manager.global.setGameRecordIndex(0);
+        
+        // 重置免费轮索引，因为免费轮中，免费轮索引是0，所以需要-1
+        app.manager.global.setGameRecordIndex(-1);
         app.manager.global.setGameRecordIds(newGameRecordIds);
         app.manager.global.setFreeBonusTimes(newFreeBonusTimes);
        

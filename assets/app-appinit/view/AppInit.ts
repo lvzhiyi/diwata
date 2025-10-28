@@ -212,7 +212,7 @@ export class AppInit extends BaseAppInit {
         token: '253c91327245400092a9a52544bf9d7d18f6ef49d4c1ad7f1b39afe91b5f3615667caaf5aeb9bcdb1f3021a698a903e671ad70511da7302b045dc0dd1a1b20bc2d0d7a72374eeb617439279affd94ab1d34a0dab7ef559b86b7537a520a421d7589cb3fa40863abd7e40ced73762aab6',
         userLevel: '1',
         userName: 'cpTest10008',
-        ut: 'afe'
+        ut: 'aff'
       };
     }
 
