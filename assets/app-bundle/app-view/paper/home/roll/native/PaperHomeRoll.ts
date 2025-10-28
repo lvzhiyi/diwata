@@ -83,6 +83,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   // 总中奖金额
   private totalRewardAmount: number = 0;
 
+  // 免费轮总轮次，用于免费轮中又中了免费轮的情况
+  private freeBonusTotalTimes: number = 0;
+
   // 需要执行的wild变化的数据,node：棒子的节点，type：类型，rollNode：滚轴节点，hasShow：是否展示过动画,RollIndex：滚轴索引
   private changeWildData: ChangeWildData[] = [];
 
@@ -745,6 +748,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         // 重置免费轮数据
         app.manager.global.setGameRecordIds([]);
         app.manager.global.setGameRecordIndex(0);
+        app.manager.global.setFreeBonusTimes(0);
         // 设置为非免费轮
         app.controller.slots.freeBonusSpinChange(false);
         // 停止免费轮音乐
@@ -764,6 +768,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         app.manager.global.setGameRecordIndex(0);
         app.manager.global.setFreeBonusTimes(gameRecordIds.length);
         app.manager.global.setGameRecordIds([...gameRecordIds]);
+        this.freeBonusTotalTimes = gameRecordIds.length;
         this.isExecutingFreeBonusAnimation = true;
         await this.setFreeBonusData(this.resultData.totalPayoutAmount);
         this.startFreeSpinGame();
@@ -774,17 +779,14 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       if (this.checkIsFreeRoundInFreeSpin()) {
         const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
         const gameOldRecordIds = app.manager.global.gameRecordIds;
-        const newFreeBonusTimes = gameRecordIds.length + gameOldRecordIds.length;
+        this.freeBonusTotalTimes = gameRecordIds.length + gameOldRecordIds.length;
         const oldRecordIds = app.manager.global.gameRecordIds.filter((_, index) =>  index > app.manager.global.gameRecordIndex);
         const newGameRecordIds = [...oldRecordIds, ...gameRecordIds];
         
         // 重置免费轮索引，因为免费轮中，免费轮索引是0，所以需要-1
         app.manager.global.setGameRecordIndex(-1);
         app.manager.global.setGameRecordIds(newGameRecordIds);
-        app.manager.global.setFreeBonusTimes(newFreeBonusTimes);
-       
-        // 更新文案
-        this.FreeBonusSpinTimesNode.getComponent(Label).string = `${newFreeBonusTimes}`;
+        app.manager.global.setFreeBonusTimes(newGameRecordIds.length);
       }
   
       // 免费轮有剩余次数，开始免费轮下一轮游戏
@@ -1273,7 +1275,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       app.manager.ui.show<PopFreeSpinResult>({
         name: 'PopFreeSpinResult',
         data: { 
-          times: app.manager.global.gameRecordIndex + 1,
+          times: this.freeBonusTotalTimes,
           amount: app.manager.global.freeBonusTotalAmount,
           accumulateReachMaxMultiple
         },
