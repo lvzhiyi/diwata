@@ -2387,7 +2387,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "1.0.0",
+    "_string": "1.0.1",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 22,
@@ -3628,8 +3628,8 @@
       "__uuid__": "1476f943-f678-4379-acad-e648e71aa0ee",
       "__expectedType__": "sp.SkeletonData"
     },
-    "defaultSkin": "default",
-    "defaultAnimation": "loading2",
+    "defaultSkin": "",
+    "defaultAnimation": "",
     "_premultipliedAlpha": false,
     "_timeScale": 1,
     "_preCacheMode": 0,
@@ -3911,8 +3911,8 @@
       "__uuid__": "1476f943-f678-4379-acad-e648e71aa0ee",
       "__expectedType__": "sp.SkeletonData"
     },
-    "defaultSkin": "default",
-    "defaultAnimation": "loading1",
+    "defaultSkin": "",
+    "defaultAnimation": "",
     "_premultipliedAlpha": false,
     "_timeScale": 1,
     "_preCacheMode": 0,

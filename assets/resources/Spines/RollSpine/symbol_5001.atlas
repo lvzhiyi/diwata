@@ -1,320 +1,327 @@
 
 symbol_5001.png
-size: 1028,547
+size: 1389,417
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 bg_2
-  rotate: false
-  xy: 837, 224
+  rotate: true
+  xy: 1200, 312
   size: 105, 107
   orig: 107, 109
   offset: 1, 1
   index: -1
+di_00
+  rotate: false
+  xy: 526, 297
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
 symbol_wild_word
   rotate: true
-  xy: 942, 300
+  xy: 1321, 170
   size: 123, 43
   orig: 125, 45
   offset: 1, 1
   index: -1
 wild_baofa_00
   rotate: false
-  xy: 383, 18
+  xy: 528, 165
   size: 126, 132
   orig: 214, 218
   offset: 44, 48
   index: -1
 wild_baofa_02
   rotate: false
-  xy: 387, 289
+  xy: 518, 30
   size: 125, 134
   orig: 214, 218
   offset: 45, 45
   index: -1
 wild_baofa_04
   rotate: true
-  xy: 260, 423
+  xy: 262, 159
   size: 124, 137
   orig: 214, 218
   offset: 45, 42
   index: -1
 wild_baofa_06
-  rotate: false
-  xy: 131, 10
+  rotate: true
+  xy: 388, 294
   size: 123, 138
   orig: 214, 218
   offset: 45, 42
   index: -1
 wild_baofa_08
   rotate: false
-  xy: 259, 280
+  xy: 261, 17
   size: 128, 133
   orig: 214, 218
   offset: 39, 49
   index: -1
 wild_baofa_10
   rotate: false
-  xy: 254, 17
+  xy: 389, 28
   size: 129, 131
   orig: 214, 218
   offset: 38, 49
   index: -1
 wild_baofa_12
   rotate: true
-  xy: 0, 413
+  xy: 0, 283
   size: 134, 132
   orig: 214, 218
   offset: 37, 49
   index: -1
 wild_baofa_14
   rotate: false
-  xy: 131, 279
+  xy: 132, 283
   size: 128, 134
   orig: 214, 218
   offset: 43, 49
   index: -1
 wild_baofa_16
   rotate: false
-  xy: 261, 150
+  xy: 399, 164
   size: 129, 130
   orig: 214, 218
   offset: 43, 52
   index: -1
 wild_baofa_18
   rotate: true
-  xy: 131, 148
+  xy: 131, 19
   size: 131, 130
   orig: 214, 218
   offset: 43, 52
   index: -1
 wild_baofa_20
   rotate: true
-  xy: 0, 145
+  xy: 0, 15
   size: 133, 131
   orig: 214, 218
   offset: 43, 51
   index: -1
 wild_baofa_22
   rotate: true
-  xy: 0, 12
+  xy: 131, 150
   size: 133, 131
   orig: 214, 218
   offset: 42, 51
   index: -1
 wild_baofa_24
   rotate: true
-  xy: 132, 413
+  xy: 260, 283
   size: 134, 128
   orig: 214, 218
   offset: 42, 52
   index: -1
 wild_baofa_26
   rotate: false
-  xy: 0, 278
+  xy: 0, 148
   size: 131, 135
   orig: 214, 218
   offset: 43, 49
   index: -1
 wild_baofa_28
   rotate: false
-  xy: 390, 159
+  xy: 643, 35
   size: 126, 130
   orig: 214, 218
   offset: 44, 49
   index: -1
 wild_idle_00
-  rotate: false
-  xy: 727, 328
+  rotate: true
+  xy: 984, 311
   size: 106, 108
   orig: 214, 218
   offset: 54, 55
   index: -1
 wild_idle_02
   rotate: false
-  xy: 731, 220
+  xy: 985, 95
   size: 106, 108
   orig: 214, 218
   offset: 54, 55
   index: -1
 wild_idle_04
   rotate: false
-  xy: 728, 439
+  xy: 1089, 203
   size: 106, 108
   orig: 214, 218
   offset: 54, 55
   index: -1
 wild_idle_06
   rotate: true
-  xy: 516, 205
+  xy: 874, 201
   size: 110, 108
   orig: 214, 218
   offset: 54, 55
   index: -1
 wild_idle_08
   rotate: true
-  xy: 509, 48
+  xy: 769, 88
   size: 111, 108
   orig: 214, 218
   offset: 54, 55
   index: -1
 wild_idle_10
   rotate: false
-  xy: 619, 328
+  xy: 877, 93
   size: 108, 108
   orig: 214, 218
   offset: 54, 55
   index: -1
 wild_idle_12
-  rotate: false
-  xy: 833, 331
+  rotate: true
+  xy: 1092, 311
   size: 106, 108
   orig: 214, 218
   offset: 54, 55
   index: -1
 wild_idle_14
   rotate: false
-  xy: 624, 220
+  xy: 982, 203
   size: 107, 108
   orig: 214, 218
   offset: 53, 55
   index: -1
 wild_idle_16
   rotate: false
-  xy: 618, 436
+  xy: 764, 199
   size: 110, 111
   orig: 214, 218
   offset: 50, 55
   index: -1
 wild_idle_18
   rotate: false
-  xy: 397, 432
+  xy: 646, 302
   size: 111, 115
   orig: 214, 218
   offset: 49, 55
   index: -1
 wild_idle_20
   rotate: false
-  xy: 508, 431
+  xy: 654, 186
   size: 110, 116
   orig: 214, 218
   offset: 50, 55
   index: -1
 wild_idle_22
-  rotate: false
-  xy: 512, 315
+  rotate: true
+  xy: 757, 310
   size: 107, 116
   orig: 214, 218
   offset: 53, 55
   index: -1
 wild_idle_24
-  rotate: false
-  xy: 617, 50
+  rotate: true
+  xy: 873, 311
   size: 106, 111
   orig: 214, 218
   offset: 54, 55
   index: -1
 wild_idle_26
   rotate: false
-  xy: 834, 439
+  xy: 1091, 95
   size: 106, 108
   orig: 214, 218
   offset: 54, 55
   index: -1
 wild_idle_28
   rotate: false
-  xy: 723, 68
+  xy: 1195, 203
   size: 106, 108
   orig: 214, 218
   offset: 54, 55
   index: -1
 wildsg_00
   rotate: false
-  xy: 509, 4
+  xy: 769, 44
   size: 124, 44
   orig: 200, 100
   offset: 38, 28
   index: -1
 wildsg_02
   rotate: false
-  xy: 516, 161
+  xy: 769, 0
   size: 124, 44
   orig: 200, 100
   offset: 38, 28
   index: -1
 wildsg_04
   rotate: false
-  xy: 633, 6
+  xy: 893, 49
   size: 124, 44
   orig: 200, 100
   offset: 38, 28
   index: -1
 wildsg_06
   rotate: false
-  xy: 640, 176
+  xy: 893, 5
   size: 124, 44
   orig: 200, 100
   offset: 38, 28
   index: -1
 wildsg_08
   rotate: false
-  xy: 764, 176
+  xy: 1017, 51
   size: 124, 44
   orig: 200, 100
   offset: 38, 28
   index: -1
 wildsg_10
   rotate: false
-  xy: 757, 24
+  xy: 1017, 7
   size: 124, 44
   orig: 200, 100
   offset: 38, 28
   index: -1
 wildsg_12
-  rotate: true
-  xy: 940, 423
+  rotate: false
+  xy: 1141, 51
   size: 124, 44
   orig: 200, 100
   offset: 38, 28
   index: -1
 wildsg_14
   rotate: false
-  xy: 829, 132
+  xy: 1141, 7
   size: 124, 44
   orig: 200, 100
   offset: 38, 28
   index: -1
 wildsg_16
   rotate: false
-  xy: 888, 180
+  xy: 1197, 159
   size: 124, 44
   orig: 200, 100
   offset: 38, 28
   index: -1
 wildsg_18
   rotate: false
-  xy: 829, 88
+  xy: 1197, 115
   size: 124, 44
   orig: 200, 100
   offset: 38, 28
   index: -1
 wildsg_20
   rotate: false
-  xy: 881, 44
+  xy: 1265, 71
   size: 124, 44
   orig: 200, 100
   offset: 38, 28
   index: -1
 wildsg_22
   rotate: false
-  xy: 881, 0
+  xy: 1265, 27
   size: 124, 44
   orig: 200, 100
   offset: 38, 28
   index: -1
 wildsg_24
   rotate: true
-  xy: 984, 423
+  xy: 1307, 293
   size: 124, 44
   orig: 200, 100
   offset: 38, 28

@@ -1,355 +1,355 @@
 
 ui.png
-size: 2023,1804
+size: 1995,1936
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 gunzhoudil_13
   rotate: false
-  xy: 0, 1691
+  xy: 0, 1823
   size: 269, 113
   orig: 300, 270
   offset: 16, 94
   index: -1
 gunzhoudisg_00
   rotate: false
-  xy: 547, 982
+  xy: 855, 596
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhoudisg_02
   rotate: false
-  xy: 916, 982
+  xy: 1224, 596
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhoudisg_04
   rotate: false
-  xy: 1285, 982
+  xy: 1593, 596
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhoudisg_06
   rotate: false
-  xy: 1654, 982
+  xy: 0, 334
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhoudisg_08
   rotate: false
-  xy: 0, 720
+  xy: 369, 334
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhoudisg_10
   rotate: false
-  xy: 369, 684
+  xy: 738, 298
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhoudisg_12
   rotate: false
-  xy: 738, 684
+  xy: 1107, 298
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhoudisg_14
   rotate: false
-  xy: 1107, 684
+  xy: 1476, 298
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhoudisg_16
   rotate: false
-  xy: 1476, 684
+  xy: 0, 36
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhoudisg_18
   rotate: false
-  xy: 0, 422
+  xy: 369, 36
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhoudisg_20
   rotate: false
-  xy: 369, 386
+  xy: 738, 0
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhoudisg_22
   rotate: false
-  xy: 738, 386
+  xy: 1107, 0
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhoudisg_24
   rotate: false
-  xy: 1107, 386
-  size: 369, 298
-  orig: 375, 338
-  offset: 3, 17
-  index: -1
-gunzhoudisg_26
-  rotate: false
-  xy: 1476, 386
-  size: 369, 298
-  orig: 375, 338
-  offset: 3, 17
-  index: -1
-gunzhoudisg_28
-  rotate: false
-  xy: 0, 124
+  xy: 1476, 0
   size: 369, 298
   orig: 375, 338
   offset: 3, 17
   index: -1
 gunzhousg_00
   rotate: false
-  xy: 269, 1542
+  xy: 520, 1156
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_02
   rotate: false
-  xy: 554, 1542
+  xy: 805, 1156
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_04
   rotate: false
-  xy: 839, 1542
+  xy: 1090, 1156
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_06
   rotate: false
-  xy: 1124, 1542
+  xy: 1375, 1156
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_08
   rotate: false
-  xy: 1409, 1542
+  xy: 1660, 1156
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_10
   rotate: false
-  xy: 1694, 1542
+  xy: 0, 897
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_12
-  rotate: true
-  xy: 0, 1406
+  rotate: false
+  xy: 285, 894
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_14
   rotate: false
-  xy: 262, 1280
+  xy: 570, 894
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_16
   rotate: false
-  xy: 547, 1280
+  xy: 855, 894
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_18
   rotate: false
-  xy: 832, 1280
+  xy: 1140, 894
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_20
   rotate: false
-  xy: 1117, 1280
+  xy: 1425, 894
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_22
   rotate: false
-  xy: 1402, 1280
+  xy: 1710, 894
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_24
   rotate: false
-  xy: 1687, 1280
+  xy: 0, 635
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_26
-  rotate: true
-  xy: 0, 1121
+  rotate: false
+  xy: 285, 632
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 gunzhousg_28
   rotate: false
-  xy: 262, 1018
+  xy: 570, 632
   size: 285, 262
   orig: 285, 263
   offset: 0, 1
   index: -1
 zhuanpansg_00
   rotate: false
-  xy: 369, 0
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
+  xy: 269, 1677
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
   index: -1
 zhuanpansg_02
   rotate: false
-  xy: 762, 0
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
+  xy: 529, 1677
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
   index: -1
 zhuanpansg_04
   rotate: false
-  xy: 1155, 0
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
+  xy: 789, 1677
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
   index: -1
 zhuanpansg_06
   rotate: false
-  xy: 1548, 0
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
+  xy: 1049, 1677
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
+  index: -1
+zhuanpansg_08
+  rotate: false
+  xy: 1309, 1677
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
+  index: -1
+zhuanpansg_10
+  rotate: false
+  xy: 1569, 1677
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
+  index: -1
+zhuanpansg_12
+  rotate: false
+  xy: 0, 1564
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
+  index: -1
+zhuanpansg_14
+  rotate: false
+  xy: 260, 1418
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
+  index: -1
+zhuanpansg_16
+  rotate: false
+  xy: 520, 1418
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
+  index: -1
+zhuanpansg_18
+  rotate: false
+  xy: 780, 1418
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
+  index: -1
+zhuanpansg_20
+  rotate: false
+  xy: 1040, 1418
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
+  index: -1
+zhuanpansg_22
+  rotate: false
+  xy: 1300, 1418
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
+  index: -1
+zhuanpansg_24
+  rotate: false
+  xy: 1560, 1418
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
+  index: -1
+zhuanpansg_26
+  rotate: false
+  xy: 0, 1305
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
+  index: -1
+zhuanpansg_28
+  rotate: false
+  xy: 260, 1159
+  size: 260, 259
+  orig: 260, 261
+  offset: 0, 1
   index: -1
 
 ui2.png
-size: 1962,1747
+size: 1532,1160
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 gunzhou
-  rotate: true
-  xy: 636, 393
+  rotate: false
+  xy: 782, 0
   size: 569, 524
   orig: 569, 524
   offset: 0, 0
   index: -1
 gunzhoudi
-  rotate: true
-  xy: 0, 212
+  rotate: false
+  xy: 782, 524
   size: 750, 636
   orig: 750, 675
   offset: 0, 34
   index: -1
-zhuanpan
-  rotate: true
-  xy: 0, 962
-  size: 785, 783
-  orig: 785, 785
-  offset: 0, 0
-  index: -1
-zhuanpansg_08
-  rotate: true
-  xy: 636, 0
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
-  index: -1
-zhuanpansg_10
-  rotate: true
-  xy: 1022, 0
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
-  index: -1
-zhuanpansg_12
-  rotate: true
-  xy: 783, 1354
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
-  index: -1
-zhuanpansg_14
+gunzhoudisg_26
   rotate: false
-  xy: 783, 968
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
+  xy: 0, 80
+  size: 369, 298
+  orig: 375, 338
+  offset: 3, 17
   index: -1
-zhuanpansg_16
-  rotate: true
-  xy: 1169, 1354
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
-  index: -1
-zhuanpansg_18
-  rotate: true
-  xy: 1160, 575
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
-  index: -1
-zhuanpansg_20
+gunzhoudisg_28
   rotate: false
-  xy: 1176, 968
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
+  xy: 369, 80
+  size: 369, 298
+  orig: 375, 338
+  offset: 3, 17
   index: -1
-zhuanpansg_22
-  rotate: true
-  xy: 1555, 1354
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
-  index: -1
-zhuanpansg_24
+zhuanpan2
   rotate: false
-  xy: 1408, 189
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
-  index: -1
-zhuanpansg_26
-  rotate: true
-  xy: 1546, 575
-  size: 393, 386
-  orig: 393, 392
-  offset: 0, 0
-  index: -1
-zhuanpansg_28
-  rotate: false
-  xy: 1569, 968
-  size: 393, 386
-  orig: 393, 392
+  xy: 0, 378
+  size: 782, 782
+  orig: 782, 782
   offset: 0, 0
   index: -1

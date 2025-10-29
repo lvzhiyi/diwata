@@ -434,52 +434,6 @@ export class Symbol extends Component {
         this.wildNode = null;
       }
     }
-  
-    // /** 
-    //  * 播放消除动画后销毁闪烁Node
-    //  */
-    // beginDestoryLightNode(): Promise<void> {
-    //   return new Promise<void>(async (resolve) => {
-    //     try {
-    //       const skeleton = this.removeUpSpineNode.getComponent(sp.Skeleton) || this.removeUpSpineNode.addComponent(sp.Skeleton);
-    //       const lightSkeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
-
-    //       if (skeleton && skeleton.skeletonData) {
-    //         // 检查动画是否存在
-    //         const animationName = 'xiaochu_up';
-    //         skeleton.setAnimation(0, animationName, false);
-    //         // 播放渐隐动画
-    //         this.playFadeOutAnimation().then(() => {
-    //           // 清理中奖动画隐藏元素图片
-    //           lightSkeleton.setCompleteListener(null);
-    //           lightSkeleton.skeletonData = null;
-    //         });
-              
-    //         // 添加超时保护
-    //         const timeout = setTimeout(() => {
-    //           console.warn('消除动画超时，强制完成');
-    //           this.completeDestoryLightNode(skeleton);
-    //           resolve();
-    //         }, 2000); 
-              
-    //         skeleton.setCompleteListener(() => {
-    //           clearTimeout(timeout);
-    //           console.log('消除动画播放完成');
-    //           this.completeDestoryLightNode(skeleton);
-    //           resolve();
-    //         });
-    //       } else {
-    //         console.warn('没有找到 skeleton 组件，直接完成');
-    //         this.completeDestoryLightNode(null);
-    //         resolve();
-    //       }
-    //     } catch (error) {
-    //       console.error('beginDestoryLightNode 执行出错:', error);
-    //       this.completeDestoryLightNode(null);
-    //       resolve();
-    //     }
-    //   });
-    // }
 
     // 抽取公共的完成逻辑
     private completeDestoryLightNode(skeleton: sp.Skeleton | null) {
@@ -534,6 +488,24 @@ export class Symbol extends Component {
             // iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
             this.destoryWildAnimationNode();
             resolve();
+          });
+          // 播放wild动画
+          // 设置节点尺寸和状态
+          const iconSize = this.iconNode.getComponent(UITransform).contentSize;
+          this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
+          this.LightSpine.active = true;
+        
+          // 获取或添加Skeleton组件
+          const wildSkeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
+          wildSkeleton.timeScale = app.manager.global.gameSpeed;
+          wildSkeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES['5001']);
+          const wildPlayName = 'symbol_5001_4';
+          this.iconNode.active = false;
+          wildSkeleton.setAnimation(0, wildPlayName, false);
+          wildSkeleton.setCompleteListener(() => {
+            this.iconNode.active = true;
+            wildSkeleton.setCompleteListener(null);
+            wildSkeleton.skeletonData = null;
           });
         } catch (error) {
           console.error('加载spine/LamAng_wild动画失败', error);
