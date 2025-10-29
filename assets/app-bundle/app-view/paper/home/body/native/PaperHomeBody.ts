@@ -513,7 +513,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       EventTrackManager.inst.trackAutoSpin(false, app.manager.global.isFreespinMode ? 'free_spin' : 'normal');
     } else {
       // 如果余额小于投注额，不能开启自动投注
-      if(app.manager.global.creditCount < app.manager.global.betCount){
+      if(app.manager.global.creditCount < app.manager.global.betCount && app.manager.global.isFreespinMode === false){
         showInsufficientCreditAlert();
 
         return;

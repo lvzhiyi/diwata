@@ -355,6 +355,7 @@ export class HomeRollTool  {
         if (child.name === 'spineNodeitem') {
         // 移除spineNode节点
           this.destoryAnimationNode(child);
+          child.removeFromParent();
           child.destroy();
         }
         if (child.name === 'spineNoderoll') {
@@ -363,10 +364,13 @@ export class HomeRollTool  {
             this.destoryAnimationNode(item);
             item.destroy();
           });
+          child.removeFromParent();
           child.destroy();
         }
       });
     }
+
+    console.log('overlayNode', overlayNode.children.length);
   }
 
   destoryAnimationNode(aniNode: Node) {
