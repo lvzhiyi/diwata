@@ -751,6 +751,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         app.manager.global.setFreeBonusTimes(0);
         // 设置为非免费轮
         app.controller.slots.freeBonusSpinChange(false);
+        // 重置免费轮总轮次
+        
         // 停止免费轮音乐
         BGMManager.inst.playNormalModeBGM();
       } 
@@ -765,10 +767,12 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
        */
       if (this.checkIsFreeRound()) {
         const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
+        // 重置免费轮总轮次
+        this.freeBonusTotalTimes = 0;
         app.manager.global.setGameRecordIndex(0);
         app.manager.global.setFreeBonusTimes(gameRecordIds.length);
         app.manager.global.setGameRecordIds([...gameRecordIds]);
-        this.freeBonusTotalTimes = gameRecordIds.length;
+        this.freeBonusTotalTimes += gameRecordIds.length;
         this.isExecutingFreeBonusAnimation = true;
         await this.setFreeBonusData(this.resultData.totalPayoutAmount);
         this.startFreeSpinGame();
@@ -778,8 +782,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       // 是否免费轮中，又中了免费轮
       if (this.checkIsFreeRoundInFreeSpin()) {
         const gameRecordIds = this.resultList[this.roundIndex].gameRecordIds;
-        const gameOldRecordIds = app.manager.global.gameRecordIds;
-        this.freeBonusTotalTimes = gameRecordIds.length + gameOldRecordIds.length;
+        this.freeBonusTotalTimes += gameRecordIds.length;
         const oldRecordIds = app.manager.global.gameRecordIds.filter((_, index) =>  index > app.manager.global.gameRecordIndex);
         const newGameRecordIds = [...oldRecordIds, ...gameRecordIds];
         
