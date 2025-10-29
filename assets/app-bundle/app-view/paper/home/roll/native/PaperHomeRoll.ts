@@ -1031,7 +1031,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * @returns 检查是否命中免费轮
    */
   private checkIsFreeRound() {
-    return !!this.resultList[this.roundIndex].freeWheelFlag && !this.hasFreeSpin();
+    return !!this.resultList[this.roundIndex].freeWheelFlag && !app.controller.slots.isFreeBonusSpin && this.resultList[this.roundIndex].gameRecordIds.length > 0;
   }
 
   /**
@@ -1074,7 +1074,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
   /**
    * 是否是免费轮的结束轮
-   * @returns 是否是免费轮的结束轮
+   * @returns 是否是免费轮的结束轮,如果最后一轮又中了免费轮，则不是免费轮的结束轮
    */
   private isFreeBonusEnd() {
     return app.controller.slots.isFreeBonusSpin && app.manager.global.gameRecordIds.length - 1 === app.manager.global.gameRecordIndex;

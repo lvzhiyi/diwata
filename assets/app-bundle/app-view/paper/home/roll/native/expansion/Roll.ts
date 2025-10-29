@@ -424,7 +424,7 @@ export class Roll extends Component {
               const timeOut = setTimeout(() => {
                 EffectManager.inst.playEffect(AudioPath.GAME.SWORD_RETURN);
                 clearTimeout(timeOut);
-              }, 1200 / app.manager.global.gameSpeed);
+              }, 1000 / app.manager.global.gameSpeed);
             }
           });
 
@@ -453,7 +453,7 @@ export class Roll extends Component {
               const timeOut = setTimeout(() => {
                 EffectManager.inst.playEffect(AudioPath.GAME.STICK_RETURN);
                 clearTimeout(timeOut);
-              }, 1200 / app.manager.global.gameSpeed);
+              }, 1000 / app.manager.global.gameSpeed);
             }else{
               showBowNode.push(child);
             }
