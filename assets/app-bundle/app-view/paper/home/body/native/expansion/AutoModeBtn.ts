@@ -31,11 +31,12 @@ export class AutoModeBtn extends Component {
         }
       }
         
-      if (app.manager.global.isGoing && this.spine.node.active && this.tipsNode.active) {
+      if ((app.manager.global.isGoing || app.manager.global.isFreespinMode) && this.spine.node.active && this.tipsNode.active) {
         // 游戏进行中，隐藏按钮
         this.spine.node.active = false;
         this.tipsNode.active = false;
-      } else if (!app.manager.global.isGoing && !app.manager.global.allwaysAutoPlay && !app.manager.global.startAutoPlay && !this.spine.node.active && !this.tipsNode.active)   {
+      // eslint-disable-next-line max-len
+      } else if (!app.manager.global.isGoing && !app.manager.global.allwaysAutoPlay && !app.manager.global.startAutoPlay && !app.manager.global.isFreespinMode && !this.spine.node.active && !this.tipsNode.active)   {
         // 游戏未进行中，显示按钮
         this.spine.node.active = true;
         this.tipsNode.active = true;

@@ -189,8 +189,8 @@ export class PopGrandPrize extends BaseView {
     }
 
     this.numberRollIsPlaying = true;
-
-    EffectManager.inst.playEffect(AudioPath.UI.COIN_ADD, true, null, true);
+    
+    console.log('金币播放', this.amount);
     this.numberWinBgAnimator.animateTo(
       this.amount,
       this.getDisplayTimeByRewardType() * this.animationQueue.length,
@@ -263,6 +263,7 @@ export class PopGrandPrize extends BaseView {
     // 播放大奖配音音效（如"NICE!"、"MEGA!"等）
     console.log('animationPrizeName', animationName);
     EffectManager.inst.playEffect(animationName);
+    EffectManager.inst.playEffect(AudioPath.UI.COIN_ADD, true, null, true);
   }
 
   /**
@@ -348,6 +349,7 @@ export class PopGrandPrize extends BaseView {
     try {
       // 停止数字动画和背景音乐
       this.numberWinBgAnimator.stopAnimation(true);
+      EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD);
       // app.manager.sound.stopEffect(this.bgm_id);
 
       this.isPlayEnd = true;

@@ -45,7 +45,7 @@ export class PopFreeSpinResult extends BaseView {
 
   onShow(params: any) {
     this.init(params);
-    BGMManager.inst.playBigPrizeBGM(AudioPath.BGM.SETTLE_OPEN);
+    // BGMManager.inst.playBigPrizeBGM(AudioPath.BGM.SETTLE_OPEN);
     this.showAmountAnimation();
   }
 
