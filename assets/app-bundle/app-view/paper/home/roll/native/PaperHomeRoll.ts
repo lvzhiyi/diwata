@@ -109,6 +109,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
   onLoad() {
     this.homeRollTool = new HomeRollTool();
+  
     this.initRoll();
 
     this.initEvents();

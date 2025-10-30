@@ -1,4 +1,4 @@
-import { _decorator, EventTouch, instantiate, isValid, math, Node, ParticleSystem2D, PolygonCollider2D, Prefab, sp, tween, UITransform, v2, v3, Vec2, Vec3 } from 'cc';
+import { _decorator, EventTouch, instantiate, isValid, math, Node, NodePool, ParticleSystem2D, PolygonCollider2D, Prefab, sp, tween, UITransform, v2, v3, Vec2, Vec3 } from 'cc';
 import { GameResourceManager, ROLL_RESOURCE_NAMES, } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { Symbol } from './Symbol';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
@@ -20,6 +20,16 @@ export interface ChangeWildData {
 }
 @ccclass('HomeRollTool')
 export class HomeRollTool  {
+  // private nodePool: NodePool = new NodePool();
+  
+  // setLightNode(lightNode: Prefab) {
+  //   for (let i = 0; i < 6; i++) {
+  //     const node = instantiate(lightNode);
+  //     node.name = 'lightNode' + i;
+  //     this.nodePool.put(node);
+  //   }
+  // }
+
   /**
    * 
    * @param {Node} targetNode - 需要显示光环动画的目标节点
@@ -117,7 +127,6 @@ export class HomeRollTool  {
     return new Promise<void>(async (resolve) => {
       targetNodes.forEach((node) => {
         const lightNode = instantiate(lightPrefab);
-        lightNode.name = 'lightNode';
         lightNode.setParent(overlayNode);
         lightNode.setWorldPosition(node.getWorldPosition());
         tween(lightNode)
@@ -128,8 +137,7 @@ export class HomeRollTool  {
             { easing: 'quadIn' } 
           )
           .call(() => {
-            lightNode.removeFromParent();
-            // this.forceDestroyParticleNode(lightNode);
+            this.forceDestroyParticleNode(lightNode);
             console.log('轨迹动画执行动画完毕');
           })
           .start();
@@ -156,25 +164,32 @@ export class HomeRollTool  {
     if (!node || !node.isValid) return;
   
     // 1. 获取所有粒子系统组件
-    const particleSystems = node.getComponentsInChildren(ParticleSystem2D);
-    
-    // 2. 彻底停止和清理 ParticleSystem2D
-    particleSystems.forEach(ps => {
-      if (ps && ps.isValid) {
-        // 停止粒子发射
-        ps.stopSystem();
-        // 禁用粒子系统
-        ps.enabled = false;
+    const particleSystems = node.getComponent(ParticleSystem2D);
+    particleSystems.stopSystem();
+    // 禁用粒子系统
+    particleSystems.enabled = false;
 
-        // 清除所有已发射的粒子
-        if (ps.resetSystem) {
-          ps.resetSystem();
-        }
-      }
-    });
+    // 清除所有已发射的粒子
+    if (particleSystems.resetSystem) {
+      particleSystems.resetSystem();
+    }
+
+    const child = node.getChildByName('Particle2D-001');
+
+    if (child) {
+      const particleSystems = child.getComponent(ParticleSystem2D);
+      particleSystems.stopSystem();
+      // 禁用粒子系统
+      particleSystems.enabled = false;
   
-    // 3. 立即销毁节点（不需要延迟）
+      // 清除所有已发射的粒子
+      if (particleSystems.resetSystem) {
+        particleSystems.resetSystem();
+      }
+    }
+
     node.destroy();
+    // this.nodePool.put(node);
   }
 
   /**
