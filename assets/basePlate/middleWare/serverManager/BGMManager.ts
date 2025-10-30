@@ -1,5 +1,6 @@
 import { _decorator, Component, AudioClip, AudioSource, Node, resources, assetManager } from 'cc';
 import { app } from 'db://assets/app/app';
+import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass } = _decorator;
 
@@ -53,8 +54,15 @@ export class BGMManager extends Component {
   private isVolumeInitialized = false;
 
   public static bgmList: string[] = [
-    'BGM/bg_audio',
-    'BGM/free_audio',
+    AudioPath.BGM.MAIN,
+    AudioPath.BGM.FREE,
+    AudioPath.BGM.SETTLE_BG_NO_COIN,
+    AudioPath.BGM.SETTLE_OPEN,
+    
+    AudioPath.BGM.MEGA_OPEN,
+    AudioPath.BGM.NICE_OPEN,
+    AudioPath.BGM.SUPER_OPEN,
+
   ];
 
   public get isMute() {

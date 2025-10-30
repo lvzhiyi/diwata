@@ -27,6 +27,16 @@ export const AudioPath = {
     MAIN: 'BGM/bg_audio',
     // 免费轮背景音乐
     FREE: 'BGM/free_audio',
+    // 结算弹窗打开（无金币）
+    SETTLE_BG_NO_COIN: 'BGM/Settle_Bg_No_Coin',
+    // Mega弹窗打开
+    MEGA_OPEN: 'BGM/Mega_Bg',
+    // Nice弹窗打开
+    NICE_OPEN: 'BGM/Nice_Bg',
+    // 结算弹窗打开
+    SETTLE_OPEN: 'BGM/Settle_Bg',
+    // Super弹窗打开
+    SUPER_OPEN: 'BGM/Super_Bg',
   },
 
   // UI音效
@@ -48,18 +58,11 @@ export const AudioPath = {
 
   // 弹窗音效
   POPUP: {
-    // 结算弹窗打开
-    SETTLE_OPEN: 'PopAudio/Settle_Bg',
-    // 结算弹窗打开（无金币）
-    SETTLE_BG_NO_COIN: 'PopAudio/Settle_Bg_No_Coin',
-    // Mega弹窗打开
-    MEGA_OPEN: 'PopAudio/Mega_Bg',
+    
     MEGA_END: 'PopAudio/Mega_end',
-    // Nice弹窗打开
-    NICE_OPEN: 'PopAudio/Nice_Bg',
+   
     NICE_END: 'PopAudio/Nice_end',
-    // Super弹窗打开
-    SUPER_OPEN: 'PopAudio/Super_Bg',
+   
     SUPER_END: 'PopAudio/Super_end',
    
     // 开场音效

@@ -8,6 +8,7 @@ import { SpineTool } from 'db://assets/res-native/script/SpineTool';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
+import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
 
 const { ccclass, property } = _decorator;
 @ccclass('PopFreeSpinResult')
@@ -44,7 +45,7 @@ export class PopFreeSpinResult extends BaseView {
 
   onShow(params: any) {
     this.init(params);
-    EffectManager.inst.playEffect(AudioPath.POPUP.SETTLE_OPEN);
+    BGMManager.inst.playBigPrizeBGM(AudioPath.BGM.SETTLE_OPEN);
     this.showAmountAnimation();
   }
 
@@ -79,13 +80,14 @@ export class PopFreeSpinResult extends BaseView {
     }
 
     return new Promise<void>(async (resolve) => {
+      EffectManager.inst.playEffect(AudioPath.UI.COIN_ADD);
       await this.numberWinBgAnimator.animateTo(
         this.amount,
         3,
         (value) => '₱ ' + numberToMoney(value, 3, false),
         true
       );
-
+      EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD);
       this.scheduleOnce(() => {
         this.stopAnimation();
       }, app.manager.global.quikeMode !== IQuickMode.nomal ? 1 : 2.5);
@@ -108,7 +110,7 @@ export class PopFreeSpinResult extends BaseView {
   }
   
   onHide(result: undefined) {
-    EffectManager.inst.stopAllEffectsByName(AudioPath.POPUP.SETTLE_OPEN);
+    BGMManager.inst.playNormalModeBGM();
     this.numberWinBgAnimator.stopAnimation(true);
     SpineTool.clearAnimationNode(this.spineNode);
 

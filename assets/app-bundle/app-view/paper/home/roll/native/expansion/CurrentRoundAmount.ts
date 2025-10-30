@@ -55,6 +55,7 @@ export class CurrentRoundAmount extends Component {
       // 重置节点状态
       this.resetState();
       console.log('startNum-开始动画');
+      
       this.tween = tween(this.node)
         .timeScale(app.manager.global.gameSpeed)
         .sequence(
@@ -75,7 +76,7 @@ export class CurrentRoundAmount extends Component {
             .call(() => {
               // multipleNode动画完成后立马隐藏
               this.multipleNode.getComponent(UIOpacity).opacity = 0;
-              EffectManager.inst.playEffect(AudioPath.GAME.DOUBLE_NUMBER);
+             
               // 播放spine动画
               const spine = this.spineWinNode.getComponent(sp.Skeleton);
               spine.setAnimation(0, 'jineshanguang', false);
@@ -111,7 +112,7 @@ export class CurrentRoundAmount extends Component {
             this.multipleNode.setPosition(new Vec3(0, 300, 0));
             this.multipleNode.setScale(Vec3.ONE);
             this.multipleNode.getComponent(UIOpacity).opacity = 0;
-          
+            EffectManager.inst.playEffect(AudioPath.GAME.DOUBLE_NUMBER);
             resolve();
           })
         )

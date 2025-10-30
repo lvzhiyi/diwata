@@ -52,7 +52,7 @@ export class HomeRollTool  {
           skeleton.timeScale = app.manager.global.gameSpeed;
        
           // 播放多个动画序列
-        
+          EffectManager.inst.playEffect(AudioPath.GAME.SWORD_RETURN, false, null, true);
           HomeRollTool.playAnimationSequence(skeleton, ['dao_atk', 'dao_hit'], async () => {
             console.log('播放剑动画序列完成');
           });
@@ -180,6 +180,7 @@ export class HomeRollTool  {
               skeleton.premultipliedAlpha = false;
               skeleton.skeletonData = skeleonData;
               skeleton.timeScale = app.manager.global.gameSpeed;
+              EffectManager.inst.playEffect(AudioPath.GAME.STICK_RETURN, false, null, true);
               skeleton.setAnimation(0, 'gun_atk', false);
            
               skeleton.setCompleteListener((track) => {
@@ -207,7 +208,7 @@ export class HomeRollTool  {
     return new Promise<void>(async (resolve) => {
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
       goddessSkeleton.premultipliedAlpha = false;
-      EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER5);
+      // EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER5);
       goddessSkeleton.setAnimation(0, 'animation5', false);
       goddessSkeleton.setCompleteListener(() => {
         goddessSkeleton.setAnimation(0, 'animation', true);

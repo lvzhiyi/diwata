@@ -1051,6 +1051,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       // 设置免费轮状态
       app.controller.slots.freeBonusSpinChange(true);
       console.log('开始免费动画执行-AAA');
+      BGMManager.inst.pauseBGM();
       app.manager.event.emit('begainfreeBonusAnimation', () => {
         console.log('转场动画执行完成');
         this.isExecutingFreeBonusAnimation = false;

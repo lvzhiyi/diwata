@@ -22,9 +22,9 @@ const animationMap: any = {
 };
 
 const effectBGMap :any = {
-  '01nice_': AudioPath.POPUP.NICE_OPEN,
-  '02mega_':  AudioPath.POPUP.MEGA_OPEN,
-  '03super_':  AudioPath.POPUP.SUPER_OPEN,
+  '01nice_': AudioPath.BGM.NICE_OPEN,
+  '02mega_':  AudioPath.BGM.MEGA_OPEN,
+  '03super_':  AudioPath.BGM.SUPER_OPEN,
 };
 
 const effectMap :any = {
@@ -190,6 +190,7 @@ export class PopGrandPrize extends BaseView {
 
     this.numberRollIsPlaying = true;
 
+    EffectManager.inst.playEffect(AudioPath.UI.COIN_ADD, true, null, true);
     this.numberWinBgAnimator.animateTo(
       this.amount,
       this.getDisplayTimeByRewardType() * this.animationQueue.length,
@@ -269,8 +270,7 @@ export class PopGrandPrize extends BaseView {
    * 根据奖励类型选择不同的音效
    */
   private playGrandPrizeBGSound(animationName: string) {
-    // BGMManager.inst.playBigPrizeBGM(animationName);
-    EffectManager.inst.playEffect(animationName);
+    BGMManager.inst.playBigPrizeBGM(animationName);
   }
 
   /**
@@ -339,9 +339,9 @@ export class PopGrandPrize extends BaseView {
       console.log('播放最后的音效');
       // 先把当前的音效停止
       const musicName = effectMap[this.currentAnimationName];
-      const musicBGName = effectBGMap[this.currentAnimationName];
+      // const musicBGName = effectBGMap[this.currentAnimationName];
       EffectManager.inst.stopAllEffectsByName(musicName);
-      EffectManager.inst.stopAllEffectsByName(musicBGName);
+      BGMManager.inst.pauseBGM();
       this.playGrandPrizeAnimation(lastAnimationName);
     }
 
@@ -415,6 +415,7 @@ export class PopGrandPrize extends BaseView {
               textNode.setPosition(originalPosition);
               
               this.numberWinBgAnimator.stopAnimation(true);
+              EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD);
               this.node.setScale(new Vec3(1, 1, 1));
               this.hide();
               resolve();
@@ -442,7 +443,12 @@ export class PopGrandPrize extends BaseView {
     SpineTool.clearAnimationNode(this.bgNode);
     EffectManager.inst.stopAllEffects();
 
-    this.resumeBGM();
+    // 恢复背景音乐，如果当前是免费区间就播免费轮音乐，
+    if(app.controller.slots.isFreeBonusSpin) {
+      BGMManager.inst.playFreeModeBGM();
+    } else {
+      BGMManager.inst.playNormalModeBGM();
+    }
 
     return result;
   }

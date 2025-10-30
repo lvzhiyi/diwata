@@ -165,6 +165,8 @@ export class RouletteWheel extends Component {
 
   /** 跳到原始位置 */ 
   jumpToOriginalPosition(index: number): void {
+    EffectManager.inst.playEffect(AudioPath.GAME.SPINE_ROTATE);
+
     if(index === 0 ) {
       const timeout = setTimeout(() => {
         this.updateSelectedItem();
@@ -363,7 +365,7 @@ export class RouletteWheel extends Component {
    */
   private animateBgToRotation(targetRotation: number, duration?: number): void {
     if (this.isBgAnimating) return;
-    
+    EffectManager.inst.playEffect(AudioPath.GAME.SPINE_ROTATE);
     this.isBgAnimating = true;
     const animDuration = duration || this.bgAnimationDuration;
     const timeout = setTimeout(() => {

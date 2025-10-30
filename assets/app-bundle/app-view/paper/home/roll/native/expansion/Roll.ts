@@ -421,10 +421,6 @@ export class Roll extends Component {
             if(item.main === true && item.symbolId === SymbolType.SWORD ) {
               symbolNode = this.node.children[index] || null;
               symbolNode?.getComponent(Symbol)?.playSwordOrBowAnimation('4010');
-              const timeOut = setTimeout(() => {
-                EffectManager.inst.playEffect(AudioPath.GAME.SWORD_RETURN);
-                clearTimeout(timeOut);
-              }, 1000 / app.manager.global.gameSpeed);
             }
           });
 
@@ -450,10 +446,6 @@ export class Roll extends Component {
             if (Item.main === true) {
               symbol?.playSwordOrBowAnimation('4011');
               showBowNode.push(child);
-              const timeOut = setTimeout(() => {
-                EffectManager.inst.playEffect(AudioPath.GAME.STICK_RETURN);
-                clearTimeout(timeOut);
-              }, 1000 / app.manager.global.gameSpeed);
             }else{
               showBowNode.push(child);
             }
@@ -528,6 +520,13 @@ export class Roll extends Component {
      * 开始中奖闪烁
      */
     async startLightAndRemoveAnimation() {
+      if(this.rollRemoveData.length > 0) {
+        EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_WIN);
+        setTimeout(() => {
+          EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_CLEAR);
+        }, 1000 / app.manager.global.gameSpeed);
+      }
+
       return await Promise.all(this.rollRemoveData.map(async item => {
         const { rowIndex } = item;
         const symbol = this.node.children[rowIndex]?.getComponent(Symbol);

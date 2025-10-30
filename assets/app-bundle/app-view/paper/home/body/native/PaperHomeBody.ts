@@ -359,9 +359,9 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       EffectManager.inst.setTurboMode(true);
       BGMManager.inst.pauseBGM();
       this.scheduleOnce(() => {
-        BGMManager.inst.resumeBGM();
       }, 0.5);
     }else{
+      BGMManager.inst.resumeBGM();
       EffectManager.inst.setTurboMode(false);
       globalSpeedCtrl.stopAcceleratedMode();
     }

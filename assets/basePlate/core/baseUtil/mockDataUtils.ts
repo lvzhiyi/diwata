@@ -536,8 +536,8 @@ export const mockSuccessData: any = {
         wheel: [
           [
             {
-              symbolId: '1006',
-              main: false
+              symbolId: '4011',
+              main: true
             },
             {
               symbolId: '4011',
@@ -1200,8 +1200,8 @@ export const mockSuccessData: any = {
         wheel: [
           [
             {
-              symbolId: '1001',
-              main: false
+              symbolId: '4010',
+              main: true
             },
             {
               symbolId: '1005',

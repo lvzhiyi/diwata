@@ -298,7 +298,7 @@ export class Symbol extends Component {
           const animationName = 'symbol_' + this.getSymbolId();
           skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
           const animationPlayName = animationName + '_2';
-          EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_WIN);
+          
           skeleton.setAnimation(0, animationPlayName, false);
           skeleton.setCompleteListener(() => {
             skeleton.setCompleteListener(null);
@@ -308,7 +308,6 @@ export class Symbol extends Component {
           });
           removeUpSkeleton.setEventListener((trackEntry, event: sp.spine.Event) => {
             if (event.data.name === 'baozha') {
-              EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_CLEAR);
               resolve();
               this.LightSpine.active = false;
               this.removeDownSpineNode.active = false;
