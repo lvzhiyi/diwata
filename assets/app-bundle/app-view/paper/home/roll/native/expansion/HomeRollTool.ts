@@ -165,6 +165,7 @@ export class HomeRollTool  {
           clearTimeout(time);
           resolve();
         }, 600 / app.manager.global.gameSpeed);
+        
         targetNodes.map(item => {
           // 过滤主元素
           const isMain = item.getComponent(Symbol).currentSymbolItem.main;
@@ -180,7 +181,7 @@ export class HomeRollTool  {
               skeleton.premultipliedAlpha = false;
               skeleton.skeletonData = skeleonData;
               skeleton.timeScale = app.manager.global.gameSpeed;
-              EffectManager.inst.playEffect(AudioPath.GAME.STICK_RETURN, false, null, true);
+              
               skeleton.setAnimation(0, 'gun_atk', false);
            
               skeleton.setCompleteListener((track) => {
@@ -191,6 +192,8 @@ export class HomeRollTool  {
               console.error('加载spine/gun动画失败', error);
               this.destoryAnimationNode(spineNode);
             }
+          }else{
+            EffectManager.inst.playEffect(AudioPath.GAME.STICK_RETURN, false, null, true);
           }
         });
       });
