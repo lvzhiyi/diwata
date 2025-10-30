@@ -400,6 +400,7 @@ export class AppInit extends BaseAppInit {
       { type: Prefab, bundle: 'PopBuybonus' },
       { type: Prefab, bundle: 'PopBetamout' },
       { type: Prefab, bundle: 'PopGrandPrize' },
+      { type: Prefab, bundle: 'PopFreeSpinResult' },
     ];
 
     const task = Core.inst.lib.task.createAny();

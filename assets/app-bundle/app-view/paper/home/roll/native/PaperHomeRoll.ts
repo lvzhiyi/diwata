@@ -563,7 +563,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 处理是否需要展示剑和棒子
     await this.handleSwordAndStick();
     // 同时执行棒子和剑光球飞向女神的效果
-    await this.playBowAndSwordFlyingAnimation();
+    // await this.playBowAndSwordFlyingAnimation();
 
     // 调用同步动画依次执行等待函数
     await this.playSequentialAnimations();

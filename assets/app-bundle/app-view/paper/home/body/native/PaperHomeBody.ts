@@ -357,12 +357,12 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     if(quickModes[nextIndex] === IQuickMode.turbo){
       globalSpeedCtrl.startAcceleratedMode(2);
       EffectManager.inst.setTurboMode(true);
-      BGMManager.inst.pauseBGM();
-      this.scheduleOnce(() => {
-        BGMManager.inst.resumeBGM();
-      }, 0.5);
+      // BGMManager.inst.pauseBGM();
+      // this.scheduleOnce(() => {
+      //   BGMManager.inst.resumeBGM();
+      // }, 0.5);
     }else{
-      BGMManager.inst.resumeBGM();
+      // BGMManager.inst.resumeBGM();
       EffectManager.inst.setTurboMode(false);
       globalSpeedCtrl.stopAcceleratedMode();
     }
