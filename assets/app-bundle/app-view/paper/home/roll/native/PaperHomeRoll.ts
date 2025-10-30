@@ -430,6 +430,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 把剑的节点储存到changeWildData中
     hasShowSwordNode.map((node, index) => {
       if (node) {
+        app.manager.event.emit('roll:reward', 'start');
         this.changeWildData.push({
           node,
           type: SymbolType.SWORD,
@@ -442,6 +443,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 把棒子的节点储存到changeWildData中
     hasShowBowNode.map((nodeArr: Node[], index) => {
       if (nodeArr.length > 0) {
+        app.manager.event.emit('roll:reward', 'start');
         this.changeWildData.push({
           nodes: nodeArr,
           type: SymbolType.BOW,
@@ -563,7 +565,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 处理是否需要展示剑和棒子
     await this.handleSwordAndStick();
     // 同时执行棒子和剑光球飞向女神的效果
-    // await this.playBowAndSwordFlyingAnimation();
+    await this.playBowAndSwordFlyingAnimation();
 
     // 调用同步动画依次执行等待函数
     await this.playSequentialAnimations();
@@ -815,7 +817,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       // 监听RollContianer点击事件
       this.rollBgViewNode.on(Node.EventType.TOUCH_END, this.rollClick, this);
       app.manager.event.emit('roll:reward', 'end');
-      console.log('结束游戏-AAA');
     }
   }
 
@@ -1293,6 +1294,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   private async changeTipsContent(startNum: number, endNum: number): Promise<void> {
     if (endNum === null) {
+      EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD);
+
       return this.rewardBox.getComponent(RewardBox).showGoodLuck();
     } else if (endNum === 0) {
       return this.rewardBox.getComponent(RewardBox).showPlace();

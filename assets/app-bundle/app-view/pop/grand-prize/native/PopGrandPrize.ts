@@ -263,7 +263,9 @@ export class PopGrandPrize extends BaseView {
     // 播放大奖配音音效（如"NICE!"、"MEGA!"等）
     console.log('animationPrizeName', animationName);
     EffectManager.inst.playEffect(animationName);
-    EffectManager.inst.playEffect(AudioPath.UI.COIN_ADD, true, null, true);
+    setTimeout(() => {
+      EffectManager.inst.playEffect(AudioPath.UI.COIN_ADD, true, null, true);
+    }, 600 / app.manager.global.gameSpeed);
   }
 
   /**

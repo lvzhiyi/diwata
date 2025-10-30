@@ -1,5 +1,5 @@
-import { _decorator, EventTouch, instantiate, Intersection2D, isValid, math, Node, PolygonCollider2D, Prefab, sp, tween, UITransform, v2, v3, Vec2, Vec3 } from 'cc';
-import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
+import { _decorator, EventTouch, instantiate, isValid, math, Node, ParticleSystem2D, PolygonCollider2D, Prefab, sp, tween, UITransform, v2, v3, Vec2, Vec3 } from 'cc';
+import { GameResourceManager, ROLL_RESOURCE_NAMES, } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { Symbol } from './Symbol';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
@@ -117,6 +117,7 @@ export class HomeRollTool  {
     return new Promise<void>(async (resolve) => {
       targetNodes.forEach((node) => {
         const lightNode = instantiate(lightPrefab);
+        lightNode.name = 'lightNode';
         lightNode.setParent(overlayNode);
         lightNode.setWorldPosition(node.getWorldPosition());
         tween(lightNode)
@@ -128,11 +129,13 @@ export class HomeRollTool  {
           )
           .call(() => {
             lightNode.removeFromParent();
+            // this.forceDestroyParticleNode(lightNode);
             console.log('轨迹动画执行动画完毕');
           })
           .start();
       });
       await delay(500);
+      
       // 女神执行动画
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
       goddessSkeleton.premultipliedAlpha = false;
@@ -146,6 +149,32 @@ export class HomeRollTool  {
       await delay(500);
       resolve();
     });
+  }
+
+  // 强制销毁粒子节点的方法
+  forceDestroyParticleNode(node: Node) {
+    if (!node || !node.isValid) return;
+  
+    // 1. 获取所有粒子系统组件
+    const particleSystems = node.getComponentsInChildren(ParticleSystem2D);
+    
+    // 2. 彻底停止和清理 ParticleSystem2D
+    particleSystems.forEach(ps => {
+      if (ps && ps.isValid) {
+        // 停止粒子发射
+        ps.stopSystem();
+        // 禁用粒子系统
+        ps.enabled = false;
+
+        // 清除所有已发射的粒子
+        if (ps.resetSystem) {
+          ps.resetSystem();
+        }
+      }
+    });
+  
+    // 3. 立即销毁节点（不需要延迟）
+    node.destroy();
   }
 
   /**
@@ -240,10 +269,10 @@ export class HomeRollTool  {
       return 'animation2';
     } else if (hasSword && hasMainBow) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER3);
-      const timeOut = setTimeout(() => {
-        EffectManager.inst.playEffect(AudioPath.GAME.SWORD_AND_STICK);
-        clearTimeout(timeOut);
-      }, 500);
+      // const timeOut = setTimeout(() => {
+      //   EffectManager.inst.playEffect(AudioPath.GAME.SWORD_AND_STICK);
+      //   clearTimeout(timeOut);
+      // }, 500);
 
       return 'animation4';
     }
