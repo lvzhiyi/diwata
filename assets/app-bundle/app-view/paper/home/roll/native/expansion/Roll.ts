@@ -444,6 +444,7 @@ export class Roll extends Component {
   
           if (Item.symbolId  === SymbolType.BOW && (symbolId !== SymbolType.WILD && symbolId !== '')) {
             if (Item.main === true) {
+              EffectManager.inst.playEffect(AudioPath.GAME.STICK_START, false, null, true);
               symbol?.playSwordOrBowAnimation('4011');
               showBowNode.push(child);
             }else{

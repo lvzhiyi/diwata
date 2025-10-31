@@ -79,12 +79,22 @@ export const AudioPath = {
     SWORD_AND_STICK: 'Game/SwordAndStick',
     // 挥棒
     STICK_RETURN: 'Game/Stick',
+    // 挥棒
+    STICK_BEAT: 'Game/Stick_Beat',
+    // 挥棒
+    STICK_START: 'Game/Stick_Start',
     // 挥剑
     SWORD_RETURN: 'Game/Sword',
     // 按钮开始旋转
     SPIN_ROTATE: 'Game/SpinStartRoll',
     // 滚轴停止旋转
     ROLL_STOP_ROTATE: 'Game/RollStop',
+    // 滚轴停止旋转3
+    ROLL_STOP_3: 'Game/RollStop3',
+    // 滚轴停止旋转4
+    ROLL_STOP_4: 'Game/RollStop4',
+    // 滚轴停止旋转5
+    ROLL_STOP_5: 'Game/RollStop5',
     // 数字翻倍
     DOUBLE_NUMBER: 'Game/DoubleNumber',
     // 免费轮转场

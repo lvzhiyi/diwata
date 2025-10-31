@@ -388,8 +388,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       // roll滚动完成回调
       const onRollComplete = () => {
         resolve(true);
-
-        EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_ROTATE, false, null, true);
+        console.log('rollIndex', rollIndex);
+        HomeRollTool.playRollStopAudio(rollIndex); 
 
         if (this.isAllRollsStopped()) {
           // 如果rollFrameSpine动画播放中，则停止
