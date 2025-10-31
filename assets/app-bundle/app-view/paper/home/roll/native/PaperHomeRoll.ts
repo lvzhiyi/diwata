@@ -388,8 +388,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       // roll滚动完成回调
       const onRollComplete = () => {
         resolve(true);
-        console.log('rollIndex', rollIndex);
-        HomeRollTool.playRollStopAudio(rollIndex); 
 
         if (this.isAllRollsStopped()) {
           // 如果rollFrameSpine动画播放中，则停止
@@ -413,6 +411,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       }
 
       // 停止滚轴
+      HomeRollTool.playRollStopAudio(rollIndex); 
       roll.getComponent(Roll).stopRolling(
         rollList,
         onRollComplete
