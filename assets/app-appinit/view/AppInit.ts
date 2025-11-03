@@ -250,6 +250,7 @@ export class AppInit extends BaseAppInit {
       userLevel,
       userName,
       ...mockParams,
+      ut: 'aff',
     };
     app.manager.global.setGameId(loginData.gameId);
 
