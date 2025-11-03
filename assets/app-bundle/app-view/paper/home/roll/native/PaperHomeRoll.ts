@@ -389,7 +389,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       const rollList = this.resultList[this.roundIndex].wheel.map((item: any) => item[rollIndex]);
 
       if (delayTime) {
-        console.log('delayTime', delayTime);
         await delay(delayTime);
       }
       // roll滚动完成回调
