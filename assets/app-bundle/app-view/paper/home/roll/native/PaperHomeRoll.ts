@@ -346,7 +346,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         syncStopRolls.push(async () => this.stopSingleRoll(roll, rollIndex, needPlayRollFrameSpine));
       } else {
         // 非快速模式 或者 快速模式并且有滚轮边框动画，则需要播放滚轮边框动画
-        asyncStopRolls.push(async (stopDelayTime?: number) => this.stopSingleRoll(roll, rollIndex, needPlayRollFrameSpine, stopDelayTime ?? 600 / (rollIndex + 1)));
+        asyncStopRolls.push(async (stopDelayTime?: number) => this.stopSingleRoll(roll, rollIndex, needPlayRollFrameSpine, stopDelayTime ?? 1000 / (rollIndex + 1)));
       }
     }
 
@@ -367,11 +367,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
           if (needPlayRollFrameSpine) {
             await asyncStopRoll();
           } else {
-            console.log('asyncStopRoll-A',);
             asyncStopRoll((syncStopRolls.length - realIndex - 1) * time);
           }
         } else {
-          console.log('asyncStopRoll-B', index);
           await asyncStopRoll();
         }
       }
@@ -619,6 +617,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 开始执行闪烁和消除动画
      */
     console.log('开始执行闪烁消除动画');
+    this.playRemoveAuido(this.resultList[this.roundIndex].rewardSymbolIndexSet);
     const hasLitghtAnimation = await Promise.all(rollsScript.map(async roll => {
       const lightAndRemoveAnimation = await roll.startLightAndRemoveAnimation();
       const rollRemoveData = roll.getRollRemoveData();
@@ -675,6 +674,16 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 结束本回合消除
      */
     this.endRemoveSymbol();
+  }
+
+  // 播放消除音效
+  private playRemoveAuido(removeData:SymbolPosition[]|null){
+    if(removeData && removeData.length > 0) {
+      EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_WIN);
+      setTimeout(() => {
+        EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_CLEAR);
+      }, 1000 / app.manager.global.gameSpeed);
+    }
   }
 
   /**

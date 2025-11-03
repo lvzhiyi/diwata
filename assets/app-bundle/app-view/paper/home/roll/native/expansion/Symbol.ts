@@ -482,7 +482,7 @@ export class Symbol extends Component {
           skeleton.setAnimation(0, animationName, false);
           console.log('播放wild动画-数据', animationName);
           iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
-          EffectManager.inst.playEffect(AudioPath.GAME.CHANGE_WILD);
+         
           skeleton.setCompleteListener(() => {
             // iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
             this.destoryWildAnimationNode();

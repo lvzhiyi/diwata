@@ -509,7 +509,7 @@ export class EffectManager extends Component {
 
     // 该音乐正在播放中则返回
     if (!isForcePlay && this.playingMusic.uuid !== -1 && this.playingMusic.name === name) {
-      console.log('该音乐正在播放');
+      console.log('该音乐正在播放', name);
 
       return ;
     }

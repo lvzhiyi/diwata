@@ -529,13 +529,6 @@ export class Roll extends Component {
      * 开始中奖闪烁
      */
     async startLightAndRemoveAnimation() {
-      if(this.rollRemoveData.length > 0) {
-        EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_WIN);
-        setTimeout(() => {
-          EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_CLEAR);
-        }, 1000 / app.manager.global.gameSpeed);
-      }
-
       return await Promise.all(this.rollRemoveData.map(async item => {
         const { rowIndex } = item;
         const symbol = this.node.children[rowIndex]?.getComponent(Symbol);
@@ -741,6 +734,7 @@ export class Roll extends Component {
         
         if (SYMBOL_WILD_IDS.indexOf(itemSymbolId) !== -1 ) {
           hasChangeWild = true;
+          EffectManager.inst.playEffect(AudioPath.GAME.CHANGE_WILD);
 
           return this.symbolChangeToSingleWild(index);
         }
