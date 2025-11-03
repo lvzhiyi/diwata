@@ -24,6 +24,7 @@ import { RewardBox } from './expansion/RewardBox';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
+import { SpineTool } from 'db://assets/res-native/script/SpineTool';
 
 const { ccclass, property } = _decorator;
 
@@ -415,7 +416,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       }
 
       // 停止滚轴
-      
+      HomeRollTool.playRollStopAudio(rollIndex);
       roll.getComponent(Roll).stopRolling(
         rollList,
         onRollComplete
