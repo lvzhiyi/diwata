@@ -478,22 +478,24 @@ export class HomeRollTool  {
   }
 
   static playRollStopAudio(rollIndex: number) {
-    switch (rollIndex) {
-      case 0:
-      case 5:
-        EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_3, false, null, true);
-        break;
-      case 1:
-      case 4:
-        EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_4, false, null, true);
-        break;
-      case 2:
-      case 3:
-        EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_5, false, null, true);
-        break;
-      default:
-        break;
-    }
+    EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_3, false, null, true);
+
+    // switch (rollIndex) {
+    //   case 0:
+    //   case 5:
+    //     EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_3, false, null, true);
+    //     break;
+    //   case 1:
+    //   case 4:
+    //     EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_4, false, null, true);
+    //     break;
+    //   case 2:
+    //   case 3:
+    //     EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_5, false, null, true);
+    //     break;
+    //   default:
+    //     break;
+    // }
   }
 
   /**

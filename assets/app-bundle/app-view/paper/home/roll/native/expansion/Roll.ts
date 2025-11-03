@@ -62,6 +62,9 @@ export class Roll extends Component {
 
     private originalWorldPosition: Vec3 = new Vec3();
 
+    // 是否在播放rollframe动画
+    private rollFrameAnimiationIsPlaying: boolean = false;
+
     protected onLoad(): void {
       this.initNodePool();
       this.initSymbols();
@@ -219,9 +222,14 @@ export class Roll extends Component {
      * @param onComplete 完成回调
      * @param reslutSymbols 结果符号
      */
-    stopRolling(rollList: SymbolItem[], onComplete?: () => void) {
+    async stopRolling(rollList: SymbolItem[], onComplete?: () => void, rollFrameAnimiationIsPlaying: boolean = false) {
+      // if (rollFrameAnimiationIsPlaying) {
+      //   await delay(900 / app.manager.global.gameSpeed);
+      // }
+
       this.rollList = rollList;
       this.onRollComplete = onComplete;
+      this.rollFrameAnimiationIsPlaying = rollFrameAnimiationIsPlaying;
     }
 
     /**
