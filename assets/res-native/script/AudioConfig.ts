@@ -109,6 +109,9 @@ export const AudioPath = {
     SYMBOL_CLEAR: 'Game/SymbolRemove',
     // 元素中奖
     SYMBOL_WIN: 'Game/SymbolWin',
+    // settle
+    SETTLE: 'Game/Settle',
+    SETTLE_OPEN: 'Game/SettleOpen',
     // Mega双倍幸运音效
     MEGA_DUB: 'Game/MegaDUB',
     // Nice双倍幸运音效
