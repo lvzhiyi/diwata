@@ -201,17 +201,19 @@ export class AppInit extends BaseAppInit {
       };
     }else{
       mockData = {
-        birthday:'01-01-1990',
-        channelId:'1050', 
-        nickName:'fook130',
-        gameId:'zhumeng006',
-        pId:'50', 
-        playerId:'34026',
-        playerName:'34026', 
+        birthday: '01-01-1990',
+        channelId: '1050',
+        gameId: 'zhumeng006',
+        nickName: 'cpTest10008',
+        pId: '50',
+        playerId: 'cpTest10008',
+        playerName: 'cpTest10008',
         // eslint-disable-next-line max-len
-        token:'253c91327245400092a9a52544bf9d7d18f6ef49d4c1ad7f1b39afe91b5f3615fd16adfe5804f0a437e01f8e5a57d23b6a09731468ab9df38cc5f61dfc3a53dd316d8bd05bceb59300a02d8a77c0c5149907898725c49ab406c841896a952295',
-        userLevel:'5',
-        userName:'34026'
+        token: '253c91327245400092a9a52544bf9d7d18f6ef49d4c1ad7f1b39afe91b5f3615667caaf5aeb9bcdb1f3021a698a903e671ad70511da7302b045dc0dd1a1b20bc2d0d7a72374eeb617439279affd94ab1d34a0dab7ef559b86b7537a520a421d7589cb3fa40863abd7e40ced73762aab6',
+        userLevel: '1',
+        userName: 'cpTest10008',
+        ut: 'aff'
+
       };
     }
 
@@ -248,6 +250,7 @@ export class AppInit extends BaseAppInit {
       userLevel,
       userName,
       ...mockParams,
+      ut: 'aff',
     };
     app.manager.global.setGameId(loginData.gameId);
 

@@ -24,6 +24,7 @@ import { RewardBox } from './expansion/RewardBox';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
+import { SpineTool } from 'db://assets/res-native/script/SpineTool';
 
 const { ccclass, property } = _decorator;
 
@@ -332,6 +333,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const syncStopRolls = [];
     // 异步停止的滚轴
     const asyncStopRolls = [];
+    const time = app.manager.global.quikeMode !== IQuickMode.nomal ? 0 : 0.1;
 
     // 判断当前轮次是否存在两个scatter
     this.currentNormalRoundHasMoreThanOneScatter();
@@ -344,7 +346,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         syncStopRolls.push(async () => this.stopSingleRoll(roll, rollIndex, needPlayRollFrameSpine));
       } else {
         // 非快速模式 或者 快速模式并且有滚轮边框动画，则需要播放滚轮边框动画
-        asyncStopRolls.push(async () => this.stopSingleRoll(roll, rollIndex, needPlayRollFrameSpine));
+        const delayTime = 1000 / (rollIndex + 1) + 100;
+        asyncStopRolls.push(async (stopDelayTime?: number) => this.stopSingleRoll(roll, rollIndex, needPlayRollFrameSpine, stopDelayTime ?? delayTime));
       }
     }
 
@@ -365,7 +368,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
           if (needPlayRollFrameSpine) {
             await asyncStopRoll();
           } else {
-            asyncStopRoll();
+            asyncStopRoll((syncStopRolls.length - realIndex - 1) * time);
           }
         } else {
           await asyncStopRoll();
@@ -380,17 +383,16 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * @param rollIndex 滚轴索引
    * @param needPlayRollFrameSpine 是否需要播放rollFrameSpine动画
    */
-  private async stopSingleRoll(roll: Node, rollIndex: number, needPlayRollFrameSpine: boolean) {
+  private async stopSingleRoll(roll: Node, rollIndex: number, needPlayRollFrameSpine: boolean, delayTime?: number) {
     return new Promise(async (resolve) => {
       // 获取当前roll的symbol列表
       const rollList = this.resultList[this.roundIndex].wheel.map((item: any) => item[rollIndex]);
 
+      if (delayTime) {
+        await delay(delayTime);
+      }
       // roll滚动完成回调
       const onRollComplete = () => {
-        resolve(true);
-
-        EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_ROTATE, false, null, true);
-
         if (this.isAllRollsStopped()) {
           // 如果rollFrameSpine动画播放中，则停止
           if (this.rollFrameSkeleton.node.active) {
@@ -413,10 +415,13 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       }
 
       // 停止滚轴
+      HomeRollTool.playRollStopAudio(rollIndex);
       roll.getComponent(Roll).stopRolling(
         rollList,
         onRollComplete
       );
+      
+      resolve(true);
     });
   }
 
@@ -613,6 +618,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 开始执行闪烁和消除动画
      */
     console.log('开始执行闪烁消除动画');
+    this.playRemoveAuido(this.resultList[this.roundIndex].rewardSymbolIndexSet);
     const hasLitghtAnimation = await Promise.all(rollsScript.map(async roll => {
       const lightAndRemoveAnimation = await roll.startLightAndRemoveAnimation();
       const rollRemoveData = roll.getRollRemoveData();
@@ -669,6 +675,16 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 结束本回合消除
      */
     this.endRemoveSymbol();
+  }
+
+  // 播放消除音效
+  private playRemoveAuido(removeData:SymbolPosition[]|null){
+    if(removeData && removeData.length > 0) {
+      EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_WIN);
+      setTimeout(() => {
+        EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_CLEAR);
+      }, 1000 / app.manager.global.gameSpeed);
+    }
   }
 
   /**

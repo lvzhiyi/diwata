@@ -209,7 +209,7 @@ export class HomeRollTool  {
           clearTimeout(time);
           resolve();
         }, 600 / app.manager.global.gameSpeed);
-        
+        EffectManager.inst.playEffect(AudioPath.GAME.STICK_BEAT, false, null, true);
         targetNodes.map(item => {
           // 过滤主元素
           const isMain = item.getComponent(Symbol).currentSymbolItem.main;
@@ -236,8 +236,6 @@ export class HomeRollTool  {
               console.error('加载spine/gun动画失败', error);
               this.destoryAnimationNode(spineNode);
             }
-          }else{
-            EffectManager.inst.playEffect(AudioPath.GAME.STICK_RETURN, false, null, true);
           }
         });
       });
@@ -477,6 +475,27 @@ export class HomeRollTool  {
       // 强制清理引用
       animationNode = null;
     }
+  }
+
+  static playRollStopAudio(rollIndex: number) {
+    EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_3, false, null, true);
+
+    // switch (rollIndex) {
+    //   case 0:
+    //   case 5:
+    //     EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_3, false, null, true);
+    //     break;
+    //   case 1:
+    //   case 4:
+    //     EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_4, false, null, true);
+    //     break;
+    //   case 2:
+    //   case 3:
+    //     EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_5, false, null, true);
+    //     break;
+    //   default:
+    //     break;
+    // }
   }
 
   /**

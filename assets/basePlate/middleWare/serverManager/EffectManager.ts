@@ -93,10 +93,14 @@ export class EffectManager extends Component {
     AudioPath.GAME.SPINE_ROTATE,
     AudioPath.GAME.CHANGE_WILD,
     AudioPath.GAME.SWORD_AND_STICK,
-    AudioPath.GAME.STICK_RETURN,
+    AudioPath.GAME.STICK_BEAT,
+    AudioPath.GAME.STICK_START,
     AudioPath.GAME.SWORD_RETURN,
     AudioPath.GAME.SPIN_ROTATE,
     AudioPath.GAME.ROLL_STOP_ROTATE,
+    AudioPath.GAME.ROLL_STOP_3,
+    AudioPath.GAME.ROLL_STOP_4,
+    AudioPath.GAME.ROLL_STOP_5,
     AudioPath.GAME.DOUBLE_NUMBER,
     AudioPath.GAME.FREE_BONUS_TRANSITION,
     AudioPath.GAME.SCATTER_SHOW,
@@ -505,7 +509,7 @@ export class EffectManager extends Component {
 
     // 该音乐正在播放中则返回
     if (!isForcePlay && this.playingMusic.uuid !== -1 && this.playingMusic.name === name) {
-      console.log('该音乐正在播放');
+      console.log('该音乐正在播放', name);
 
       return ;
     }

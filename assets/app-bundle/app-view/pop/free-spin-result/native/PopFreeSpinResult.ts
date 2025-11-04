@@ -45,7 +45,7 @@ export class PopFreeSpinResult extends BaseView {
 
   onShow(params: any) {
     this.init(params);
-    // BGMManager.inst.playBigPrizeBGM(AudioPath.BGM.SETTLE_OPEN);
+    // BGMManager.inst.playBigPrizeBGM(AudioPath.UI.COIN_ADD);
     this.showAmountAnimation();
   }
 
@@ -80,14 +80,13 @@ export class PopFreeSpinResult extends BaseView {
     }
 
     return new Promise<void>(async (resolve) => {
-      EffectManager.inst.playEffect(AudioPath.UI.COIN_ADD);
+      EffectManager.inst.playEffect(AudioPath.GAME.SETTLE);
       await this.numberWinBgAnimator.animateTo(
         this.amount,
-        3,
+        5,
         (value) => '₱ ' + numberToMoney(value, 3, false),
         true
       );
-      EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD);
       this.scheduleOnce(() => {
         this.stopAnimation();
       }, app.manager.global.quikeMode !== IQuickMode.nomal ? 1 : 2.5);

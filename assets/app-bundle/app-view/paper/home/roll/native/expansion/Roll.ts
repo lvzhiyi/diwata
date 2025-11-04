@@ -62,6 +62,9 @@ export class Roll extends Component {
 
     private originalWorldPosition: Vec3 = new Vec3();
 
+    // 是否在播放rollframe动画
+    private rollFrameAnimiationIsPlaying: boolean = false;
+
     protected onLoad(): void {
       this.initNodePool();
       this.initSymbols();
@@ -219,9 +222,14 @@ export class Roll extends Component {
      * @param onComplete 完成回调
      * @param reslutSymbols 结果符号
      */
-    stopRolling(rollList: SymbolItem[], onComplete?: () => void) {
+    async stopRolling(rollList: SymbolItem[], onComplete?: () => void, rollFrameAnimiationIsPlaying: boolean = false) {
+      // if (rollFrameAnimiationIsPlaying) {
+      //   await delay(900 / app.manager.global.gameSpeed);
+      // }
+
       this.rollList = rollList;
       this.onRollComplete = onComplete;
+      this.rollFrameAnimiationIsPlaying = rollFrameAnimiationIsPlaying;
     }
 
     /**
@@ -444,6 +452,7 @@ export class Roll extends Component {
   
           if (Item.symbolId  === SymbolType.BOW && (symbolId !== SymbolType.WILD && symbolId !== '')) {
             if (Item.main === true) {
+              EffectManager.inst.playEffect(AudioPath.GAME.STICK_START, false, null, true);
               symbol?.playSwordOrBowAnimation('4011');
               showBowNode.push(child);
             }else{
@@ -520,13 +529,6 @@ export class Roll extends Component {
      * 开始中奖闪烁
      */
     async startLightAndRemoveAnimation() {
-      if(this.rollRemoveData.length > 0) {
-        EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_WIN);
-        setTimeout(() => {
-          EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_CLEAR);
-        }, 1000 / app.manager.global.gameSpeed);
-      }
-
       return await Promise.all(this.rollRemoveData.map(async item => {
         const { rowIndex } = item;
         const symbol = this.node.children[rowIndex]?.getComponent(Symbol);
@@ -732,6 +734,7 @@ export class Roll extends Component {
         
         if (SYMBOL_WILD_IDS.indexOf(itemSymbolId) !== -1 ) {
           hasChangeWild = true;
+          EffectManager.inst.playEffect(AudioPath.GAME.CHANGE_WILD);
 
           return this.symbolChangeToSingleWild(index);
         }
