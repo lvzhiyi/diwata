@@ -1,12 +1,12 @@
 
 jiantou.png
-size: 86,89
+size: 82,85
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-zhuan
+zhuan2
   rotate: false
-  xy: 2, 2
+  xy: 0, 0
   size: 82, 85
   orig: 82, 85
   offset: 0, 0

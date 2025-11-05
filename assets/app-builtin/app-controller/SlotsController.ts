@@ -39,8 +39,12 @@ export class SlotsController extends BaseController<
    * @param serverResults 服务器结果
    */
   async stopRolling(betResult: BetResult) {
-    this.betRecordId = betResult?.betRecordId ?? '';
-    console.log('betRecordId', this.betRecordId);
+    // 只有当前中了免费轮才需要记录投注id
+    const isFreeBonusSpin = betResult?.resultDetail?.resultList?.some(item => item.freeWheelFlag === 1);
+
+    if(isFreeBonusSpin){
+      this.betRecordId = betResult?.betRecordId ?? '';
+    }
     
     this.emit(SlotsController.Event.StopRolling, betResult);
   }
@@ -78,6 +82,11 @@ export class SlotsController extends BaseController<
    * 普通投注
    */
   betNormal() {
+    /// 如果是免费轮，则不进行普通投注
+    if(app.controller.slots.isFreeBonusSpin === true){
+      return;
+    }
+
     app.controller.home.gameStart();
 
     app.controller.home.getBetResult(app.manager.global.betCount, BetTypes.normal, BetSubTypes.normal, app.manager.global.isFreespinMode, freeSpinManager.freespinCampaignId);
