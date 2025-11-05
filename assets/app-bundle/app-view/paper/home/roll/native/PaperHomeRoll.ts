@@ -392,7 +392,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         await delay(delayTime);
         setTimeout(() => {
           EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_3, false, null, true);
-        }, 300 / app.manager.global.gameSpeed);
+        }, 270 / app.manager.global.gameSpeed);
       }
       // roll滚动完成回调
       const onRollComplete = () => {
