@@ -390,6 +390,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
       if (delayTime) {
         await delay(delayTime);
+        setTimeout(() => {
+          EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_3, false, null, true);
+        }, 300 / app.manager.global.gameSpeed);
       }
       // roll滚动完成回调
       const onRollComplete = () => {
@@ -415,7 +418,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       }
 
       // 停止滚轴
-      HomeRollTool.playRollStopAudio(rollIndex);
       roll.getComponent(Roll).stopRolling(
         rollList,
         onRollComplete

@@ -209,7 +209,12 @@ export class HomeRollTool  {
           clearTimeout(time);
           resolve();
         }, 600 / app.manager.global.gameSpeed);
-        EffectManager.inst.playEffect(AudioPath.GAME.STICK_BEAT, false, null, true);
+        const isAllMain = targetNodes.every(item => item.getComponent(Symbol).currentSymbolItem.main);
+
+        if(!isAllMain){
+          EffectManager.inst.playEffect(AudioPath.GAME.STICK_BEAT, false, null, true);
+        }
+
         targetNodes.map(item => {
           // 过滤主元素
           const isMain = item.getComponent(Symbol).currentSymbolItem.main;
