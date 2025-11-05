@@ -244,7 +244,7 @@ export class PopGrandPrize extends BaseView {
       // 执行整体缩放动画
       this.GrandprizeScaleAnimation();
 
-      await delay(3000 / app.manager.global.gameSpeed);
+      await delay(4000 / app.manager.global.gameSpeed);
 
       // 动画完成后，如果节点仍然有效，则执行隐藏逻辑
       if (this.node && this.node.isValid && animationName === this.animationQueue[this.animationQueue.length - 1] && !this.isPlayEnd) {

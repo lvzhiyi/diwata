@@ -375,6 +375,9 @@ export class HomeController extends BaseController<
       }
 
       // 免费中的子轮其中一个中断后，设置为非免费轮，修改状态
+      app.manager.global.setGameRecordIds([]);
+      app.manager.global.setGameRecordIndex(0);
+      app.manager.global.setFreeBonusTimes(0);
       app.controller.slots.freeBonusSpinChange(false);
 
       app.controller.slots.stopRolling(this.betResult);

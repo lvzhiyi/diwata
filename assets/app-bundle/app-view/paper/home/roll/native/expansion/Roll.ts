@@ -428,6 +428,7 @@ export class Roll extends Component {
           this.rollList.forEach((item, index) => {
             if(item.main === true && item.symbolId === SymbolType.SWORD ) {
               symbolNode = this.node.children[index] || null;
+              EffectManager.inst.playEffect(AudioPath.GAME.SWORD_AND_STICK, false, null, true);
               symbolNode?.getComponent(Symbol)?.playSwordOrBowAnimation('4010');
             }
           });
