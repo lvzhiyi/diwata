@@ -82,7 +82,7 @@ export class PopFreeSpinResult extends BaseView {
     return new Promise<void>(async (resolve) => {
       await this.numberWinBgAnimator.animateTo(
         this.amount,
-        5,
+        5.2,
         (value) => '₱ ' + numberToMoney(value, 3, false),
         true
       );

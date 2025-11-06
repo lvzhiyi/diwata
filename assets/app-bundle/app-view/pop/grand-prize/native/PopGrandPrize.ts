@@ -245,14 +245,12 @@ export class PopGrandPrize extends BaseView {
       this.playSpineAnimation(spine, `${animationName}loop`, true);
       // 执行整体缩放动画
       this.GrandprizeScaleAnimation();
+      await delay(4000 / app.manager.global.gameSpeed);
 
       // 动画完成后，如果节点仍然有效，则执行隐藏逻辑
       if (this.node && this.node.isValid && animationName === this.animationQueue[this.animationQueue.length - 1] && !this.isPlayEnd) {
-        await delay(2000 / app.manager.global.gameSpeed);
         this.hideGrandPrize();
       }
-
-      await delay(4000 / app.manager.global.gameSpeed);
     } catch (error) {
       console.error('playGrandPrizeAnimation error:', error);
     }
