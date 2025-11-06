@@ -1270,6 +1270,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     const { overallRewardAmount, resultDetail } = this.resultData;
     const { allWheelRewardSubType } = resultDetail;
     const { accumulateReachMaxMultiple } = this.resultList[this.roundIndex];
+    EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD);
 
     // 当前没有展示投注记录和记录详情的时候，调整层级
     return new Promise<void>(resolve => {
