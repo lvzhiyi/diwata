@@ -93,6 +93,7 @@ export class EffectManager extends Component {
     AudioPath.GAME.SPINE_ROTATE,
     AudioPath.GAME.CHANGE_WILD,
     AudioPath.GAME.SWORD_AND_STICK,
+    AudioPath.GAME.SWORD_START,
     AudioPath.GAME.STICK_BEAT,
     AudioPath.GAME.STICK_START,
     AudioPath.GAME.SWORD_RETURN,
@@ -120,6 +121,7 @@ export class EffectManager extends Component {
     AudioPath.UI.CLOSE,
     // 金币增加的音效
     AudioPath.UI.COIN_ADD,
+    AudioPath.UI.COIN_ADD2,
    
     AudioPath.POPUP.MEGA_END,
     AudioPath.POPUP.NICE_END,

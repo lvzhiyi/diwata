@@ -428,7 +428,7 @@ export class Roll extends Component {
           this.rollList.forEach((item, index) => {
             if(item.main === true && item.symbolId === SymbolType.SWORD ) {
               symbolNode = this.node.children[index] || null;
-              EffectManager.inst.playEffect(AudioPath.GAME.SWORD_AND_STICK, false, null, true);
+              EffectManager.inst.playEffect(AudioPath.GAME.SWORD_START, false, null, true);
               symbolNode?.getComponent(Symbol)?.playSwordOrBowAnimation('4010');
             }
           });
@@ -735,8 +735,8 @@ export class Roll extends Component {
         
         if (SYMBOL_WILD_IDS.indexOf(itemSymbolId) !== -1 ) {
           hasChangeWild = true;
-          EffectManager.inst.playEffect(AudioPath.GAME.CHANGE_WILD);
 
+          // EffectManager.inst.playEffect(AudioPath.GAME.CHANGE_WILD);
           return this.symbolChangeToSingleWild(index);
         }
     

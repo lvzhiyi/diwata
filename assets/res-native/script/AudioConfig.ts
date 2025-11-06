@@ -54,6 +54,7 @@ export const AudioPath = {
     WUSHENG: 'UI/Wusheng',
     // 金币增加的音效
     COIN_ADD: 'UI/NumberRoll',
+    COIN_ADD2: 'UI/NumberRoll2',
   },
 
   // 弹窗音效
@@ -85,6 +86,8 @@ export const AudioPath = {
     STICK_START: 'Game/Stick_Start',
     // 挥剑
     SWORD_RETURN: 'Game/Sword',
+    // 挥剑开始
+    SWORD_START: 'Game/Sword_Start',
     // 按钮开始旋转
     SPIN_ROTATE: 'Game/SpinStartRoll',
     // 滚轴停止旋转

@@ -1,7 +1,7 @@
 import { _decorator, EventTouch, Label, Node, Prefab, sp,  SpriteFrame,  tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import BaseView from 'db://app/base/BaseView';
 import { Roll } from './expansion/Roll';
-import { Symbol } from './expansion/Symbol';
+import { Symbol, SYMBOL_WILD_IDS } from './expansion/Symbol';
 import { calculateWithBase, delay, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { app } from 'db://assets/app/app';
 import { PopGrandPrize } from '../../../../pop/grand-prize/native/PopGrandPrize';
@@ -390,9 +390,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
       if (delayTime) {
         await delay(delayTime);
+        let audioDelayTime = 270 / app.manager.global.gameSpeed;
+
+        if(rollIndex === 5){
+          audioDelayTime = 250 / app.manager.global.gameSpeed;
+        }
+
         setTimeout(() => {
           EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_3, false, null, true);
-        }, 270 / app.manager.global.gameSpeed);
+        }, audioDelayTime);
       }
       // roll滚动完成回调
       const onRollComplete = () => {
@@ -597,7 +603,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * symbol变为wild,先清空overlayNode上面的发光节点
      */
     this.homeRollTool.destoryOverlayNodeLight(this.overLayNode);
-
+    this.playSymbolChangeToWildAudio(rollsScript);
     const hasSymbolChangeToWilds = await Promise.all(rollsScript.map(roll => roll.symbolChangeToWild()));
    
     if (hasSymbolChangeToWilds.some(item => item)) await delay(480 / app.manager.global.gameSpeed);
@@ -685,7 +691,18 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_WIN);
       setTimeout(() => {
         EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_CLEAR);
-      }, 1000 / app.manager.global.gameSpeed);
+      }, 900 / app.manager.global.gameSpeed);
+    }
+  }
+
+  // 播放元素变wild音效
+  private playSymbolChangeToWildAudio(rollsScript:Roll[]|null){
+    if(rollsScript && rollsScript.length > 0) {
+      const haveChangeWild = rollsScript.some(roll => roll.symbolAnimationData.some(item => SYMBOL_WILD_IDS.indexOf(item.symbolId) !== -1 ));
+
+      if(haveChangeWild) {
+        EffectManager.inst.playEffect(AudioPath.GAME.CHANGE_WILD);
+      }
     }
   }
 
