@@ -216,6 +216,7 @@ export class PopGrandPrize extends BaseView {
     const textNode = this.node.getChildByName('AmontBox');
     // 显示金额文本并播放循环动画
     textNode.active = true;
+    textNode.setScale(new Vec3(1, 1, 1));
 
     try {
       // 根据奖励类型加载对应的骨骼动画资源
@@ -379,7 +380,7 @@ export class PopGrandPrize extends BaseView {
     const textNode = this.node.getChildByName('AmontBox');
 
     // 保存原始位置用于后续重置
-    const originalPosition = textNode.position.clone();
+    // const originalPosition = textNode.position.clone();
 
     // 播放关闭骨骼动画
     const animationName = this.currentAnimationName + 'out';
@@ -395,7 +396,8 @@ export class PopGrandPrize extends BaseView {
         this.numberWinBgAnimator.stopAnimation(true);
         EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD2);
         // 重置并清理资源
-        textNode.setPosition(originalPosition);
+        // textNode.setPosition(originalPosition);
+        this.node.setScale(new Vec3(1, 1, 1));
         this.hide();
         resolve();
       }, 1670 / app.manager.global.gameSpeed);
@@ -414,7 +416,7 @@ export class PopGrandPrize extends BaseView {
               { easing: 'quadIn' }
             )
             .call(() => {
-              this.node.setScale(new Vec3(1, 1, 1));
+              
             })
             .start();
         })
