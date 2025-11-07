@@ -181,15 +181,14 @@ export class PopGrandPrize extends BaseView {
     });
   }
 
-  private  playAmountAnimation() {
+  private async playAmountAnimation() {
     // 确保金额动画只执行一次
     if (this.numberWinBgAnimator.isInAnimation() || this.numberRollIsPlaying) {
       return;
     }
 
     this.numberRollIsPlaying = true;
-    
-    console.log('金币开始播放', this.amount, this.animationQueue.length);
+    await delay(300);
     this.numberWinBgAnimator.animateTo(
       this.amount,
       this.getDisplayTimeByRewardType() * this.animationQueue.length,
@@ -265,9 +264,7 @@ export class PopGrandPrize extends BaseView {
     // 播放大奖配音音效（如"NICE!"、"MEGA!"等）
     console.log('animationPrizeName', animationName);
     EffectManager.inst.playEffect(animationName, false, null, false);
-    setTimeout(() => {
-      EffectManager.inst.playEffect(AudioPath.UI.COIN_ADD2, true, null, true);
-    }, 600 / app.manager.global.gameSpeed);
+    EffectManager.inst.playEffect(AudioPath.UI.COIN_ADD2, true, null, true);
   }
 
   /**
