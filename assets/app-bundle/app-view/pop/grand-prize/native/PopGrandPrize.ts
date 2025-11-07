@@ -245,10 +245,11 @@ export class PopGrandPrize extends BaseView {
       this.playSpineAnimation(spine, `${animationName}loop`, true);
       // 执行整体缩放动画
       this.GrandprizeScaleAnimation();
-      await delay(4000 / app.manager.global.gameSpeed);
+      await delay(4800 / app.manager.global.gameSpeed);
 
       // 动画完成后，如果节点仍然有效，则执行隐藏逻辑
       if (this.node && this.node.isValid && animationName === this.animationQueue[this.animationQueue.length - 1] && !this.isPlayEnd) {
+        this.pauseBGM();
         this.hideGrandPrize();
       }
     } catch (error) {
@@ -274,7 +275,7 @@ export class PopGrandPrize extends BaseView {
    * 根据奖励类型选择不同的音效
    */
   private playGrandPrizeBGSound(animationName: string) {
-    BGMManager.inst.playBigPrizeBGM(animationName);
+    BGMManager.inst.playBigPrizeBGM(animationName, false);
   }
 
   /**
@@ -323,7 +324,7 @@ export class PopGrandPrize extends BaseView {
    * @returns 显示时间（秒）
    */
   private getDisplayTimeByRewardType(): number {
-    const time = 4;
+    const time = 5.5;
 
     return time / app.manager.global.gameSpeed;
   }
@@ -356,9 +357,6 @@ export class PopGrandPrize extends BaseView {
       // app.manager.sound.stopEffect(this.bgm_id);
 
       this.isPlayEnd = true;
-
-      // 延迟2秒，让结束音效有时间播放
-      await delay(2000);
 
       // 如果节点仍然有效，播放关闭动画
       if (this.node && this.node.isValid) {

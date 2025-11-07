@@ -335,7 +335,7 @@ export class BGMManager extends Component {
    * @param name 音乐资源名称
    * @param volume 音量
    */
-  private async playBGM(name: string, volume?: number): Promise<void> {
+  private async playBGM(name: string, volume?: number, loop: boolean = true): Promise<void> {
     if (!this._bgmAudioSource) {
       console.error('BGMManager: BGM audio source not initialized');
 
@@ -366,7 +366,7 @@ export class BGMManager extends Component {
 
     // 配置音频源
     this._bgmAudioSource.clip = audioClip;
-    this._bgmAudioSource.loop = true;
+    this._bgmAudioSource.loop = loop;
     this._bgmAudioSource.volume = this._isMuted ? 0 : this._bgmVolume;
 
     // 创建BGM实例
@@ -411,8 +411,8 @@ export class BGMManager extends Component {
   }
    
   /** 播放大奖弹框的背景音乐 */
-  public async playBigPrizeBGM(prizeBgName:string): Promise<void> {
-    await this.playBGM(prizeBgName);
+  public async playBigPrizeBGM(prizeBgName:string, loop: boolean = true): Promise<void> {
+    await this.playBGM(prizeBgName, undefined, loop);
   }
 
   /**
