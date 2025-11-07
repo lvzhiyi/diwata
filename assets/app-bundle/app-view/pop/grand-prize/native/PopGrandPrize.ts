@@ -396,10 +396,10 @@ export class PopGrandPrize extends BaseView {
         EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD2);
         this.hide();
         resolve();
-      }, 1670);
+      }, 1670 / app.manager.global.gameSpeed);
       tween(textNode)
         .to(
-          1,
+          1 / app.manager.global.gameSpeed,
           { scale: new Vec3(1.3, 1.3, 1.3), },
           { easing: 'quadOut' }
         )
@@ -407,7 +407,7 @@ export class PopGrandPrize extends BaseView {
           // 文本缩小并上移动画：快速缩小到0并上移
           tween(textNode)
             .to(
-              0.5,
+              0.5 / app.manager.global.gameSpeed,
               { scale: new Vec3(0, 0, 0), },
               { easing: 'quadIn' }
             )
