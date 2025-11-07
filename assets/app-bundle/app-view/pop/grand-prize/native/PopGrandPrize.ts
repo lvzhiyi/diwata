@@ -219,6 +219,15 @@ export class PopGrandPrize extends BaseView {
     textNode.setScale(new Vec3(1, 1, 1));
 
     try {
+      const musicBGName = effectBGMap[animationName];
+
+      if(isEnd === false){
+        this.playGrandPrizeBGSound(musicBGName);
+      }
+
+      // 播放音效和背景音乐
+      const musicName = effectMap[animationName];
+      this.playGrandPrizeSound(musicName);
       // 根据奖励类型加载对应的骨骼动画资源
       const spineAtlas: sp.SkeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.GRAND_PRIZE);
 
@@ -231,16 +240,6 @@ export class PopGrandPrize extends BaseView {
       console.log('animationName', animationName);
       spine.timeScale = app.manager.global.gameSpeed;
       
-      const musicBGName = effectBGMap[animationName];
-
-      if(isEnd === false){
-        this.playGrandPrizeBGSound(musicBGName);
-      }
-
-      // 播放音效和背景音乐
-      const musicName = effectMap[animationName];
-      this.playGrandPrizeSound(musicName);
-      
       this.currentAnimationName = animationName;
 
       // 播放入场动画
@@ -251,7 +250,7 @@ export class PopGrandPrize extends BaseView {
       this.GrandprizeScaleAnimation();
 
       if(isEnd === false){
-        await delay(4800 / app.manager.global.gameSpeed);
+        await delay(5000 / app.manager.global.gameSpeed);
       }
 
       // 动画完成后，如果节点仍然有效，则执行隐藏逻辑
