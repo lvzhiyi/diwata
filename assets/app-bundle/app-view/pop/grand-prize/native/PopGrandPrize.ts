@@ -394,6 +394,8 @@ export class PopGrandPrize extends BaseView {
         clearTimeout(timeoutId);
         this.numberWinBgAnimator.stopAnimation(true);
         EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD2);
+        // 重置并清理资源
+        textNode.setPosition(originalPosition);
         this.hide();
         resolve();
       }, 1670 / app.manager.global.gameSpeed);
@@ -412,9 +414,6 @@ export class PopGrandPrize extends BaseView {
               { easing: 'quadIn' }
             )
             .call(() => {
-              // 重置并清理资源
-              textNode.setPosition(originalPosition);
-             
               this.node.setScale(new Vec3(1, 1, 1));
             })
             .start();
