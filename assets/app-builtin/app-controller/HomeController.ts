@@ -335,7 +335,13 @@ export class HomeController extends BaseController<
         // 购买失败，复原星卡使用状态
         ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.hideStarCard, null);
       }
-      
+
+      app.controller.slots.freeBonusSpinChange(false);
+
+      if(app.manager.global.quantity > 0){
+        app.manager.global.setQuantity(0);
+      }
+
       app.controller.slots.stopRolling(this.betResult);
     }
   }
