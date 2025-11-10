@@ -58,9 +58,7 @@ export const AudioPath = {
     CLOSE: 'UI/Close',
     // 无声
     WUSHENG: 'UI/Wusheng',
-    // 金币增加的音效
-    COIN_ADD: 'UI/NumberRoll',
-    COIN_ADD2: 'UI/NumberRoll2',
+    
   },
 
   // 弹窗音效
@@ -137,6 +135,9 @@ export const AudioPath = {
     GODDESS_CHEER4: 'Game/Goddess4',
     // 女神欢呼
     GODDESS_CHEER5: 'Game/Goddess5',
+    // 金币增加的音效
+    COIN_ADD: 'Game/NumberRoll',
+    COIN_ADD2: 'Game/NumberRoll2',
   
   },
 };

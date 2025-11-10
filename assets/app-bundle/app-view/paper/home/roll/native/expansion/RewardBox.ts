@@ -51,7 +51,7 @@ export class RewardBox extends Component {
 
     showWinNumber(startNum: number, endNum: number): Promise<void> {
       return new Promise<void>(resolve => {
-        EffectManager.inst.playEffect(AudioPath.UI.COIN_ADD);
+        EffectManager.inst.playEffect(AudioPath.GAME.COIN_ADD);
         this.TipsNode.active = true;
         this.TipsImageNode.active = false;
         // 播放金额动画，如果金额变化小于2倍投注金额，则播放action1，否则播放action2
@@ -71,7 +71,7 @@ export class RewardBox extends Component {
           { value: endNum },
           { onUpdate: () => label.string = `WIN ₱${numberToMoney(calculateWithBase(target.value), 3, false)}` }
         ).call(() => {
-          EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD);
+          EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD);
           resolve();
         })
           .start();

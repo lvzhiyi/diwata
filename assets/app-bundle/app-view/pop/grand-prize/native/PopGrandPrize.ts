@@ -207,7 +207,7 @@ export class PopGrandPrize extends BaseView {
       true
     ).then(() => {
       console.log('金币结束播放');
-      EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD2);
+      // EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD2);
     });
   }
 
@@ -215,7 +215,7 @@ export class PopGrandPrize extends BaseView {
    * 播放大奖动画序列
    * 包括骨骼动画、文本动画和数字滚动效果
    */
-  private async playGrandPrizeAnimation(animationName: string) {
+  private async playGrandPrizeAnimation(animationName: string, isSkipEnd:boolean = false) {
     // 获取骨骼动画组件和文本节点
     console.log('this.bgNode', this.bgNode);
 
@@ -254,8 +254,10 @@ export class PopGrandPrize extends BaseView {
       this.playSpineAnimation(spine, `${animationName}loop`, true);
       // 执行整体缩放动画
       this.GrandprizeScaleAnimation();
-      
-      await delay(5000 / app.manager.global.gameSpeed);
+
+      if(!isSkipEnd) { 
+        await delay(5000 / app.manager.global.gameSpeed);
+      }
 
       // 动画完成后，如果节点仍然有效，则执行隐藏逻辑
       if (this.node && this.node.isValid && animationName === this.animationQueue[this.animationQueue.length - 1] && !this.isPlayEnd) {
@@ -274,7 +276,7 @@ export class PopGrandPrize extends BaseView {
     // 播放大奖配音音效（如"NICE!"、"MEGA!"等）
     console.log('animationPrizeName', animationName);
     EffectManager.inst.playEffect(animationName, false, null, false);
-    EffectManager.inst.playEffect(AudioPath.UI.COIN_ADD2, true, null, true);
+    // EffectManager.inst.playEffect(AudioPath.GAME.COIN_ADD2, true, null, true);
   }
 
   /**
@@ -340,7 +342,7 @@ export class PopGrandPrize extends BaseView {
    * 隐藏大奖弹窗
    * 停止动画和音效，播放结束动画
    */
-  async hideGrandPrize(needEnd:boolean = true) {
+  async hideGrandPrize(needEndAudio:boolean = true) {
     // 防止重复调用
     if (this.isHideInProgress || !this.numberRollIsPlaying) return;
     this.isHideInProgress = true;
@@ -350,16 +352,16 @@ export class PopGrandPrize extends BaseView {
     if (this.currentAnimationName !== lastAnimationName) {
       // 停止数字动画和背景音乐
       this.numberWinBgAnimator.stopAnimation(true);
-      EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD2);
+      // EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD2);
       const musicBGName = effectBGMap[lastAnimationName];
       this.playGrandPrizeBGSound(musicBGName, false);
-      await this.playGrandPrizeAnimation(lastAnimationName);
+      await this.playGrandPrizeAnimation(lastAnimationName, true);
     }
 
     try {
-      EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD2);
+      // EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD2);
 
-      if(needEnd) { 
+      if(needEndAudio) { 
         const musicName = effectBGMapEnd[this.currentAnimationName];
         EffectManager.inst.playEffect(musicName);
       }
@@ -401,7 +403,7 @@ export class PopGrandPrize extends BaseView {
       const timeoutId = setTimeout(() => {
         clearTimeout(timeoutId);
         this.numberWinBgAnimator.stopAnimation(true);
-        EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD2);
+        // EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD2);
         // 重置并清理资源
         // textNode.setPosition(originalPosition);
         this.node.setScale(new Vec3(1, 1, 1));
