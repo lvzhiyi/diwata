@@ -17,7 +17,7 @@ const { ccclass, property } = _decorator;
 
 const animationMap: any = {
   [RewardSubTypeEnum.NICE]: ['01nice_'],
-  [RewardSubTypeEnum.MEGA]: ['01nice_', '02mega_'],
+  [RewardSubTypeEnum.MEGA]: ['02mega_'],
   [RewardSubTypeEnum.SUPER]: ['01nice_', '02mega_', '03super_'],
 };
 
@@ -25,6 +25,12 @@ const effectBGMap :any = {
   '01nice_': AudioPath.BGM.NICE_OPEN,
   '02mega_':  AudioPath.BGM.MEGA_OPEN,
   '03super_':  AudioPath.BGM.SUPER_OPEN,
+};
+
+const effectBGAndEndMap :any = {
+  '01nice_': AudioPath.BGM.NICE_OPEN_AND_END,
+  '02mega_':  AudioPath.BGM.MEGA_OPEN_AND_END,
+  '03super_':  AudioPath.BGM.SUPER_OPEN_AND_END,
 };
 
 const effectMap :any = {
@@ -144,6 +150,10 @@ export class PopGrandPrize extends BaseView {
     // 初始化UI并播放大奖动画
     await this.initializeUI(params);
     this.playAmountAnimation();
+    // 播放背景音乐
+    const lastAnimationName = this.animationQueue[this.animationQueue.length - 1];
+    const musicBGName = effectBGAndEndMap[lastAnimationName];
+    this.playGrandPrizeBGSound(musicBGName, false);
 
     for (const animationName of this.animationQueue) {
       if (this.isHideInProgress) break;
@@ -204,7 +214,7 @@ export class PopGrandPrize extends BaseView {
    * 播放大奖动画序列
    * 包括骨骼动画、文本动画和数字滚动效果
    */
-  private async playGrandPrizeAnimation(animationName: string, isEnd:boolean = false) {
+  private async playGrandPrizeAnimation(animationName: string) {
     // 获取骨骼动画组件和文本节点
     console.log('this.bgNode', this.bgNode);
 
@@ -219,13 +229,7 @@ export class PopGrandPrize extends BaseView {
     textNode.setScale(new Vec3(1, 1, 1));
 
     try {
-      const musicBGName = effectBGMap[animationName];
-
-      if(isEnd === false){
-        this.playGrandPrizeBGSound(musicBGName);
-      }
-
-      // 播放音效和背景音乐
+      // 播放音效
       const musicName = effectMap[animationName];
       this.playGrandPrizeSound(musicName);
       // 根据奖励类型加载对应的骨骼动画资源
@@ -248,14 +252,12 @@ export class PopGrandPrize extends BaseView {
       this.playSpineAnimation(spine, `${animationName}loop`, true);
       // 执行整体缩放动画
       this.GrandprizeScaleAnimation();
-
-      if(isEnd === false){
-        await delay(5000 / app.manager.global.gameSpeed);
-      }
+      
+      await delay(5000 / app.manager.global.gameSpeed);
 
       // 动画完成后，如果节点仍然有效，则执行隐藏逻辑
       if (this.node && this.node.isValid && animationName === this.animationQueue[this.animationQueue.length - 1] && !this.isPlayEnd) {
-        this.hideGrandPrize();
+        this.hideGrandPrize(false);
       }
     } catch (error) {
       console.error('playGrandPrizeAnimation error:', error);
@@ -277,8 +279,8 @@ export class PopGrandPrize extends BaseView {
    * 播放大奖配音音效和大奖背景音效
    * 根据奖励类型选择不同的音效
    */
-  private playGrandPrizeBGSound(animationName: string) {
-    BGMManager.inst.playBigPrizeBGM(animationName, false);
+  private playGrandPrizeBGSound(animationName: string, isLoop:boolean = true) {
+    BGMManager.inst.playBigPrizeBGM(animationName, isLoop);
   }
 
   /**
@@ -336,7 +338,7 @@ export class PopGrandPrize extends BaseView {
    * 隐藏大奖弹窗
    * 停止动画和音效，播放结束动画
    */
-  async hideGrandPrize() {
+  async hideGrandPrize(needEnd:boolean = true) {
     // 防止重复调用
     if (this.isHideInProgress || !this.numberRollIsPlaying) return;
     this.isHideInProgress = true;
@@ -347,12 +349,18 @@ export class PopGrandPrize extends BaseView {
       // 停止数字动画和背景音乐
       this.numberWinBgAnimator.stopAnimation(true);
       EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD2);
-      await this.playGrandPrizeAnimation(lastAnimationName, true);
+      const musicBGName = effectBGMap[lastAnimationName];
+      this.playGrandPrizeBGSound(musicBGName, false);
+      await this.playGrandPrizeAnimation(lastAnimationName);
     }
 
     try {
       EffectManager.inst.stopAllEffectsByName(AudioPath.UI.COIN_ADD2);
-      // app.manager.sound.stopEffect(this.bgm_id);
+
+      if(needEnd) { 
+        const musicName = effectBGMapEnd[this.currentAnimationName];
+        EffectManager.inst.playEffect(musicName);
+      }
 
       this.isPlayEnd = true;
 
@@ -385,8 +393,6 @@ export class PopGrandPrize extends BaseView {
     const animationName = this.currentAnimationName + 'out';
     // 播放关闭骨骼动画
     this.playSpineAnimation(spine, animationName, false);
-    const musicName = effectBGMapEnd[this.currentAnimationName];
-    EffectManager.inst.playEffect(musicName);
 
     return new Promise<void>((resolve) => {
       // 文本放大动画：放大并略微下移

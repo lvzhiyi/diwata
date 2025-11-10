@@ -33,10 +33,16 @@ export const AudioPath = {
     MEGA_OPEN: 'BGM/Mega_Bg',
     // Nice弹窗打开
     NICE_OPEN: 'BGM/Nice_Bg',
-    // 结算弹窗打开
-    SETTLE_OPEN: 'BGM/Settle_Bg',
     // Super弹窗打开
     SUPER_OPEN: 'BGM/Super_Bg',
+    // Mega弹窗打开
+    MEGA_OPEN_AND_END: 'BGM/Mega_Bg_AndEnd',
+    // Nice弹窗打开
+    NICE_OPEN_AND_END: 'BGM/Nice_Bg_AndEnd',
+    // Super弹窗打开
+    SUPER_OPEN_AND_END: 'BGM/Super_Bg_AndEnd',
+    // 结算弹窗打开
+    SETTLE_OPEN: 'BGM/Settle_Bg',
   },
 
   // UI音效

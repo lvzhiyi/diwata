@@ -62,6 +62,9 @@ export class BGMManager extends Component {
     AudioPath.BGM.MEGA_OPEN,
     AudioPath.BGM.NICE_OPEN,
     AudioPath.BGM.SUPER_OPEN,
+    AudioPath.BGM.MEGA_OPEN_AND_END,
+    AudioPath.BGM.NICE_OPEN_AND_END,
+    AudioPath.BGM.SUPER_OPEN_AND_END,
 
   ];
 
