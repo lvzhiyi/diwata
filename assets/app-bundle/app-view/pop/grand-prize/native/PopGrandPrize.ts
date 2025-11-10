@@ -55,7 +55,7 @@ export class PopGrandPrize extends BaseView {
    * 用于展示中奖金额
    */
   @property({ type: Node, tooltip: '金额节点' })
-  private AmountLabel: Label;
+  private AmountLabel: Node;
 
   /**
    * Max Win节点
@@ -199,7 +199,7 @@ export class PopGrandPrize extends BaseView {
 
     this.numberRollIsPlaying = true;
     await delay(300);
-    this.AmountLabel.node.active = true;
+    this.AmountLabel.active = true;
     this.numberWinBgAnimator.animateTo(
       this.amount,
       this.getDisplayTimeByRewardType() * this.animationQueue.length,
@@ -228,7 +228,7 @@ export class PopGrandPrize extends BaseView {
     // 显示金额文本并播放循环动画
     textNode.active = true;
     textNode.setScale(new Vec3(1, 1, 1));
-    this.AmountLabel.node.active = true;
+    this.AmountLabel.active = true;
 
     try {
       // 播放音效
