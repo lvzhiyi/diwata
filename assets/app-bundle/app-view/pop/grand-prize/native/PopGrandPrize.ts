@@ -17,7 +17,7 @@ const { ccclass, property } = _decorator;
 
 const animationMap: any = {
   [RewardSubTypeEnum.NICE]: ['01nice_'],
-  [RewardSubTypeEnum.MEGA]: ['02mega_'],
+  [RewardSubTypeEnum.MEGA]: ['01nice_', '02mega_'],
   [RewardSubTypeEnum.SUPER]: ['01nice_', '02mega_', '03super_'],
 };
 
@@ -199,6 +199,7 @@ export class PopGrandPrize extends BaseView {
 
     this.numberRollIsPlaying = true;
     await delay(300);
+    this.AmountLabel.node.active = true;
     this.numberWinBgAnimator.animateTo(
       this.amount,
       this.getDisplayTimeByRewardType() * this.animationQueue.length,
@@ -227,6 +228,7 @@ export class PopGrandPrize extends BaseView {
     // 显示金额文本并播放循环动画
     textNode.active = true;
     textNode.setScale(new Vec3(1, 1, 1));
+    this.AmountLabel.node.active = true;
 
     try {
       // 播放音效
@@ -403,6 +405,7 @@ export class PopGrandPrize extends BaseView {
         // 重置并清理资源
         // textNode.setPosition(originalPosition);
         this.node.setScale(new Vec3(1, 1, 1));
+        textNode.setScale(new Vec3(1, 1, 1));
         this.hide();
         resolve();
       }, 1670 / app.manager.global.gameSpeed);
