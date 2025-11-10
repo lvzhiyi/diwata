@@ -379,8 +379,13 @@ export class HomeController extends BaseController<
       app.manager.global.setGameRecordIndex(0);
       app.manager.global.setFreeBonusTimes(0);
       app.controller.slots.freeBonusSpinChange(false);
-
       app.controller.slots.stopRolling(this.betResult);
+
+      // 如果购买多轮的免费轮也需要给停止
+      if(app.manager.global.quantity > 0){
+        app.manager.global.setQuantity(0);
+      }
+
       BGMManager.inst.playNormalModeBGM();
     }
   }

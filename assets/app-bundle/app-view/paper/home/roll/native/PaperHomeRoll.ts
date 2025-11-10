@@ -1245,6 +1245,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       this.BonusView.getComponent(BousView).updateBuyBonusStatus(1);
     }
 
+    this.FreeBonusSpinTimesNode.getComponent(Label).string = `${0}`;
+
     this.BonusView.getComponent(AdvancedButtonBreath).resumeBreath();
   }
 
