@@ -53,10 +53,6 @@ export class PopErrorPop extends BaseView {
 
       return;
     }
-    if (this.serviceUrl === ApiPath.bet) {
-      app.controller.slots.stopRolling(mockFailedData);
-      app.manager.event.emit('resetGameMode', true);
-    }
 
     if (this.closeable) {
       this.hide();
@@ -139,6 +135,11 @@ export class PopErrorPop extends BaseView {
     // 设置确认按钮图标
     this.updateConfirmButtonSprite(type);
     this.closeable = closeable;
+
+    // if (this.serviceUrl === ApiPath.bet) {
+    //   app.controller.slots.stopRolling(mockFailedData);
+    //   app.manager.event.emit('resetGameMode', true);
+    // }
   }
 
   private updateTextLayout() {

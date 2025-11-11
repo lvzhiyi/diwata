@@ -258,6 +258,7 @@ export class HomeController extends BaseController<
       this.betResult = mockFailedData;
       ToastView.showCommonToast('Unstable Network,Bet failed');
       app.controller.slots.stopRolling(this.betResult);
+      app.manager.event.emit('resetGameMode', true);
     }
   }
 
@@ -338,11 +339,9 @@ export class HomeController extends BaseController<
 
       app.controller.slots.freeBonusSpinChange(false);
 
-      if(app.manager.global.quantity > 0){
-        app.manager.global.setQuantity(0);
-      }
-
       app.controller.slots.stopRolling(this.betResult);
+ 
+      app.manager.event.emit('resetGameMode', true);
     }
   }
 
@@ -381,16 +380,8 @@ export class HomeController extends BaseController<
       }
 
       // 免费中的子轮其中一个中断后，设置为非免费轮，修改状态
-      app.manager.global.setGameRecordIds([]);
-      app.manager.global.setGameRecordIndex(0);
-      app.manager.global.setFreeBonusTimes(0);
-      app.controller.slots.freeBonusSpinChange(false);
       app.controller.slots.stopRolling(this.betResult);
-
-      // 如果购买多轮的免费轮也需要给停止
-      if(app.manager.global.quantity > 0){
-        app.manager.global.setQuantity(0);
-      }
+      app.manager.event.emit('resetGameMode', true);
 
       BGMManager.inst.playNormalModeBGM();
     }
