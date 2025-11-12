@@ -1187,7 +1187,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       this.showFreeBonusTimes();
     } else {
       if(app.manager.global.isFreespinMode) {
-        this.showFreespinView();
+        this.showFreeBonusView();
       } else {
         this.showBuyFreeSpinView();
       }
@@ -1195,7 +1195,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   /** 展示成就的免费模式 or隐藏成就的免费模式 */
-  showFreespinView() {
+  showFreeBonusView() {
     if (this.BonusView.isValid) {
       // 如果是成就系统赠送的免费游玩模式
       if(app.manager.global.isFreespinMode) {
