@@ -29,11 +29,7 @@ export class CurrentRoundAmount extends Component {
     return new Promise((resolve) => {
       if (this.tween?.running) {
         this.tween.stop();
-        this.node.getComponent(UIOpacity).opacity = 0;
-        this.node.setPosition(this.originPosition);
-        this.amountNode.setPosition(Vec3.ZERO);
-        this.multipleNode.setPosition(Vec3.ZERO);
-        this.multipleNode.getComponent(UIOpacity).opacity = 0;
+        this.resetState();
         // 重要：被中断的动画也需要 resolve，否则 Promise 永远不会完成
         console.log('startNum-动画被中断');
         resolve();
@@ -51,7 +47,7 @@ export class CurrentRoundAmount extends Component {
       label.string = `₱${originalAmount.toFixed(3)}`;
       
       this.multipleNode.getComponent(Label).string = `x ${Math.pow(2, multiple)}`;
-      this.multipleNode.active = multiple > 1;
+      // this.multipleNode.active = multiple > 1;
       // 重置节点状态
       this.resetState();
       console.log('startNum-开始动画');
@@ -113,6 +109,7 @@ export class CurrentRoundAmount extends Component {
             this.multipleNode.setScale(Vec3.ONE);
             this.multipleNode.getComponent(UIOpacity).opacity = 0;
             EffectManager.inst.playEffect(AudioPath.GAME.DOUBLE_NUMBER);
+            this.tween?.stop();
             resolve();
           })
         )
@@ -130,7 +127,7 @@ export class CurrentRoundAmount extends Component {
     this.amountNode.setPosition(Vec3.ZERO);
     this.multipleNode.scale = new Vec3(1, 1, 1);
     this.multipleNode.setPosition(new Vec3(0, 300, 0));
-    this.multipleNode.getComponent(UIOpacity).opacity = 0;
+    this.multipleNode.getComponent(UIOpacity).opacity = 1;
 
     this.amountNode.getComponent(UIOpacity).opacity = 255;
     this.multipleNode.getComponent(UIOpacity).opacity = 255;

@@ -347,6 +347,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       } else {
         // 非快速模式 或者 快速模式并且有滚轮边框动画，则需要播放滚轮边框动画
         const delayTime = 1000 / (rollIndex + 1) + 100;
+        // const delayTime = 350 - (rollIndex * 50);
         asyncStopRolls.push(async (stopDelayTime?: number) => this.stopSingleRoll(roll, rollIndex, needPlayRollFrameSpine, stopDelayTime ?? delayTime));
       }
     }
