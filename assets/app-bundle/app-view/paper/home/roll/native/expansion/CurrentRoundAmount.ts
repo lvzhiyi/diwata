@@ -45,9 +45,10 @@ export class CurrentRoundAmount extends Component {
       const label = this.amountNode.getComponent(Label);
       const originalAmount = amount / Math.pow(2, multiple);
       label.string = `₱${originalAmount.toFixed(3)}`;
-      
-      this.multipleNode.getComponent(Label).string = `x ${Math.pow(2, multiple)}`;
-      // this.multipleNode.active = multiple > 1;
+      const multipleValue = Math.pow(2, multiple);
+      this.multipleNode.getComponent(Label).string = `x${multipleValue}`;
+      // 动态设置字体大小
+      this.setMultipleNodeFontSize(multipleValue);
       // 重置节点状态
       this.resetState();
       console.log('startNum-开始动画');
@@ -66,8 +67,8 @@ export class CurrentRoundAmount extends Component {
           // 第二步：multipleNode同时执行位移和缩放动画
           tween(this.multipleNode)
             .parallel(
-              tween(this.multipleNode).to(0.3, { position: new Vec3(0, 30, 0) }, { easing: 'sineOut' }),
-              tween(this.multipleNode).to(0.3, { scale: new Vec3(1.5, 1.5, 1) }, { easing: 'sineOut' })
+              tween(this.multipleNode).to(0.5, { position: new Vec3(0, 30, 0) }, { easing: 'sineOut' }),
+              tween(this.multipleNode).to(0.5, { scale: new Vec3(1.8, 1.8, 1) }, { easing: 'sineOut' })
             )
             .call(() => {
               // multipleNode动画完成后立马隐藏
@@ -117,6 +118,20 @@ export class CurrentRoundAmount extends Component {
     });
   }
 
+  private setMultipleNodeFontSize(multiple: number) {
+    const label = this.multipleNode.getComponent(Label);
+
+    if (multiple < 10) {
+      label.fontSize = 42 * 1.2;
+    } else if (multiple < 100) {
+      label.fontSize = 30 * 1.2;
+    } else if (multiple < 1000) {
+      label.fontSize = 24 * 1.2;
+    } else {
+      label.fontSize = 18 * 1.2;
+    }
+  }
+
   /**
    * 重置状态
    */
@@ -126,7 +141,7 @@ export class CurrentRoundAmount extends Component {
     this.amountNode.scale = new Vec3(0.5, 0.5, 1);
     this.amountNode.setPosition(Vec3.ZERO);
     this.multipleNode.scale = new Vec3(1, 1, 1);
-    this.multipleNode.setPosition(new Vec3(0, 300, 0));
+    this.multipleNode.setPosition(new Vec3(0, 352, 0));
     this.multipleNode.getComponent(UIOpacity).opacity = 1;
 
     this.amountNode.getComponent(UIOpacity).opacity = 255;
