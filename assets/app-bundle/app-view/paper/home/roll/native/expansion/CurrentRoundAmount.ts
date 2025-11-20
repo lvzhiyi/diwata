@@ -5,6 +5,7 @@ import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
+const MULTIPLE_BG_SPINE_POSITION = new Vec3(0, 352, 0);
 @ccclass('CurrentRoundAmount')
 export class CurrentRoundAmount extends Component {
   @property({ type: Node, tooltip: '当前轮次金额' })
@@ -15,6 +16,9 @@ export class CurrentRoundAmount extends Component {
 
   @property({ type: Node, tooltip: 'SpineWinSkeleton' })
   private spineWinNode: Node = null;
+
+  @property({ type: Node, tooltip: 'SpineWinSkeleton' })
+  private multipleBgSpine: Node = null;
 
   private tween: Tween = null;
 
@@ -61,18 +65,18 @@ export class CurrentRoundAmount extends Component {
             .to(0.3, { scale: new Vec3(1, 1, 1) }, { easing: 'quadIn' })
             .call(() => {
               // amountNode动画完成后，multipleNode透明度变为255
-              this.multipleNode.getComponent(UIOpacity).opacity = 255;
+              this.multipleBgSpine.getComponent(UIOpacity).opacity = 255;
             }),
           
           // 第二步：multipleNode同时执行位移和缩放动画
-          tween(this.multipleNode)
+          tween(this.multipleBgSpine)
             .parallel(
-              tween(this.multipleNode).to(0.5, { position: new Vec3(0, 30, 0) }, { easing: 'sineOut' }),
-              tween(this.multipleNode).to(0.5, { scale: new Vec3(1.8, 1.8, 1) }, { easing: 'sineOut' })
+              tween(this.multipleBgSpine).to(0.5, { position: new Vec3(0, 30, 0) }, { easing: 'sineOut' }),
+              tween(this.multipleNode).to(0.5, { scale: new Vec3(1.5, 1.5, 1) }, { easing: 'sineOut' })
             )
             .call(() => {
               // multipleNode动画完成后立马隐藏
-              this.multipleNode.getComponent(UIOpacity).opacity = 0;
+              this.multipleBgSpine.getComponent(UIOpacity).opacity = 0;
              
               // 播放spine动画
               const spine = this.spineWinNode.getComponent(sp.Skeleton);
@@ -106,9 +110,9 @@ export class CurrentRoundAmount extends Component {
             this.node.setPosition(this.originPosition);
             this.amountNode.setPosition(Vec3.ZERO);
             this.amountNode.setScale(Vec3.ONE);
-            this.multipleNode.setPosition(new Vec3(0, 300, 0));
+            this.multipleBgSpine.setPosition(MULTIPLE_BG_SPINE_POSITION);
             this.multipleNode.setScale(Vec3.ONE);
-            this.multipleNode.getComponent(UIOpacity).opacity = 0;
+            this.multipleBgSpine.getComponent(UIOpacity).opacity = 0;
             EffectManager.inst.playEffect(AudioPath.GAME.DOUBLE_NUMBER);
             this.tween?.stop();
             resolve();
@@ -140,12 +144,12 @@ export class CurrentRoundAmount extends Component {
     this.node.getComponent(UIOpacity).opacity = 255;
     this.amountNode.scale = new Vec3(0.5, 0.5, 1);
     this.amountNode.setPosition(Vec3.ZERO);
+    
+    this.multipleBgSpine.setPosition(MULTIPLE_BG_SPINE_POSITION);
     this.multipleNode.scale = new Vec3(1, 1, 1);
-    this.multipleNode.setPosition(new Vec3(0, 352, 0));
-    this.multipleNode.getComponent(UIOpacity).opacity = 1;
 
     this.amountNode.getComponent(UIOpacity).opacity = 255;
-    this.multipleNode.getComponent(UIOpacity).opacity = 255;
+    this.multipleBgSpine.getComponent(UIOpacity).opacity = 255;
   }
 
   /**
