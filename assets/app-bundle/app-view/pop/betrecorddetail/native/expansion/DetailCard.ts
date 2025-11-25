@@ -4,7 +4,7 @@ import { MoneyUtil } from 'db://assets/basePlate/core/baseUtil/MoneyUtil';
 import { ToastView } from 'db://assets/basePlate/middleWare/commonUI/ToastView';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
-import { copyText } from 'db://assets/common/script/extra/Utils/common';
+import { copyText, getP } from 'db://assets/common/script/extra/Utils/common';
 import { CopyUtils } from 'db://assets/common/script/extra/Utils/CopyUtils';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
@@ -58,8 +58,9 @@ export class DetailCard extends Component {
       this.net.color = new Color().fromHEX('#00b862');
     }
 
-    this.net.string = `₱ ${MoneyUtil.internalToDisplayAndFormat((item.payOutAmount - item.payAmount))}`;
-    this.betWin.getComponent(Label).string = `₱ ${(MoneyUtil.internalToDisplayAndFormat(item.payAmount))}/₱ ${(MoneyUtil.internalToDisplayAndFormat(item.payOutAmount))}`;
+    this.net.string = `${getP()} ${MoneyUtil.internalToDisplayAndFormat((item.payOutAmount - item.payAmount))}`;
+    // eslint-disable-next-line max-len
+    this.betWin.getComponent(Label).string = `${getP()} ${(MoneyUtil.internalToDisplayAndFormat(item.payAmount))}/${getP()} ${(MoneyUtil.internalToDisplayAndFormat(item.payOutAmount))}`;
     this.time.string = dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss');
   }
 

@@ -19,7 +19,7 @@ import BaseView from '../../../../../../../extensions/app/assets/base/BaseView';
 import { app } from '../../../../../../app/app';
 import { HomeController } from '../../../../../../app-builtin/app-controller/HomeController';
 import { PopSettings } from '../../../../pop/settings/native/PopSettings';
-import { calculateWithBase, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
+import { calculateWithBase, getP, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { HomeBodyUtil } from './expansion/HomeBodyUtil';
 import CpPostMessage from 'db://assets/common/script/extra/tmBridge/cpPostMessage';
 import {  preventRapidClickDecorator, showInsufficientCreditAlert } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
@@ -101,9 +101,9 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   onLoad() {
     this.homeBodyUtil = new HomeBodyUtil(this);
     this.creditLable.getComponent(Label).string =
-      '₱ ' + numberToMoney(app.manager.global.creditCount);
+    `${getP()} ` + numberToMoney(app.manager.global.creditCount);
     this.betLable.getComponent(Label).string =
-      'Bet ₱ ' + numberToMoney(app.manager.global.betCount);
+    `Bet ${getP()} ` + numberToMoney(app.manager.global.betCount);
     this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.manager.global.vipLevel - 1];
     this.onResizeScreen();
 
@@ -234,7 +234,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
    * @param val
    */
   creditCountChange(val: number) {
-    this.creditLable.getComponent(Label).string = '₱' + numberToMoney(val);
+    this.creditLable.getComponent(Label).string = getP() + numberToMoney(val);
   }
   
   /**
@@ -253,7 +253,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   betCountChange(val: number) {
     // 获取当前正在展示的金额
     const currentBetAmount = this.betLable.getComponent(Label).string;
-    const targetBetAmount = 'Bet ₱ ' + numberToMoney(val);
+    const targetBetAmount = `Bet ${getP()} ` + numberToMoney(val);
     console.log('betCountChange', currentBetAmount, targetBetAmount);
 
     // 如果当前金额和val相等，则不进行操作

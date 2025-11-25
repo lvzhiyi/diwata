@@ -1,7 +1,7 @@
 import { _decorator, Label, Node, sp, Sprite, SpriteFrame } from 'cc';
 import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { NumberAnimator } from 'db://assets/basePlate/middleWare/commonUI/NumberAnimator';
-import { numberToMoney } from 'db://assets/common/script/extra/Utils/common';
+import { getP, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { app } from 'db://assets/app/app';
 import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 import { SpineTool } from 'db://assets/res-native/script/SpineTool';
@@ -83,7 +83,7 @@ export class PopFreeSpinResult extends BaseView {
       await this.numberWinBgAnimator.animateTo(
         this.amount,
         5.2,
-        (value) => '₱ ' + numberToMoney(value, 3, false),
+        (value) => `${getP()} ` + numberToMoney(value, 3, false),
         true
       );
       this.stopAnimation();

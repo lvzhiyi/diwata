@@ -1,6 +1,6 @@
 import { _decorator, Component, Label, Node } from 'cc';
 import { app } from 'db://assets/app/app';
-import { numberToMoney } from 'db://assets/common/script/extra/Utils/common';
+import { getP, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { PopBuybonus } from '../PopBuybonus';
 import { showInsufficientCreditAlert } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
@@ -19,6 +19,9 @@ const { BUY_FREE_SPIN_TIMES_RATIO } = app?.config?.app || {};
  */
 @ccclass('FreeModal')
 export class FreeModal extends Component {
+  @property({ type: Label, tooltip: '' })
+  private nameText: Label = null;
+
   @property({ type: Node, tooltip: '投注金额增加按钮' })
   private BetAddNode: Node = null;
 
@@ -132,6 +135,12 @@ export class FreeModal extends Component {
     this.setLabelText(this.priceLabelNode, this.formatCurrency(this.currentBetVal * BUY_FREE_SPIN_TIMES_RATIO));
     this.setLabelText(this.quantityLabelNode, this.DEFAULT_QUANTITY.toString());
     this.updateTotalPrice();
+
+    if (getP() === '') {
+      this.nameText.string = 'Bet';
+    }else{
+      this.nameText.string = 'Bet (₱)';
+    }
   }
 
   /**

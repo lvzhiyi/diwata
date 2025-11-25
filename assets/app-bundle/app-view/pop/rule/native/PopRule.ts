@@ -21,7 +21,7 @@ import { ButtonItem } from './expansion/ButtonItem';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { RuleTitle } from './expansion/RuleTitle';
 import { SymbolView } from './expansion/SymbolView';
-import { delay } from 'db://assets/common/script/extra/Utils/common';
+import { delay, getP } from 'db://assets/common/script/extra/Utils/common';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
@@ -196,7 +196,7 @@ export class PopRule extends BaseView {
         type: RuleType.TEXT,
         textOptions: {
           content:
-            'Minimum bet: ₱0.3',
+            `Minimum bet: ${getP()}0.3`,
           fontSize: 27,
           color: '#FFFFFF',
           bold: false,
@@ -208,7 +208,7 @@ export class PopRule extends BaseView {
         type: RuleType.TEXT,
         textOptions: {
           content:
-            'Maximum bet: ₱10,000',
+            `Maximum bet: ${getP()}10,000`,
           fontSize: 27,
           color: '#FFFFFF',
           bold: false,

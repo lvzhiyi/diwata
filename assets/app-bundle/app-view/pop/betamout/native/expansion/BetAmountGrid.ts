@@ -12,7 +12,7 @@ import {
 import { app } from 'db://assets/app/app';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
-import { numberToMoney } from 'db://assets/common/script/extra/Utils/common';
+import { getP, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
@@ -53,7 +53,7 @@ export class BetAmountGrid extends Component {
         labelNode.enableShadow = false;
       }
 
-      labelNode.string = '₱ ' + numberToMoney(realVal);
+      labelNode.string = `${getP()} ` + numberToMoney(realVal);
       this.node.addChild(roundBorder);
 
       this.listRadiusRect.push(roundBorder);

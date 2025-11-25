@@ -9,6 +9,7 @@ import {
   copyText,
   calculateWithBase,
   loadRemoteImage,
+  getP,
 } from 'db://assets/common/script/extra/Utils/common';
 import { CopyUtils } from 'db://assets/common/script/extra/Utils/CopyUtils';
 
@@ -64,7 +65,7 @@ export class RecordCard extends Component {
     }
 
     const multiBetAmount = app.manager.global.multiBetAmount;
-    let netSpecialValue = `₱ ${numberToMoney((dataInfo.payOutAmount - dataInfo.payAmount) / multiBetAmount)}`;
+    let netSpecialValue = `${getP()} ${numberToMoney((dataInfo.payOutAmount - dataInfo.payAmount) / multiBetAmount)}`;
 
     if((dataInfo.extendInfo?.rewardUrl ?? '').length > 0){
       netSpecialValue = `${netSpecialValue} /`;
@@ -87,7 +88,8 @@ export class RecordCard extends Component {
     }
 
     NetSpecialValueLabel.string = netSpecialValue;
-    this.BetWinValue.getComponent(Label).string = `₱ ${numberToMoney(dataInfo.payAmount / multiBetAmount)}/₱ ${numberToMoney(dataInfo.payOutAmount / multiBetAmount)}`;
+    // eslint-disable-next-line max-len
+    this.BetWinValue.getComponent(Label).string = `${getP()} ${numberToMoney(dataInfo.payAmount / multiBetAmount)}/${getP()} ${numberToMoney(dataInfo.payOutAmount / multiBetAmount)}`;
     this.RoundNumberValue.getComponent(Label).string = dataInfo.id;
     this.TimeValue.getComponent(Label).string = dayjs(dataInfo.createTime).format('YYYY-MM-DD HH:mm:ss');
 

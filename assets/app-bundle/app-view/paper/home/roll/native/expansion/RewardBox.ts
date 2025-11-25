@@ -1,7 +1,7 @@
 import { _decorator, Component, Label, Node, sp, Sprite, SpriteFrame, tween } from 'cc';
 import { app } from 'db://assets/app/app';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
-import { calculateWithBase, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
+import { calculateWithBase, getP, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
@@ -69,7 +69,7 @@ export class RewardBox extends Component {
         tween(target).to(
           2 / app.manager.global.gameSpeed,
           { value: endNum },
-          { onUpdate: () => label.string = `WIN ₱${numberToMoney(calculateWithBase(target.value), 3, false)}` }
+          { onUpdate: () => label.string = `WIN ${getP()}${numberToMoney(calculateWithBase(target.value), 3, false)}` }
         ).call(() => {
           EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD);
           resolve();

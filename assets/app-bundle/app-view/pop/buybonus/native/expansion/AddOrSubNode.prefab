@@ -38,10 +38,13 @@
       },
       {
         "__id__": 44
+      },
+      {
+        "__id__": 46
       }
     ],
     "_prefab": {
-      "__id__": 46
+      "__id__": 48
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -358,7 +361,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 26.6796875,
+      "width": 0,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -394,7 +397,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "₱",
+    "_string": "",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 40,
@@ -454,7 +457,7 @@
     },
     "_alignFlags": 8,
     "_target": null,
-    "_left": 12.7880859375,
+    "_left": 26.1279296875,
     "_right": 0,
     "_top": 0,
     "_bottom": 0,
@@ -1072,6 +1075,27 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "bdtQIgUORGB4tL9LAHsAqJ"
+  },
+  {
+    "__type__": "9ccb8iX91NFPbkGzVU+BwOl",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 47
+    },
+    "moneyText": {
+      "__id__": 12
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "49YLe/Qw5IFp95Ze5zisjw"
   },
   {
     "__type__": "cc.PrefabInfo",

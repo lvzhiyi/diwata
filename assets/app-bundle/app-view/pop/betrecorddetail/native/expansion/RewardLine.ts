@@ -1,6 +1,7 @@
 import { _decorator, Component, Label, Layout, Node, Sprite, SpriteFrame, UITransform, Vec3 } from 'cc';
 import { MoneyUtil } from 'db://assets/basePlate/core/baseUtil/MoneyUtil';
 import { BetRewardLineItem } from 'db://assets/basePlate/middleWare/services/bet';
+import { getP } from 'db://assets/common/script/extra/Utils/common';
 
 const { ccclass, property } = _decorator;
 
@@ -54,14 +55,14 @@ export class RewardLine extends Component {
     if (item) {
       const label = textNode.getComponent(Label);
       const betNumber = MoneyUtil.formatDisplayAmount(MoneyUtil.internalToDisplay(item.betAmount) * item.odds);
-      let content = `₱ ${betNumber} X ${item.rewardLineCount} = ₱${MoneyUtil.internalToDisplay(item.rewardAmount)
+      let content = `${getP()} ${betNumber} X ${item.rewardLineCount} = ${getP()}${MoneyUtil.internalToDisplay(item.rewardAmount)
       }`;
 
       if (item.multiple > 1 && item.symbolId != '3001') {
         const betNewNumber =  MoneyUtil.internalToDisplay(item.betAmount * item.odds);
         const rewardAmount = betNewNumber * item.rewardLineCount;
-        content = `₱ ${MoneyUtil.formatDisplayAmount(rewardAmount)} X ${item.multiple
-        } = ₱ ${MoneyUtil.internalToDisplay(item.rewardAmount)}`;
+        content = `${getP()} ${MoneyUtil.formatDisplayAmount(rewardAmount)} X ${item.multiple
+        } = ${getP()} ${MoneyUtil.internalToDisplay(item.rewardAmount)}`;
       }
 
       label.string = content;

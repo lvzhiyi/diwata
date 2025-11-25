@@ -3,6 +3,7 @@ import { app } from 'db://assets/app/app';
 import { Marquee } from './Marquee';
 import { getReward } from 'db://assets/basePlate/middleWare/services/user';
 import { serverHookManager } from 'db://assets/basePlate/middleWare/serverManager/ServerHookManager';
+import { getP } from 'db://assets/common/script/extra/Utils/common';
 
 const { ccclass, property } = _decorator;
 
@@ -64,6 +65,10 @@ export class HomeTopViewContrl extends Component {
 
   start() {
     if (!app.manager.global.getToken()) {
+      return;
+    }
+
+    if(getP() === ''){
       return;
     }
 

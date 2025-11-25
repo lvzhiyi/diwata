@@ -18,6 +18,7 @@ import { BetRewardLineItem } from 'db://assets/basePlate/middleWare/services/bet
 import { RecordItemCard } from './RecordItemCard';
 import { RewardLine } from './RewardLine';
 import { calculateEnglishTextWidth } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
+import { getP } from 'db://assets/common/script/extra/Utils/common';
 
 const { ccclass, property } = _decorator;
 
@@ -60,7 +61,7 @@ export class DetailListItem extends Component {
 
   public initValue(item: any, maxRewardLineCount: number, imgSprite: SpriteFrame[][], cards: SpriteFrame[], otherList: SymbolItem[][]) {
     this.title.string = item.freeWheelFlag ? 'Free Game' : 'Main Game';
-    this.win.string = `Win:₱ ${MoneyUtil.internalToDisplayAndFormat(item.rewardAmount)}`;
+    this.win.string = `Win:${getP()} ${MoneyUtil.internalToDisplayAndFormat(item.rewardAmount)}`;
     this.odd.string = `${item.multiple || 1}X`;
     const oddWidth = calculateEnglishTextWidth(this.odd.string, this.odd.fontSize);
     this.odd.node.getComponent(UITransform).width = oddWidth + 10;
