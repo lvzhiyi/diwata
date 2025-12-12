@@ -104,6 +104,9 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   // 初始化的相关逻辑写在这
   onLoad() {
     this.homeBodyUtil = new HomeBodyUtil(this);
+    this.creditLable.getComponent(Label).string =
+    `${getP()} ` + numberToMoney(app.manager.global.creditCount);
+
     this.betLable.getComponent(Label).string =
     `${BetString()} ${getP()} ` + numberToMoney(app.manager.global.betCount);
     this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.manager.global.vipLevel - 1];
