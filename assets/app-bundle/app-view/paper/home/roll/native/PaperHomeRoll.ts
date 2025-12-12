@@ -2,7 +2,7 @@ import { _decorator, EventTouch, Label, Node, Prefab, sp,  SpriteFrame,  tween, 
 import BaseView from 'db://app/base/BaseView';
 import { Roll } from './expansion/Roll';
 import { Symbol, SYMBOL_WILD_IDS } from './expansion/Symbol';
-import { calculateWithBase, delay, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
+import { calculateWithBase, delay, getIsGap, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { app } from 'db://assets/app/app';
 import { PopGrandPrize } from '../../../../pop/grand-prize/native/PopGrandPrize';
 import { BetTypes, RewardSubTypeEnum, SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
@@ -125,6 +125,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.node.active = false;
     this.node.scale = new Vec3(0, 0, 0);
     this.goddessNode.getComponent(UIOpacity).opacity = 0;
+    this.BonusView.active = !getIsGap();
   }
 
   startHomeRollAnimation() {

@@ -1,5 +1,7 @@
 import { _decorator, Button, Component, Node, sp, tween, UIOpacity } from 'cc';
 import { app } from 'db://assets/app/app';
+import { igoPathSuffix } from 'db://assets/common/script/ActivityDefine';
+import { getIsGap } from 'db://assets/common/script/extra/Utils/common';
 
 const { ccclass, property } = _decorator;
 
@@ -20,12 +22,17 @@ export class AutoModeBtn extends Component {
 
       this.node.on(Node.EventType.TOUCH_START, this.onTouchStart, this);
       this.node.on(Node.EventType.TOUCH_END, this.onTouchEnd, this);
+      this.tipsNode.active = !getIsGap();
     }
 
     protected update(dt: number): void {
       if (this.touchStartTime > 0 && Date.now() - this.touchStartTime > 1500) {
         // 长按1.5秒打开自动模式设置弹窗
         if (app.manager.global.isGoing === false && !app.manager.global.isFreespinMode && !app.manager.global.allwaysAutoPlay  && !app.manager.global.isBuyFreeBonusMode) {
+          if(getIsGap()){
+            return;
+          }
+  
           app.manager.ui.show({ name: 'PopAutosetting' });
           this.touchStartTime = 0;
         }
@@ -39,7 +46,7 @@ export class AutoModeBtn extends Component {
       } else if (!app.manager.global.isGoing && !app.manager.global.allwaysAutoPlay && !app.manager.global.startAutoPlay && !app.manager.global.isFreespinMode && !this.spine.node.active && !this.tipsNode.active)   {
         // 游戏未进行中，显示按钮
         this.spine.node.active = true;
-        this.tipsNode.active = true;
+        this.tipsNode.active = !getIsGap();
       }
     }
 

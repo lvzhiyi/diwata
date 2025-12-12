@@ -6531,6 +6531,9 @@
     "bottomView": {
       "__id__": 38
     },
+    "balanceLabel": {
+      "__id__": 50
+    },
     "freespinTimesNode": {
       "__id__": 170
     },

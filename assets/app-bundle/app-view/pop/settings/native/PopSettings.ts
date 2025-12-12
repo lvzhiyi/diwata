@@ -1,4 +1,4 @@
-import { _decorator, Button, Color, Label, Node, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Button, Color, Label, Node, Sprite, SpriteFrame, Widget } from 'cc';
 import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { app } from 'db://assets/app/app';
 import { PopAutosetting } from '../../autosetting/native/PopAutosetting';
@@ -8,10 +8,17 @@ import { Progress } from './expansion/Progress';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
+import { getIsGap } from 'db://assets/common/script/extra/Utils/common';
 
 const { ccclass, property } = _decorator;
 @ccclass('PopSettings')
 export class PopSettings extends BaseView {
+  @property(Node)
+  private itemsNode: Node = null;
+
+  @property(Node)
+  private BottomNode: Node;
+
     @property(Node)
     private VoiceIcon: Node;
 
@@ -40,6 +47,12 @@ export class PopSettings extends BaseView {
     private AutoSettingBtn: Node;
 
   private subMenus: Set<string> = new Set();
+
+  onLoad(): void {
+    this.itemsNode.active = !getIsGap();
+    const widget = this.BottomNode.getComponent(Widget);
+    widget.bottom = getIsGap() ? 220 : 45;
+  }
 
   protected onEnable(): void {
     this.initVoiceMusic();

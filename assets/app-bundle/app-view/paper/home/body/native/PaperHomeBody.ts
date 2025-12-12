@@ -19,7 +19,7 @@ import BaseView from '../../../../../../../extensions/app/assets/base/BaseView';
 import { app } from '../../../../../../app/app';
 import { HomeController } from '../../../../../../app-builtin/app-controller/HomeController';
 import { PopSettings } from '../../../../pop/settings/native/PopSettings';
-import { calculateWithBase, getP, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
+import { calculateWithBase, getIsGap, getP, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { HomeBodyUtil } from './expansion/HomeBodyUtil';
 import CpPostMessage from 'db://assets/common/script/extra/tmBridge/cpPostMessage';
 import {  preventRapidClickDecorator, showInsufficientCreditAlert } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
@@ -34,6 +34,7 @@ import { PopGrandPrize } from '../../../../pop/grand-prize/native/PopGrandPrize'
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
+import { BalanceString, BetString } from 'db://assets/common/script/extra/Utils/PlatformConfig';
 
 const { ccclass, property } = _decorator;
 
@@ -79,6 +80,9 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   @property({ type: Node, tooltip: '底部视图' })
   private bottomView: Node = null;
 
+  @property({ type: Label, tooltip: 'balanceLabel' })
+  private balanceLabel: Label = null;
+
   /** freespin模式下免费游玩次数节点 */
   @property({
     type: Node,
@@ -100,11 +104,12 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   // 初始化的相关逻辑写在这
   onLoad() {
     this.homeBodyUtil = new HomeBodyUtil(this);
-    this.creditLable.getComponent(Label).string =
-    `${getP()} ` + numberToMoney(app.manager.global.creditCount);
     this.betLable.getComponent(Label).string =
-    `Bet ${getP()} ` + numberToMoney(app.manager.global.betCount);
+    `${BetString()} ${getP()} ` + numberToMoney(app.manager.global.betCount);
     this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.manager.global.vipLevel - 1];
+    this.balanceLabel.getComponent(Label).string = BalanceString();
+    this.vipNode.active = !getIsGap();
+
     this.onResizeScreen();
 
     // 如果有开屏动画线隐藏节点
@@ -253,7 +258,8 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   betCountChange(val: number) {
     // 获取当前正在展示的金额
     const currentBetAmount = this.betLable.getComponent(Label).string;
-    const targetBetAmount = `Bet ${getP()} ` + numberToMoney(val);
+    const targetBetAmount = `${BetString()} ${getP()} ` + numberToMoney(val);
+
     console.log('betCountChange', currentBetAmount, targetBetAmount);
 
     // 如果当前金额和val相等，则不进行操作
@@ -457,6 +463,10 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   startGame(event?: EventTouch) {
     // 余额不足时，无法开始游戏
     if (app.manager.global.creditCount < app.manager.global.betCount && app.manager.global.isFreespinMode === false) {
+      if(!getIsGap()){
+        showInsufficientCreditAlert();
+      }
+
       showInsufficientCreditAlert();
 
       return;

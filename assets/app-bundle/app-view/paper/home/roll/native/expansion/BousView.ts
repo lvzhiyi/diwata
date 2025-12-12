@@ -1,4 +1,5 @@
 import { _decorator, Component, Node, Sprite, SpriteFrame } from 'cc';
+import { getIsGap } from 'db://assets/common/script/extra/Utils/common';
 
 const { ccclass, property } = _decorator;
 
@@ -36,7 +37,7 @@ export class BousView extends Component {
    */
   updateBuyBonusStatus(status: number){
     if(status == 1){
-      this.BuyBonusView.active = true;
+      this.BuyBonusView.active = !getIsGap();
       this.FreeTimeView.active = false;
       this.FreeSpineView.active = false;
       this.node.getComponent(Sprite).spriteFrame = this.NormalBg;
@@ -51,5 +52,9 @@ export class BousView extends Component {
       this.FreeSpineView.active = false;
       this.node.getComponent(Sprite).spriteFrame = this.NormalBg;
     }
+  }
+
+  getBuyBonusView() {
+    return this.BuyBonusView;
   }
 }

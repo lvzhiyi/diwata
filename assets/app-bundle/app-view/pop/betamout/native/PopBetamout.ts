@@ -1,11 +1,11 @@
-import { _decorator } from 'cc';
+import { _decorator, Node } from 'cc';
 import BaseView from 'db://app/base/BaseView';
 import { app } from 'db://assets/app/app';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
-const { ccclass } = _decorator;
+const { ccclass, property } = _decorator;
 
 @ccclass('PopBetamout')
 export class PopBetamout extends BaseView {

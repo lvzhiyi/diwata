@@ -3,7 +3,7 @@ import BaseAppInit from '../../../extensions/app/assets/base/BaseAppInit';
 import { app } from '../../app/app';
 import Core from 'db://app/Core';
 import { GlobalMgr } from '../../common/script/extra/GlobalMgr';
-import { calculateWithBase, getRuntimeEnv, getUrlParameters, } from '../../common/script/extra/Utils/common';
+import { calculateWithBase, getIsGap, getRuntimeEnv, getUrlParameters, } from '../../common/script/extra/Utils/common';
 import { getUserCredit, login } from '../../basePlate/middleWare/services/user';
 import { ProgressBar } from '../../basePlate/middleWare/commonUI/ProgressBar/ProgressBar';
 import { loadBundle, loadResource, showErrorPop } from '../../basePlate/core/baseUtil/BaseCommonUtil';
@@ -70,6 +70,8 @@ export class AppInit extends BaseAppInit {
   protected async onLoad() {
     // 隐藏启动页
     window?.hideLoadingPage?.();
+    // 是否隐藏swipe 
+    this.swipeNode.active = !getIsGap();
   }
 
   /**
