@@ -520,6 +520,13 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   // 防止快速点击
   @preventRapidClickDecorator(1000)
   clickAllwaysAutoModeBtn() {
+    if (app.manager.global.creditCount < app.manager.global.betCount && app.manager.global.isFreespinMode === false) {
+      if(!getIsGap()){
+        showInsufficientCreditAlert();
+      }
+
+      return;
+    }
     if (app.manager.global.isGoing) {
       this.stopAutoPlay();
       this.disabledPlayButton();
