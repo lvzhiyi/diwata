@@ -126,7 +126,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
 
   vipNodeSetup() {
     if(getIsGap() === false){
-      this.vipNode.active = app.store.user.PlayerLevelData.playerLevel > 0;
+      this.vipNode.active = app.store.user.PlayerLevelData.playerLevel > -1;
       this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.store.user.PlayerLevelData.playerLevel];
     }else{
       this.vipNode.active = false;
@@ -262,7 +262,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
    * @param val
    */
   updatePlayerLevel(val: number) {
-    if(val > 0){
+    if(val > -1){
       this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[val];
     }else{
       this.vipNode.active = false;
