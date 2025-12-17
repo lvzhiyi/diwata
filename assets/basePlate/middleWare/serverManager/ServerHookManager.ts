@@ -340,6 +340,7 @@ class ServerHookManager {
         pId: app.store.user.userParams.pId,
         playerName: GlobalMgr.instance.playerName,
       },
+      playerLevelData: app.store.user.PlayerLevelData,
     });
 
     try {

@@ -1,5 +1,6 @@
 import { IStore } from '../../../extensions/app/assets/base/BaseModel';
 import { IGOR_P_ID } from '../../basePlate/middleWare/constants/constants';
+import { PlayerLevelData } from '../../common/script/ActivityDefine';
 import { getIsGap } from '../../common/script/extra/Utils/common';
 
 // store中只允许在根路径下定义方法，任何变量在外部访问都是readonly
@@ -10,6 +11,16 @@ export default class User implements IStore<User> {
   playerId = '';
 
   playerName = '';
+
+  playerLevelData: PlayerLevelData = null;
+
+  setPlayerLevelData(v: PlayerLevelData) {
+    this.playerLevelData = v;
+  }
+
+  get PlayerLevelData(): PlayerLevelData {
+    return this.playerLevelData;
+  }
 
   setToken(v: string) {
     this.token = v;

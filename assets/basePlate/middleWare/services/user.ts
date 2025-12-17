@@ -1,5 +1,6 @@
 import { http } from 'db://assets/common/script/extra/Request';
 import { JackpotType } from '../enums/jackpot';
+import { PlayerLevelData } from 'db://assets/common/script/ActivityDefine';
 
 export interface BetRecordListModel {
   id: string;
@@ -139,6 +140,22 @@ export const getRecordHistory = async (params: Record<string, any>) => {
  */
 export const getRecordDetail = async (id: string) => {
   return http.get<IRecordDetail>(`/betRecord/get/${id}`);
+};
+
+/**
+ * 获取玩家等级
+ * @returns
+ */
+export const getPlayerLevel = async () => {
+  return http.post<PlayerLevelData>('/level/getPlayerLevel', {}, {
+    headers: {
+      // 禁用缓存
+      'Cache-Control': 'no-cache', 
+      // 兼容旧浏览器
+      Pragma: 'no-cache',
+    },
+    autoIntercept: false,
+  });
 };
 
 /**

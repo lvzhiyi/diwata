@@ -35,6 +35,7 @@ import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/Ef
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
 import { BalanceString, BetString } from 'db://assets/common/script/extra/Utils/PlatformConfig';
+import { ActivityEventMgr, ActivityEventMgrEventsType } from 'db://assets/common/script/ActivityEventMgr';
 
 const { ccclass, property } = _decorator;
 
@@ -111,7 +112,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     `${BetString()} ${getP()} ` + numberToMoney(app.manager.global.betCount);
     this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.manager.global.vipLevel - 1];
     this.balanceLabel.getComponent(Label).string = BalanceString();
-    this.vipNode.active = !getIsGap();
+    this.vipNodeSetup();
 
     this.onResizeScreen();
 
@@ -121,6 +122,15 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     app.manager.event.on('startHomeAnimationComplete', this.startHomeAnimationComplete, this);
 
     GameResourceManager.instance.preloadLocalICons();
+  }
+
+  vipNodeSetup() {
+    if(getIsGap() === false){
+      this.vipNode.active = app.store.user.PlayerLevelData.playerLevel > 0;
+      this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[app.manager.global.vipLevel];
+    }else{
+      this.vipNode.active = false;
+    }
   }
 
   private hiddenAllNodes() {
@@ -220,6 +230,8 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     app.manager.event.on('quantityChange', this.quantityChange, this);
     // 重置自动投注
     app.manager.event.on('resetGameMode', this.resetGameMode, this);
+    // 监听玩家等级变化
+    ActivityEventMgr.instance.on(ActivityEventMgrEventsType.updatePlayerLevel, this.updatePlayerLevel, this);
   }
 
   // 界面关闭时的相关逻辑写在这(已经关闭的界面不会触发onHide)
@@ -243,6 +255,18 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
    */
   creditCountChange(val: number) {
     this.creditLable.getComponent(Label).string = getP() + numberToMoney(val);
+  }
+
+  /**
+   * 更新玩家等级
+   * @param val
+   */
+  updatePlayerLevel(val: number) {
+    if(val > 0){
+      this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[val];
+    }else{
+      this.vipNode.active = false;
+    }
   }
   
   /**
@@ -408,6 +432,13 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
         app.manager.ui.show({ name: 'PopBuybonus' });
       }
     }
+  }
+
+  /**
+   *点击vip
+  */
+  clickVip(){
+    ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.showLevelDialog);
   }
 
   // 防止快速点击

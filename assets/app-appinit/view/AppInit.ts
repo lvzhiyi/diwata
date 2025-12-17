@@ -4,7 +4,7 @@ import { app } from '../../app/app';
 import Core from 'db://app/Core';
 import { GlobalMgr } from '../../common/script/extra/GlobalMgr';
 import { calculateWithBase, getIsGap, getRuntimeEnv, getUrlParameters, } from '../../common/script/extra/Utils/common';
-import { getUserCredit, login } from '../../basePlate/middleWare/services/user';
+import { getPlayerLevel, getUserCredit, login } from '../../basePlate/middleWare/services/user';
 import { ProgressBar } from '../../basePlate/middleWare/commonUI/ProgressBar/ProgressBar';
 import { loadBundle, loadResource, showErrorPop } from '../../basePlate/core/baseUtil/BaseCommonUtil';
 import { DEBUG } from 'cc/env';
@@ -149,6 +149,7 @@ export class AppInit extends BaseAppInit {
     this._initGameInternal();
     this._configService();
     await this._configPlayerInfo();
+    await this._getUserLevel();
     await this.configureActivityEntry();
     this.appInitArms();
   }
@@ -302,6 +303,23 @@ export class AppInit extends BaseAppInit {
     }
   }
 
+  /*
+ * 获取用户等级
+ */
+  private async _getUserLevel() {
+    try {
+      const res = await getPlayerLevel();
+  
+      if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data !== null) {
+        app.store.user.setPlayerLevelData(res.data);
+      }
+    }catch(error) {
+      app.store.user.setPlayerLevelData({
+        playerName: '', playerLevel: -1, playerExperience: 0
+      });
+    }
+  }
+  
   /**
    * 初始化游戏设置接口请求
    */
