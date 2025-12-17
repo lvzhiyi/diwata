@@ -276,7 +276,7 @@ export class GlobalManager extends BaseManager {
      return this._tempBetCount;
    }
 
-   public setTempBetCount(val: number) {
+   public setTempBetCount(val: number | null) {
      this._tempBetCount = val;
    }
 

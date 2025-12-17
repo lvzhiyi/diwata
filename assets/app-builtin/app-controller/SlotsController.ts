@@ -3,6 +3,7 @@ import { app } from '../../app/app';
 import { BetSubTypes, BetTypes } from '../../basePlate/middleWare/enums/bet';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
 import { freeSpinManager } from '../../res-native/script/FreeSpinManager';
+import { ActivityDataMgr } from '../../common/script/data/ActivityDataMgr';
 
 export class SlotsController extends BaseController<
   SlotsController,
@@ -132,10 +133,11 @@ export class SlotsController extends BaseController<
    */
   resetBetAmount() {
     const tempBetCount = app.manager.global.tempBetCount;
+    const starCardData = ActivityDataMgr.instance.getGoodsData();
 
-    if(tempBetCount){
+    if(tempBetCount && starCardData){
       app.manager.global.setBetCount(tempBetCount);
-      app.manager.event.emit('betCountChange', tempBetCount);
+      app.manager.global.setTempBetCount(null);
     }
   }
 }

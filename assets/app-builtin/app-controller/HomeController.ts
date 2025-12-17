@@ -375,10 +375,6 @@ export class HomeController extends BaseController<
       this.betResult = mockFailedData;
       ToastView.showCommonToast('Unstable Network,Bet failed');
 
-      if(starCardData){
-        app.controller.slots.resetBetAmount();
-      }
-
       // 免费中的子轮其中一个中断后，设置为非免费轮，修改状态
       app.controller.slots.stopRolling(this.betResult);
       app.manager.event.emit('resetGameMode', true);
