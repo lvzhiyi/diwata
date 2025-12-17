@@ -71,7 +71,7 @@ export class GlobalManager extends BaseManager {
   private _betCount: number = 2;
 
   // 临时记录的bet
-  private _tempBetCount: number = 0;
+  private _tempBetCount: number | null = null;
 
   // 购买次数
   private _quantity: number = 0;
