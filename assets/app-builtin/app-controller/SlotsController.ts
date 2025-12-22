@@ -137,7 +137,6 @@ export class SlotsController extends BaseController<
 
     if(tempBetCount && starCardData){
       app.manager.global.setBetCount(tempBetCount);
-      app.manager.global.setTempBetCount(null);
     }
   }
 }
