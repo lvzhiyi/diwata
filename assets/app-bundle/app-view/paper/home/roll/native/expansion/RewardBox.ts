@@ -70,7 +70,7 @@ export class RewardBox extends Component {
         tween(target).to(
           2 / app.manager.global.gameSpeed,
           { value: endNum },
-          { onUpdate: () => label.string = `${WinString()} ${getP()}${numberToMoney(calculateWithBase(target.value), 3, false)}` }
+          { onUpdate: () => label.string = `${WinString().toUpperCase()} ${getP()}${numberToMoney(calculateWithBase(target.value), 3, false)}` }
         ).call(() => {
           EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD);
           resolve();
