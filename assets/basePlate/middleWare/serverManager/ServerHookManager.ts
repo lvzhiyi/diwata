@@ -126,11 +126,7 @@ class ServerHookManager {
       }
       // 接口错误，并且是投注接口，就显示错误弹窗
       if (httpError.type === 'api' && path === ApiPath.bet) {
-        showErrorPop({
-          type: ErrorType.BetError,
-          msg: httpError.message,
-          serviceUrl: path,
-        });
+        this.showBetErrorDialog(httpError, path);
 
         return;
       }
@@ -221,15 +217,44 @@ class ServerHookManager {
     });
   }
 
-  private showErrorDialog(error: any, path: string) {
+  // 投注错误的弹框
+  showBetErrorDialog(error: any, path: string) {
     // 根据错误码确定错误类型
     let errorType: ErrorType;
+    console.log('error', error.status);
 
-    switch (error.status) {
+    switch (String(error.status)) {
       case HTTP_STATUS_CODES.BET_ERROR:
         errorType = ErrorType.BetError;
         break;
       case HTTP_STATUS_CODES.FREE_SPIN_ACTIVITY_ID_INVALID:
+      case HTTP_STATUS_CODES.FREE_SPIN_ACTIVITY_DISABLED:
+        errorType = ErrorType.FreeSpinActivityIdInvalid;
+        break;
+      default:
+        errorType = ErrorType.BetError;
+        break;
+    }
+
+    console.log('errorType', errorType);
+    showErrorPop({
+      type: errorType,
+      msg: error.message,
+      serviceUrl: path,
+    });
+  }
+
+  // 其他接口的错误弹框
+  private showErrorDialog(error: any, path: string) {
+    // 根据错误码确定错误类型
+    let errorType: ErrorType;
+
+    switch (String(error.status)) {
+      case HTTP_STATUS_CODES.BET_ERROR:
+        errorType = ErrorType.BetError;
+        break;
+      case HTTP_STATUS_CODES.FREE_SPIN_ACTIVITY_ID_INVALID:
+      case HTTP_STATUS_CODES.FREE_SPIN_ACTIVITY_DISABLED:
         errorType = ErrorType.FreeSpinActivityIdInvalid;
         break;
       default:

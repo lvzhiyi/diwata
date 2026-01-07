@@ -205,9 +205,9 @@ export class PopErrorPop extends BaseView {
       slowNetTips: 'Confirm',
       normalTips: 'Confirm',
       serverMaintenance: 'Refresh',
+      freeSpinActivityIdInvalid: 'Confirm',
     };
     confirmText = spriteFrameMap[type as keyof typeof spriteFrameMap];
-
     const textLabel = this.confirmLable.getComponent(Label);
 
     if (textLabel.isValid) {
