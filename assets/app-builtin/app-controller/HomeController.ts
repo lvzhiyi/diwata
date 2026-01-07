@@ -387,6 +387,12 @@ export class HomeController extends BaseController<
    * 检查当前轮是否命中免费轮
    */
   checkIsFreeRound(result: BetResult) {
+    console.log('checkIsFreeRound', result);
+
+    if (!result?.resultDetail) {
+      return false;
+    }
+
     const resultList = result.resultDetail.resultList;
 
     return resultList.some(item => item.freeWheelFlag === 1);
