@@ -35,6 +35,10 @@
     <!--<link rel="apple-touch-icon" href=".png" />-->
     <!--<link rel="apple-touch-icon-precomposed" href=".png" />-->
     <link rel="shortcut icon" href="/favicon.ico" />
+    <!-- 预加载营销图片，防止显示时闪烁 -->
+    <link rel="preload" href="./images/10.png" as="image">
+    <link rel="preload" href="./images/20.png" as="image">
+    <link rel="preload" href="./images/mayari.png" as="image">
     <style>
       html {
         -ms-touch-action: none;
@@ -342,8 +346,9 @@
         <div class="logo-container">
             <img class="sm-img" src="./images/logo.ico" />
             <div class="middle-box">
-                <img class="num-img" data-num="10" data-src="./images/10.png" />
-                <img class="num-img" data-num="20" data-src="./images/20.png" />
+                <!-- 直接使用 src 预先请求图片，利用浏览器缓存，避免 JS 动态赋值 src 导致的加载延迟 -->
+                <img class="num-img" data-num="10" src="./images/10.png" />
+                <img class="num-img" data-num="20" src="./images/20.png" />
                 <img class="free-img mayari" src="./images/mayari.png" style="display: none;" />
             </div>
             <div class="progress-bar">
