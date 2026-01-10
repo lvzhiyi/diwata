@@ -120,9 +120,9 @@
           var minScale = Math.min(scaleX, scaleY);
           var contentWidth = innerWidth * 0.8;
           // 背景图原始宽度
-          var bgOriginWidth = 750;
+          var bgOriginWidth = 1688;
           // 背景图原始高度
-          var bgOriginHeight = 1334;
+          var bgOriginHeight = 3654;
           // 宽度缩放比例
           var scaleX = innerWidth / designWidth;
           // 高度缩放比例
@@ -151,14 +151,13 @@
           initBaseSize();
         };
 
-        // 统一控制进度条更新
         window.ccEngineProgress = (progress) => {
             // progress: 0~1
-            // 更新默认界面的进度条
+            // 尝试更新默认进度条
             var defVal = document.getElementById('default-progress-val');
-            if(defVal) defVal.style.width = (progress * 100) + '%'; 
-
-            // 更新营销界面的进度条
+            if(defVal) defVal.style.width = (progress * 100) + '%';
+            
+            // 尝试更新营销进度条
             var promoVal = document.getElementById('promo-progress-val');
             if(promoVal) promoVal.style.width = (progress * 100) + '%';
         };
@@ -169,21 +168,18 @@
       window.loadStartTime = performance.now();
     </script>
     <style type="text/css">
-      /* =========================================
-         样式 A: 默认 Loading (无参数 c 时显示)
-         ========================================= */
+      /* 默认样式，包含原有样式和新增样式 */
       .loading-page {
         position: absolute;
         flex: 1;
         width: 100%;
         height: 100%;
-        /* background-image: url(./images/loading_bg.jpeg); */
         background-color: black;
         z-index: 2;
         background-position: center;
         background-repeat: no-repeat;
         background-size: var(--bg-size);
-        display: none; /* 默认隐藏，由 JS 控制显示 */
+        display: none; /* 默认隐藏，JS控制 */
       }
 
       .loading-page-logo {
@@ -202,90 +198,11 @@
         margin: 0 auto;
         margin-top: 0.5rem;
       }
-      
-      .loading-page-logo img {
-        width: 100%;
-        height: auto;
-      }
 
-      /* =========================================
-         样式 B: 营销 Loading (有参数 c 时显示)
-         ========================================= */
-      .sm-logo-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-            
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #000;
-        background-image: url("./images/bg.webp");
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
-        background-position: center;
-        z-index: 3; /* 比默认 loading 层级高 */
-        display: none; /* 默认隐藏，由 JS 控制显示 */
-      }
-      .logo-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        /* transform: translateY(-3%); */
-      }
-      
-      /* 确保元素顺序 */
-      .sm-img { order: 1; margin-bottom: 0.2rem; width: 2.38rem; height: auto; }
-      .middle-box { order: 2; margin-bottom: 0.2rem; position: relative; min-height: 3rem; }
-      .progress-bar { order: 3; margin-bottom: 0.1rem; }
-      .loading-text { order: 4; margin-top: 0.05rem; }
-
-      .num-img {
-        width: 1.04rem;
-        position: absolute;
-        top: 2.01rem;
-        left: 1.88rem;
-        display: none;
-      }
-      .free-img {
-        width: 7.5rem;
-        height: auto;
-        margin-top: -0.3rem;
-        display: none;
-      }
-      .loading-text {
-        font-size: 0.2rem;
-        color: rgba(255, 255, 255, 0.6);
-        text-align: center;
-      }
-
-      /* =========================================
-         通用组件: 进度条 (两套 UI 共用样式)
-         ========================================= */
       .progress-back {
         height: 0.1rem;
         border-radius: 0.1rem;
         background-color: #574b2f;
-      }
-
-      .sm-logo-container .progress-bar {
-        width: 1.72rem; 
-        height: 0.1rem;
-        margin: 0 auto;
-        overflow: hidden;
-        border-radius: 0.1rem;
-        background-color: #574b2f;
-      }
-      .sm-logo-container .progress-bar-inner {
-        width: 0%;
-        height: 100%;
-        background-color: #f6c412;
       }
 
       .progress-val {
@@ -297,6 +214,11 @@
         background-color: #efa300;
         width: 0px;
         transition: all 100ms;
+      }
+
+      .loading-page-logo img {
+        width: 100%;
+        height: auto;
       }
 
       .fade-in {
@@ -312,6 +234,56 @@
           opacity: 1;
         }
       }
+
+      /* === 新增营销页面样式 === */
+      .sm-logo-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        background-image: url("./images/bg.webp");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-position: center;
+        z-index: 3;
+        display: none; /* 默认隐藏，JS控制 */
+      }
+      .logo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+      }
+      .sm-img { order: 1; margin-bottom: 0.2rem; width: 2.38rem; height: auto; }
+      .middle-box { order: 2; margin-bottom: 0.2rem; position: relative; min-height: 3rem; }
+      .sm-logo-container .progress-bar { 
+          order: 3; 
+          margin-bottom: 0.1rem; 
+          width: 1.72rem; 
+          height: 0.1rem;
+          margin: 0 auto;
+          overflow: hidden;
+          border-radius: 0.1rem;
+          background-color: #574b2f;
+      }
+      .loading-text { order: 4; margin-top: 0.05rem; font-size: 0.2rem; color: rgba(255, 255, 255, 0.6); text-align: center; }
+      
+      .sm-logo-container .progress-bar-inner {
+        width: 0%;
+        height: 100%;
+        background-color: #f6c412;
+      }
+      .num-img { width: 1.04rem; position: absolute; top: 2.01rem; left: 1.88rem; display: none; }
+      .free-img { width: 7.5rem; height: auto; margin-top: -0.3rem; display: none; }
     </style>
   </head>
   <body>
@@ -346,7 +318,7 @@
       },
       // 链路追踪配置开关，默认关闭
       tracing: false,
-      };
+    };
         with (b)
           with (body)
             with (insertBefore(createElement('script'), firstChild))
@@ -354,10 +326,9 @@
       })(window, document, 'https://sdk.rum.aliyuncs.com/v2/browser-sdk.js', '__rum');
     </script>
     
-    <!-- UI A: 默认 Loading 界面 -->
+    <!-- 默认 Loading -->
     <div class="loading-page" id="default-loading-page">
       <div class="loading-page-logo">
-        <!-- 注意：build 模板中的 logo 使用 logo.ico 还是 logo.png 请根据实际文件调整，这里假设是用 logo.ico -->
         <img src="./images/logo.ico" alt="logo" />
         <div class="loading-page-progress">
           <div class="progress-back"></div>
@@ -366,17 +337,15 @@
       </div>
     </div>
 
-    <!-- UI B: 营销 Loading 界面 -->
+    <!-- 营销 Loading -->
     <div class="sm-logo-container" id="promo-loading-page">
         <div class="logo-container">
             <img class="sm-img" src="./images/logo.ico" />
             <div class="middle-box">
                 <img class="num-img" data-num="10" data-src="./images/10.png" />
                 <img class="num-img" data-num="20" data-src="./images/20.png" />
-                <!-- 固定显示 mayari -->
                 <img class="free-img mayari" src="./images/mayari.png" style="display: none;" />
             </div>
-            <!-- 营销版进度条容器 -->
             <div class="progress-bar">
                 <div class="progress-bar-inner" id="promo-progress-val"></div>
             </div>
@@ -391,7 +360,6 @@
     </div>
 
     <!-- Polyfills bundle. -->
-
     <script src="src/polyfills.bundle.5adbf.js" charset="utf-8"></script>
 
     <!-- SystemJS support. -->
@@ -403,68 +371,56 @@
 
     <script>
       (function () {
-        // --- 核心逻辑：根据 URL 参数决定显示哪套 UI ---
-        const params = new URLSearchParams(location.search);
-        const c = params.get("c");
+        // 解析参数
+        var params = new URLSearchParams(location.search);
+        var c = params.get("c");
         
-        var activeLoadingPage = null;
+        var activePage = null;
 
         if (c) {
-            // 有参数 c -> 显示营销界面
-            console.log('Mode: Promo Loading');
-            activeLoadingPage = document.getElementById('promo-loading-page');
+            console.log('Mode: Promo');
+            activePage = document.getElementById('promo-loading-page');
             
-            // 处理营销界面的图片显示逻辑
-            const match = c.match(/(\d+)$/);
-            const num = match ? Number(match[1]) : null;
+            // 图片逻辑
+            var match = c.match(/(\d+)$/);
+            var num = match ? Number(match[1]) : null;
             if (num !== null) {
-                const numEl = document.querySelector(`.num-img[data-num="${num}"]`);
+                var numEl = document.querySelector('.num-img[data-num="' + num + '"]');
                 if (numEl) {
                     numEl.src = numEl.dataset.src;
-                    numEl.style.display = "block";
+                    numEl.style.display = 'block';
                 }
             }
-            // 固定显示 mayari
-            const gameEl = document.querySelector(".free-img.mayari");
-            if (gameEl) {
-                gameEl.style.display = "block";
-            }
+            var gameEl = document.querySelector(".free-img.mayari");
+            if (gameEl) gameEl.style.display = 'block';
 
         } else {
-            // 无参数 c -> 显示默认界面
-            console.log('Mode: Default Loading');
-            activeLoadingPage = document.getElementById('default-loading-page');
+            console.log('Mode: Default');
+            activePage = document.getElementById('default-loading-page');
         }
 
-        // 显示选中的 Loading 页
-        if (activeLoadingPage) {
-            activeLoadingPage.style.display = 'block';
-        }
+        // 显示
+        if (activePage) activePage.style.display = 'block';
 
-        // 暴露给引擎调用的方法
-        window.showProgressBar = function showProgressBar() {
-           if(activeLoadingPage) activeLoadingPage.style.display = 'block';
+        window.showProgressBar = function () {
+           if(activePage) activePage.style.display = 'block';
         };
         
-        window.hideLoadingPage = function hideLoadingPage() {
-          if (!activeLoadingPage) return;
-
-          activeLoadingPage.style.opacity = 0;
-          activeLoadingPage.style.perspective = '1000px';
-          activeLoadingPage.style.transition = 'all 0.2s ease-out';
-          activeLoadingPage.addEventListener('transitionend', function () {
-            activeLoadingPage.style.display = 'none';
+        window.hideLoadingPage = function () {
+          if (!activePage) return;
+          activePage.style.opacity = 0;
+          activePage.style.perspective = '1000px';
+          activePage.style.transition = 'all 0.2s ease-out';
+          activePage.addEventListener('transitionend', function () {
+            activePage.style.display = 'none';
           });
         };
       })();
 
       if (window.location.hostname.includes('prod')) {
-        // 重写 console 对象, 屏蔽所有 console 方法
         Object.defineProperty(console, 'log', {
           get: function () {
-            return function () {
-              // 空函数，什么都不做
-            };
+            return function () {};
           },
         });
       }
