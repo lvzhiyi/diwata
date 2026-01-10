@@ -27,26 +27,20 @@
         box-sizing: border-box;
       }
 
+      /* =========================================
+         样式 A: 默认 Loading (无参数 c 时显示)
+         ========================================= */
       .loading-page {
         position: absolute;
         flex: 1;
         width: 100%;
         height: 100%;
-        /* background-image: url(./images/loading_bg.jpeg); */
         background-color: black;
         z-index: 2;
         background-position: center;
         background-repeat: no-repeat;
-        background-size: var(--bg-size);
-      }
-
-      .loading-page-wrapper {
-        display: none;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        margin-top: 1.67rem;
+        /* background-size: var(--bg-size); */
+        display: none; /* 默认隐藏，由 JS 控制显示 */
       }
 
       .loading-page-logo {
@@ -63,12 +57,90 @@
         width: 2.21rem;
         position: relative;
       }
+      
+      .loading-page-logo img {
+        width: 100%;
+        height: auto;
+      }
 
+      /* =========================================
+         样式 B: 营销 Loading (有参数 c 时显示)
+         ========================================= */
+      .sm-logo-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        background-image: url("./images/bg.webp");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-position: center;
+        z-index: 3; /* 比默认 loading 层级高 */
+        display: none; /* 默认隐藏，由 JS 控制显示 */
+      }
+      .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        transform: translateY(-3%);
+      }
+      .sm-img {
+        width: 2.38rem; 
+        height: auto;
+      }
+      .middle-box {
+        min-height: 3rem;
+        position: relative;
+      }
+      .num-img {
+        width: 1.04rem;
+        position: absolute;
+        top: 2.01rem;
+        left: 1.88rem;
+        display: none;
+      }
+      .free-img {
+        width: 7.5rem;
+        height: auto;
+        margin-top: -0.3rem;
+        display: none;
+      }
+      .loading-text {
+        font-size: 0.2rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 0.05rem;
+        text-align: center; /* 文字内部居中 */
+     
+      }
+
+      /* =========================================
+         通用组件: 进度条 (两套 UI 共用样式)
+         ========================================= */
       .progress-back {
-        width: 2.21rem;
+        width: 2.21rem; /* 默认样式宽度 */
         height: 8px;
         border-radius: 8px;
         background-color: #574b2f;
+      }
+      
+      /* 营销界面的进度条可能需要不同的宽度，这里微调 */
+      .sm-logo-container .progress-bar {
+         width: 1.72rem; 
+         height: 0.1rem;
+         margin: 0 auto;
+         overflow: hidden;
+         border-radius: 0.1rem;
+         background-color: #574b2f;
+      }
+      .sm-logo-container .progress-bar-inner {
+         width: 0%;
+         height: 100%;
+         background-color: #f6c412;
       }
 
       .progress-val {
@@ -80,11 +152,6 @@
         background-color: #efa300;
         width: 0px;
         transition: all 100ms;
-      }
-
-      .loading-page-logo img {
-        width: 100%;
-        height: auto;
       }
 
       .fade-in {
@@ -127,66 +194,60 @@
 				</div>
 			</div>
 		</div>
-		<div class="loading-page" id="loading-page">
+		
+        <!-- UI A: 默认 Loading 界面 -->
+		<div class="loading-page" id="default-loading-page">
 			<div class="loading-page-logo">
-				<img src="./images/logo.png" alt="logo">
+				<img src="./images/logo.png" alt="logo"> <!-- 确保有默认 logo -->
 				<div class="loading-page-progress">
 					<div class="progress-back"></div>
-					<div class="progress-val" id="progress-val"></div>
+					<div class="progress-val" id="default-progress-val"></div>
 				</div>
+        <div class="loading-text">Loading...</div>
 			</div>
 		</div>
+
+        <!-- UI B: 营销 Loading 界面 -->
+        <div class="sm-logo-container" id="promo-loading-page">
+            <div class="logo-container">
+                <img class="sm-img" src="./images/logo.ico" />
+                <div class="middle-box">
+                    <img class="num-img" data-num="10" data-src="./images/10.png" />
+                    <img class="num-img" data-num="20" data-src="./images/20.png" />
+                    <!-- 固定显示 mayari -->
+                    <img class="free-img mayari" src="./images/mayari.png" style="display: none;" />
+                </div>
+                <!-- 营销版进度条容器 -->
+                <div class="progress-bar">
+                    <div class="progress-bar-inner" id="promo-progress-val"></div>
+                </div>
+                <div class="loading-text">Loading...</div>
+            </div>
+        </div>
+
 		<%- include(cocosTemplate, {}) %>
 		<script>
       console.time('start game');
       (function () {
         function initBaseSize() {
-          // 设计稿宽度
           var designWidth = 750;
-          // 设计稿高度
           var designHeight = 1334;
-          // 屏幕宽度
           var innerWidth = window.innerWidth;
-          // 屏幕高度
           var innerHeight = window.innerHeight;
-          // 宽度缩放比例
           var scaleX = innerWidth / designWidth;
-          // 高度缩放比例
           var scaleY = innerHeight / designHeight;
           var minScale = Math.min(scaleX, scaleY);
           var contentWidth = innerWidth * 0.8;
-          // 背景图原始宽度
           var bgOriginWidth = 750;
-          // 背景图原始高度
           var bgOriginHeight = 1334;
-          // 宽度缩放比例
-          var scaleX = innerWidth / designWidth;
-          // 高度缩放比例
-          var scaleY = innerHeight / designHeight;
-          var minScale = Math.min(scaleX, scaleY);
-          // 缩放后的背景图宽度
           var bgWidth = bgOriginWidth * minScale;
-          // 缩放后的背景图高度
           var bgHeight = bgOriginHeight * minScale;
-          document.documentElement.style.setProperty(
-            '--window-width',
-            innerWidth + 'px'
-          );
-          document.documentElement.style.setProperty(
-            '--window-content-width',
-            contentWidth + 'px'
-          );
-          document.documentElement.style.setProperty(
-            '--render-ui-scale',
-            minScale
-          );
-          document.documentElement.style.setProperty(
-            '--bg-size',
-            bgWidth + 'px ' + bgHeight + 'px'
-          );
-          // 设计稿尺寸是 1125 * 2436, 以1rem = 100px 为基准
-          // 然后屏幕的全屏就等于1125 / 100 = 11.25rem
-          // 然后根据屏幕的实际大小，设置根节点的fontSize
+          
+          document.documentElement.style.setProperty('--window-width', innerWidth + 'px');
+          document.documentElement.style.setProperty('--window-content-width', contentWidth + 'px');
+          document.documentElement.style.setProperty('--render-ui-scale', minScale);
+          document.documentElement.style.setProperty('--bg-size', bgWidth + 'px ' + bgHeight + 'px');
+          
           var rem = minScale * 100;
           document.documentElement.style.setProperty('font-size', rem + 'px');
         }
@@ -196,31 +257,118 @@
           initBaseSize();
         };
 
-        window.ccEngineProgress = (progress) => {
-          document.getElementById('progress-val').style.width =
-            progress * 4.21 + 'rem';
+        // 统一控制进度条更新的核心函数
+        function updateProgress(progress) {
+            console.log('Loading Progress:', progress); 
+            // 更新默认界面的进度条
+            var defVal = document.getElementById('default-progress-val');
+            if(defVal) defVal.style.width = progress * 2.21 + 'rem'; 
+
+            // 更新营销界面的进度条
+            var promoVal = document.getElementById('promo-progress-val');
+            if(promoVal) {
+                promoVal.style.width = (progress * 100) + '%';
+            }
+        }
+
+        // 监听 Cocos 3.x 标准回调
+        window.ccEngineProgress = updateProgress;
+        
+        // 监听参考模板中的回调 (以防万一)
+        window.onEngineLoadProgress = function(percent) {
+            // 有的引擎版本传进来是 0-100，有的是 0-1
+            var p = percent > 1 ? percent / 100 : percent;
+            updateProgress(p);
         };
+
+        // 【兜底方案】模拟进度条 (仅在预览模式生效)
+        // 如果 1秒内没有收到任何进度回调，就自动跑进度，防止进度条卡死
+        var hasReceivedProgress = false;
+        var fakeProgress = 0;
+        setTimeout(function() {
+            if (!hasReceivedProgress) {
+                console.log('No progress received, starting fake progress...');
+                var timer = setInterval(function() {
+                    if (fakeProgress < 0.9) {
+                        fakeProgress += 0.05;
+                        updateProgress(fakeProgress);
+                    } else {
+                        clearInterval(timer);
+                    }
+                }, 200);
+            }
+        }, 1000);
+
+        // 劫持 updateProgress 标记已收到真实进度
+        var originalUpdate = updateProgress;
+        updateProgress = function(p) {
+            hasReceivedProgress = true;
+            originalUpdate(p);
+        };
+
         console.time('Game init total time');
       })();
     </script>
 			<script>
 				(function () {
-					var loadingPage = document.getElementById('loading-page');
+                    // --- 核心逻辑：根据 URL 参数决定显示哪套 UI ---
+                    const params = new URLSearchParams(location.search);
+                    // const c = params.get("c");
+            
+                    const c = params.get("c");
+                    // const c = params.get("c") || "FreeSpinCarnival_20";
+
+                    console.log('Preview Params:', params, c);
+
+                    if (c) {
+                        // 有参数 c -> 显示营销界面
+                        console.log('Mode: Promo Loading');
+                        activeLoadingPage = document.getElementById('promo-loading-page');
+                        
+                        // 处理营销界面的图片显示逻辑
+                        const match = c.match(/(\d+)$/);
+                        const num = match ? Number(match[1]) : null;
+                        if (num !== null) {
+                            const numEl = document.querySelector(`.num-img[data-num="${num}"]`);
+                            if (numEl) {
+                                numEl.src = numEl.dataset.src;
+                                numEl.style.display = "block";
+                            }
+                        }
+                        // 固定显示 mayari
+                        const gameEl = document.querySelector(".free-img.mayari");
+                        if (gameEl) {
+                            gameEl.style.display = "block";
+                        }
+
+                    } else {
+                        // 无参数 c -> 显示默认界面
+                        console.log('Mode: Default Loading');
+                        activeLoadingPage = document.getElementById('default-loading-page');
+                    }
+
+                    // 显示选中的 Loading 页
+                    if (activeLoadingPage) {
+                        activeLoadingPage.style.display = 'block';
+                    }
+
+                    // 暴露给 Cocos 引擎调用的方法
 					window.showProgressBar = function showProgressBar() {
-						loadingPage.style.display = 'block';
+						if(activeLoadingPage) activeLoadingPage.style.display = 'block';
 					}
 					window.hideLoadingPage = function hideLoadingPage() {
 						console.log('hideLoadingPage');
-						loadingPage.style.opacity = 0;
-						loadingPage.style.perspective = '1000px';
-						loadingPage.style.transition = 'all 0.2s ease-out';
-						loadingPage.addEventListener('transitionend', function () {
-							loadingPage.style.display = 'none';
+                        if (!activeLoadingPage) return;
+                        
+						activeLoadingPage.style.opacity = 0;
+						activeLoadingPage.style.perspective = '1000px';
+						activeLoadingPage.style.transition = 'all 0.2s ease-out';
+						activeLoadingPage.addEventListener('transitionend', function () {
+							activeLoadingPage.style.display = 'none';
 						});
 					}
 				})();
 			</script>
 
 </body>
-
 </html>
