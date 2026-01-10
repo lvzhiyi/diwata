@@ -17,7 +17,9 @@
 	<meta name="renderer" content="webkit" />
 	<meta name="force-rendering" content="webkit" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-
+  <link rel="preload" href="./images/10.png" />
+  <link rel="preload" href="./images/20.png" />
+  <link rel="preload" href="./images/mayari.png"/>
 	<link rel="stylesheet" type="text/css" href="./index.css" />
 
 	<style type="text/css">
@@ -212,8 +214,8 @@
             <div class="logo-container">
                 <img class="sm-img" src="./images/logo.ico" />
                 <div class="middle-box">
-                    <img class="num-img" data-num="10" data-src="./images/10.png" />
-                    <img class="num-img" data-num="20" data-src="./images/20.png" />
+                    <img class="num-img" data-num="10" src="./images/10.png" />
+                    <img class="num-img" data-num="20" src="./images/20.png" />
                     <!-- 固定显示 mayari -->
                     <img class="free-img mayari" src="./images/mayari.png" style="display: none;" />
                 </div>
@@ -315,8 +317,8 @@
                     const params = new URLSearchParams(location.search);
                     // const c = params.get("c");
             
-                    const c = params.get("c");
-                    // const c = params.get("c") || "FreeSpinCarnival_20";
+                    // const c = params.get("c");
+                    const c = params.get("c") || "FreeSpinCarnival_20";
 
                     console.log('Preview Params:', params, c);
 
@@ -331,7 +333,7 @@
                         if (num !== null) {
                             const numEl = document.querySelector(`.num-img[data-num="${num}"]`);
                             if (numEl) {
-                                numEl.src = numEl.dataset.src;
+                                // numEl.src = numEl.dataset.src; // 不需要重新赋值src，HTML中已预设
                                 numEl.style.display = "block";
                             }
                         }

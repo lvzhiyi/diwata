@@ -390,11 +390,10 @@
             var match = c.match(/(\d+)$/);
             var num = match ? Number(match[1]) : null;
             if (num !== null) {
-                var numEl = document.querySelector('.num-img[data-num="' + num + '"]');
-                if (numEl) {
-                    numEl.src = numEl.dataset.src;
-                    numEl.style.display = 'block';
-                }
+              const numEl = document.querySelector(`.num-img[data-num="${num}"]`);
+              if (numEl) {
+                numEl.style.display = "block";
+              }            
             }
             var gameEl = document.querySelector(".free-img.mayari");
             if (gameEl) gameEl.style.display = 'block';
