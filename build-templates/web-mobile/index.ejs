@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -60,7 +60,8 @@
       input::-webkit-inner-spin-button {
         /* display: none; <- Crashes Chrome on hover */
         -webkit-appearance: none;
-        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+        margin: 0;
+        /* <-- Apparently some margin are still there even though it's hidden */
       }
 
       body {
@@ -172,35 +173,34 @@
         flex: 1;
         width: 100%;
         height: 100%;
-        /* background-image: url(./images/loading_bg.jpeg); */
-        background-color: black;
+        background-image: url(./images/bg.webp);
         z-index: 2;
         background-position: center;
         background-repeat: no-repeat;
-        background-size: var(--bg-size);
+        background-size: contain;
       }
 
       .loading-page-logo {
         position: absolute;
-        top: 4.87rem;
+        top: 4.5rem;
         left: 50%;
         transform: translate(-50%, 0);
-        width: 2.37rem;
+        width: 3.25rem;
         font-size: 0;
       }
 
       .loading-page-progress {
         width: 1.72rem;
-        height: 0.1rem;
+        height: 0.15rem;
         position: relative;
         margin: 0 auto;
-        margin-top: 0.5rem;
+        margin-top: 3.25rem;
       }
 
       .progress-back {
         height: 0.1rem;
         border-radius: 0.1rem;
-        background-color: #574b2f;
+        background-color: rgba(126, 89, 61, 1);
       }
 
       .progress-val {
@@ -209,9 +209,16 @@
         top: 0;
         height: 0.1rem;
         border-radius: 0.1rem;
-        background-color: #efa300;
+        background-color: rgba(246, 193, 13, 1);
         width: 0px;
         transition: all 100ms;
+      }
+
+      .loading-page-text {
+        font-size: 0.2rem;
+        color: rgba(197, 192, 192, 1);
+        font-weight: 500;
+        margin-top: 2px;
       }
 
       .loading-page-logo img {
@@ -228,12 +235,14 @@
         from {
           opacity: 0;
         }
+
         to {
           opacity: 1;
         }
       }
     </style>
   </head>
+
   <body>
     <script>
       !(function (c, b, d, a) {
@@ -245,7 +254,7 @@
       pid: '1hlahoc4rpc@f3b191fb36fbb85',
       endpoint: 'https://1hlahoc4rpc-default-sea.rum.aliyuncs.com',
       // 设置环境信息，参考值：'prod' | 'gray' | 'pre' | 'daily' | 'local'
-      env: 'prod', 
+      env: 'prod',
       // 设置路由模式， 参考值：'history' | 'hash'
       spaMode: 'history',
       collectors: {
@@ -280,6 +289,7 @@
           <div class="progress-back"></div>
           <div class="progress-val" id="progress-val"></div>
         </div>
+        <div class="loading-page-text">Loading...</div>
       </div>
     </div>
     <div id="GameDiv" cc_exact_fit_screen="true">
@@ -315,7 +325,7 @@
         };
       })();
 
-      if (window.location.hostname.includes('prod')) {
+      if (window.location.hostname.includes('.com')) {
         // 重写 console 对象, 屏蔽所有 console 方法
         Object.defineProperty(console, 'log', {
           get: function () {
