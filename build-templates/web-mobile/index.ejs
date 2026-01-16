@@ -244,15 +244,16 @@
   </head>
 
   <body>
-    <script>
+		<script>
+			if (!window.location.hostname.includes('prod')) {
+				console.log('不初始化ARMS');
+			  return;
+			}
       !(function (c, b, d, a) {
         c[a] || (c[a] = {});
-        // if (!window.location.hostname.includes('prod')) {
-        //   return;
-        // }
         c[a] = {
           endpoint:
-            'https://proj-xtrace-66b92f21759fcaa0b151286de2f75559-ap-southeast-1.ap-southeast-1.log.aliyuncs.com/rum/web/v2?workspace=default-cms-5858152735245005-ap-southeast-1&service_id=1loji7pjkct@afc3a4e34959dba7b0296',
+            'https://proj-xtrace-66b92f21759fcaa0b151286de2f75559-ap-southeast-1.ap-southeast-1.log.aliyuncs.com/rum/web/v2?workspace=default-cms-5858152735245005-ap-southeast-1&service_id=1loji7pjkct@e1a5bb3ef120819412e5d',
           // 设置环境信息，参考值：'prod' | 'gray' | 'pre' | 'daily' | 'local'
           env: 'prod',
           // 设置路由模式， 参考值：'history' | 'hash'
