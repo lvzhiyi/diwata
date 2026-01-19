@@ -70,7 +70,7 @@ export class AppInit extends BaseAppInit {
   protected async onLoad() {
     // 隐藏启动页
     window?.hideLoadingPage?.();
-    // 是否隐藏swipe 
+    // 是否隐藏swipe
     this.swipeNode.active = !getIsGap();
   }
 
@@ -309,7 +309,7 @@ export class AppInit extends BaseAppInit {
   private async _getUserLevel() {
     try {
       const res = await getPlayerLevel();
-  
+
       if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data !== null) {
         app.store.user.setPlayerLevelData(res.data);
       }
@@ -319,7 +319,7 @@ export class AppInit extends BaseAppInit {
       });
     }
   }
-  
+
   /**
    * 初始化游戏设置接口请求
    */
@@ -531,21 +531,21 @@ export class AppInit extends BaseAppInit {
   private appInitArms() {
     if (DEBUG) return;
     const env = getGameEnv();
-
-    const pid = '1hlahoc4rpc@a0f20c14591e2db';
-    initARMS({
-      pid: pid,
-      endpoint: 'https://1hlahoc4rpc-default-sea.rum.aliyuncs.com',
-      env: env,
-      user: {
-        uid: app.store.user.userParams.pId,
-        ...app.store.user.userParams,
-      },
-      properties: {
-        ...app.store.user.userParams,
-        appVersion: app.config.app.APP_VERSION,
-      },
-    });
+    initARMS(
+      {
+        
+        // eslint-disable-next-line max-len
+        endpoint: 'https://proj-xtrace-66b92f21759fcaa0b151286de2f75559-ap-southeast-1.ap-southeast-1.log.aliyuncs.com/rum/web/v2?workspace=default-cms-5858152735245005-ap-southeast-1&service_id=1loji7pjkct@e1a5bb3ef120819412e5d',
+        env: env,
+        user: {
+          uid: app.store.user.userParams.pId,
+          ...app.store.user.userParams,
+        },
+        properties: {
+          ...app.store.user.userParams,
+          appVersion: app.config.app.APP_VERSION,
+        },
+      });
   }
 
   protected onProgress(completed: number, total: number) {
