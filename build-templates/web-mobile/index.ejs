@@ -13,7 +13,10 @@
 
     <!--https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html-->
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <meta name="format-detection" content="telephone=no" />
 
     <!-- force webkit on 360 -->
@@ -38,7 +41,7 @@
     <!-- 预加载营销图片，防止显示时闪烁 -->
     <link rel="preload" href="./images/10.png" />
     <link rel="preload" href="./images/20.png" />
-    <link rel="preload" href="./images/mayari.png"/>
+    <link rel="preload" href="./images/malakas.png" />
     <style>
       html {
         -ms-touch-action: none;
@@ -64,7 +67,8 @@
       input::-webkit-inner-spin-button {
         /* display: none; <- Crashes Chrome on hover */
         -webkit-appearance: none;
-        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+        margin: 0;
+        /* <-- Apparently some margin are still there even though it's hidden */
       }
 
       body {
@@ -136,12 +140,21 @@
           var bgWidth = bgOriginWidth * minScale;
           // 缩放后的背景图高度
           var bgHeight = bgOriginHeight * minScale;
-          document.documentElement.style.setProperty('--window-width', innerWidth + 'px');
-          document.documentElement.style.setProperty('--window-content-width', contentWidth + 'px');
-          document.documentElement.style.setProperty('--render-ui-scale', minScale);
+          document.documentElement.style.setProperty(
+            '--window-width',
+            innerWidth + 'px'
+          );
+          document.documentElement.style.setProperty(
+            '--window-content-width',
+            contentWidth + 'px'
+          );
+          document.documentElement.style.setProperty(
+            '--render-ui-scale',
+            minScale
+          );
           document.documentElement.style.setProperty(
             '--bg-size',
-            bgWidth + 'px ' + bgHeight + 'px',
+            bgWidth + 'px ' + bgHeight + 'px'
           );
           // 设计稿尺寸是 1125 * 2436, 以1rem = 100px 为基准
           // 然后屏幕的全屏就等于1125 / 100 = 11.25rem
@@ -156,14 +169,14 @@
         };
 
         window.ccEngineProgress = (progress) => {
-            // progress: 0~1
-            // 尝试更新默认进度条
-            var defVal = document.getElementById('default-progress-val');
-            if(defVal) defVal.style.width = (progress * 100) + '%';
-            
-            // 尝试更新营销进度条
-            var promoVal = document.getElementById('promo-progress-val');
-            if(promoVal) promoVal.style.width = (progress * 100) + '%';
+          // progress: 0~1
+          // 尝试更新默认进度条
+          var defVal = document.getElementById('default-progress-val');
+          if (defVal) defVal.style.width = progress * 100 + '%';
+
+          // 尝试更新营销进度条
+          var promoVal = document.getElementById('promo-progress-val');
+          if (promoVal) promoVal.style.width = progress * 100 + '%';
         };
         console.time('Game init total time');
       })();
@@ -172,41 +185,48 @@
       window.loadStartTime = performance.now();
     </script>
     <style type="text/css">
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       /* 默认样式，包含原有样式和新增样式 */
       .loading-page {
         position: absolute;
         flex: 1;
         width: 100%;
         height: 100%;
-        background-color: black;
+        background-image: url(./images/bg.webp);
         z-index: 2;
         background-position: center;
         background-repeat: no-repeat;
-        background-size: var(--bg-size);
-        display: none; /* 默认隐藏，JS控制 */
+        background-size: contain;
+        display: none;
+        /* 默认隐藏，JS控制 */
       }
 
       .loading-page-logo {
         position: absolute;
-        top: 4.87rem;
+        top: 4.5rem;
         left: 50%;
         transform: translate(-50%, 0);
-        width: 2.37rem;
+        width: 3.25rem;
         font-size: 0;
       }
 
       .loading-page-progress {
         width: 1.72rem;
-        height: 0.1rem;
+        height: 0.15rem;
         position: relative;
         margin: 0 auto;
-        margin-top: 0.5rem;
+        margin-top: 3.25rem;
       }
 
       .progress-back {
         height: 0.1rem;
         border-radius: 0.1rem;
-        background-color: #574b2f;
+        background-color: rgba(126, 89, 61, 1);
       }
 
       .progress-val {
@@ -215,9 +235,16 @@
         top: 0;
         height: 0.1rem;
         border-radius: 0.1rem;
-        background-color: #efa300;
+        background-color: rgba(246, 193, 13, 1);
         width: 0px;
         transition: all 100ms;
+      }
+
+      .loading-page-text {
+        font-size: 0.2rem;
+        color: rgba(197, 192, 192, 1);
+        font-weight: 500;
+        margin-top: 2px;
       }
 
       .loading-page-logo img {
@@ -234,6 +261,7 @@
         from {
           opacity: 0;
         }
+
         to {
           opacity: 1;
         }
@@ -245,20 +273,22 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        
+
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         background-color: #000;
-        background-image: url("./images/bg.webp");
+        background-image: url('./images/bg.webp');
         background-repeat: no-repeat;
         background-size: 100% 100%;
         background-position: center;
         z-index: 3;
-        display: none; /* 默认隐藏，JS控制 */
+        display: none;
+        /* 默认隐藏，JS控制 */
       }
+
       .logo-container {
         display: flex;
         flex-direction: column;
@@ -267,69 +297,105 @@
         width: 100%;
         height: 100%;
       }
-      .sm-img { order: 1; margin-bottom: 0.2rem; width: 2.38rem; height: auto; }
-      .middle-box { order: 2; margin-bottom: 0.2rem; position: relative; min-height: 3rem; }
-      .sm-logo-container .progress-bar { 
-          order: 3; 
-          margin-bottom: 0.1rem; 
-          width: 1.72rem; 
-          height: 0.1rem;
-          margin: 0 auto;
-          overflow: hidden;
-          border-radius: 0.1rem;
-          background-color: #574b2f;
+
+      .sm-img {
+        order: 1;
+        margin-bottom: 0.2rem;
+        width: 2.38rem;
+        height: auto;
       }
-      .loading-text { order: 4; margin-top: 0.05rem; font-size: 0.2rem; color: rgba(255, 255, 255, 0.6); text-align: center; }
-      
+
+      .middle-box {
+        order: 2;
+        margin-bottom: 0.2rem;
+        position: relative;
+        min-height: 3rem;
+      }
+
+      .sm-logo-container .progress-bar {
+        order: 3;
+        margin-bottom: 0.1rem;
+        width: 1.72rem;
+        height: 0.1rem;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 0.1rem;
+        background-color: #574b2f;
+      }
+
+      .loading-text {
+        order: 4;
+        margin-top: 0.05rem;
+        font-size: 0.2rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-align: center;
+      }
+
       .sm-logo-container .progress-bar-inner {
         width: 0%;
         height: 100%;
         background-color: #f6c412;
       }
-      .num-img { width: 1.04rem; position: absolute; top: 2.01rem; left: 1.88rem; display: none; }
-      .free-img { width: 7.5rem; height: auto; margin-top: -0.3rem; display: none; }
+
+      .num-img {
+        width: 1.04rem;
+        position: absolute;
+        top: 2.01rem;
+        left: 1.88rem;
+        display: none;
+      }
+
+      .free-img {
+        width: 7.5rem;
+        height: auto;
+        margin-top: -0.3rem;
+        display: none;
+      }
     </style>
   </head>
+
   <body>
     <script>
+			if (!window.location.hostname.includes('prod')) {
+				console.log('不初始化ARMS');
+				return;
+			}
       !(function (c, b, d, a) {
         c[a] || (c[a] = {});
-				if (!window.location.hostname.includes('prod')) {
-					return;
-				}
+
         c[a] = {
-      pid: '1hlahoc4rpc@f3b191fb36fbb85',
-      endpoint: 'https://1hlahoc4rpc-default-sea.rum.aliyuncs.com',
-      // 设置环境信息，参考值：'prod' | 'gray' | 'pre' | 'daily' | 'local'
-      env: 'prod', 
-      // 设置路由模式， 参考值：'history' | 'hash'
-      spaMode: 'history',
-      collectors: {
-        // 页面性能指标监听开关，默认开启
-        perf: true,
-        // WebVitals指标监听开关，默认开启
-        webVitals: true,
-        // Ajax监听开关，默认开启
-        api: true,
-        // 静态资源开关，默认开启
-        staticResource: true,
-        // JS错误监听开关，默认开启
-        jsError: true,
-        // 控制台错误监听开关，默认开启
-        consoleError: true,
-        // 用户行为监听开关，默认开启
-        action: true,
-      },
-      // 链路追踪配置开关，默认关闭
-      tracing: false,
-    };
+          endpoint:
+            'https://proj-xtrace-66b92f21759fcaa0b151286de2f75559-ap-southeast-1.ap-southeast-1.log.aliyuncs.com/rum/web/v2?workspace=default-cms-5858152735245005-ap-southeast-1&service_id=1loji7pjkct@eafd6c80102685766116b',
+          // 设置环境信息，参考值：'prod' | 'gray' | 'pre' | 'daily' | 'local'
+          env: 'qat',
+          // 设置路由模式， 参考值：'history' | 'hash'
+          spaMode: 'history',
+          collectors: {
+            // 页面性能指标监听开关，默认开启
+            perf: true,
+            // WebVitals指标监听开关，默认开启
+            webVitals: true,
+            // Ajax监听开关，默认开启
+            api: true,
+            // 静态资源开关，默认开启
+            staticResource: true,
+            // JS错误监听开关，默认开启
+            jsError: true,
+            // 控制台错误监听开关，默认开启
+            consoleError: true,
+            // 用户行为监听开关，默认开启
+            action: true,
+          },
+          // 链路追踪配置开关，默认关闭
+          tracing: false,
+        };
         with (b)
           with (body)
             with (insertBefore(createElement('script'), firstChild))
               setAttribute('crossorigin', '', (src = d));
-      })(window, document, 'https://sdk.rum.aliyuncs.com/v2/browser-sdk.js', '__rum');
+      })(window, document, '//sdk.rum.aliyuncs.com/v2/browser-sdk.js', '__rum');
     </script>
-    
+
     <!-- 默认 Loading -->
     <div class="loading-page" id="default-loading-page">
       <div class="loading-page-logo">
@@ -343,24 +409,32 @@
 
     <!-- 营销 Loading -->
     <div class="sm-logo-container" id="promo-loading-page">
-        <div class="logo-container">
-            <img class="sm-img" src="./images/logo.ico" />
-            <div class="middle-box">
-                <!-- 直接使用 src 预先请求图片，利用浏览器缓存，避免 JS 动态赋值 src 导致的加载延迟 -->
-                <img class="num-img" data-num="10" src="./images/10.png" />
-                <img class="num-img" data-num="20" src="./images/20.png" />
-                <img class="free-img mayari" src="./images/mayari.png" style="display: none;" />
-            </div>
-            <div class="progress-bar">
-                <div class="progress-bar-inner" id="promo-progress-val"></div>
-            </div>
-            <div class="loading-text">Loading...</div>
+      <div class="logo-container">
+        <img class="sm-img" src="./images/logo.ico" />
+        <div class="middle-box">
+          <!-- 直接使用 src 预先请求图片，利用浏览器缓存，避免 JS 动态赋值 src 导致的加载延迟 -->
+          <img class="num-img" data-num="10" src="./images/10.png" />
+          <img class="num-img" data-num="20" src="./images/20.png" />
+          <img
+            class="free-img mayari"
+            src="./images/malakas.png"
+            style="display: none"
+          />
         </div>
+        <div class="progress-bar">
+          <div class="progress-bar-inner" id="promo-progress-val"></div>
+        </div>
+        <div class="loading-text">Loading...</div>
+      </div>
     </div>
 
     <div id="GameDiv" cc_exact_fit_screen="true">
       <div id="Cocos3dGameContainer">
-        <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
+        <canvas
+          id="GameCanvas"
+          oncontextmenu="event.preventDefault()"
+          tabindex="99"
+        ></canvas>
       </div>
     </div>
 
@@ -378,38 +452,36 @@
       (function () {
         // 解析参数
         var params = new URLSearchParams(location.search);
-        var c = params.get("c");
-        
+        var c = params.get('c');
+
         var activePage = null;
 
         if (c) {
-            console.log('Mode: Promo');
-            activePage = document.getElementById('promo-loading-page');
-            
-            // 图片逻辑
-            var match = c.match(/(\d+)$/);
-            var num = match ? Number(match[1]) : null;
-            if (num !== null) {
-              const numEl = document.querySelector(`.num-img[data-num="${num}"]`);
-              if (numEl) {
-                numEl.style.display = "block";
-              }            
-            }
-            var gameEl = document.querySelector(".free-img.mayari");
-            if (gameEl) gameEl.style.display = 'block';
+          activePage = document.getElementById('promo-loading-page');
 
+          // 图片逻辑
+          var match = c.match(/(\d+)$/);
+          var num = match ? Number(match[1]) : null;
+          if (num !== null) {
+            const numEl = document.querySelector(`.num-img[data-num="${num}"]`);
+            if (numEl) {
+              numEl.style.display = 'block';
+            }
+          }
+          var gameEl = document.querySelector('.free-img.mayari');
+          if (gameEl) gameEl.style.display = 'block';
         } else {
-            console.log('Mode: Default');
-            activePage = document.getElementById('default-loading-page');
+          console.log('Mode: Default');
+          activePage = document.getElementById('default-loading-page');
         }
 
         // 显示
         if (activePage) activePage.style.display = 'block';
 
         window.showProgressBar = function () {
-           if(activePage) activePage.style.display = 'block';
+          if (activePage) activePage.style.display = 'block';
         };
-        
+
         window.hideLoadingPage = function () {
           if (!activePage) return;
           activePage.style.opacity = 0;
