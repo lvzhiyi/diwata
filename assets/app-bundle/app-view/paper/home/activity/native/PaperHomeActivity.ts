@@ -177,6 +177,7 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
           // 后端返回的是1厘比索，前端显示的是1比索，所以需要除以1000
           const creditCount = calculateWithBase(res.data, true);
           app.manager.global.setCreditCount(creditCount);
+          ActivityDataMgr.instance.updateBalance(creditCount);
           GlobalMgr.instance.balance = creditCount;
         }
       }
