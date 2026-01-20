@@ -122,7 +122,8 @@ export class HomeRollTool  {
     overlayNode: Node,
     goddessTargetNode: Node,
     lightPrefab: Prefab,
-    goddessNode: Node
+    goddessNode: Node,
+    goddess2Node: Node
   ): Promise<void> {
     return new Promise<void>(async (resolve) => {
       targetNodes.forEach((node) => {
@@ -148,12 +149,27 @@ export class HomeRollTool  {
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
       goddessSkeleton.premultipliedAlpha = false;
       const animationName = this.getGoddessAnimation(targetNodes);
-     
       goddessSkeleton.setAnimation(0, animationName, false);
       goddessSkeleton.setCompleteListener(() => {
         // 女神执行待机动画
-        goddessSkeleton.setAnimation(0, 'animation', true);
+        goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation_fg' : 'animation', true);
       });
+      
+      const animation2Name = this.getGoddess2Animation(targetNodes);
+
+      if(animation2Name !== '') {
+        // 女神2执行动画
+        goddess2Node.active = true;
+        const goddess2Skeleton = goddess2Node.getComponent(sp.Skeleton) || goddess2Node.addComponent(sp.Skeleton);
+        goddess2Skeleton.premultipliedAlpha = false;
+        goddess2Skeleton.setAnimation(0, animation2Name, false);
+        goddess2Skeleton.setCompleteListener(() => {
+          // 女神2执行待机动画
+          goddess2Node.active = false;
+          goddess2Skeleton.setCompleteListener(null);
+        });
+      }
+
       await delay(500);
       resolve();
     });
@@ -259,9 +275,9 @@ export class HomeRollTool  {
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
       goddessSkeleton.premultipliedAlpha = false;
       // EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER5);
-      goddessSkeleton.setAnimation(0, 'animation5', false);
+      goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation5_fg' : 'animation5', false);
       goddessSkeleton.setCompleteListener(() => {
-        goddessSkeleton.setAnimation(0, 'animation', true);
+        goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation_fg' : 'animation', true);
       });
       resolve();
     });
@@ -279,21 +295,36 @@ export class HomeRollTool  {
     if (hasSword && !hasMainBow) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER1);
 
-      return 'animation3';
+      return app.manager.global.isBuyFreeBonusMode ? 'animation3_fg' : 'animation3';
     // 返回女神挥剑animation3
     } else if (!hasSword && hasMainBow) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER2);
 
-      return 'animation2';
+      return app.manager.global.isBuyFreeBonusMode ? 'animation2_fg' : 'animation2';
     } else if (hasSword && hasMainBow) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER3);
-      // const timeOut = setTimeout(() => {
-      //   EffectManager.inst.playEffect(AudioPath.GAME.SWORD_AND_STICK);
-      //   clearTimeout(timeOut);
-      // }, 500);
 
-      return 'animation4';
+      return app.manager.global.isBuyFreeBonusMode ? 'animation4_fg' : 'animation4';
     }
+  }
+
+  /**
+   * 根据中的图标决定女神播放什么动效
+  */
+  getGoddess2Animation(
+    changeWildData: Node[]
+  ):string{
+    const hasSword = changeWildData.some(item => item.getComponent(Symbol).currentSymbolItem.symbolId === SymbolType.SWORD);
+    const hasMainBow = changeWildData.some(item => item.getComponent(Symbol).currentSymbolItem.symbolId === SymbolType.BOW);
+
+    if (hasSword && !hasMainBow) {
+      return 'animation3_fx';
+    // 返回女神挥剑animation3
+    } else if (!hasSword && hasMainBow) {
+      return 'animation2_fx';
+    }
+ 
+    return '';
   }
 
   /**

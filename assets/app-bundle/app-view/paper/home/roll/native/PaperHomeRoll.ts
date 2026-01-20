@@ -33,6 +33,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   @property({ type: Node, tooltip: '女神节点' })
   private goddessNode: Node = null;
 
+  @property({ type: Node, tooltip: '女神节点2' })
+  private goddess2Node: Node = null;
+
   @property({ type: Node, tooltip: '女神动画节点' })
   private goddessAnimationNode: Node = null;
 
@@ -508,7 +511,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       this.overLayNode,
       this.goddessAnimationNode,
       this.lightPrefab,
-      this.goddessNode
+      this.goddessNode,
+      this.goddess2Node
     );
   }
 
