@@ -1198,6 +1198,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         this.showBuyFreeSpinView();
       }
     }
+
+    this.homeRollTool.switchGoddessSkin(this.goddessNode);
   }
 
   /** 展示成就的免费模式 or隐藏成就的免费模式 */

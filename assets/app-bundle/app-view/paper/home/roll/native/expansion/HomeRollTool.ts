@@ -266,6 +266,21 @@ export class HomeRollTool  {
   }
 
   /**
+   * 女神皮肤切换
+  */
+  async switchGoddessSkin(
+    goddessNode: Node,
+ 
+  ): Promise<void> {
+    return new Promise<void>(async (resolve) => {
+      const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
+      goddessSkeleton.premultipliedAlpha = false;
+      goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation_fg' : 'animation', true);
+      resolve();
+    });
+  }
+
+  /**
    * 播放女神举手动画
   */
   async showGoddessPraiseAnimation(
