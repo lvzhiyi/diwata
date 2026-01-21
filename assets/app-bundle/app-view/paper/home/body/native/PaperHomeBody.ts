@@ -36,6 +36,7 @@ import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
 import { BalanceString, BetString } from 'db://assets/common/script/extra/Utils/PlatformConfig';
 import { ActivityEventMgr, ActivityEventMgrEventsType } from 'db://assets/common/script/ActivityEventMgr';
+import { GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
 
 const { ccclass, property } = _decorator;
 
@@ -255,6 +256,7 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
    */
   creditCountChange(val: number) {
     this.creditLable.getComponent(Label).string = getP() + numberToMoney(val);
+    GlobalMgr.instance.balance = val;
   }
 
   /**

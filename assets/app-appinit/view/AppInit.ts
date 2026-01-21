@@ -531,18 +531,21 @@ export class AppInit extends BaseAppInit {
   private appInitArms() {
     if (DEBUG) return;
     const env = getGameEnv();
-    initARMS({
-      endpoint: 'https://proj-xtrace-66b92f21759fcaa0b151286de2f75559-ap-southeast-1.ap-southeast-1.log.aliyuncs.com/rum/web/v2?workspace=default-cms-5858152735245005-ap-southeast-1&service_id=1loji7pjkct@e1a5bb3ef120819412e5d',
-      env: env,
-      user: {
-        uid: app.store.user.userParams.pId,
-        ...app.store.user.userParams,
-      },
-      properties: {
-        ...app.store.user.userParams,
-        appVersion: app.config.app.APP_VERSION,
-      },
-    });
+    initARMS(
+      {
+        
+        // eslint-disable-next-line max-len
+        endpoint: 'https://proj-xtrace-66b92f21759fcaa0b151286de2f75559-ap-southeast-1.ap-southeast-1.log.aliyuncs.com/rum/web/v2?workspace=default-cms-5858152735245005-ap-southeast-1&service_id=1loji7pjkct@e1a5bb3ef120819412e5d',
+        env: env,
+        user: {
+          uid: app.store.user.userParams.pId,
+          ...app.store.user.userParams,
+        },
+        properties: {
+          ...app.store.user.userParams,
+          appVersion: app.config.app.APP_VERSION,
+        },
+      });
   }
 
   protected onProgress(completed: number, total: number) {

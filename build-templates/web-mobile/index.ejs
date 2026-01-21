@@ -1,4 +1,4 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -13,7 +13,10 @@
 
     <!--https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html-->
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <meta name="format-detection" content="telephone=no" />
 
     <!-- force webkit on 360 -->
@@ -35,6 +38,10 @@
     <!--<link rel="apple-touch-icon" href=".png" />-->
     <!--<link rel="apple-touch-icon-precomposed" href=".png" />-->
     <link rel="shortcut icon" href="/favicon.ico" />
+    <!-- 预加载营销图片，防止显示时闪烁 -->
+    <link rel="preload" href="./images/10.png" />
+    <link rel="preload" href="./images/20.png" />
+    <link rel="preload" href="./images/malakas.png" />
     <style>
       html {
         -ms-touch-action: none;
@@ -133,12 +140,21 @@
           var bgWidth = bgOriginWidth * minScale;
           // 缩放后的背景图高度
           var bgHeight = bgOriginHeight * minScale;
-          document.documentElement.style.setProperty('--window-width', innerWidth + 'px');
-          document.documentElement.style.setProperty('--window-content-width', contentWidth + 'px');
-          document.documentElement.style.setProperty('--render-ui-scale', minScale);
+          document.documentElement.style.setProperty(
+            '--window-width',
+            innerWidth + 'px'
+          );
+          document.documentElement.style.setProperty(
+            '--window-content-width',
+            contentWidth + 'px'
+          );
+          document.documentElement.style.setProperty(
+            '--render-ui-scale',
+            minScale
+          );
           document.documentElement.style.setProperty(
             '--bg-size',
-            bgWidth + 'px ' + bgHeight + 'px',
+            bgWidth + 'px ' + bgHeight + 'px'
           );
           // 设计稿尺寸是 1125 * 2436, 以1rem = 100px 为基准
           // 然后屏幕的全屏就等于1125 / 100 = 11.25rem
@@ -153,7 +169,14 @@
         };
 
         window.ccEngineProgress = (progress) => {
-          document.getElementById('progress-val').style.width = progress * 1.72 + 'rem';
+          // progress: 0~1
+          // 尝试更新默认进度条
+          var defVal = document.getElementById('default-progress-val');
+          if (defVal) defVal.style.width = progress * 100 + '%';
+
+          // 尝试更新营销进度条
+          var promoVal = document.getElementById('promo-progress-val');
+          if (promoVal) promoVal.style.width = progress * 100 + '%';
         };
         console.time('Game init total time');
       })();
@@ -168,6 +191,7 @@
         box-sizing: border-box;
       }
 
+      /* 默认样式，包含原有样式和新增样式 */
       .loading-page {
         position: absolute;
         flex: 1;
@@ -178,6 +202,8 @@
         background-position: center;
         background-repeat: no-repeat;
         background-size: contain;
+        display: none;
+        /* 默认隐藏，JS控制 */
       }
 
       .loading-page-logo {
@@ -240,11 +266,96 @@
           opacity: 1;
         }
       }
+
+      /* === 新增营销页面样式 === */
+      .sm-logo-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        background-image: url('./images/bg.webp');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-position: center;
+        z-index: 3;
+        display: none;
+        /* 默认隐藏，JS控制 */
+      }
+
+      .logo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+      }
+
+      .sm-img {
+        order: 1;
+        margin-bottom: 0.2rem;
+        width: 2.38rem;
+        height: auto;
+      }
+
+      .middle-box {
+        order: 2;
+        margin-bottom: 0.2rem;
+        position: relative;
+        min-height: 3rem;
+      }
+
+      .sm-logo-container .progress-bar {
+        order: 3;
+        margin-bottom: 0.1rem;
+        width: 1.72rem;
+        height: 0.1rem;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 0.1rem;
+        background-color: #574b2f;
+      }
+
+      .loading-text {
+        order: 4;
+        margin-top: 0.05rem;
+        font-size: 0.2rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-align: center;
+      }
+
+      .sm-logo-container .progress-bar-inner {
+        width: 0%;
+        height: 100%;
+        background-color: #f6c412;
+      }
+
+      .num-img {
+        width: 1.04rem;
+        position: absolute;
+        top: 2.01rem;
+        left: 1.88rem;
+        display: none;
+      }
+
+      .free-img {
+        width: 7.5rem;
+        height: auto;
+        margin-top: -0.3rem;
+        display: none;
+      }
     </style>
   </head>
 
   <body>
-		<script>
+    <script>
 			if (!window.location.hostname.includes('prod')) {
 				!(function (c, b, d, a) {
 					c[a] || (c[a] = {});
@@ -284,24 +395,50 @@
 				console.log('不初始化ARMS');
 			}
     </script>
-    <div class="loading-page" id="loading-page">
+
+    <!-- 默认 Loading -->
+    <div class="loading-page" id="default-loading-page">
       <div class="loading-page-logo">
         <img src="./images/logo.ico" alt="logo" />
         <div class="loading-page-progress">
           <div class="progress-back"></div>
-          <div class="progress-val" id="progress-val"></div>
+          <div class="progress-val" id="default-progress-val"></div>
         </div>
-        <div class="loading-page-text">Loading...</div>
       </div>
     </div>
+
+    <!-- 营销 Loading -->
+    <div class="sm-logo-container" id="promo-loading-page">
+      <div class="logo-container">
+        <img class="sm-img" src="./images/logo.ico" />
+        <div class="middle-box">
+          <!-- 直接使用 src 预先请求图片，利用浏览器缓存，避免 JS 动态赋值 src 导致的加载延迟 -->
+          <img class="num-img" data-num="10" src="./images/10.png" />
+          <img class="num-img" data-num="20" src="./images/20.png" />
+          <img
+            class="free-img mayari"
+            src="./images/malakas.png"
+            style="display: none"
+          />
+        </div>
+        <div class="progress-bar">
+          <div class="progress-bar-inner" id="promo-progress-val"></div>
+        </div>
+        <div class="loading-text">Loading...</div>
+      </div>
+    </div>
+
     <div id="GameDiv" cc_exact_fit_screen="true">
       <div id="Cocos3dGameContainer">
-        <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
+        <canvas
+          id="GameCanvas"
+          oncontextmenu="event.preventDefault()"
+          tabindex="99"
+        ></canvas>
       </div>
     </div>
 
     <!-- Polyfills bundle. -->
-
     <script src="src/polyfills.bundle.5adbf.js" charset="utf-8"></script>
 
     <!-- SystemJS support. -->
@@ -313,27 +450,53 @@
 
     <script>
       (function () {
-        var loadingPage = document.getElementById('loading-page');
-        window.showProgressBar = function showProgressBar() {
-          loadingPage.style.display = 'block';
+        // 解析参数
+        var params = new URLSearchParams(location.search);
+        var c = params.get('c');
+
+        var activePage = null;
+
+        if (c) {
+          activePage = document.getElementById('promo-loading-page');
+
+          // 图片逻辑
+          var match = c.match(/(\d+)$/);
+          var num = match ? Number(match[1]) : null;
+          if (num !== null) {
+            const numEl = document.querySelector(`.num-img[data-num="${num}"]`);
+            if (numEl) {
+              numEl.style.display = 'block';
+            }
+          }
+          var gameEl = document.querySelector('.free-img.mayari');
+          if (gameEl) gameEl.style.display = 'block';
+        } else {
+          console.log('Mode: Default');
+          activePage = document.getElementById('default-loading-page');
+        }
+
+        // 显示
+        if (activePage) activePage.style.display = 'block';
+
+        window.showProgressBar = function () {
+          if (activePage) activePage.style.display = 'block';
         };
-        window.hideLoadingPage = function hideLoadingPage() {
-          loadingPage.style.opacity = 0;
-          loadingPage.style.perspective = '1000px';
-          loadingPage.style.transition = 'all 0.2s ease-out';
-          loadingPage.addEventListener('transitionend', function () {
-            loadingPage.style.display = 'none';
+
+        window.hideLoadingPage = function () {
+          if (!activePage) return;
+          activePage.style.opacity = 0;
+          activePage.style.perspective = '1000px';
+          activePage.style.transition = 'all 0.2s ease-out';
+          activePage.addEventListener('transitionend', function () {
+            activePage.style.display = 'none';
           });
         };
       })();
 
       if (window.location.hostname.includes('prod')) {
-        // 重写 console 对象, 屏蔽所有 console 方法
         Object.defineProperty(console, 'log', {
           get: function () {
-            return function () {
-              // 空函数，什么都不做
-            };
+            return function () {};
           },
         });
       }
