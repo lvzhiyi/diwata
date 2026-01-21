@@ -72,6 +72,8 @@ export class AppInit extends BaseAppInit {
     window?.hideLoadingPage?.();
     // 是否隐藏swipe
     this.swipeNode.active = !getIsGap();
+    // 初始化未完成前隐藏复选框
+    if (this.dontShowNextTimeNode) this.dontShowNextTimeNode.active = false;
   }
 
   /**
@@ -123,6 +125,7 @@ export class AppInit extends BaseAppInit {
     this.preloadMusicEffects();
     this.isDontShowNextTime = app.manager.global.isDontShowNextTime;
     this.updateToggleDontShowNextTimeButton();
+    if (this.dontShowNextTimeNode) this.dontShowNextTimeNode.active = true;
 
     try {
       await this.loginUser();
@@ -452,6 +455,7 @@ export class AppInit extends BaseAppInit {
   }
 
   clickSelectedBox() {
+    if (!app.manager.global) return;
     this.selectedNode.active = !this.selectedNode.active;
     const isDontShowNextTime = !app.manager.global.isDontShowNextTime;
     app.manager.global.setIsDontShowNextTime(isDontShowNextTime);
