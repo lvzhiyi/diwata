@@ -238,6 +238,7 @@ export class AppInit extends BaseAppInit {
       userLevel,
       userName,
       nickName,
+      ut,
     } = app.store.user.userParams;
 
     const mockParams = useMockData ? this._useMockData() : {};
@@ -253,7 +254,7 @@ export class AppInit extends BaseAppInit {
       userLevel,
       userName,
       ...mockParams,
-      ut: 'aff',
+      ut,
     };
     app.manager.global.setGameId(loginData.gameId);
 
