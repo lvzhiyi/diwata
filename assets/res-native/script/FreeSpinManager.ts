@@ -1,7 +1,7 @@
 import { app } from 'db://assets/app/app';
 import { ActivityEventMgr, ActivityEventMgrEventsType } from 'db://assets/common/script/ActivityEventMgr';
 import { MoneyUtil } from 'db://assets/basePlate/core/baseUtil/MoneyUtil';
-import { delay } from 'db://assets/common/script/extra/Utils/common';
+import { delay, sliceAmount } from 'db://assets/common/script/extra/Utils/common';
 import { _decorator, v3 } from 'cc';
 import { GlobalActivity } from '../../common/script/extra/GlobalMgr';
 
@@ -296,7 +296,7 @@ class FreeSpinManager {
    */
   private showFreespinTotalRewardAmount() {
     // 通过事件系统通知UI显示累计奖励
-    app.manager.event.emit('freespin:showTotalReward', this.freespinRewardAmount.toFixed(3));
+    app.manager.event.emit('freespin:showTotalReward', sliceAmount(this.freespinRewardAmount));
   }
 
   /**

@@ -1,7 +1,7 @@
 import { _decorator, Component, Label, Node, sp, tween, Tween, UIOpacity, Vec3 } from 'cc';
 import { app } from 'db://assets/app/app';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
-import { getP } from 'db://assets/common/script/extra/Utils/common';
+import { getP, sliceAmount } from 'db://assets/common/script/extra/Utils/common';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
@@ -49,7 +49,7 @@ export class CurrentRoundAmount extends Component {
 
       const label = this.amountNode.getComponent(Label);
       const originalAmount = amount / Math.pow(2, multiple);
-      label.string = `${getP()}${originalAmount.toFixed(3)}`;
+      label.string = `${getP()}${sliceAmount(originalAmount)}`;
       const multipleValue = Math.pow(2, multiple);
       this.multipleNode.getComponent(Label).string = `x${multipleValue}`;
       // 动态设置字体大小
@@ -82,7 +82,7 @@ export class CurrentRoundAmount extends Component {
               // 播放spine动画
               const spine = this.spineWinNode.getComponent(sp.Skeleton);
               spine.setAnimation(0, 'jineshanguang', false);
-              label.string = `${getP()}${amount.toFixed(3)}`;
+              label.string = `${getP()}${sliceAmount(amount)}`;
             }),
           
           // 第三步：amountNode从Scale 1变到1.5，同时播放jineshanguang动画
