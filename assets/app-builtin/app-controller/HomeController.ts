@@ -333,7 +333,8 @@ export class HomeController extends BaseController<
 
       // 星卡使用失败
       if (isUseStarCard) {
-        // 购买失败，复原星卡使用状态
+        // 购买失败，复原星卡使用状态，复原投注金额
+        app.controller.slots.resetBetAmount();
         ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.hideStarCard, null);
         app.manager.global.setIsStartCardMode(false);
         app.manager.global.setStartCardBetAmount(0);
