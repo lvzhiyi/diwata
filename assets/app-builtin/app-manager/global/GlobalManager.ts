@@ -258,8 +258,14 @@ export class GlobalManager extends BaseManager {
      }else{
        betCount = this._betCount;
      }
+     if(this._isFreespinMode){
+       betCount = this._freespinBetAmount;
+     }
+     if(this._isStartCardMode){
+       betCount = this._startCardBetAmount;
+     }
 
-     return this._isFreespinMode ? this._freespinBetAmount : betCount;
+     return  betCount;
    }
 
    public setBetCount(val: number, needSave: boolean = true) {

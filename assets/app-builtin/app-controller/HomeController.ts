@@ -335,6 +335,8 @@ export class HomeController extends BaseController<
       if (isUseStarCard) {
         // 购买失败，复原星卡使用状态
         ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.hideStarCard, null);
+        app.manager.global.setIsStartCardMode(false);
+        app.manager.global.setStartCardBetAmount(0);
       }
 
       app.controller.slots.freeBonusSpinChange(false);

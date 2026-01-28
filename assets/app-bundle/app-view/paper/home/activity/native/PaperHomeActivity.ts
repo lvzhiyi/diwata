@@ -149,6 +149,8 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         let tempBetCount = app.manager.global.betCount;
         app.manager.global.setTempBetCount(tempBetCount);
         app.manager.global.setBetCount(betAmout, false);
+        app.manager.global.setIsStartCardMode(true);
+        app.manager.global.setStartCardBetAmount(betAmout);
       }
 
       // 关闭结算弹窗
@@ -196,6 +198,8 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         // 隐藏星卡动效
         if (starCardData != null) {
           ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.hideStarCard, null);
+          app.manager.global.setIsStartCardMode(false);
+          app.manager.global.setStartCardBetAmount(0);
           // 恢复投注金额
           app.manager.global.setBetCount(app.manager.global.tempBetCount);
         }
