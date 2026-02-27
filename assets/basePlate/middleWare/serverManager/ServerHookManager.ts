@@ -345,7 +345,7 @@ class ServerHookManager {
       }
     );
     GlobalActivity.initActivity({
-      activityIDs: [1, 2, 3, 4, 5, 6,],
+      activityIDs: [1, 2, 3, 4, 5, 6, 7, 8],
       httpHeadUrl: hostUrl,
       token: token,
       gameID: app.config.app.GAME_ID,
