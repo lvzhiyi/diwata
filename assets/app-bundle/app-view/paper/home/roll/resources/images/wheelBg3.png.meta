@@ -2,22 +2,22 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "02182b30-081c-4760-837f-e685f30208eb",
+  "uuid": "69feb43f-5f49-4b2f-a9c3-1b743a19d604",
   "files": [
     ".json",
-    ".webp"
+    ".png"
   ],
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "02182b30-081c-4760-837f-e685f30208eb@6c48a",
+      "uuid": "69feb43f-5f49-4b2f-a9c3-1b743a19d604@6c48a",
       "displayName": "wheelBg3",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "02182b30-081c-4760-837f-e685f30208eb",
+        "imageUuidOrDatabaseUri": "69feb43f-5f49-4b2f-a9c3-1b743a19d604",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,7 +34,7 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "02182b30-081c-4760-837f-e685f30208eb@f9941",
+      "uuid": "69feb43f-5f49-4b2f-a9c3-1b743a19d604@f9941",
       "displayName": "wheelBg3",
       "id": "f9941",
       "name": "spriteFrame",
@@ -114,7 +114,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "02182b30-081c-4760-837f-e685f30208eb@6c48a",
+        "imageUuidOrDatabaseUri": "69feb43f-5f49-4b2f-a9c3-1b743a19d604@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.12",
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "hasAlpha": true,
     "fixAlphaTransparencyArtifacts": false,
-    "redirect": "02182b30-081c-4760-837f-e685f30208eb@6c48a"
+    "redirect": "69feb43f-5f49-4b2f-a9c3-1b743a19d604@6c48a"
   }
 }
