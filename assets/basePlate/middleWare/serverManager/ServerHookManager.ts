@@ -366,7 +366,7 @@ class ServerHookManager {
         playerName: GlobalMgr.instance.playerName,
       },
       playerLevelData: app.store.user.PlayerLevelData,
-      turnstileVerifyUrl: CONFIG[env as Environment].turnstileVerifyUrl,
+      // turnstileVerifyUrl: CONFIG[env as Environment].turnstileVerifyUrl,
     });
 
     try {
