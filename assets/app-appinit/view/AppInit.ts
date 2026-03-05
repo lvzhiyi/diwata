@@ -207,19 +207,18 @@ export class AppInit extends BaseAppInit {
       };
     }else{
       mockData = {
-        birthday: '01-01-1990',
-        channelId: '1050',
+        birthday:'01-01-1990',
+        channelId:'1050',
+        nickName:'gl395',
         gameId: 'zhumeng006',
-        nickName: 'cpTest10008',
         pId: '50',
-        playerId: 'cpTest10008',
-        playerName: 'cpTest10008',
+        playerId: '33691',
+        playerName: '33691',
         // eslint-disable-next-line max-len
-        token: '253c91327245400092a9a52544bf9d7d18f6ef49d4c1ad7f1b39afe91b5f3615667caaf5aeb9bcdb1f3021a698a903e671ad70511da7302b045dc0dd1a1b20bc2d0d7a72374eeb617439279affd94ab1d34a0dab7ef559b86b7537a520a421d7589cb3fa40863abd7e40ced73762aab6',
+        token: '253c91327245400092a9a52544bf9d7d18f6ef49d4c1ad7f1b39afe91b5f3615395c8eccd2d12c0a5059942e44abfc3e9517fa76a1cf7e0a32505cf1c405afc724948e6606094b2642afcfd846e7e6933ecb16333ba8ae4e47294b5aa423558e',
         userLevel: '1',
-        userName: 'cpTest10008',
+        userName: '33691',
         ut: 'aff'
-
       };
     }
 

@@ -3432,7 +3432,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 175.625,
+      "width": 186.73828125,
       "height": 39.06
     },
     "_anchorPoint": {
@@ -3468,7 +3468,7 @@
       "b": 167,
       "a": 255
     },
-    "_string": "Toal Price",
+    "_string": "Total Price",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 40,
