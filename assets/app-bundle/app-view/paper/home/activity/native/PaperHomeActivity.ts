@@ -195,12 +195,13 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         GlobalActivity.dispatchEvent(GameDataMgrEventsType.updateBuyFreeCount, 0);
         const starCardData = ActivityDataMgr.instance.getGoodsData();
 
-        // 隐藏星卡动效
-        if (starCardData != null) {
+        // 免费轮结束即清除星卡模式，不依赖 getGoodsData() 是否仍存在
+        app.manager.global.setIsStartCardMode(false);
+        app.manager.global.setStartCardBetAmount(0);
+
+        // 仅星卡模式结束时恢复投注额；花钱购买免费轮时 tempBetCount 可能是上次星卡的旧值，不能覆盖当前 betCount
+        if (starCardData != null && app.manager.global.tempBetCount != null) {
           ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.hideStarCard, null);
-          app.manager.global.setIsStartCardMode(false);
-          app.manager.global.setStartCardBetAmount(0);
-          // 恢复投注金额
           app.manager.global.setBetCount(app.manager.global.tempBetCount);
         }
       }
