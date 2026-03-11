@@ -289,6 +289,10 @@ class FreeSpinManager {
    */
   private onFreeSpinActivityIdInvalid() {
     this.stopFreespin();
+    app.manager.global.setIsFreespinMode(false);
+    app.manager.global.setFreespinBetAmount(0);
+    // 更新投注金额显示
+    this.betCountChange(app.manager.global.betCount);
   }
 
   /**
