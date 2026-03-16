@@ -194,7 +194,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     });
     const  rollSpine = this.rollContainerNode.getComponent(sp.Skeleton);
     rollSpine.setAnimation(0, 'gunzhou', false);
-    rollSpine.timeScale = 0;
+    SpineTool.stopAtFrameOnComplete(rollSpine, 90, 0, 60);
+    rollSpine.timeScale = 1;
   }
 
   initEvents() {
@@ -517,31 +518,29 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   /**
-     * 使用for...of循环处理异步序列处理是否需要展示剑和棒子打击动画
-    */
-   
-  public async playSequentialAnimations(): Promise<void> {
-    if (this.changeWildData.length === 0 ) return Promise.resolve();
-    // 先根据rollIndex排序
+   * 按列依次播放剑/棒击打动画，播完一列就立即把该列元素变成 wild
+   */
+  public async playSequentialAnimations(rollsScript: Roll[]): Promise<void> {
+    if (this.changeWildData.length === 0) return Promise.resolve();
     this.changeWildData.sort((a, b) => a.rollIndex - b.rollIndex);
 
-    for (let [index, itemMap] of this.changeWildData.entries()) {
-      if (itemMap.hasShow) {
-        continue;
-      }
-      // 根据类型播放不同动画
+    for (const itemMap of this.changeWildData) {
+      if (itemMap.hasShow || itemMap.rollIndex == null) continue;
+
       if (itemMap.type === SymbolType.SWORD) {
         await this.homeRollTool.showSwordHaloAnimation(
-          itemMap.rollNode, 
+          itemMap.rollNode,
           this.overLayNode,
         );
         itemMap.hasShow = true;
+        await rollsScript[itemMap.rollIndex].symbolChangeToWild();
       } else if (itemMap.type === SymbolType.BOW) {
         await this.homeRollTool.showBowHitAnimation(
           itemMap.nodes,
           this.overLayNode,
         );
         itemMap.hasShow = true;
+        await rollsScript[itemMap.rollIndex].symbolChangeToWild();
       }
     }
   }
@@ -587,16 +586,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 同时执行棒子和剑光球飞向女神的效果
     await this.playBowAndSwordFlyingAnimation();
 
-    // 调用同步动画依次执行等待函数
-    await this.playSequentialAnimations();
-
-    if (this.changeWildData.length > 0) await delay(app.manager.global.quikeMode == IQuickMode.nomal ? 200 : 100);
-
     /**
-     * 初始化Symbol动画数据
-     */ 
+     * 初始化Symbol动画数据（提前到剑/棒动画前，以便播完剑/棒后立即变 wild）
+     */
     await Promise.all(rollsScript.map(roll => roll.initSymbolAnimationData()));
-
     /**
      * 处理消除数据
      */
@@ -604,15 +597,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     let symbolAnimationData = rollsScript.map(roll => roll.symbolAnimationData);
     console.log('初步处理消除数据', symbolAnimationData);
     console.table(symbolAnimationData[2].map((_, index) => symbolAnimationData.map((item: any) => item[index]?.symbolId || '')));
-    
+
     /**
-     * symbol变为wild,先清空overlayNode上面的发光节点
+     * 剑/棒击打动画：播完一列就立即把该列元素变成 wild（先清空 overlay，再按列依次播动画并变 wild）
      */
     this.homeRollTool.destoryOverlayNodeLight(this.overLayNode);
     this.playSymbolChangeToWildAudio(rollsScript);
-    const hasSymbolChangeToWilds = await Promise.all(rollsScript.map(roll => roll.symbolChangeToWild()));
-   
-    if (hasSymbolChangeToWilds.some(item => item)) await delay(480 / app.manager.global.gameSpeed);
+    await this.playSequentialAnimations(rollsScript);
+
+    if (this.changeWildData.length > 0) await delay(480 / app.manager.global.gameSpeed);
    
     /**
      * 如果当前回合达到最大倍率，则结束本回合消除
@@ -1154,8 +1147,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   private updateNextMultiple() {
     if (app.manager.global.multipleIndex >= 10) return;
     const rollSpine = this.rollContainerNode.getComponent(sp.Skeleton);
-    rollSpine.setAnimation(0, 'gunzhou', false);
     rollSpine.timeScale = 1;
+    rollSpine.setAnimation(0, 'gunzhou', false);
+    SpineTool.stopAtFrameOnComplete(rollSpine, 45, 0, 30);
     app.manager.global.setMultipleIndex(app.manager.global.multipleIndex + 1, false);
   }
 

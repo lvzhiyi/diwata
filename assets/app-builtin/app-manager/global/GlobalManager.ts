@@ -135,6 +135,8 @@ export class GlobalManager extends BaseManager {
   // 声音
   private _music: number = 100;
 
+  private loginTimestamp: number = 0;
+
   // 快速模式
   private _quikeMode: IQuickMode = IQuickMode.nomal;
 
@@ -176,6 +178,10 @@ export class GlobalManager extends BaseManager {
      return this._networkQuality === 'slow' ? 'low' : 'medium';
    }
 
+   public get isLogin() {
+     return Boolean(this.token);
+   }
+
    public get gameId() {
      return this._gameId;
    }
@@ -191,6 +197,14 @@ export class GlobalManager extends BaseManager {
    public setCreditCount(val: number) {
      this._creditCount = val;
      app.manager.event.emit('creditCountChange', val);
+   }
+
+   public setLoginTimestamp(timestamp: number) {
+     this.loginTimestamp = timestamp;
+   }
+
+   public getLoginTimestamp(): number {
+     return this.loginTimestamp;
    }
 
    /** 获取购买的免费轮状态 */

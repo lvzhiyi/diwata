@@ -224,7 +224,7 @@ export class HomeRollTool  {
         const time = setTimeout(() => {
           clearTimeout(time);
           resolve();
-        }, 600 / app.manager.global.gameSpeed);
+        }, 300 / app.manager.global.gameSpeed);
         const isAllMain = targetNodes.every(item => item.getComponent(Symbol).currentSymbolItem.main);
 
         if(!isAllMain){

@@ -1,256 +1,255 @@
 import {
   _decorator,
-  Color,
   Component,
-  Director,
-  director,
-  instantiate,
-  Label,
   Node,
-  Prefab,
-  resources,
+  NodePool,
   RichText,
+  Tween,
   tween,
   UITransform,
   Vec3,
 } from 'cc';
-import { BackgroundRadius } from 'db://assets/basePlate/middleWare/commonUI/BackgroundRadius';
+import { app } from 'db://assets/app/app';
+import { getReward } from 'db://assets/basePlate/middleWare/services/user';
+import { getP } from 'db://assets/common/script/extra/Utils/common';
+import { getNearestMarqueeBigPrize } from './MarqueeUtils';
 
-const { ccclass, property } = _decorator;
+const { ccclass } = _decorator;
 
-/**
- * 跑马灯组件
- */
+/// 跑马灯
 @ccclass('Marquee')
 export class Marquee extends Component {
-  /** 跑马灯背景节点 */
-  @property({ type: Node, tooltip: '跑马灯节点' })
-  private bgNode: Node | null = null;
+  private itemHeight: number;
 
-  /** 跑马灯是否正在滚动 */
-  public isGoing = false;
+  /** 跑马灯消息列表 */
+  private marqueeMessageList: string[] = [];
 
-  /** 父节点宽度 */
-  private parentWidth: number;
+  /** 跑马灯Label节点池 */
+  private labelNodePool: NodePool = new NodePool();
 
-  /** 跑马灯移动距离 */
-  private moveDistance: number;
+  /** 是否可以显示下一条消息 */
+  private isCanShowNextMessage: boolean = true;
 
-  /** 透明背景色 */
-  private static readonly TRANSPARENT_COLOR = new Color(0, 0, 0, 0);
+  /** 当前跑马灯消息索引 */
+  private marqueeIndex: number = -1;
 
-  /** 跑马灯背景色 */
-  private static readonly BACKGROUND_COLOR = new Color(33, 4, 4, 140);
+  private marqueeTween1: Tween | null = null;
 
-  /** 跑马灯字体颜色 */
-  private static readonly TEXT_COLOR = new Color(255, 255, 255, 255);
+  private marqueeTween2: Tween | null = null;
 
-  /** 跑马灯字体大小 */
-  private static readonly FONT_SIZE = 28;
+  /** 跑马灯消息停留时间 */
+  private MARQUEE_MESSAGE_STAY_TIME: number = 5;
 
-  /** 跑马灯初始X坐标 */
-  private static readonly INIT_POSITION_X = 2000;
-
-  /** 跑马灯移动速度系数 */
-  private static readonly MOVE_SPEED_FACTOR = 4;
-
-  /** 跑马灯label预制体缓存 */
-  private labelPrefab: Prefab | null = null;
+  /** 跑马灯消息滚动时间 */
+  private MARQUEE_MESSAGE_SCROLL_TIME: number = 2;
 
   protected onLoad(): void {
-    var uiTrans = this.node.getComponent(UITransform);
-    this.parentWidth = uiTrans ? uiTrans.width : 0;
-    this.resetBackgroundColor();
-  }
+    this.node.active = false;
 
-  /**
-   * 重置背景为透明
-   */
-  private resetBackgroundColor(): void {
-    if (!this.bgNode) {
-      return;
-    }
+    if (app.manager.global.isLogin && !!getP()) {
+      this.itemHeight = this.node.getComponent(UITransform).height;
 
-    var bgRect = this.bgNode.getComponent(BackgroundRadius);
+      /** 初始化节点池 */
+      this.initPool();
+      
+      /** 首次进入获取并播放获取距离当前时间最近的大奖消息 */
+      setTimeout(() => {
+        const nearestMarqueeBigPrize = getNearestMarqueeBigPrize();
 
-    if (bgRect) {
-      bgRect.setBackgroundColor(Marquee.TRANSPARENT_COLOR);
-    }
-  }
-
-  /**
-   * 开始移动跑马灯文字
-   * @param text 要显示的文本内容
-   * @param cb 动画完成后的回调函数
-   */
-  async startMove(text: string, cb?: () => void) {
-    if (this.isGoing) {
-      return;
-    }
-
-    this.isGoing = true;
-    let labelNode: Node | null = null;
-
-    try {
-      labelNode = await this.initLabel(text);
-
-      await new Promise<void>(function (resolve) {
-        director.once(Director.EVENT_AFTER_DRAW, function () {
-          resolve();
-        });
-      });
-
-      var uiTrans = labelNode.getComponent(UITransform);
-      var width = uiTrans ? uiTrans.width : 0;
-      var startWidth = this.calculateStartPosition(width);
-      this.moveDistance = this.parentWidth + width;
-
-      labelNode.setPosition(startWidth, labelNode.position.y);
-
-      if (this.bgNode) {
-        var bgRect = this.bgNode.getComponent(BackgroundRadius);
-
-        if (bgRect) {
-          bgRect.setBackgroundColor(Marquee.BACKGROUND_COLOR);
+        if (nearestMarqueeBigPrize) {
+          this.marqueeMessageList = [nearestMarqueeBigPrize];
+          this.showQueueMessage();
         }
-      }
+      }, 2000);
 
-      await this.move(labelNode);
-
-      if (this.bgNode) {
-        var bgRect2 = this.bgNode.getComponent(BackgroundRadius);
-
-        if (bgRect2) {
-          bgRect2.setBackgroundColor(Marquee.TRANSPARENT_COLOR);
-        }
-      }
-
-      labelNode.destroy();
-    } catch (err) {
-      // 跑马灯动画失败时输出错误
-      console.error('跑马灯动画失败:', err);
-
-      if (labelNode) {
-        labelNode.destroy();
-      }
-    } finally {
-      this.isGoing = false;
-
-      if (cb) {
-        cb();
-      }
+      /** 循环12秒去请求中大奖的接口 */
+      this.requestLottery();
     }
   }
 
   /**
-   * 计算文本起始位置
-   * 目的是让文本从右侧边界外开始，或居中起始
-   * @param textWidth 文本宽度
-   * @returns 起始X坐标
+   * 初始化节点池
    */
-  private calculateStartPosition(textWidth: number): number {
-    if (this.parentWidth > textWidth) {
-      return (this.parentWidth + textWidth) / 2;
+  initPool() {
+    for (let i = 0; i < 2; i++) {
+      const labelNode = this.createLabelNode();
+      this.labelNodePool.put(labelNode);
     }
-
-    return (textWidth + this.parentWidth) / 2;
   }
 
   /**
-   * 加载并缓存跑马灯label预制体
+   * 创建节点
    */
-  private async loadLabelPrefab(): Promise<Prefab> {
-    if (this.labelPrefab) {
-      return this.labelPrefab;
-    }
-
-    return new Promise<Prefab>((resolve, reject) => {
-      resources.load('Prefab/marqueeLabel', Prefab, function (err, prefab) {
-        if (err) {
-          reject(err);
-
-          return;
-        }
-
-        resolve(prefab as Prefab);
-      });
-    }).then((prefab: Prefab) => {
-      this.labelPrefab = prefab;
-
-      return prefab;
-    });
-  }
-
-  /**
-   * 初始化文本标签
-   * @param text 要显示的文本
-   * @returns Promise<Node> 创建的标签节点
-   */
-  private async initLabel(text: string): Promise<Node> {
-    var prefab = await this.loadLabelPrefab();
-    var labelNode = instantiate(prefab);
-    var label = labelNode.getComponent(RichText);
-
-    if (label) {
-      label.string = this.highlightCurrency(text);
-      label.fontSize = Marquee.FONT_SIZE;
-    }
-
-    labelNode.setPosition(Marquee.INIT_POSITION_X, labelNode.position.y);
-    this.node.addChild(labelNode);
+  createLabelNode() {
+    const labelNode = new Node();
+    labelNode.layer = this.node.layer;
+    labelNode.addComponent(RichText).string = '';
+    labelNode.addComponent(UITransform).setContentSize(this.node.getComponent(UITransform).width, this.node.getComponent(UITransform).height);
+    const richText = labelNode.getComponent(RichText);
+    richText.verticalAlign = RichText.VerticalAlign.CENTER;
+    richText.horizontalAlign = RichText.HorizontalAlign.CENTER;
+    richText.fontSize = 26;
+    richText.lineHeight = 28;
 
     return labelNode;
   }
 
   /**
-     * 金额高亮处理
-     * @param text 原始文本
-     * @param color 颜色值（默认#fff600）
-     * @returns 处理后的富文本
-     */
-  highlightCurrency(text: string, color: string = '#fff600'): string {
-    // 匹配通用货币格式（支持₱$€¥等符号 + 数字 + 可选小数）
-    const currencyRegex = /([₱$€¥])(\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?)/g;
-    console.log('highlighted-text', text);
-    const highlighted = text.replace(currencyRegex, (match, symbol, amount) => {
-      return `<color=${color}>${symbol}${amount}</color>`;
-    });
-    console.log('highlighted', highlighted);
+   * 获取节点池中的节点
+   */
+  getLabelNode() {
+    if (this.labelNodePool.size() === 0) {
+      return this.createLabelNode();
+    }
 
-    return `<color=#FFFFFF><b><size=28>${highlighted}</size></b></color>`;
+    return this.labelNodePool.get();
   }
 
   /**
-   * 计算跑马灯动画时长
-   * @returns 动画时长（秒）
+   * 将节点放回节点池
    */
-  private getMoveDuration(): number {
-    return (this.moveDistance / this.parentWidth) * Marquee.MOVE_SPEED_FACTOR;
+  putLabelNode(labelNode: Node) {
+    labelNode.getComponent(RichText).string = '';
+    this.labelNodePool.put(labelNode);
   }
-
+  
   /**
-   * 执行移动动画
-   * @param labelNode 要移动的标签节点
-   * @returns Promise 动画完成后resolve的Promise
+   * 循环12秒去请求中大奖的接口
    */
-  private move(labelNode: Node): Promise<void> {
-    var duration = this.getMoveDuration();
+  private requestLottery() {
+    setInterval(() => {
+      try {
+        getReward().then((res) => {
+          if (res?.data?.rewardMessageList?.length) {
+            this.marqueeMessageList = Array.from(
+              new Set([...this.marqueeMessageList, ...res.data.rewardMessageList])
+            );
+          }
 
-    return new Promise(function (resolve) {
-      var parent = labelNode.parent;
-      var parentWidth = 0;
+          // TODO 此版本兼容历史数据，下一个版本删除次行代码
+          this.marqueeMessageList = this.marqueeMessageList?.filter(message => message.indexOf('Congratulations') === -1);
 
-      if (parent) {
-        var uiTrans = parent.getComponent(UITransform);
-        parentWidth = uiTrans ? uiTrans.width : 0;
+          if (this.marqueeMessageList?.length > 0) {
+            this.showQueueMessage();
+          }
+        });
+      } catch(error){
+        console.log('请求中大奖的接口失败', error);
       }
+    }, 12000);
+  }
 
-      tween(labelNode)
-        .by(duration, { position: new Vec3(-labelNode.position.x - parentWidth, 0, 0) })
-        .call(function () {
-          resolve();
+  /**
+   * 显示队列消息
+   */
+  private async showQueueMessage() {
+    // 如果不能显示下一条消息，则返回
+    if (!this.isCanShowNextMessage) {
+      return;
+    } 
+
+    // 如果已经显示到最后一条消息，则返回
+    if (this.marqueeIndex >= this.marqueeMessageList.length - 1) {
+      return;
+    }
+
+    this.isCanShowNextMessage = false;
+
+    this.marqueeIndex += 1;
+
+    this.node.active = true;
+
+    const labelNode = this.getLabelNode();
+    labelNode.getComponent(RichText).string = this.highlightCurrency(this.marqueeMessageList[this.marqueeIndex]);
+    
+    if (!this.marqueeTween1?.running && !this.marqueeTween2?.running) {
+      // 没有tween正在播放
+      labelNode.setPosition(0, 0);
+      this.marqueeTween1 = tween(labelNode)
+        .delay(this.MARQUEE_MESSAGE_STAY_TIME)
+        .call(() => {
+          this.isCanShowNextMessage = true;
+
+          if (this.hasNextMarqueeMessage()) {
+            this.showQueueMessage();
+          }
+        })
+        .to(this.MARQUEE_MESSAGE_SCROLL_TIME, { position: new Vec3(0, this.itemHeight) })
+        .call(() => {
+          this.putLabelNode(labelNode);
+
+          this.marqueeTween1?.stop();
+
+          if (!this.hasNextMarqueeMessage() && !this.marqueeTween1?.running && !this.marqueeTween2?.running) {
+            this.node.active = false;
+            this.marqueeTween1 = null;
+            this.marqueeTween2 = null;
+          }
         })
         .start();
+    } else {
+      // 有一个tween正在播放
+      labelNode.setPosition(0, -this.itemHeight);
+      const t = tween(labelNode)
+        .to(this.MARQUEE_MESSAGE_SCROLL_TIME, { position: new Vec3(0, 0) })
+        .delay(this.MARQUEE_MESSAGE_STAY_TIME)
+        .call(() => {
+          this.isCanShowNextMessage = true;   
+
+          if (this.hasNextMarqueeMessage()) {
+            this.showQueueMessage();
+          }
+        })
+        .to(this.MARQUEE_MESSAGE_SCROLL_TIME, { position: new Vec3(0, this.itemHeight) })
+        .call(() => {
+          this.putLabelNode(labelNode);
+
+          t.stop();
+
+          if (!this.hasNextMarqueeMessage() && !this.marqueeTween1?.running && !this.marqueeTween2?.running) {
+            this.node.active = false;
+            this.marqueeTween1 = null;
+            this.marqueeTween2 = null;
+          }
+        })
+        .start();
+
+      if (!this.marqueeTween1?.running) { 
+        this.marqueeTween1 = t;
+      } else if (!this.marqueeTween2?.running) {
+        this.marqueeTween2 = t;
+      }
+    }
+
+    this.node.addChild(labelNode);
+  }
+
+  /**
+   * 是否有下一个跑马灯消息
+   */
+  private hasNextMarqueeMessage() {
+    return !!this.marqueeMessageList[this.marqueeIndex + 1];
+  }
+
+  /**
+   * 金额高亮处理
+   * @param text 原始文本
+   * @param color 颜色值（默认#fff600）
+   * @returns 处理后的富文本
+   */
+  highlightCurrency(text: string, color: string = '#fff600'): string {
+    const regex = /(?:₱\s*)?\b(?:\d+(?:,\d{3})*(?:\.\d+)?X|\d+(?:,\d{3})*\.\d+|\d{1,3}(?:,\d{3})+)\b/g;;
+
+    // 金额高亮处理
+    let highlighted = text.replace(regex, (match) => {
+      return `<color=${color}>${match}</color>`;
     });
+
+    // 换行处理
+    highlighted = highlighted.replace(/\n/g, '<br />');
+
+    console.log('highlighted', highlighted);
+
+    return `<color=#FFFFFF><b>${highlighted}</b></color>`;
   }
 }

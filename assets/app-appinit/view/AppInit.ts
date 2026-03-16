@@ -280,6 +280,7 @@ export class AppInit extends BaseAppInit {
     }
 
     app.manager.global.setToken(res.data.token);
+    app.manager.global.setLoginTimestamp(res.time);
     app.manager.global.setUserInfo(
       res.data.id,
       res.data.playerId,
