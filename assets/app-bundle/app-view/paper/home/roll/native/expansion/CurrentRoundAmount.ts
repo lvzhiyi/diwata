@@ -51,7 +51,9 @@ export class CurrentRoundAmount extends Component {
       const originalAmount = amount / Math.pow(2, multiple);
       label.string = `${getP()}${sliceAmount(originalAmount)}`;
       const multipleValue = Math.pow(2, multiple);
+      console.log('startNum-开始动画', originalAmount, multipleValue);
       this.multipleNode.getComponent(Label).string = `x${multipleValue}`;
+      this.multipleNode.active = multipleValue > 1;
       // 动态设置字体大小
       this.setMultipleNodeFontSize(multipleValue);
       // 重置节点状态

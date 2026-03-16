@@ -633,6 +633,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      */
     console.log('开始执行闪烁消除动画');
     this.playRemoveAuido(this.resultList[this.roundIndex].rewardSymbolIndexSet);
+    // 中奖动画前：未中奖的符号变暗，凸显中奖元素
+    this.dimNonWinningSymbols(rollsScript, true);
     const hasLitghtAnimation = await Promise.all(rollsScript.map(async roll => {
       const lightAndRemoveAnimation = await roll.startLightAndRemoveAnimation();
       const rollRemoveData = roll.getRollRemoveData();
@@ -643,6 +645,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
       return lightAndRemoveAnimation;
     }));
+    // 中奖动画结束后：恢复所有符号亮度
+    this.dimNonWinningSymbols(rollsScript, false);
     /**
      * 更新tips中奖金额
      */
@@ -698,6 +702,26 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       setTimeout(() => {
         EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_CLEAR);
       }, 900 / app.manager.global.gameSpeed);
+    }
+  }
+
+  /** 中奖动画时：dim=true 未中奖符号变暗，dim=false 恢复所有符号亮度 */
+  private dimNonWinningSymbols(rollsScript: Roll[], dim: boolean) {
+    for (const roll of rollsScript) {
+      const winningRowIndices = roll.getRollRemoveData().map((r: { rowIndex: number }) => r.rowIndex);
+      const children = roll.node.children;
+
+      for (let i = 0; i < children.length; i++) {
+        const symbol = children[i].getComponent(Symbol);
+
+        if (symbol) {
+          if (dim) {
+            if (winningRowIndices.indexOf(i) === -1) symbol.setDimmed(true);
+          } else {
+            symbol.setDimmed(false);
+          }
+        }
+      }
     }
   }
 

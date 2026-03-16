@@ -12,10 +12,15 @@ const SYMBOL_NORMAL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007
 export const SYMBOL_WILD_IDS = ['4001', '4010', '4011'];
 const { ccclass, property } = _decorator;
 
+const SymbolScale = new Vec3(1.1, 1.1, 1.1);
+
 @ccclass('Symbol')
 export class Symbol extends Component {
     @property(Node)
     private iconNode: Node = null;
+
+    @property(Node)
+    private iconMaskNode: Node = null;
 
     // 中奖动画
     @property(Node)
@@ -116,6 +121,13 @@ export class Symbol extends Component {
       this.LightSpine.getComponent(UIOpacity).opacity = 255;
 
       this.iconNode.getComponent(UIOpacity).opacity = 255;
+      this.iconNode.active = true;
+    }
+
+    /** 中奖动画时：true 变暗以凸显中奖元素，false 恢复亮度 */
+    setDimmed(dim: boolean) {
+      const uiOpacity = this.iconNode.getComponent(UIOpacity) || this.iconNode.addComponent(UIOpacity);
+      uiOpacity.opacity = dim ? 75 : 255;
     }
 
     initBlurSymbol(symbolId: string) {
@@ -205,6 +217,7 @@ export class Symbol extends Component {
         const iconSize = this.iconNode.getComponent(UITransform).contentSize;
         this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
         this.LightSpine.active = true;
+        this.LightSpine.scale = SymbolScale;
         this.iconNode.active = false;
         const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
         const animationName = 'symbol_' + symbolId;
@@ -214,6 +227,7 @@ export class Symbol extends Component {
         skeleton.setAnimation(0, animationPlayName, false);
         skeleton.setCompleteListener(() => {
           this.LightSpine.active = false;
+          this.LightSpine.scale = new Vec3(1, 1, 1);
           this.iconNode.active = true;
           skeleton.setCompleteListener(null);
           skeleton.skeletonData = null;
@@ -221,6 +235,7 @@ export class Symbol extends Component {
       }catch(error){
         console.error('startElementFallBackAnimation 执行出错:', error);
         this.LightSpine.active = false;
+        this.LightSpine.scale = new Vec3(1, 1, 1);
         this.iconNode.active = true;
       }
     }
@@ -255,7 +270,7 @@ export class Symbol extends Component {
 
           skeleton.setCompleteListener(() => {
             clearTimeout(timeout);
-            this.LightSpine.active = false;
+            
             this.iconNode.active = true;
             resolve();
             skeleton.setCompleteListener(null);
@@ -263,7 +278,7 @@ export class Symbol extends Component {
           });
         }catch(error){
           console.error('startElementFallBackAnimation 执行出错:', error);
-          this.LightSpine.active = false;
+        
           this.iconNode.active = true;
           resolve();
         }
@@ -280,6 +295,7 @@ export class Symbol extends Component {
           const iconSize = this.iconNode.getComponent(UITransform).contentSize;
           this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
           this.LightSpine.active = true;
+          this.LightSpine.scale = SymbolScale;
           this.removeUpSpineNode.active = true;
           this.removeDownSpineNode.active = true;
 
@@ -304,14 +320,16 @@ export class Symbol extends Component {
             skeleton.setCompleteListener(null);
             skeleton.skeletonData = null;
             this.LightSpine.active = false;
-            this.iconNode.getComponent(UIOpacity).opacity = 0;
+            this.LightSpine.scale = new Vec3(1, 1, 1);
+            this.iconNode.active = false;
           });
           removeUpSkeleton.setEventListener((trackEntry, event: sp.spine.Event) => {
             if (event.data.name === 'baozha') {
-              resolve();
               this.LightSpine.active = false;
+              this.LightSpine.scale = new Vec3(1, 1, 1);
               this.removeDownSpineNode.active = false;
-              this.iconNode.getComponent(UIOpacity).opacity = 0;
+              this.iconNode.active = false;
+              resolve();
             }
           });
           removeUpSkeleton.setCompleteListener(() => {
@@ -347,6 +365,7 @@ export class Symbol extends Component {
     private cleanupAnimationNodes(): void {
       this.removeUpSpineNode.active = false;
       this.LightSpine.active = false;
+      this.LightSpine.scale = new Vec3(1, 1, 1);
       this.removeDownSpineNode.active = false;
     }
 
@@ -390,6 +409,7 @@ export class Symbol extends Component {
     async startScatterActionAnimation(animationName: string): Promise<void> {
       return new Promise<void>(async (resolve) => {
         this.LightSpine.active = true;
+        this.LightSpine.scale = SymbolScale;
         const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
         skeleton.timeScale = app.manager.global.gameSpeed;
         skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
@@ -397,6 +417,7 @@ export class Symbol extends Component {
         console.log('播放scatter高亮动画2');
         skeleton.setCompleteListener(() => {
           this.LightSpine.active = false;
+          this.LightSpine.scale = new Vec3(1, 1, 1);
           resolve();
           skeleton.setCompleteListener(null);
           skeleton.skeletonData = null;
@@ -455,6 +476,7 @@ export class Symbol extends Component {
 
     clearLightNode() {
       this.LightSpine.active = false;
+      this.LightSpine.scale = new Vec3(1, 1, 1);
       const skeleton = this.LightSpine.getComponent(sp.Skeleton);
 
       if(skeleton) {
@@ -493,7 +515,7 @@ export class Symbol extends Component {
           const iconSize = this.iconNode.getComponent(UITransform).contentSize;
           this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
           this.LightSpine.active = true;
-        
+          this.LightSpine.scale = SymbolScale;
           // 获取或添加Skeleton组件
           const wildSkeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
           wildSkeleton.timeScale = app.manager.global.gameSpeed;
@@ -505,6 +527,7 @@ export class Symbol extends Component {
             this.iconNode.active = true;
             wildSkeleton.setCompleteListener(null);
             wildSkeleton.skeletonData = null;
+            this.LightSpine.scale = new Vec3(1, 1, 1);
           });
         } catch (error) {
           console.error('加载spine/LamAng_wild动画失败', error);
