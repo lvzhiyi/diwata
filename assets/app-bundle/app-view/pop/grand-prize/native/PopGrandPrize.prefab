@@ -805,7 +805,7 @@
     },
     "component": "",
     "_componentId": "f4277yauQhGYY4JI1fqLZ2+",
-    "handler": "hideGrandPrize",
+    "handler": "clickToHideGrandPrize",
     "customEventData": ""
   },
   {

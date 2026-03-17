@@ -224,8 +224,9 @@ export class HomeRollTool  {
         const time = setTimeout(() => {
           clearTimeout(time);
           resolve();
-        }, 300 / app.manager.global.gameSpeed);
+        }, 800 / app.manager.global.gameSpeed);
         const isAllMain = targetNodes.every(item => item.getComponent(Symbol).currentSymbolItem.main);
+        console.log('isAllMain', isAllMain);
 
         if(!isAllMain){
           EffectManager.inst.playEffect(AudioPath.GAME.STICK_BEAT, false, null, true);
@@ -290,7 +291,7 @@ export class HomeRollTool  {
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
       goddessSkeleton.premultipliedAlpha = false;
       // EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER5);
-      goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation5_fg' : 'animation5', false);
+      goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation4_fg' : 'animation4', false);
       goddessSkeleton.setCompleteListener(() => {
         goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation_fg' : 'animation', true);
       });
@@ -319,7 +320,7 @@ export class HomeRollTool  {
     } else if (hasSword && hasMainBow) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER3);
 
-      return app.manager.global.isBuyFreeBonusMode ? 'animation4_fg' : 'animation4';
+      return app.manager.global.isBuyFreeBonusMode ? 'animation5_fg' : 'animation5';
     }
   }
 

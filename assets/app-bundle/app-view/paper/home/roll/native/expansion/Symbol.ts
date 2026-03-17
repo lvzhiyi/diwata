@@ -496,6 +496,11 @@ export class Symbol extends Component {
     async playWildAnimation(aniNode: Node, animationName: string, iconNode: Node, symbolId: string) {
       return new Promise<void>(async (resolve) => {
         try {
+          // 0.4秒后执行
+          const time = setTimeout(() => {
+            clearTimeout(time);
+            resolve();
+          }, 400 / app.manager.global.gameSpeed);
           // 添加动画
           const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
@@ -508,7 +513,7 @@ export class Symbol extends Component {
           skeleton.setCompleteListener(() => {
             // iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
             this.destoryWildAnimationNode();
-            resolve();
+            // resolve();
           });
           // 播放wild动画
           // 设置节点尺寸和状态

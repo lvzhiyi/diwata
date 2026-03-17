@@ -736,7 +736,6 @@ export class Roll extends Component {
         if (SYMBOL_WILD_IDS.indexOf(itemSymbolId) !== -1 ) {
           hasChangeWild = true;
 
-          // EffectManager.inst.playEffect(AudioPath.GAME.CHANGE_WILD);
           return this.symbolChangeToSingleWild(index);
         }
     

@@ -54,6 +54,7 @@ export class CurrentRoundAmount extends Component {
       console.log('startNum-开始动画', originalAmount, multipleValue);
       this.multipleNode.getComponent(Label).string = `x${multipleValue}`;
       this.multipleNode.active = multipleValue > 1;
+      this.multipleBgSpine.active = multipleValue > 1;
       // 动态设置字体大小
       this.setMultipleNodeFontSize(multipleValue);
       // 重置节点状态

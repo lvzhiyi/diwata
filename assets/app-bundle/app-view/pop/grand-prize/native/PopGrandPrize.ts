@@ -114,6 +114,11 @@ export class PopGrandPrize extends BaseView {
    */
   private isPlayEnd: boolean = false;
 
+   /**
+   * 是否将要播放结束
+   */
+   private isWillPlayEnd: boolean = false;
+
   /**
    * 背景音乐ID
    * 用于后续停止播放
@@ -124,6 +129,11 @@ export class PopGrandPrize extends BaseView {
    * 奖励动画队列
    */
   private animationQueue: string[] = [];
+
+  /**
+   * 是否点击过
+   */
+  private isClick: boolean = false;
 
   /**
    * 组件加载时初始化
@@ -339,6 +349,18 @@ export class PopGrandPrize extends BaseView {
   }
 
   /**
+   * 点击停止大奖弹窗
+   */
+  clickToHideGrandPrize() {
+    if (this.isWillPlayEnd ) {
+      // 如果是第二次点击，播放隐藏动画
+      this.playCloseAnimation();
+    } else {
+      this.hideGrandPrize();
+    }
+  }
+
+  /**
    * 隐藏大奖弹窗
    * 停止动画和音效，播放结束动画
    */
@@ -366,6 +388,10 @@ export class PopGrandPrize extends BaseView {
         EffectManager.inst.playEffect(musicName);
       }
 
+      this.isWillPlayEnd = true;
+      await delay(4000);
+      this.isWillPlayEnd = false;
+
       this.isPlayEnd = true;
 
       // 如果节点仍然有效，播放关闭动画
@@ -375,7 +401,8 @@ export class PopGrandPrize extends BaseView {
     } catch (error) {
       console.error('hideGrandPrize error:', error);
     } finally {
-
+      // 重置状态标志
+      this.isHideInProgress = false;
     }
   }
 

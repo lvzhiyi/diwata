@@ -527,21 +527,22 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     for (const itemMap of this.changeWildData) {
       if (itemMap.hasShow || itemMap.rollIndex == null) continue;
 
-      if (itemMap.type === SymbolType.SWORD) {
-        await this.homeRollTool.showSwordHaloAnimation(
-          itemMap.rollNode,
-          this.overLayNode,
-        );
-        itemMap.hasShow = true;
-        await rollsScript[itemMap.rollIndex].symbolChangeToWild();
-      } else if (itemMap.type === SymbolType.BOW) {
+      if (itemMap.type === SymbolType.BOW) {
         await this.homeRollTool.showBowHitAnimation(
           itemMap.nodes,
           this.overLayNode,
         );
         itemMap.hasShow = true;
         await rollsScript[itemMap.rollIndex].symbolChangeToWild();
-      }
+      }  
+      else if (itemMap.type === SymbolType.SWORD) {
+        await this.homeRollTool.showSwordHaloAnimation(
+          itemMap.rollNode,
+          this.overLayNode,
+        );
+        itemMap.hasShow = true;
+        await rollsScript[itemMap.rollIndex].symbolChangeToWild();
+      }  
     }
   }
 

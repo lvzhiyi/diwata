@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, sp, Sprite, SpriteFrame, tween } from 'cc';
+import { _decorator, Component, Label, Node, sp, Sprite, SpriteFrame, tween, Vec3 } from 'cc';
 import { app } from 'db://assets/app/app';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { calculateWithBase, getP, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
@@ -52,7 +52,7 @@ export class RewardBox extends Component {
 
     showWinNumber(startNum: number, endNum: number): Promise<void> {
       return new Promise<void>(resolve => {
-        EffectManager.inst.playEffect(AudioPath.GAME.COIN_ADD);
+        // EffectManager.inst.playEffect(AudioPath.GAME.COIN_ADD);
         this.TipsNode.active = true;
         this.TipsImageNode.active = false;
         // 播放金额动画，如果金额变化小于2倍投注金额，则播放action1，否则播放action2
@@ -65,17 +65,24 @@ export class RewardBox extends Component {
         });
         // 金额滚动效果
         console.log('startNum', startNum, endNum);
-        const target = { value: startNum };
         const label = this.TipsNode.getComponent(Label);
-        tween(target).to(
-          2 / app.manager.global.gameSpeed,
-          { value: endNum },
-          { onUpdate: () => label.string = `${WinString().toUpperCase()} ${getP()}${numberToMoney(calculateWithBase(target.value), 3, false)}` }
-        ).call(() => {
-          EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD);
-          resolve();
-        })
+        label.string = `${WinString().toUpperCase()} ${getP()}${numberToMoney(calculateWithBase(endNum), 3, false)}`;
+        // 缩放效果：从 0 放大到 1.2 再回弹到 1（小 pop）
+        this.TipsNode.setScale(0.25, 0.25, 1);
+        tween(this.TipsNode)
+          .to(0.35, { scale: new Vec3(1.2, 1.2, 1) }, { easing: 'quadOut' })
+          .to(0.25, { scale: new Vec3(1, 1, 1) }, { easing: 'quadIn' })
+          .call(() => resolve())
           .start();
+        // tween(target).to(
+        //   0.8,
+        //   { value: endNum },
+        //   { onUpdate: () => label.string = `${WinString().toUpperCase()} ${getP()}${numberToMoney(calculateWithBase(target.value), 3, false)}` }
+        // ).call(() => {
+        //   // EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD);
+        // resolve();
+        // })
+        //   .start();
       });
     }
 }
