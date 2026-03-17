@@ -128,6 +128,8 @@ export class Symbol extends Component {
     setDimmed(dim: boolean) {
       const uiOpacity = this.iconNode.getComponent(UIOpacity) || this.iconNode.addComponent(UIOpacity);
       uiOpacity.opacity = dim ? 75 : 255;
+      const lightOpacity = this.LightSpine.getComponent(UIOpacity) || this.LightSpine.addComponent(UIOpacity);
+      lightOpacity.opacity = dim ? 75 : 255;
     }
 
     initBlurSymbol(symbolId: string) {

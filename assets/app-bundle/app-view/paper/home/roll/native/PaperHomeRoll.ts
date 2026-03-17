@@ -407,7 +407,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         }, audioDelayTime);
       }
       // roll滚动完成回调
-      const onRollComplete = () => {
+      const onRollComplete = (rollIndex: number) => {
         if (this.isAllRollsStopped()) {
           // 如果rollFrameSpine动画播放中，则停止
           if (this.rollFrameSkeleton.node.active) {
@@ -424,16 +424,17 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         }
       };
 
-      // 如果需要播放rollFrameSpine动画，则播放
-      if (needPlayRollFrameSpine) {
-        await roll.getComponent(Roll).showRollFrameSpine(this.rollFrameSkeleton);
-      }
-
       // 停止滚轴
       roll.getComponent(Roll).stopRolling(
         rollList,
-        onRollComplete
+        onRollComplete,
+        needPlayRollFrameSpine
       );
+
+      // 如果需要播放rollFrameSpine动画，则播放
+      if (needPlayRollFrameSpine) {
+        await roll.getComponent(Roll).showRollFrameSpine(this.rollFrameSkeleton, 3);
+      }
       
       resolve(true);
     });

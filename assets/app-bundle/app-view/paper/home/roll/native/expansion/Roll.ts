@@ -52,7 +52,7 @@ export class Roll extends Component {
     }[] = [];
 
     // 滚动结束回调
-    private onRollComplete: () => void = null;
+    private onRollComplete: (rollIndex: number) => void = null;
 
     // 消除、下坠动画数据
     public symbolAnimationData: ISymbolAnimationData[] = [];
@@ -222,10 +222,10 @@ export class Roll extends Component {
      * @param onComplete 完成回调
      * @param reslutSymbols 结果符号
      */
-    async stopRolling(rollList: SymbolItem[], onComplete?: () => void, rollFrameAnimiationIsPlaying: boolean = false) {
-      // if (rollFrameAnimiationIsPlaying) {
-      //   await delay(900 / app.manager.global.gameSpeed);
-      // }
+    async stopRolling(rollList: SymbolItem[], onComplete?: (rollIndex: number) => void, rollFrameAnimiationIsPlaying: boolean = false) {
+      if (rollFrameAnimiationIsPlaying) {
+        await delay(900 / app.manager.global.gameSpeed);
+      }
 
       this.rollList = rollList;
       this.onRollComplete = onComplete;
@@ -235,7 +235,7 @@ export class Roll extends Component {
     /**
      * 停止滚动动画
      */
-    stopRollingAnimation(reslutSymbols: SymbolItem[] | null = null, onComplete?: () => void) {
+    stopRollingAnimation(reslutSymbols: SymbolItem[] | null = null, onComplete?: (rollIndex: number) => void) {
       if (!this.isRolling) return;
 
       const parentNode = this.node;
@@ -243,25 +243,86 @@ export class Roll extends Component {
       Tween.stopAllByTarget(parentNode);
       // 反转结果symbols，需要从下往上添加symbol
       const reverseReslutSymbols = reslutSymbols?.reverse();
-     
-      const going = tween(parentNode)
-        .by(0.05, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintOut' })
-        .call(() => this.updateNode(reverseReslutSymbols));
-      const end = tween(parentNode)
-        .by(0.15, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintOut' })
-        .call(() => { 
-          this.updateNode(); 
-          this.isRolling = false;
 
-          this.firstSymbolY = this.node.children[0]?.position?.y ?? 0;
+      // 需要scatter停牌缓慢下落效果
+      if(this.rollFrameAnimiationIsPlaying) {
+        // 当前Roll有rollframe动画时，需要缓慢停止
+        const durations = [0.075, 0.125, 0.175, 0.225, 0.275, 0.325, 0.375, 0.425];
+        const endTween = tween(parentNode);
+        const hasScatterSymbol = reslutSymbols?.some(item => item?.symbolId === '3001');
+        let hasUsedRandomScatter = false;
+        let usedRandomScatterIndex: number;
+ 
+        // 添加前4个相同的动画步骤
+        for (let i = 0; i < durations.length; i++) {
+          if (i < durations.length - 6) {
+            console.log('i-', i);
 
-          this.removeTopExcessSymbol();
+            if (!hasScatterSymbol && !hasUsedRandomScatter && Math.random() > (0.6 + 0.1 * i)) {
+              hasUsedRandomScatter = true;
+              usedRandomScatterIndex = i;
+            }
+ 
+            const index = i;
+ 
+            // 非最后五个的时候，更新随机节点
+            endTween.then(tween(parentNode).by(durations[i], { position: new Vec3(0, -this.itemHeight, 0) }).call(() => {
+              if (!hasScatterSymbol && hasUsedRandomScatter && index === usedRandomScatterIndex) {
+                this.updateNode([{ symbolId: '3001' }]);
+                hasUsedRandomScatter = false;
+              } else {
+                this.updateNode();
+              }
+            }));
+          } else if (i < durations.length - 1) {
+            console.log('i--', i);
+            // 非最后一个时的最后四个，更新结果节点
+            endTween.then(tween(parentNode).by(durations[i], { position: new Vec3(0, -this.itemHeight, 0) }).call(() => {
+              this.updateNode(reslutSymbols);
+            }));
+          } else {
+            console.log('i----', i);
+            // 添加最后一个有随机symbol
+            endTween
+              .then(tween(parentNode).by(durations[durations.length - 1], { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'bounceOut' })
+                .call(() => {
+                  this.updateNode(); 
+                  this.isRolling = false;
+ 
+                  this.firstSymbolY = this.node.children[0].position.y;
+ 
+                  this.removeTopExcessSymbol();
+ 
+                  onComplete?.(this.rollIndex);
+                })
+              );
+          }
+        }
+ 
+        Tween.stopAllByTarget(parentNode);
+ 
+        this.rollTween = tween(parentNode);
+        this.rollTween.then(endTween).start();
+      }else    {
+        const going = tween(parentNode)
+          .by(0.05, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintOut' })
+          .call(() => this.updateNode(reverseReslutSymbols));
+        const end = tween(parentNode)
+          .by(0.15, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintOut' })
+          .call(() => { 
+            this.updateNode(); 
+            this.isRolling = false;
 
-          onComplete?.();
-        });
+            this.firstSymbolY = this.node.children[0]?.position?.y ?? 0;
 
-      this.rollTween = tween(parentNode);
-      this.rollTween.repeat(reverseReslutSymbols.length, going).then(end).start();
+            this.removeTopExcessSymbol();
+
+            onComplete?.(this.rollIndex);
+          });
+
+        this.rollTween = tween(parentNode);
+        this.rollTween.repeat(reverseReslutSymbols.length, going).then(end).start();
+      }
     }
 
     /**
@@ -340,7 +401,7 @@ export class Roll extends Component {
         };
       }
 
-      const needBlur = resultSymbols?.length > 0 ? false : true;
+      const needBlur = !resultSymbols && !this.rollFrameAnimiationIsPlaying;
       const fromServer = resultSymbols?.length > 0 ? true : false;
       // 如果resultSymbols不为空，则创建symbolId，否则随机一个symbolId
       let SymbolNode = this.createSymbol(symbol, fromServer, needBlur);
@@ -502,17 +563,25 @@ export class Roll extends Component {
     /**
      * 显示rollFrameSpine，展示完毕后停止滚动
      */
-    async showRollFrameSpine(rollFrameSkeleton: sp.Skeleton) {
+    async showRollFrameSpine(rollFrameSkeleton: sp.Skeleton, times: number = 1) {
       rollFrameSkeleton.node.active = true;
-      console.log('this.originalWorldPosition', this.originalWorldPosition);
       rollFrameSkeleton.node.setPosition(this.originalWorldPosition);
       rollFrameSkeleton.timeScale = app.manager.global.gameSpeed;
       const scatterAnimationName = HomeRollTool.getScatterRunAnimationName(this.rollIndex);
-      rollFrameSkeleton.setAnimation(0, scatterAnimationName, true);
-      EffectManager.inst.playEffect(AudioPath.GAME.SCATTER_EXPECT, false, null, true);
+      
+      for (let i = 0; i < times; i++) {
+        await this.playSingleAnimation(rollFrameSkeleton, scatterAnimationName);
+      }
 
-      return new Promise(async resolve => {
+      return Promise.resolve();
+    }
+
+    private playSingleAnimation(rollFrameSkeleton: sp.Skeleton, animationName: string): Promise<boolean> {
+      return new Promise(resolve => {
+        rollFrameSkeleton.setAnimation(0, animationName, true);
+        EffectManager.inst.playEffect(AudioPath.GAME.SCATTER_EXPECT, false, null, true);
         rollFrameSkeleton.setCompleteListener(() => {
+          rollFrameSkeleton.setCompleteListener(null);
           resolve(true);
         });
       });
