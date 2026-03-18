@@ -501,6 +501,7 @@ export class Symbol extends Component {
           // 0.4秒后执行
           const time = setTimeout(() => {
             clearTimeout(time);
+            this.iconNode.active = true;
             resolve();
           }, 400 / app.manager.global.gameSpeed);
           // 添加动画

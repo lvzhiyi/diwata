@@ -513,8 +513,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       this.overLayNode,
       this.goddessAnimationNode,
       this.lightPrefab,
-      this.goddessNode,
-      this.goddess2Node
     );
   }
 
@@ -528,14 +526,16 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     for (const itemMap of this.changeWildData) {
       if (itemMap.hasShow || itemMap.rollIndex == null) continue;
 
+      // 击打棍子
       if (itemMap.type === SymbolType.BOW) {
         await this.homeRollTool.showBowHitAnimation(
           itemMap.nodes,
           this.overLayNode,
         );
         itemMap.hasShow = true;
-        await rollsScript[itemMap.rollIndex].symbolChangeToWild();
+        rollsScript[itemMap.rollIndex].symbolChangeToWild();
       }  
+      // 劈剑动画
       else if (itemMap.type === SymbolType.SWORD) {
         await this.homeRollTool.showSwordHaloAnimation(
           itemMap.rollNode,
@@ -585,8 +585,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     await Promise.all(rollsScript.map(roll => roll.playScatterHighlightAnimation()));
     // 处理是否需要展示剑和棒子
     await this.handleSwordAndStick();
-    // 同时执行棒子和剑光球飞向女神的效果
-    await this.playBowAndSwordFlyingAnimation();
 
     /**
      * 初始化Symbol动画数据（提前到剑/棒动画前，以便播完剑/棒后立即变 wild）
@@ -596,6 +594,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 处理消除数据
      */
     await Promise.all(rollsScript.map(roll => roll.dealRemoveData()));
+    
+    // 同时执行棒子和剑光球飞向女神的效果
+    await this.playBowAndSwordFlyingAnimation();
+    
     let symbolAnimationData = rollsScript.map(roll => roll.symbolAnimationData);
     console.log('初步处理消除数据', symbolAnimationData);
     console.table(symbolAnimationData[2].map((_, index) => symbolAnimationData.map((item: any) => item[index]?.symbolId || '')));
@@ -603,9 +605,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     /**
      * 剑/棒击打动画：播完一列就立即把该列元素变成 wild（先清空 overlay，再按列依次播动画并变 wild）
      */
-    this.homeRollTool.destoryOverlayNodeLight(this.overLayNode);
+  
     this.playSymbolChangeToWildAudio(rollsScript);
-    await this.playSequentialAnimations(rollsScript);
+    await this.homeRollTool.showBowAndSwordHitAnimation(this.changeWildData, this.overLayNode, rollsScript, this.goddessNode, this.goddess2Node);
 
     if (this.changeWildData.length > 0) await delay(480 / app.manager.global.gameSpeed);
    

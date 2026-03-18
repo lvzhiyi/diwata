@@ -122,8 +122,6 @@ export class HomeRollTool  {
     overlayNode: Node,
     goddessTargetNode: Node,
     lightPrefab: Prefab,
-    goddessNode: Node,
-    goddess2Node: Node
   ): Promise<void> {
     return new Promise<void>(async (resolve) => {
       targetNodes.forEach((node) => {
@@ -143,36 +141,125 @@ export class HomeRollTool  {
           })
           .start();
       });
-      await delay(500);
-      
-      // 女神执行动画
-      const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
-      goddessSkeleton.premultipliedAlpha = false;
-      const animationName = this.getGoddessAnimation(targetNodes);
-      goddessSkeleton.setAnimation(0, animationName, false);
-      goddessSkeleton.setCompleteListener(() => {
-        // 女神执行待机动画
-        goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation_fg' : 'animation', true);
-      });
-      
-      const animation2Name = this.getGoddess2Animation(targetNodes);
-
-      if(animation2Name !== '') {
-        // 女神2执行动画
-        goddess2Node.active = true;
-        const goddess2Skeleton = goddess2Node.getComponent(sp.Skeleton) || goddess2Node.addComponent(sp.Skeleton);
-        goddess2Skeleton.premultipliedAlpha = false;
-        goddess2Skeleton.setAnimation(0, animation2Name, false);
-        goddess2Skeleton.setCompleteListener(() => {
-          // 女神2执行待机动画
-          goddess2Node.active = false;
-          goddess2Skeleton.setCompleteListener(null);
-        });
-      }
 
       await delay(500);
       resolve();
     });
+  }
+
+  /**
+   * 一起播放女神节点动画（goddessNode 与 goddess2Node 同时播放），播完后恢复待机并 resolve
+   */
+  private async playGoddessAnimationTogether(
+    goddessNode: Node,
+    goddess2Node: Node,
+    goddessAnimName: string,
+    goddess2AnimName: string,
+  ): Promise<void> {
+    const goddessSkeleton = goddessNode?.getComponent(sp.Skeleton) || goddessNode?.addComponent(sp.Skeleton);
+    goddessSkeleton.premultipliedAlpha = false;
+    goddessSkeleton.setAnimation(0, goddessAnimName, false);
+
+    if (goddess2AnimName) {
+      goddess2Node.active = true;
+      const goddess2Skeleton = goddess2Node.getComponent(sp.Skeleton) || goddess2Node.addComponent(sp.Skeleton);
+      goddess2Skeleton.premultipliedAlpha = false;
+      goddess2Skeleton.setAnimation(0, goddess2AnimName, false);
+      goddess2Skeleton.setCompleteListener(() => {
+        goddess2Node.active = false;
+        goddess2Skeleton.setCompleteListener(null);
+      });
+    }
+
+    await new Promise<void>(resolve => {
+      goddessSkeleton.setCompleteListener(() => {
+        goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation_fg' : 'animation', true);
+        goddessSkeleton.setCompleteListener(null);
+        resolve();
+      });
+    });
+  }
+
+  /**
+   * 根据 changeWildData 遍历区分动画类型，执行对应动画组合并返回 Promise。
+   * 类型1-全部棒子：一起播放女神动画 → 依次播放棒子击打 → 元素变 wild
+   * 类型2-全部剑：一起播放女神动画 → 同时播放劈下效果 → 元素变 wild
+   * 类型3-有棒子也有剑：分两组，先执行类型1逻辑（棒子），再执行类型2逻辑（剑）
+   */
+  async showBowAndSwordHitAnimation(
+    changeWildData: ChangeWildData[],
+    overlayNode: Node,
+    rollsScript: Roll[],
+    goddessNode: Node,
+    goddess2Node: Node,
+  ): Promise<void> {
+    if (changeWildData.length === 0) return Promise.resolve();
+    // 先清空overlayNode上的光球动画
+    this.destoryOverlayNodeLight(overlayNode);
+    changeWildData.sort((a, b) => (a.rollIndex ?? 0) - (b.rollIndex ?? 0));
+
+    const bowData = changeWildData.filter(item => item.type === SymbolType.BOW);
+    const swordData = changeWildData.filter(item => item.type === SymbolType.SWORD);
+
+    const hasOnlyBow = swordData.length === 0;
+    const hasOnlySword = bowData.length === 0;
+
+    // 类型1：全部都是棒子（仅非主元素击打动画，击打后立即该列非主变 wild，全部非主处理完后主元素一起变 wild）
+    if (hasOnlyBow) {
+      const goddessAnimName = this.getGoddessAnimation(true, false);
+      const goddess2AnimName = this.getGoddess2Animation(true, false);
+      await this.playGoddessAnimationTogether(goddessNode, goddess2Node, goddessAnimName, goddess2AnimName);
+
+      for (const item of bowData) {
+        await this.showBowHitAnimation(item.nodes ?? [], overlayNode);
+        rollsScript[item.rollIndex!].symbolChangeToWildOnlyNonMain();
+      }
+
+      await Promise.all(bowData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolChangeToWildOnlyMain()));
+      bowData.forEach(item => { item.hasShow = true; });
+
+      return Promise.resolve();
+    }
+
+    // 类型2：全部都是剑
+    if (hasOnlySword) {
+      const goddessAnimName = this.getGoddessAnimation(false, true);
+      const goddess2AnimName = this.getGoddess2Animation(false, true);
+      await this.playGoddessAnimationTogether(goddessNode, goddess2Node, goddessAnimName, goddess2AnimName);
+      await Promise.all(swordData.map((item: ChangeWildData) =>
+        this.showSwordHaloAnimation(item.rollNode!, overlayNode),
+      ));
+      await Promise.all(swordData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolChangeToWild()));
+      swordData.forEach(item => { item.hasShow = true; });
+
+      return Promise.resolve();
+    }
+
+    // 类型3：有棒子也有剑，分别进入类型1和类型2逻辑，女神动画播放两次
+    const goddessAnimBow = this.getGoddessAnimation(true, false);
+    const goddess2AnimBow = this.getGoddess2Animation(true, false);
+    await this.playGoddessAnimationTogether(goddessNode, goddess2Node, goddessAnimBow, goddess2AnimBow);
+
+    for (const item of bowData) {
+      await this.showBowHitAnimation(item.nodes ?? [], overlayNode);
+      await rollsScript[item.rollIndex!].symbolChangeToWildOnlyNonMain();
+    }
+
+    await Promise.all(bowData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolChangeToWildOnlyMain()));
+    bowData.forEach(item => { item.hasShow = true; });
+
+    // 第二次女神动画（剑）
+    const goddessAnimSword = this.getGoddessAnimation(false, true);
+    const goddess2AnimSword = this.getGoddess2Animation(false, true);
+    await this.playGoddessAnimationTogether(goddessNode, goddess2Node, goddessAnimSword, goddess2AnimSword);
+
+    await Promise.all(swordData.map((item: ChangeWildData) =>
+      this.showSwordHaloAnimation(item.rollNode!, overlayNode),
+    ));
+    await Promise.all(swordData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolChangeToWild()));
+    swordData.forEach(item => { item.hasShow = true; });
+
+    return Promise.resolve();
   }
 
   // 强制销毁粒子节点的方法
@@ -224,7 +311,7 @@ export class HomeRollTool  {
         const time = setTimeout(() => {
           clearTimeout(time);
           resolve();
-        }, 800 / app.manager.global.gameSpeed);
+        }, 400 / app.manager.global.gameSpeed);
         const isAllMain = targetNodes.every(item => item.getComponent(Symbol).currentSymbolItem.main);
         console.log('isAllMain', isAllMain);
 
@@ -303,41 +390,32 @@ export class HomeRollTool  {
    * 根据中的图标决定女神播放什么动效
   */
   getGoddessAnimation(
-    changeWildData: Node[]
+    needPlayBow:boolean, needPlaySword:boolean
   ):string{
-    const hasSword = changeWildData.some(item => item.getComponent(Symbol).currentSymbolItem.symbolId === SymbolType.SWORD);
-    const hasMainBow = changeWildData.some(item => item.getComponent(Symbol).currentSymbolItem.symbolId === SymbolType.BOW);
-
-    if (hasSword && !hasMainBow) {
+    if (needPlaySword) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER1);
 
       return app.manager.global.isBuyFreeBonusMode ? 'animation3_fg' : 'animation3';
     // 返回女神挥剑animation3
-    } else if (!hasSword && hasMainBow) {
+    } 
+    if (needPlayBow) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER2);
 
       return app.manager.global.isBuyFreeBonusMode ? 'animation2_fg' : 'animation2';
-    } else if (hasSword && hasMainBow) {
-      EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER3);
-
-      return app.manager.global.isBuyFreeBonusMode ? 'animation5_fg' : 'animation5';
-    }
+    } 
   }
 
   /**
    * 根据中的图标决定女神播放什么动效
   */
   getGoddess2Animation(
-    changeWildData: Node[]
+    needPlayBow:boolean, needPlaySword:boolean
   ):string{
-    const hasSword = changeWildData.some(item => item.getComponent(Symbol).currentSymbolItem.symbolId === SymbolType.SWORD);
-    const hasMainBow = changeWildData.some(item => item.getComponent(Symbol).currentSymbolItem.symbolId === SymbolType.BOW);
-
-    if (hasSword && !hasMainBow) {
-      return 'animation3_fx';
-    // 返回女神挥剑animation3
-    } else if (!hasSword && hasMainBow) {
+    if (needPlayBow) {
       return 'animation2_fx';
+    // 返回女神挥剑animation3
+    } else if (needPlaySword) {
+      return 'animation3_fx'; 
     }
  
     return '';

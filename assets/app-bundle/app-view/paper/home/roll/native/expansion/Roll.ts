@@ -230,6 +230,7 @@ export class Roll extends Component {
       this.rollList = rollList;
       this.onRollComplete = onComplete;
       this.rollFrameAnimiationIsPlaying = rollFrameAnimiationIsPlaying;
+      console.log('rollFrameAnimiationIsPlaying', this.rollFrameAnimiationIsPlaying);
     }
 
     /**
@@ -258,7 +259,7 @@ export class Roll extends Component {
           if (i < durations.length - 6) {
             console.log('i-', i);
 
-            if (!hasScatterSymbol && !hasUsedRandomScatter && Math.random() > (0.6 + 0.1 * i)) {
+            if (!hasScatterSymbol && !hasUsedRandomScatter && Math.random() > (0.4 + 0.1 * i)) {
               hasUsedRandomScatter = true;
               usedRandomScatterIndex = i;
             }
@@ -303,7 +304,7 @@ export class Roll extends Component {
  
         this.rollTween = tween(parentNode);
         this.rollTween.then(endTween).start();
-      }else    {
+      }else {
         const going = tween(parentNode)
           .by(0.05, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintOut' })
           .call(() => this.updateNode(reverseReslutSymbols));
@@ -403,6 +404,7 @@ export class Roll extends Component {
 
       const needBlur = !resultSymbols && !this.rollFrameAnimiationIsPlaying;
       const fromServer = resultSymbols?.length > 0 ? true : false;
+      console.log('resultSymbols', resultSymbols, this.rollFrameAnimiationIsPlaying, symbol, needBlur);
       // 如果resultSymbols不为空，则创建symbolId，否则随机一个symbolId
       let SymbolNode = this.createSymbol(symbol, fromServer, needBlur);
      
@@ -797,25 +799,73 @@ export class Roll extends Component {
      * symbol变为wild，当本回合wild会被消除时，symbol才会变成wild
      */
     async symbolChangeToWild() {
-      let hasChangeWild = false;
       // 收集所有异步操作的Promise
-      const promises = this.symbolAnimationData.map((item, index) => {
+      this.symbolAnimationData.map((item, index) => {
         const itemSymbolId = item.symbolId;
-        
-        if (SYMBOL_WILD_IDS.indexOf(itemSymbolId) !== -1 ) {
-          hasChangeWild = true;
 
+        if (SYMBOL_WILD_IDS.indexOf(itemSymbolId) !== -1 ) {
           return this.symbolChangeToSingleWild(index);
         }
-    
-        return Promise.resolve();
       });
 
-      // 等待所有异步操作完成
-      await Promise.all(promises);
+      // 0.5秒后执行
+      const time = setTimeout(() => {
+        clearTimeout(time);
 
-      // 所有操作完成后返回
-      return Promise.resolve(hasChangeWild);
+        return Promise.resolve();
+      }, 400 / app.manager.global.gameSpeed);
+    }
+
+    /**
+     * 仅将当前列中的非主元素变为 wild（棒子击打后立即变 wild 时用）
+     */
+    async symbolChangeToWildOnlyNonMain(): Promise<void> {
+      const promises: Promise<void>[] = [];
+
+      this.symbolAnimationData.forEach((item, index) => {
+        if (SYMBOL_WILD_IDS.indexOf(item.symbolId) === -1) {
+          return;
+        }
+
+        const symbol = item.symbolNode?.getComponent(Symbol);
+
+        if (symbol?.currentSymbolItem && !symbol.currentSymbolItem.main) {
+          promises.push(this.symbolChangeToSingleWild(index));
+        }
+      });
+
+      // 0.3秒后执行
+      const time = setTimeout(() => {
+        clearTimeout(time);
+
+        return Promise.resolve();
+      }, 400 / app.manager.global.gameSpeed);
+    }
+
+    /**
+     * 仅将当前列中的主元素变为 wild（所有非主击打并变 wild 后，主元素一起变 wild 时用）
+     */
+    async symbolChangeToWildOnlyMain(): Promise<void> {
+      const promises: Promise<void>[] = [];
+
+      this.symbolAnimationData.forEach((item, index) => {
+        if (SYMBOL_WILD_IDS.indexOf(item.symbolId) === -1) {
+          return;
+        }
+
+        const symbol = item.symbolNode?.getComponent(Symbol);
+
+        if (symbol?.currentSymbolItem?.main) {
+          promises.push(this.symbolChangeToSingleWild(index));
+        }
+      });
+
+      // 0.3秒后执行
+      const time = setTimeout(() => {
+        clearTimeout(time);
+
+        return Promise.resolve();
+      }, 200 / app.manager.global.gameSpeed);
     }
 
     /**
