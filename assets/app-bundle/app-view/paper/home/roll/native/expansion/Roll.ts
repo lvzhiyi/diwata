@@ -1,5 +1,5 @@
 import { _decorator, CCInteger, Component, instantiate, Material, Node, NodePool, Prefab, sp, Sprite, Tween, tween, UITransform, Vec3 } from 'cc';
-import { Symbol, SYMBOL_WILD_IDS } from './Symbol';
+import { Symbol, SYMBOL_BOW_WILD_IDS, SYMBOL_SWORD_WILD_IDS, SYMBOL_WILD_IDS } from './Symbol';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
@@ -276,18 +276,16 @@ export class Roll extends Component {
               }
             }));
           } else if (i < durations.length - 1) {
-            console.log('i--', i);
             // 非最后一个时的最后四个，更新结果节点
             endTween.then(tween(parentNode).by(durations[i], { position: new Vec3(0, -this.itemHeight, 0) }).call(() => {
               this.updateNode(reslutSymbols);
             }));
           } else {
-            console.log('i----', i);
-            // 添加最后一个有随机symbol
+            // 添加最后一个有随机symbol（停止时补位不显示模糊）
             endTween
               .then(tween(parentNode).by(durations[durations.length - 1], { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'bounceOut' })
                 .call(() => {
-                  this.updateNode(); 
+                  this.updateNode(null, true);
                   this.isRolling = false;
  
                   this.firstSymbolY = this.node.children[0].position.y;
@@ -304,14 +302,15 @@ export class Roll extends Component {
  
         this.rollTween = tween(parentNode);
         this.rollTween.then(endTween).start();
-      }else {
+      } else {
+        // 停止时：按 reverseReslutSymbols 循环多次，每次插入一条服务器数据（清晰图），最后再补一位（不模糊）
         const going = tween(parentNode)
           .by(0.05, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintOut' })
           .call(() => this.updateNode(reverseReslutSymbols));
         const end = tween(parentNode)
           .by(0.15, { position: new Vec3(0, -this.itemHeight, 0) }, { easing: 'quintOut' })
-          .call(() => { 
-            this.updateNode(); 
+          .call(() => {
+            this.updateNode(null, true);
             this.isRolling = false;
 
             this.firstSymbolY = this.node.children[0]?.position?.y ?? 0;
@@ -323,6 +322,7 @@ export class Roll extends Component {
 
         this.rollTween = tween(parentNode);
         this.rollTween.repeat(reverseReslutSymbols.length, going).then(end).start();
+        console.log('reverseReslutSymbols', reverseReslutSymbols, reslutSymbols);
       }
     }
 
@@ -376,10 +376,13 @@ export class Roll extends Component {
     }
 
     /**
-     * 更新节点位置
-     * @param resultSymbols 最终结果符号
+     * 更新节点位置（roll 外层有 mask，子节点数 = 服务器条数 + 1，多出的一个在 mask 上方做缓冲）
+     * - 滚动中：无 resultSymbols 时随机生成并显示模糊图
+     * - 停止时：循环插入 reverseReslutSymbols 服务器数据（清晰图），最后一次补位用 forceNoBlur 避免顶部留模糊
+     * @param resultSymbols 最终结果符号（来自服务器，传 null 表示随机补位）
+     * @param forceNoBlur 是否强制不模糊（停止时最后一次补位必传 true）
      */
-    updateNode(resultSymbols: SymbolItem[] | null = null) {
+    updateNode(resultSymbols: SymbolItem[] | null = null, forceNoBlur: boolean = false) {
       const children = this.node.children;
       const lastIndex = children.length - 1;
       if (lastIndex <= 0) return;
@@ -402,9 +405,9 @@ export class Roll extends Component {
         };
       }
 
-      const needBlur = !resultSymbols && !this.rollFrameAnimiationIsPlaying;
+      // 仅滚动中且非 rollFrame 且未强制不模糊时显示模糊图；停止时的最后一次补位用 forceNoBlur 避免顶部留模糊
+      const needBlur = !resultSymbols && !this.rollFrameAnimiationIsPlaying && !forceNoBlur;
       const fromServer = resultSymbols?.length > 0 ? true : false;
-      console.log('resultSymbols', resultSymbols, this.rollFrameAnimiationIsPlaying, symbol, needBlur);
       // 如果resultSymbols不为空，则创建symbolId，否则随机一个symbolId
       let SymbolNode = this.createSymbol(symbol, fromServer, needBlur);
      
@@ -768,7 +771,7 @@ export class Roll extends Component {
     }
 
     /**
-     * 移除顶部多余符号
+     * 移除顶部多余符号（itemCount = 可见数 + 1，只在不大于 itemCount 时移除，保证停止后保留 itemCount 个子节点）
      */
     removeTopExcessSymbol() {
       if (this.node.children.length === this.itemCount) {
@@ -798,32 +801,29 @@ export class Roll extends Component {
     /**
      * symbol变为wild，当本回合wild会被消除时，symbol才会变成wild
      */
-    async symbolChangeToWild() {
+    async symbolSwordChangeToWild() {
       // 收集所有异步操作的Promise
-      this.symbolAnimationData.map((item, index) => {
+      let promises = this.symbolAnimationData.map((item, index) => {
         const itemSymbolId = item.symbolId;
 
-        if (SYMBOL_WILD_IDS.indexOf(itemSymbolId) !== -1 ) {
+        if (SYMBOL_SWORD_WILD_IDS.indexOf(itemSymbolId) !== -1 ) {
           return this.symbolChangeToSingleWild(index);
         }
       });
 
-      // 0.5秒后执行
-      const time = setTimeout(() => {
-        clearTimeout(time);
+      await Promise.all(promises);
 
-        return Promise.resolve();
-      }, 400 / app.manager.global.gameSpeed);
+      return Promise.resolve();
     }
 
     /**
      * 仅将当前列中的非主元素变为 wild（棒子击打后立即变 wild 时用）
      */
-    async symbolChangeToWildOnlyNonMain(): Promise<void> {
+    async symbolBowChangeToWildOnlyNonMain(): Promise<void> {
       const promises: Promise<void>[] = [];
 
       this.symbolAnimationData.forEach((item, index) => {
-        if (SYMBOL_WILD_IDS.indexOf(item.symbolId) === -1) {
+        if (SYMBOL_BOW_WILD_IDS.indexOf(item.symbolId) === -1) {
           return;
         }
 
@@ -833,23 +833,24 @@ export class Roll extends Component {
           promises.push(this.symbolChangeToSingleWild(index));
         }
       });
-
       // 0.3秒后执行
       const time = setTimeout(() => {
         clearTimeout(time);
 
         return Promise.resolve();
       }, 400 / app.manager.global.gameSpeed);
+
+      // await Promise.all(promises);
     }
 
     /**
      * 仅将当前列中的主元素变为 wild（所有非主击打并变 wild 后，主元素一起变 wild 时用）
      */
-    async symbolChangeToWildOnlyMain(): Promise<void> {
+    async symbolBowChangeToWildOnlyMain(): Promise<void> {
       const promises: Promise<void>[] = [];
 
       this.symbolAnimationData.forEach((item, index) => {
-        if (SYMBOL_WILD_IDS.indexOf(item.symbolId) === -1) {
+        if (SYMBOL_BOW_WILD_IDS.indexOf(item.symbolId) === -1) {
           return;
         }
 
@@ -859,13 +860,9 @@ export class Roll extends Component {
           promises.push(this.symbolChangeToSingleWild(index));
         }
       });
+      await Promise.all(promises);
 
-      // 0.3秒后执行
-      const time = setTimeout(() => {
-        clearTimeout(time);
-
-        return Promise.resolve();
-      }, 200 / app.manager.global.gameSpeed);
+      return Promise.resolve();
     }
 
     /**

@@ -10,6 +10,8 @@ import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const SYMBOL_NORMAL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010'];
 export const SYMBOL_WILD_IDS = ['4001', '4010', '4011'];
+export const SYMBOL_BOW_WILD_IDS = ['4001', '4011'];
+export const SYMBOL_SWORD_WILD_IDS = ['4001', '4010'];
 const { ccclass, property } = _decorator;
 
 const SymbolScale = new Vec3(1.1, 1.1, 1.1);
@@ -503,7 +505,7 @@ export class Symbol extends Component {
             clearTimeout(time);
             this.iconNode.active = true;
             resolve();
-          }, 400 / app.manager.global.gameSpeed);
+          }, 300 / app.manager.global.gameSpeed);
           // 添加动画
           const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;

@@ -1,7 +1,145 @@
 /**
  * 模拟成功数据
  */
-export const mockSuccessData1: any = null;
+export const mockSuccessData1: any = {
+  betRecordId: '2034179864110641152',
+  gameId: 'zhumeng006',
+  betType: 'BUY_BET',
+  betSubType: 'FREE_SPINS_BUY_BET',
+  credit: 300000,
+  overallRewardAmount: 0,
+  totalPayoutAmount: 0,
+  resultDetail: {
+    allWheelRewardSubType: 'none',
+    resultList: [
+      {
+        rewardType: 'NONE',
+        rewardSubType: 'none',
+        totalRewardAmount: 0,
+        totalRewardMultiple: 8.0,
+        wheel: [
+          [
+            {
+              symbolId: '1007',
+              main: false
+            },
+            {
+              symbolId: '1002',
+              main: false
+            },
+            {
+              symbolId: '4010',
+              main: false
+            },
+            {
+              symbolId: '1001',
+              main: false
+            },
+            {
+              symbolId: '1002',
+              main: false
+            },
+            {
+              symbolId: '1002',
+              main: false
+            }
+          ],
+          [
+            {
+              symbolId: '1001',
+              main: false
+            },
+            {
+              symbolId: '1010',
+              main: false
+            },
+            {
+              symbolId: '4010',
+              main: false
+            },
+            {
+              symbolId: '1005',
+              main: false
+            },
+            {
+              symbolId: '1002',
+              main: false
+            },
+            {
+              symbolId: '1006',
+              main: false
+            }
+          ],
+          [
+            {
+              symbolId: '1009',
+              main: false
+            },
+            {
+              symbolId: '1006',
+              main: false
+            },
+            {
+              symbolId: '4010',
+              main: false
+            },
+            {
+              symbolId: '1009',
+              main: false
+            },
+            {
+              symbolId: '1009',
+              main: false
+            },
+            {
+              symbolId: '1007',
+              main: false
+            }
+          ],
+          [
+            null,
+            {
+              symbolId: '1010',
+              main: false
+            },
+            {
+              symbolId: '4010',
+              main: false
+            },
+            {
+              symbolId: '1008',
+              main: false
+            },
+            {
+              symbolId: '1010',
+              main: false
+            },
+            null
+          ],
+          [
+            null,
+            null,
+            {
+              symbolId: '4010',
+              main: true
+            },
+            {
+              symbolId: '1007',
+              main: false
+            },
+            null,
+            null
+          ]
+        ],
+        rewardSymbolIndexSet: null,
+        rewardLineList: null,
+        freeWheelFlag: 0,
+        gameRecordIds: [],
+        accumulateReachMaxMultiple: false
+      }
+    ]
+  }
+};
 export const mockSuccessData: any = {
   betRecordId: '1977661323763085312',
   gameId: 'zhumeng006',

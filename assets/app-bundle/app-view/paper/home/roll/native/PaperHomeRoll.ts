@@ -517,37 +517,6 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   /**
-   * 按列依次播放剑/棒击打动画，播完一列就立即把该列元素变成 wild
-   */
-  public async playSequentialAnimations(rollsScript: Roll[]): Promise<void> {
-    if (this.changeWildData.length === 0) return Promise.resolve();
-    this.changeWildData.sort((a, b) => a.rollIndex - b.rollIndex);
-
-    for (const itemMap of this.changeWildData) {
-      if (itemMap.hasShow || itemMap.rollIndex == null) continue;
-
-      // 击打棍子
-      if (itemMap.type === SymbolType.BOW) {
-        await this.homeRollTool.showBowHitAnimation(
-          itemMap.nodes,
-          this.overLayNode,
-        );
-        itemMap.hasShow = true;
-        rollsScript[itemMap.rollIndex].symbolChangeToWild();
-      }  
-      // 劈剑动画
-      else if (itemMap.type === SymbolType.SWORD) {
-        await this.homeRollTool.showSwordHaloAnimation(
-          itemMap.rollNode,
-          this.overLayNode,
-        );
-        itemMap.hasShow = true;
-        await rollsScript[itemMap.rollIndex].symbolChangeToWild();
-      }  
-    }
-  }
-
-  /**
    * ！！！！！核心消除逻辑！！！！！
    * 开始本回合消除
    * 1. 设置当前回合数据

@@ -212,10 +212,10 @@ export class HomeRollTool  {
 
       for (const item of bowData) {
         await this.showBowHitAnimation(item.nodes ?? [], overlayNode);
-        rollsScript[item.rollIndex!].symbolChangeToWildOnlyNonMain();
+        rollsScript[item.rollIndex!].symbolBowChangeToWildOnlyNonMain();
       }
 
-      await Promise.all(bowData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolChangeToWildOnlyMain()));
+      await Promise.all(bowData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolBowChangeToWildOnlyMain()));
       bowData.forEach(item => { item.hasShow = true; });
 
       return Promise.resolve();
@@ -229,7 +229,7 @@ export class HomeRollTool  {
       await Promise.all(swordData.map((item: ChangeWildData) =>
         this.showSwordHaloAnimation(item.rollNode!, overlayNode),
       ));
-      await Promise.all(swordData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolChangeToWild()));
+      await Promise.all(swordData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolSwordChangeToWild()));
       swordData.forEach(item => { item.hasShow = true; });
 
       return Promise.resolve();
@@ -242,10 +242,10 @@ export class HomeRollTool  {
 
     for (const item of bowData) {
       await this.showBowHitAnimation(item.nodes ?? [], overlayNode);
-      await rollsScript[item.rollIndex!].symbolChangeToWildOnlyNonMain();
+      await rollsScript[item.rollIndex!].symbolBowChangeToWildOnlyNonMain();
     }
 
-    await Promise.all(bowData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolChangeToWildOnlyMain()));
+    await Promise.all(bowData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolBowChangeToWildOnlyMain()));
     bowData.forEach(item => { item.hasShow = true; });
 
     // 第二次女神动画（剑）
@@ -256,7 +256,7 @@ export class HomeRollTool  {
     await Promise.all(swordData.map((item: ChangeWildData) =>
       this.showSwordHaloAnimation(item.rollNode!, overlayNode),
     ));
-    await Promise.all(swordData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolChangeToWild()));
+    await Promise.all(swordData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolSwordChangeToWild()));
     swordData.forEach(item => { item.hasShow = true; });
 
     return Promise.resolve();
