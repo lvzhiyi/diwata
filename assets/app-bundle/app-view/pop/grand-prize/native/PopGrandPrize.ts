@@ -352,7 +352,7 @@ export class PopGrandPrize extends BaseView {
    * 点击停止大奖弹窗
    */
   clickToHideGrandPrize() {
-    if (this.isHideInProgress  && !this.isCloseInProgress) {
+    if (this.isHideInProgress) {
       // 如果是第二次点击，播放隐藏动画
       this.playCloseAnimation();
     } else {
@@ -374,13 +374,14 @@ export class PopGrandPrize extends BaseView {
     const lastAnimationName = this.animationQueue[this.animationQueue.length - 1];
 
     if (this.currentAnimationName !== lastAnimationName) {
-      // 停止数字动画和背景音乐
-      this.numberWinBgAnimator.stopAnimation(true);
       // EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD2);
       const musicBGName = effectBGMap[lastAnimationName];
       this.playGrandPrizeBGSound(musicBGName, false);
       await this.playGrandPrizeAnimation(lastAnimationName, true);
     }
+
+    // 停止数字动画和背景音乐
+    this.numberWinBgAnimator.stopAnimation(true);
 
     try {
       // EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD2);
@@ -412,6 +413,11 @@ export class PopGrandPrize extends BaseView {
    * @returns Promise，动画完成时resolve
    */
   private async playCloseAnimation() {
+    if (this.isCloseInProgress) {
+      return;
+    }
+
+    this.isCloseInProgress = true;
     // 获取骨骼动画组件和文本节点
     const spine = this.bgNode.getComponent(sp.Skeleton);
     spine.timeScale = app.manager.global.gameSpeed;
@@ -488,6 +494,7 @@ export class PopGrandPrize extends BaseView {
     if(app.controller.slots.isFreeBonusSpin) {
       BGMManager.inst.playFreeModeBGM();
     } else {
+      console.log('playNormalModeBGM');
       BGMManager.inst.playNormalModeBGM();
     }
 

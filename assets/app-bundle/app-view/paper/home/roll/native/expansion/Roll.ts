@@ -223,9 +223,9 @@ export class Roll extends Component {
      * @param reslutSymbols 结果符号
      */
     async stopRolling(rollList: SymbolItem[], onComplete?: (rollIndex: number) => void, rollFrameAnimiationIsPlaying: boolean = false) {
-      if (rollFrameAnimiationIsPlaying) {
-        await delay(900 / app.manager.global.gameSpeed);
-      }
+      // if (rollFrameAnimiationIsPlaying) {
+      //   await delay(900 / app.manager.global.gameSpeed);
+      // }
 
       this.rollList = rollList;
       this.onRollComplete = onComplete;

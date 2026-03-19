@@ -939,7 +939,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      */
     if (rollFrameAnimationScript.length > 0) {
       for (const roll of rollFrameAnimationScript) {
-        await roll.showRollFrameSpine(this.rollFrameSkeleton);
+        // await roll.showRollFrameSpine(this.rollFrameSkeleton);
         /**
        * 添加Roll边框动画后下落，然后再添加到顶部下落
        * -- 传入下一回合roll的数据
