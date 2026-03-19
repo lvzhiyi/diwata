@@ -579,6 +579,8 @@ export class Roll extends Component {
         await this.playSingleAnimation(rollFrameSkeleton, scatterAnimationName);
       }
 
+      this.rollFrameAnimiationIsPlaying = false;
+
       return Promise.resolve();
     }
 
