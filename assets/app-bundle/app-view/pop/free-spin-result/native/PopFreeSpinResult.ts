@@ -39,6 +39,8 @@ export class PopFreeSpinResult extends BaseView {
 
   private isClickScreenToStop: boolean = false;
 
+  private isCloseInProgress: boolean = false;
+
   protected onLoad(): void {
     this.numberWinBgAnimator = new NumberAnimator(this.AmountLabel);
     console.log('this.spineNode', this.spineNode);
@@ -49,6 +51,8 @@ export class PopFreeSpinResult extends BaseView {
     this.init(params);
     this.node.on(Node.EventType.TOUCH_START, this.clickScreenToStop, this);
     EffectManager.inst.playEffect(AudioPath.GAME.SETTLE);
+    this.isCloseInProgress = false;
+    this.isClickScreenToStop = false;
     this.showAmountAnimation();
   }
 
@@ -139,6 +143,11 @@ export class PopFreeSpinResult extends BaseView {
   }
 
   stopAnimation() {
+    if (this.isCloseInProgress) {
+      return;
+    }
+
+    this.isCloseInProgress = true;
     EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.SETTLE);
     this.spineSkeleton.setAnimation(0, 'congratlilation_out', false);
     this.spineSkeleton.setCompleteListener(() => {
@@ -148,6 +157,7 @@ export class PopFreeSpinResult extends BaseView {
   
   onHide(result: undefined) {
     this.isClickScreenToStop = false;
+    this.isCloseInProgress = false;
     this.node.off(Node.EventType.TOUCH_START, this.clickScreenToStop, this);
     BGMManager.inst.playNormalModeBGM();
     this.numberWinBgAnimator.stopAnimation(true);
