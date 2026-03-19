@@ -115,9 +115,9 @@ export class PopGrandPrize extends BaseView {
   private isPlayEnd: boolean = false;
 
    /**
-   * 是否将要播放结束
+   * 是否正在关闭
    */
-   private isWillPlayEnd: boolean = false;
+   private isCloseInProgress: boolean = false;
 
   /**
    * 背景音乐ID
@@ -151,6 +151,7 @@ export class PopGrandPrize extends BaseView {
     if (!params) return;
 
     this.isHideInProgress = false;
+    this.isCloseInProgress = false;
 
     this.numberRollIsPlaying = false;
 
@@ -351,7 +352,7 @@ export class PopGrandPrize extends BaseView {
    * 点击停止大奖弹窗
    */
   clickToHideGrandPrize() {
-    if (this.isWillPlayEnd ) {
+    if (this.isHideInProgress  && !this.isCloseInProgress) {
       // 如果是第二次点击，播放隐藏动画
       this.playCloseAnimation();
     } else {
@@ -388,10 +389,8 @@ export class PopGrandPrize extends BaseView {
         const musicName = effectBGMapEnd[this.currentAnimationName];
         EffectManager.inst.playEffect(musicName);
       }
-
-      this.isWillPlayEnd = true;
+      
       await delay(4000);
-      this.isWillPlayEnd = false;
 
       this.isPlayEnd = true;
 
@@ -431,11 +430,13 @@ export class PopGrandPrize extends BaseView {
       const timeoutId = setTimeout(() => {
         clearTimeout(timeoutId);
         this.numberWinBgAnimator.stopAnimation(true);
+        this.numberRollIsPlaying = false;
         // EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD2);
         // 重置并清理资源
         // textNode.setPosition(originalPosition);
         this.node.setScale(new Vec3(1, 1, 1));
         textNode.setScale(new Vec3(1, 1, 1));
+        this.isCloseInProgress = false;
         this.hide();
         resolve();
       }, 1670 / app.manager.global.gameSpeed);
@@ -477,7 +478,8 @@ export class PopGrandPrize extends BaseView {
    */
   onHide(result: undefined) {
     SpineTool.clearAnimationNode(this.bgNode);
-    // EffectManager.inst.stopAllEffects();
+    const musicName = effectMap[this.currentAnimationName];
+    EffectManager.inst.stopAllEffectsByName(musicName);
 
     // 恢复背景音乐，如果当前是免费区间就播免费轮音乐，
     if(app.controller.slots.isFreeBonusSpin) {

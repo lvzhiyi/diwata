@@ -82,17 +82,17 @@ export class PopFreeSpinResult extends BaseView {
       console.error('showAmountAnimation error', error);
     }
 
-    return new Promise<void>(async (resolve) => {
-      await this.numberWinBgAnimator.animateTo(
-        this.amount,
-        this.getDisplayTimeByRewardType(),
-        (value) => `${getP()} ` + numberToMoney(value, 3, false),
-        true
-      );
-      this.stopAnimation();
-
-      resolve();
-    });
+    await this.numberWinBgAnimator.animateTo(
+      this.amount,
+      this.getDisplayTimeByRewardType(),
+      (value) => `${getP()} ` + numberToMoney(value, 3, false),
+      true
+    );
+    this.scheduleOnce(() => {
+      if (!this.isClickScreenToStop) {
+        this.stopAnimation();
+      }
+    }, 5);
   }
 
   private getDisplayTimeByRewardType(): number {
