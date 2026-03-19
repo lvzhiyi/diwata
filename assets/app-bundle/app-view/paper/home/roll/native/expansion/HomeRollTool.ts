@@ -312,17 +312,18 @@ export class HomeRollTool  {
    
     if (skeleonData != null) {
       return new Promise<void>(async (resolve) => {
-        // 0.3秒后执行
-        const time = setTimeout(() => {
-          clearTimeout(time);
-          resolve();
-        }, 400 / app.manager.global.gameSpeed);
         const isAllMain = targetNodes.every(item => item.getComponent(Symbol).currentSymbolItem.main);
-        console.log('isAllMain', isAllMain);
 
         if(!isAllMain){
           EffectManager.inst.playEffect(AudioPath.GAME.STICK_BEAT, false, null, true);
         }
+
+        const delayTime = isAllMain ? 100 : 400;
+        // 0.3秒后执行
+        const time = setTimeout(() => {
+          clearTimeout(time);
+          resolve();
+        }, delayTime / app.manager.global.gameSpeed);
 
         targetNodes.map(item => {
           // 过滤主元素

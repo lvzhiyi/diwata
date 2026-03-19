@@ -1,4 +1,4 @@
-import { _decorator, Label, Node, sp, tween, Vec3 } from 'cc';
+import { _decorator, Label, Node, sp, Tween, tween, Vec3 } from 'cc';
 import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { app } from 'db://assets/app/app';
 import { RewardSubTypeEnum } from 'db://assets/basePlate/middleWare/enums/bet';
@@ -480,6 +480,9 @@ export class PopGrandPrize extends BaseView {
     SpineTool.clearAnimationNode(this.bgNode);
     const musicName = effectMap[this.currentAnimationName];
     EffectManager.inst.stopAllEffectsByName(musicName);
+    // 清除 textNode 身上所有的tween动画
+    const textNode = this.node.getChildByName('AmontBox');
+    Tween.stopAllByTarget(textNode);
 
     // 恢复背景音乐，如果当前是免费区间就播免费轮音乐，
     if(app.controller.slots.isFreeBonusSpin) {
