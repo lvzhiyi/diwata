@@ -37,6 +37,8 @@ export class PopFreeSpinResult extends BaseView {
 
   private amount: number = 0;
 
+  private isClickScreenToStop: boolean = false;
+
   protected onLoad(): void {
     this.numberWinBgAnimator = new NumberAnimator(this.AmountLabel);
     console.log('this.spineNode', this.spineNode);
@@ -45,6 +47,7 @@ export class PopFreeSpinResult extends BaseView {
 
   onShow(params: any) {
     this.init(params);
+    this.node.on(Node.EventType.TOUCH_START, this.clickScreenToStop, this);
     EffectManager.inst.playEffect(AudioPath.GAME.SETTLE);
     this.showAmountAnimation();
   }
@@ -82,7 +85,7 @@ export class PopFreeSpinResult extends BaseView {
     return new Promise<void>(async (resolve) => {
       await this.numberWinBgAnimator.animateTo(
         this.amount,
-        5.2,
+        this.getDisplayTimeByRewardType(),
         (value) => `${getP()} ` + numberToMoney(value, 3, false),
         true
       );
@@ -92,20 +95,60 @@ export class PopFreeSpinResult extends BaseView {
     });
   }
 
+  private getDisplayTimeByRewardType(): number {
+    let time = 5.2;
+
+    time = app.manager.global.gameSpeed === 2 ? time : time / app.manager.global.gameSpeed;
+
+    return time;
+  }
+
+  clickScreenToStop() {
+    if (this.isClickScreenToStop) {
+      // 如果是第二次点击，播放隐藏动画
+      this.stopAnimation();
+    } else {
+      this.isClickScreenToStop = true;
+
+      if (this.numberWinBgAnimator.isInAnimation()) {
+        // 如果数字动画在播放，点击后金额动画直接到最后一步
+        this.numberWinBgAnimator.stopAnimation();
+        EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.SETTLE);
+        EffectManager.inst.playEffect(AudioPath.GAME.SETTLE_END, false, null, true);
+        this.scheduleOnce(() => {
+          this.numberWinBgAnimator.animateTo(
+            this.amount,
+            0,
+            (value) => numberToMoney(value, 3, false),
+            true
+          );
+          this.scheduleOnce(() => {
+            this.stopAnimation();
+          }, 5);
+        });
+      } else {
+        // 如果数字动画没有在播放，点击后直接隐藏
+        this.stopAnimation();
+      }
+    }
+  }
+
   startAnimation() {
     this.spineSkeleton.setAnimation(0, 'congratlilation_in', false);
     this.spineSkeleton.addAnimation(0, 'congratlilation_loop', true);
   }
 
   stopAnimation() {
+    EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.SETTLE);
     this.spineSkeleton.setAnimation(0, 'congratlilation_out', false);
-    
     this.spineSkeleton.setCompleteListener(() => {
       app.manager.ui.hide({ name: 'PopFreeSpinResult' });
     });
   }
   
   onHide(result: undefined) {
+    this.isClickScreenToStop = false;
+    this.node.off(Node.EventType.TOUCH_START, this.clickScreenToStop, this);
     BGMManager.inst.playNormalModeBGM();
     this.numberWinBgAnimator.stopAnimation(true);
     SpineTool.clearAnimationNode(this.spineNode);

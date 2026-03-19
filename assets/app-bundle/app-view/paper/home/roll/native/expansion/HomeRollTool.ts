@@ -155,6 +155,7 @@ export class HomeRollTool  {
     goddess2Node: Node,
     goddessAnimName: string,
     goddess2AnimName: string,
+    delayTime: number = 800,
   ): Promise<void> {
     const goddessSkeleton = goddessNode?.getComponent(sp.Skeleton) || goddessNode?.addComponent(sp.Skeleton);
     goddessSkeleton.premultipliedAlpha = false;
@@ -172,10 +173,14 @@ export class HomeRollTool  {
     }
 
     await new Promise<void>(resolve => {
+      // 0.6秒后执行
+      const time = setTimeout(() => {
+        clearTimeout(time);
+        resolve();
+      }, delayTime / app.manager.global.gameSpeed);
       goddessSkeleton.setCompleteListener(() => {
         goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation_fg' : 'animation', true);
         goddessSkeleton.setCompleteListener(null);
-        resolve();
       });
     });
   }

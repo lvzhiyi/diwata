@@ -118,6 +118,8 @@ export const AudioPath = {
     SYMBOL_WIN: 'Game/SymbolWin',
     // settle
     SETTLE: 'Game/Settle',
+    // settle 结算音
+    SETTLE_END: 'Game/Settle_end',
     SETTLE_OPEN: 'Game/SettleOpen',
     // Mega双倍幸运音效
     MEGA_DUB: 'Game/MegaDUB',

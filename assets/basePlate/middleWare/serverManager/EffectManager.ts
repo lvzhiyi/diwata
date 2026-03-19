@@ -127,6 +127,7 @@ export class EffectManager extends Component {
     AudioPath.POPUP.NICE_END,
     AudioPath.POPUP.SUPER_END,
     AudioPath.GAME.SETTLE,
+    AudioPath.GAME.SETTLE_END,
 
     AudioPath.GAME.GODDESS_CHEER1,
     // 女神欢呼2

@@ -208,7 +208,6 @@ export class PopGrandPrize extends BaseView {
     }
 
     this.numberRollIsPlaying = true;
-    await delay(300);
     this.AmountLabel.active = true;
     this.numberWinBgAnimator.animateTo(
       this.amount,
@@ -356,7 +355,9 @@ export class PopGrandPrize extends BaseView {
       // 如果是第二次点击，播放隐藏动画
       this.playCloseAnimation();
     } else {
-      this.hideGrandPrize();
+      if (this.numberRollIsPlaying){
+        this.hideGrandPrize();
+      }
     }
   }
 
