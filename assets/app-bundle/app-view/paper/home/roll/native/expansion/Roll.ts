@@ -248,7 +248,8 @@ export class Roll extends Component {
       // 需要scatter停牌缓慢下落效果
       if(this.rollFrameAnimiationIsPlaying) {
         // 当前Roll有rollframe动画时，需要缓慢停止
-        const durations = [0.075, 0.125, 0.175, 0.225, 0.275, 0.325, 0.375, 0.425];
+        const timeScale = app.manager.global.gameSpeed;
+        const durations = [0.075 / timeScale, 0.125 / timeScale, 0.175 / timeScale, 0.225 / timeScale, 0.275 / timeScale, 0.325 / timeScale, 0.375 / timeScale, 0.425 / timeScale];
         const endTween = tween(parentNode);
         const hasScatterSymbol = reslutSymbols?.some(item => item?.symbolId === '3001');
         let hasUsedRandomScatter = false;
