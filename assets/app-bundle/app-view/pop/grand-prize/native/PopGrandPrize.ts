@@ -382,6 +382,8 @@ export class PopGrandPrize extends BaseView {
 
     // 停止数字动画和背景音乐
     this.numberWinBgAnimator.stopAnimation(true);
+    const musicName = effectMap[this.currentAnimationName];
+    EffectManager.inst.stopAllEffectsByName(musicName);
 
     try {
       // EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD2);

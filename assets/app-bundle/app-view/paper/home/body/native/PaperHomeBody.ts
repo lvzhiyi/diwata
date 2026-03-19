@@ -535,12 +535,12 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
       // 设置自动游戏模式 并且 未达到停止条件
       this.scheduleOnce(() => {
         this.startGame();
-      }, 0.5);
+      }, 0.1);
     } else if (globalManager.allwaysAutoPlay && this.isCanAutoPlay()) {
       // 普通自动游戏模式
       this.scheduleOnce(() => {
         this.startGame();
-      }, 0.5);
+      }, 0.1);
     }
   }
 
