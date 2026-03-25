@@ -15,7 +15,7 @@
         "asset-db": {
             "mount": {
                 "path": "./assets",
-                "readonly": true
+                "readonly": false
             }
         },
         "inspector": {
