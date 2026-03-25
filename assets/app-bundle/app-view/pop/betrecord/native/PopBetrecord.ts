@@ -74,6 +74,8 @@ export class PopBetrecord extends BaseView {
 
     private _isLoading = true;
 
+    private _pageLoadingUUID = '';
+
     private _hasMoreData = true;
 
     private _pageParams = {
@@ -221,7 +223,7 @@ export class PopBetrecord extends BaseView {
     async getData(id = '') {
       if (this._pageParams.pageNo === 0) {
         this.content.removeAllChildren();
-        this.PageLoading.getComponent(Loading).showLoading();
+        this._pageLoadingUUID = app.manager.ui.showLoading();
       }
 
       this._hasMoreData = true;
@@ -249,8 +251,9 @@ export class PopBetrecord extends BaseView {
         this._recordList = [...this._recordList, ...recordList ?? []];
       }
 
-      if (this.PageLoading.active) {
-        this.PageLoading.getComponent(Loading).hideLoading();
+      if (this._pageLoadingUUID) {
+        app.manager.ui.hideLoading(this._pageLoadingUUID);
+        this._pageLoadingUUID = '';
       }
 
       (recordList ?? []).forEach((item: any) => {

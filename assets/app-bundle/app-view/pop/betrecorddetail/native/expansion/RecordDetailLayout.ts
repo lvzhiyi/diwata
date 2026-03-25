@@ -48,6 +48,8 @@ export class RecordDetailLayout extends Component {
 
   private id: string = '';
 
+  private _pageLoadingUUID = '';
+
   /// 复用池
   private _nodePool: NodePool;
 
@@ -105,7 +107,8 @@ export class RecordDetailLayout extends Component {
   }
 
   show(id: string) {
-    this.LoadingScript.showLoading();
+    this._pageLoadingUUID = app.manager.ui.showLoading();
+
     this.id = id;
   }
 
@@ -117,8 +120,9 @@ export class RecordDetailLayout extends Component {
     this.listBox.destroyAllChildren();
     const gameRecordList = res.data?.gameRecordList ?? [];
 
-    if (this.LoadingScript.node.active) {
-      this.LoadingScript.hideLoading();
+    if (this._pageLoadingUUID) {
+      app.manager.ui.hideLoading(this._pageLoadingUUID);
+      this._pageLoadingUUID = '';
     }
 
     if (!gameRecordList.length) {
