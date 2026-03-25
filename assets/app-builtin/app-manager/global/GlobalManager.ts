@@ -62,7 +62,7 @@ export class GlobalManager extends BaseManager {
   public multiBetAmount: number = 1000;
 
   // 游戏id
-  private _gameId: string = '';
+  private _gameId: string = 'zhumeng006';
 
   // 用户余额
   private _creditCount: number = 0;
@@ -265,7 +265,8 @@ export class GlobalManager extends BaseManager {
    }
   
    public get betCount() {
-     let betCount = sys.localStorage.getItem('betCount_' + this.playerId);
+     const betCountKey = this.gameId + this.playerId;
+     let betCount = sys.localStorage.getItem('betCount_' + betCountKey);
     
      if (betCount) {
        betCount = parseFloat(betCount);
@@ -283,9 +284,11 @@ export class GlobalManager extends BaseManager {
    }
 
    public setBetCount(val: number, needSave: boolean = true) {
+     const betCountKey = this.gameId + this.playerId;
+
      if(needSave){
        console.log('setBetCount-保存', val);
-       sys.localStorage.setItem('betCount_' + this.playerId, val.toString());
+       sys.localStorage.setItem('betCount_' + betCountKey, val.toString());
      }
 
      this._betCount = val;
