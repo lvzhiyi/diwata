@@ -1,0 +1,76 @@
+
+gunzhou.png
+size: 1085,1092
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+chang_00
+  rotate: false
+  xy: 0, 546
+  size: 217, 546
+  orig: 265, 554
+  offset: 22, 5
+  index: -1
+chang_02
+  rotate: false
+  xy: 0, 0
+  size: 217, 546
+  orig: 265, 554
+  offset: 22, 5
+  index: -1
+chang_04
+  rotate: false
+  xy: 217, 546
+  size: 217, 546
+  orig: 265, 554
+  offset: 22, 5
+  index: -1
+chang_06
+  rotate: false
+  xy: 217, 0
+  size: 217, 546
+  orig: 265, 554
+  offset: 22, 5
+  index: -1
+chang_08
+  rotate: false
+  xy: 434, 546
+  size: 217, 546
+  orig: 265, 554
+  offset: 22, 5
+  index: -1
+chang_10
+  rotate: false
+  xy: 434, 0
+  size: 217, 546
+  orig: 265, 554
+  offset: 22, 5
+  index: -1
+chang_12
+  rotate: false
+  xy: 651, 546
+  size: 217, 546
+  orig: 265, 554
+  offset: 22, 5
+  index: -1
+chang_14
+  rotate: false
+  xy: 651, 0
+  size: 217, 546
+  orig: 265, 554
+  offset: 22, 5
+  index: -1
+chang_16
+  rotate: false
+  xy: 868, 546
+  size: 217, 546
+  orig: 265, 554
+  offset: 22, 5
+  index: -1
+chang_18
+  rotate: false
+  xy: 868, 0
+  size: 217, 546
+  orig: 265, 554
+  offset: 22, 5
+  index: -1

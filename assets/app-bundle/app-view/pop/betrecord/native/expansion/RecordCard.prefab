@@ -155,7 +155,7 @@
     "node": {
       "__id__": 2
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 6
     },
@@ -170,7 +170,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "1d9360d9-73b5-4134-9798-84f55a6e4baa@f9941",
+      "__uuid__": "2a4af9bc-4a70-5590-bc78-a4ea8591040e@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 1,
@@ -352,7 +352,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -210,
+      "x": -215,
       "y": 0,
       "z": 0
     },
@@ -477,9 +477,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 111,
+      "g": 135,
+      "b": 165,
       "a": 255
     },
     "_string": "Net/Special",
@@ -536,7 +536,7 @@
     "node": {
       "__id__": 11
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 17
     },
@@ -660,7 +660,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 110,
+      "x": 105,
       "y": 0,
       "z": 0
     },
@@ -782,9 +782,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 243,
-      "g": 223,
-      "b": 255,
+      "r": 5,
+      "g": 30,
+      "b": 88,
       "a": 255
     },
     "_string": "-",
@@ -1075,7 +1075,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 620,
+      "width": 630,
       "height": 61
     },
     "_anchorPoint": {
@@ -1221,7 +1221,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -210,
+      "x": -215,
       "y": 0,
       "z": 0
     },
@@ -1346,9 +1346,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 111,
+      "g": 135,
+      "b": 165,
       "a": 255
     },
     "_string": "Bet/Win",
@@ -1405,7 +1405,7 @@
     "node": {
       "__id__": 47
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 53
     },
@@ -1523,7 +1523,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 110,
+      "x": 105,
       "y": 0,
       "z": 0
     },
@@ -1645,9 +1645,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 243,
-      "g": 223,
-      "b": 255,
+      "r": 5,
+      "g": 30,
+      "b": 88,
       "a": 255
     },
     "_string": "-",
@@ -1764,7 +1764,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 620,
+      "width": 630,
       "height": 61
     },
     "_anchorPoint": {
@@ -1910,7 +1910,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -210,
+      "x": -215,
       "y": 0,
       "z": 0
     },
@@ -2004,8 +2004,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 115.0341796875,
-      "height": 67.8
+      "width": 203.4375,
+      "height": 37.8
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2035,12 +2035,12 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 111,
+      "g": 135,
+      "b": 165,
       "a": 255
     },
-    "_string": "Round \n Number",
+    "_string": "Round Number",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 30,
@@ -2094,7 +2094,7 @@
     "node": {
       "__id__": 75
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 81
     },
@@ -2218,7 +2218,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 110,
+      "x": 105,
       "y": 0,
       "z": 0
     },
@@ -2340,9 +2340,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 243,
-      "g": 223,
-      "b": 255,
+      "r": 5,
+      "g": 30,
+      "b": 88,
       "a": 255
     },
     "_string": "-",
@@ -2522,8 +2522,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 60,
-      "height": 56
+      "width": 26,
+      "height": 26
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2559,12 +2559,12 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "585c9cc4-4dcf-4e94-b250-9677d46fd31e@f9941",
+      "__uuid__": "9f41334a-859f-5039-a61c-b78be653302d@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
     "_fillType": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -2798,7 +2798,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 620,
+      "width": 630,
       "height": 61
     },
     "_anchorPoint": {
@@ -2944,7 +2944,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -210,
+      "x": -215,
       "y": 0,
       "z": 0
     },
@@ -3069,9 +3069,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 111,
+      "g": 135,
+      "b": 165,
       "a": 255
     },
     "_string": "Time",
@@ -3128,7 +3128,7 @@
     "node": {
       "__id__": 118
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 124
     },
@@ -3246,7 +3246,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 110,
+      "x": 105,
       "y": 0,
       "z": 0
     },
@@ -3368,9 +3368,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 243,
-      "g": 223,
-      "b": 255,
+      "r": 5,
+      "g": 30,
+      "b": 88,
       "a": 255
     },
     "_string": "-",
@@ -3487,7 +3487,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 620,
+      "width": 630,
       "height": 61
     },
     "_anchorPoint": {
@@ -3566,7 +3566,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 640,
+      "width": 700,
       "height": 280
     },
     "_anchorPoint": {
@@ -3641,7 +3641,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "26d17902-6204-47ee-8e56-543f240f03fe@f9941",
+      "__uuid__": "f3db2632-a28e-56ff-9757-b5487635aff9@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 1,
@@ -3865,7 +3865,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 640,
+      "width": 700,
       "height": 280
     },
     "_anchorPoint": {

@@ -1,0 +1,3268 @@
+{
+  "version": "1.2.0",
+  "exportedAt": "2026-10-13T14:51:01.449Z",
+  "project": "mayari",
+  "outputDir": "/Users/lv/work/cocos/mayari-cocos/skin-export",
+  "stats": {
+    "imageCount": 187,
+    "spineGroupCount": 7,
+    "spineFileCount": 150,
+    "fontGroupCount": 7,
+    "fontFileCount": 24
+  },
+  "images": [
+    {
+      "uuid": "a4cadc68-5c93-4683-8ee0-cf3bb6acb132",
+      "url": "db://assets/app-appinit/res/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/singleColor.png",
+      "exportPath": "default/images/app-appinit/res/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/app-appinit/singleColor.png"
+    },
+    {
+      "uuid": "fc32bba8-54d2-41dc-b76d-f8663559a746",
+      "url": "db://assets/app-appinit/res/images/beijin_01.png",
+      "name": "beijin_01.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/images/beijin_01.png",
+      "exportPath": "default/images/app-appinit/res/images/beijin_01.png",
+      "type": "image",
+      "exportUiPath": "image/app-appinit/beijin_01.png"
+    },
+    {
+      "uuid": "49f5f48f-e8d6-4482-a94c-7b5f79e50693",
+      "url": "db://assets/app-appinit/res/images/check.png",
+      "name": "check.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/images/check.png",
+      "exportPath": "default/images/app-appinit/res/images/check.png",
+      "type": "image",
+      "exportUiPath": "image/app-appinit/check.png"
+    },
+    {
+      "uuid": "9c484859-a110-4e59-9655-97004247824b",
+      "url": "db://assets/app-appinit/res/images/check_01.png",
+      "name": "check_01.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/images/check_01.png",
+      "exportPath": "default/images/app-appinit/res/images/check_01.png",
+      "type": "image",
+      "exportUiPath": "image/app-appinit/check_01.png"
+    },
+    {
+      "uuid": "1bb2e547-dcee-41ba-ab41-af6186dc42a7",
+      "url": "db://assets/app-appinit/res/images/jiantou_01.png",
+      "name": "jiantou_01.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/images/jiantou_01.png",
+      "exportPath": "default/images/app-appinit/res/images/jiantou_01.png",
+      "type": "image",
+      "exportUiPath": "image/app-appinit/jiantou_01.png"
+    },
+    {
+      "uuid": "9a6f2b25-7230-41c5-aacb-e664fa17f328",
+      "url": "db://assets/app-appinit/res/images/jindu_01.png",
+      "name": "jindu_01.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/images/jindu_01.png",
+      "exportPath": "default/images/app-appinit/res/images/jindu_01.png",
+      "type": "image",
+      "exportUiPath": "image/app-appinit/jindu_01.png"
+    },
+    {
+      "uuid": "3b5a73e2-dae4-47c6-95f9-33ffd98b370a",
+      "url": "db://assets/app-appinit/res/images/jindu_02.png",
+      "name": "jindu_02.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/images/jindu_02.png",
+      "exportPath": "default/images/app-appinit/res/images/jindu_02.png",
+      "type": "image",
+      "exportUiPath": "image/app-appinit/jindu_02.png"
+    },
+    {
+      "uuid": "9a4c3598-b815-4003-a2e6-524cc52ef340",
+      "url": "db://assets/app-appinit/res/images/logo.png",
+      "name": "logo.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/images/logo.png",
+      "exportPath": "default/images/app-appinit/res/images/logo.png",
+      "type": "image",
+      "exportUiPath": "image/app-appinit/logo.png"
+    },
+    {
+      "uuid": "c80e2916-d6e9-4d37-a590-7575ca197496",
+      "url": "db://assets/app-appinit/res/images/play.png",
+      "name": "play.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/images/play.png",
+      "exportPath": "default/images/app-appinit/res/images/play.png",
+      "type": "image",
+      "exportUiPath": "image/app-appinit/play.png"
+    },
+    {
+      "uuid": "1907ff23-fa6c-4159-89fe-563191bbc86b",
+      "url": "db://assets/app-appinit/res/images/yuan_01.png",
+      "name": "yuan_01.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/images/yuan_01.png",
+      "exportPath": "default/images/app-appinit/res/images/yuan_01.png",
+      "type": "image",
+      "exportUiPath": "image/app-appinit/yuan_01.png"
+    },
+    {
+      "uuid": "e40c546d-12f3-4241-932f-ff43fb8bb694",
+      "url": "db://assets/app-appinit/res/images/yuan_02.png",
+      "name": "yuan_02.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/images/yuan_02.png",
+      "exportPath": "default/images/app-appinit/res/images/yuan_02.png",
+      "type": "image",
+      "exportUiPath": "image/app-appinit/yuan_02.png"
+    },
+    {
+      "uuid": "f944554e-69b7-4949-aeda-84a0575dd6ef",
+      "url": "db://assets/resources/icons/blursymbols/1001.png",
+      "name": "1001.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/1001.png",
+      "exportPath": "default/images/resources/icons/blursymbols/1001.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1001.png"
+    },
+    {
+      "uuid": "81c39f7d-54d8-4a03-bd0b-52f7c18950f4",
+      "url": "db://assets/resources/icons/blursymbols/1002.png",
+      "name": "1002.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/1002.png",
+      "exportPath": "default/images/resources/icons/blursymbols/1002.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1002.png"
+    },
+    {
+      "uuid": "d79e5e08-39f2-470b-b980-65ceda5a090b",
+      "url": "db://assets/resources/icons/blursymbols/1003.png",
+      "name": "1003.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/1003.png",
+      "exportPath": "default/images/resources/icons/blursymbols/1003.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1003.png"
+    },
+    {
+      "uuid": "d4b411eb-1ead-43c0-a001-f7a8c1566f56",
+      "url": "db://assets/resources/icons/blursymbols/1004.png",
+      "name": "1004.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/1004.png",
+      "exportPath": "default/images/resources/icons/blursymbols/1004.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1004.png"
+    },
+    {
+      "uuid": "9f3ef831-c238-4ce2-9ffe-a33b672ef841",
+      "url": "db://assets/resources/icons/blursymbols/1005.png",
+      "name": "1005.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/1005.png",
+      "exportPath": "default/images/resources/icons/blursymbols/1005.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1005.png"
+    },
+    {
+      "uuid": "9dca26f3-4ed5-475f-8e0d-ee66e58b315b",
+      "url": "db://assets/resources/icons/blursymbols/1006.png",
+      "name": "1006.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/1006.png",
+      "exportPath": "default/images/resources/icons/blursymbols/1006.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1006.png"
+    },
+    {
+      "uuid": "8c124324-5b0a-40c8-a844-7675aaabd58c",
+      "url": "db://assets/resources/icons/blursymbols/1007.png",
+      "name": "1007.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/1007.png",
+      "exportPath": "default/images/resources/icons/blursymbols/1007.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1007.png"
+    },
+    {
+      "uuid": "4334bde7-ca9a-43e0-848b-6c20a8690c59",
+      "url": "db://assets/resources/icons/blursymbols/1008.png",
+      "name": "1008.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/1008.png",
+      "exportPath": "default/images/resources/icons/blursymbols/1008.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1008.png"
+    },
+    {
+      "uuid": "665b8019-6d34-4b0b-bb5b-667da2a66f7d",
+      "url": "db://assets/resources/icons/blursymbols/1009.png",
+      "name": "1009.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/1009.png",
+      "exportPath": "default/images/resources/icons/blursymbols/1009.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1009.png"
+    },
+    {
+      "uuid": "0c9ee8aa-b66d-4e29-bba5-cdb0c5818bd9",
+      "url": "db://assets/resources/icons/blursymbols/1010.png",
+      "name": "1010.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/1010.png",
+      "exportPath": "default/images/resources/icons/blursymbols/1010.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1010.png"
+    },
+    {
+      "uuid": "58029746-84da-4cb8-a4dd-56113690c047",
+      "url": "db://assets/resources/icons/blursymbols/3001.png",
+      "name": "3001.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/3001.png",
+      "exportPath": "default/images/resources/icons/blursymbols/3001.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/3001.png"
+    },
+    {
+      "uuid": "5abe1d9f-9204-4c46-8d62-b6be61d70163",
+      "url": "db://assets/resources/icons/blursymbols/4010.png",
+      "name": "4010.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/4010.png",
+      "exportPath": "default/images/resources/icons/blursymbols/4010.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/4010.png"
+    },
+    {
+      "uuid": "b36f3d00-b06b-47cd-9735-b3bb02e0d549",
+      "url": "db://assets/resources/icons/blursymbols/4011.png",
+      "name": "4011.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/4011.png",
+      "exportPath": "default/images/resources/icons/blursymbols/4011.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/4011.png"
+    },
+    {
+      "uuid": "0a9dbb5d-c5af-4ec8-8f4b-12fe3612bfc1",
+      "url": "db://assets/resources/icons/blursymbols/5001.png",
+      "name": "5001.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/blursymbols/5001.png",
+      "exportPath": "default/images/resources/icons/blursymbols/5001.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/5001.png"
+    },
+    {
+      "uuid": "2edab693-502c-4c89-af4f-5e581d13fee0",
+      "url": "db://assets/resources/icons/homeIcons/freeSpine_bg.png",
+      "name": "freeSpine_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/freeSpine_bg.png",
+      "exportPath": "default/images/resources/icons/homeIcons/freeSpine_bg.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/freeSpine_bg.png"
+    },
+    {
+      "uuid": "6b753cf8-f0f7-43c1-bb7c-34403bc99ca5",
+      "url": "db://assets/resources/icons/homeIcons/home_Free_time.png",
+      "name": "home_Free_time.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_Free_time.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_Free_time.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_Free_time.png"
+    },
+    {
+      "uuid": "0786ecd0-0bcb-43d4-b162-fe1c5a791ddf",
+      "url": "db://assets/resources/icons/homeIcons/home_auto_off.png",
+      "name": "home_auto_off.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_auto_off.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_auto_off.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_auto_off.png"
+    },
+    {
+      "uuid": "9850ffbd-abd0-499b-9d7f-ac8b12836493",
+      "url": "db://assets/resources/icons/homeIcons/home_auto_on.png",
+      "name": "home_auto_on.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_auto_on.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_auto_on.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_auto_on.png"
+    },
+    {
+      "uuid": "f455f446-310e-4ef4-abd5-d5219cc89aa7",
+      "url": "db://assets/resources/icons/homeIcons/home_buybons.png",
+      "name": "home_buybons.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_buybons.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_buybons.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_buybons.png"
+    },
+    {
+      "uuid": "26174d9a-a719-4e71-96b1-6d4f0c2be804",
+      "url": "db://assets/resources/icons/homeIcons/home_buybons_bg.png",
+      "name": "home_buybons_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_buybons_bg.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_buybons_bg.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_buybons_bg.png"
+    },
+    {
+      "uuid": "e5470475-411d-4e89-af92-2989ceed750c",
+      "url": "db://assets/resources/icons/homeIcons/home_money.png",
+      "name": "home_money.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_money.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_money.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_money.png"
+    },
+    {
+      "uuid": "55026d72-0a8f-462f-a61c-ac71afbbc059",
+      "url": "db://assets/resources/icons/homeIcons/home_queick_off.png",
+      "name": "home_queick_off.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_queick_off.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_queick_off.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_queick_off.png"
+    },
+    {
+      "uuid": "b8840c3b-695e-41a8-af7d-55618f9a1094",
+      "url": "db://assets/resources/icons/homeIcons/home_queick_on.png",
+      "name": "home_queick_on.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_queick_on.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_queick_on.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_queick_on.png"
+    },
+    {
+      "uuid": "11a2f86a-0fc9-4d05-ac06-b6a551211eec",
+      "url": "db://assets/resources/icons/homeIcons/home_quick.png",
+      "name": "home_quick.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_quick.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_quick.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_quick.png"
+    },
+    {
+      "uuid": "61a03b89-f1a6-4ff5-97f8-e4e6522d541e",
+      "url": "db://assets/resources/icons/homeIcons/home_quick_normal.png",
+      "name": "home_quick_normal.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_quick_normal.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_quick_normal.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_quick_normal.png"
+    },
+    {
+      "uuid": "4f2d2564-7c59-42d9-8eed-9232c1c3e846",
+      "url": "db://assets/resources/icons/homeIcons/home_quick_turbo.png",
+      "name": "home_quick_turbo.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_quick_turbo.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_quick_turbo.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_quick_turbo.png"
+    },
+    {
+      "uuid": "c8697e67-7836-404f-b953-a5bfc21d7824",
+      "url": "db://assets/resources/icons/homeIcons/home_setting.png",
+      "name": "home_setting.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_setting.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_setting.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_setting.png"
+    },
+    {
+      "uuid": "154548a7-a5c7-4989-a9bc-39703e7739ca",
+      "url": "db://assets/resources/icons/homeIcons/home_start.png",
+      "name": "home_start.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/homeIcons/home_start.png",
+      "exportPath": "default/images/resources/icons/homeIcons/home_start.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/home_start.png"
+    },
+    {
+      "uuid": "8170d43e-29b6-416d-85f5-f83eeaf2fafd",
+      "url": "db://assets/resources/icons/publicicons/alert_border.png",
+      "name": "alert_border.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/alert_border.png",
+      "exportPath": "default/images/resources/icons/publicicons/alert_border.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/alert_border.png"
+    },
+    {
+      "uuid": "613c4a68-f3cf-47fe-a455-fce02781db0c",
+      "url": "db://assets/resources/icons/publicicons/autoset_cancle.png",
+      "name": "autoset_cancle.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/autoset_cancle.png",
+      "exportPath": "default/images/resources/icons/publicicons/autoset_cancle.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/autoset_cancle.png"
+    },
+    {
+      "uuid": "6330a3fa-beb0-4fac-8ba9-6728ddff5e18",
+      "url": "db://assets/resources/icons/publicicons/autoset_start.png",
+      "name": "autoset_start.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/autoset_start.png",
+      "exportPath": "default/images/resources/icons/publicicons/autoset_start.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/autoset_start.png"
+    },
+    {
+      "uuid": "6da98529-84a0-44ad-adca-6fbc4cc9b677",
+      "url": "db://assets/resources/icons/publicicons/bet_record_max.png",
+      "name": "bet_record_max.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/bet_record_max.png",
+      "exportPath": "default/images/resources/icons/publicicons/bet_record_max.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/bet_record_max.png"
+    },
+    {
+      "uuid": "7117c348-1555-437a-ad6e-28dfd7cf57af",
+      "url": "db://assets/resources/icons/publicicons/common_add.png",
+      "name": "common_add.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/common_add.png",
+      "exportPath": "default/images/resources/icons/publicicons/common_add.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/common_add.png"
+    },
+    {
+      "uuid": "d3929346-aa70-4614-80f4-03903e18ca41",
+      "url": "db://assets/resources/icons/publicicons/common_back.png",
+      "name": "common_back.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/common_back.png",
+      "exportPath": "default/images/resources/icons/publicicons/common_back.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/common_back.png"
+    },
+    {
+      "uuid": "61f591f2-a545-4a94-86dc-77c1f6c9c942",
+      "url": "db://assets/resources/icons/publicicons/common_close.png",
+      "name": "common_close.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/common_close.png",
+      "exportPath": "default/images/resources/icons/publicicons/common_close.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/common_close.png"
+    },
+    {
+      "uuid": "585c9cc4-4dcf-4e94-b250-9677d46fd31e",
+      "url": "db://assets/resources/icons/publicicons/common_copy.png",
+      "name": "common_copy.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/common_copy.png",
+      "exportPath": "default/images/resources/icons/publicicons/common_copy.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/common_copy.png"
+    },
+    {
+      "uuid": "9d76e306-eaff-4cdd-a813-4de1ada2f6cc",
+      "url": "db://assets/resources/icons/publicicons/common_sub.png",
+      "name": "common_sub.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/common_sub.png",
+      "exportPath": "default/images/resources/icons/publicicons/common_sub.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/common_sub.png"
+    },
+    {
+      "uuid": "a2789e17-fba0-4aa7-bc01-a1d5f902b388",
+      "url": "db://assets/resources/icons/publicicons/comonSub_bg.png",
+      "name": "comonSub_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/comonSub_bg.png",
+      "exportPath": "default/images/resources/icons/publicicons/comonSub_bg.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/comonSub_bg.png"
+    },
+    {
+      "uuid": "f9f9069c-1497-4257-afd6-be457693fa5e",
+      "url": "db://assets/resources/icons/publicicons/icon_freespins.png",
+      "name": "icon_freespins.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/icon_freespins.png",
+      "exportPath": "default/images/resources/icons/publicicons/icon_freespins.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/icon_freespins.png"
+    },
+    {
+      "uuid": "3512f77b-ff3a-4372-b6a3-38cf9139ddd2",
+      "url": "db://assets/resources/icons/publicicons/input_bg.png",
+      "name": "input_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/input_bg.png",
+      "exportPath": "default/images/resources/icons/publicicons/input_bg.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/input_bg.png"
+    },
+    {
+      "uuid": "e1201abc-602c-4e9c-82bc-3d64c64bfda9",
+      "url": "db://assets/resources/icons/publicicons/loading.png",
+      "name": "loading.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/loading.png",
+      "exportPath": "default/images/resources/icons/publicicons/loading.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/loading.png"
+    },
+    {
+      "uuid": "db198d88-0861-4dfd-baac-a8012b554b01",
+      "url": "db://assets/resources/icons/publicicons/normalbtn_Bg_select.png",
+      "name": "normalbtn_Bg_select.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/normalbtn_Bg_select.png",
+      "exportPath": "default/images/resources/icons/publicicons/normalbtn_Bg_select.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/normalbtn_Bg_select.png"
+    },
+    {
+      "uuid": "80fa01fb-1c6b-4946-9215-1b184a11bbed",
+      "url": "db://assets/resources/icons/publicicons/normalbtn_bg.png",
+      "name": "normalbtn_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/normalbtn_bg.png",
+      "exportPath": "default/images/resources/icons/publicicons/normalbtn_bg.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/normalbtn_bg.png"
+    },
+    {
+      "uuid": "edb7b9d4-a5a7-4dd8-91e5-011738dec15a",
+      "url": "db://assets/resources/icons/publicicons/record_bg.png",
+      "name": "record_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/record_bg.png",
+      "exportPath": "default/images/resources/icons/publicicons/record_bg.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/record_bg.png"
+    },
+    {
+      "uuid": "c9fdb069-40af-411f-a780-c9780f3f5de5",
+      "url": "db://assets/resources/icons/publicicons/scrollbar.png",
+      "name": "scrollbar.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/scrollbar.png",
+      "exportPath": "default/images/resources/icons/publicicons/scrollbar.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/scrollbar.png"
+    },
+    {
+      "uuid": "20258208-1f3e-4362-935a-884a098983f4",
+      "url": "db://assets/resources/icons/publicicons/toast_bg.png",
+      "name": "toast_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/publicicons/toast_bg.png",
+      "exportPath": "default/images/resources/icons/publicicons/toast_bg.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/toast_bg.png"
+    },
+    {
+      "uuid": "fb058914-5408-4e54-b2b0-b5bf4ae92045",
+      "url": "db://assets/resources/icons/symbols/1001.png",
+      "name": "1001.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/1001.png",
+      "exportPath": "default/images/resources/icons/symbols/1001.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1001_f6ad00.png"
+    },
+    {
+      "uuid": "f8fed465-d8c0-4c4c-8f7f-9e454c57bd12",
+      "url": "db://assets/resources/icons/symbols/1002.png",
+      "name": "1002.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/1002.png",
+      "exportPath": "default/images/resources/icons/symbols/1002.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1002_fb3edc.png"
+    },
+    {
+      "uuid": "d1836ebd-4a12-4639-bb2c-f2c7f134aaa8",
+      "url": "db://assets/resources/icons/symbols/1003.png",
+      "name": "1003.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/1003.png",
+      "exportPath": "default/images/resources/icons/symbols/1003.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1003_d7d1ae.png"
+    },
+    {
+      "uuid": "8b8addc6-fafb-422e-ac9c-797403c084ce",
+      "url": "db://assets/resources/icons/symbols/1004.png",
+      "name": "1004.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/1004.png",
+      "exportPath": "default/images/resources/icons/symbols/1004.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1004_6d2e3d.png"
+    },
+    {
+      "uuid": "af047f7d-1c7f-4e32-8948-49bcda452b1e",
+      "url": "db://assets/resources/icons/symbols/1005.png",
+      "name": "1005.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/1005.png",
+      "exportPath": "default/images/resources/icons/symbols/1005.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1005_6f668b.png"
+    },
+    {
+      "uuid": "681a68f5-9f7e-40e8-9635-48338c498840",
+      "url": "db://assets/resources/icons/symbols/1006.png",
+      "name": "1006.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/1006.png",
+      "exportPath": "default/images/resources/icons/symbols/1006.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1006_34677e.png"
+    },
+    {
+      "uuid": "eec72359-f16b-4248-b437-40b3d225dc2f",
+      "url": "db://assets/resources/icons/symbols/1007.png",
+      "name": "1007.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/1007.png",
+      "exportPath": "default/images/resources/icons/symbols/1007.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1007_fd3ee8.png"
+    },
+    {
+      "uuid": "fbb82726-6fc4-45bd-83c4-ad2e3031e87e",
+      "url": "db://assets/resources/icons/symbols/1008.png",
+      "name": "1008.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/1008.png",
+      "exportPath": "default/images/resources/icons/symbols/1008.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1008_d921da.png"
+    },
+    {
+      "uuid": "8d8bad7b-73f5-4345-9902-bd752e3d4981",
+      "url": "db://assets/resources/icons/symbols/1009.png",
+      "name": "1009.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/1009.png",
+      "exportPath": "default/images/resources/icons/symbols/1009.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1009_96ccee.png"
+    },
+    {
+      "uuid": "932bdb61-5f29-444d-b915-edb4c28202db",
+      "url": "db://assets/resources/icons/symbols/1010.png",
+      "name": "1010.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/1010.png",
+      "exportPath": "default/images/resources/icons/symbols/1010.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/1010_1cd352.png"
+    },
+    {
+      "uuid": "6de65346-8bd3-44f5-99fa-e63570d76ad2",
+      "url": "db://assets/resources/icons/symbols/3001.png",
+      "name": "3001.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/3001.png",
+      "exportPath": "default/images/resources/icons/symbols/3001.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/3001_ba88df.png"
+    },
+    {
+      "uuid": "97a2ef38-351f-43a8-b683-a84c0b40d58d",
+      "url": "db://assets/resources/icons/symbols/4010.png",
+      "name": "4010.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/4010.png",
+      "exportPath": "default/images/resources/icons/symbols/4010.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/4010_4cf777.png"
+    },
+    {
+      "uuid": "d645b024-31e3-496c-892f-c051175af622",
+      "url": "db://assets/resources/icons/symbols/4011.png",
+      "name": "4011.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/4011.png",
+      "exportPath": "default/images/resources/icons/symbols/4011.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/4011_e07290.png"
+    },
+    {
+      "uuid": "82891fa9-938a-4d26-b3fd-755985160c03",
+      "url": "db://assets/resources/icons/symbols/5001.png",
+      "name": "5001.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/icons/symbols/5001.png",
+      "exportPath": "default/images/resources/icons/symbols/5001.png",
+      "type": "image",
+      "exportUiPath": "image/resources-icons/5001_ed1b50.png"
+    },
+    {
+      "uuid": "0eaa6292-5e3d-44eb-82bc-fd3c612f2576",
+      "url": "db://assets/basePlate/middleWare/commonUI/ProgressBar/progress.png",
+      "name": "progress.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/basePlate/middleWare/commonUI/ProgressBar/progress.png",
+      "exportPath": "default/images/basePlate/middleWare/commonUI/ProgressBar/progress.png",
+      "type": "image",
+      "exportUiPath": "image/basePlate-middleWare/progress.png"
+    },
+    {
+      "uuid": "b2de9563-c5bb-4d00-a825-c26edd63b31e",
+      "url": "db://assets/basePlate/middleWare/commonUI/ProgressBar/progress_bg.png",
+      "name": "progress_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/basePlate/middleWare/commonUI/ProgressBar/progress_bg.png",
+      "exportPath": "default/images/basePlate/middleWare/commonUI/ProgressBar/progress_bg.png",
+      "type": "image",
+      "exportUiPath": "image/basePlate-middleWare/progress_bg.png"
+    },
+    {
+      "uuid": "ec88f700-3e42-4860-ba3f-f86fa08d053a",
+      "url": "db://assets/basePlate/middleWare/commonUI/ProgressBar/progress_border.png",
+      "name": "progress_border.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/basePlate/middleWare/commonUI/ProgressBar/progress_border.png",
+      "exportPath": "default/images/basePlate/middleWare/commonUI/ProgressBar/progress_border.png",
+      "type": "image",
+      "exportUiPath": "image/basePlate-middleWare/progress_border.png"
+    },
+    {
+      "uuid": "dcbf4bdb-0f4b-4914-a223-39f862a7a158",
+      "url": "db://assets/app-bundle/app-view/page/home/resources/home_bg.png",
+      "name": "home_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/page/home/resources/home_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/page/home/resources/home_bg.png",
+      "type": "image",
+      "exportUiPath": "image/page-home/home_bg.png"
+    },
+    {
+      "uuid": "b95233e9-c5ad-46a1-9ce5-36fecc9145c6",
+      "url": "db://assets/app-bundle/app-view/page/home/resources/home_bg_free.png",
+      "name": "home_bg_free.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/page/home/resources/home_bg_free.png",
+      "exportPath": "default/images/app-bundle/app-view/page/home/resources/home_bg_free.png",
+      "type": "image",
+      "exportUiPath": "image/page-home/home_bg_free.png"
+    },
+    {
+      "uuid": "752a8edd-1489-430d-b601-fe4ac1d656ec",
+      "url": "db://assets/app-bundle/app-view/page/home/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/page/home/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/page/home/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/page-home/singleColor.png"
+    },
+    {
+      "uuid": "62c2aa3b-073f-4d7f-894b-1a6e453f10fa",
+      "url": "db://assets/app-bundle/app-view/pop/autosetting/resources/autoSetting_bg.png",
+      "name": "autoSetting_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/autosetting/resources/autoSetting_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/autosetting/resources/autoSetting_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-autosetting/autoSetting_bg.png"
+    },
+    {
+      "uuid": "ece7fd41-3384-4f63-b6fa-27820a448458",
+      "url": "db://assets/app-bundle/app-view/pop/autosetting/resources/auto_title.png",
+      "name": "auto_title.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/autosetting/resources/auto_title.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/autosetting/resources/auto_title.png",
+      "type": "image",
+      "exportUiPath": "image/pop-autosetting/auto_title.png"
+    },
+    {
+      "uuid": "0a8047dd-040c-4f33-8250-0082c5ea8d1c",
+      "url": "db://assets/app-bundle/app-view/pop/autosetting/resources/autoset_check.png",
+      "name": "autoset_check.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/autosetting/resources/autoset_check.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/autosetting/resources/autoset_check.png",
+      "type": "image",
+      "exportUiPath": "image/pop-autosetting/autoset_check.png"
+    },
+    {
+      "uuid": "2b63beac-dfab-4e91-896a-78eabe48b231",
+      "url": "db://assets/app-bundle/app-view/pop/autosetting/resources/itembox_select.png",
+      "name": "itembox_select.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/autosetting/resources/itembox_select.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/autosetting/resources/itembox_select.png",
+      "type": "image",
+      "exportUiPath": "image/pop-autosetting/itembox_select.png"
+    },
+    {
+      "uuid": "c26e4d4d-89d7-4ad8-a099-aa2de48c0c47",
+      "url": "db://assets/app-bundle/app-view/pop/autosetting/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/autosetting/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/autosetting/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/pop-autosetting/singleColor.png"
+    },
+    {
+      "uuid": "e754d4fe-6f12-4371-98c9-7678e99e64e3",
+      "url": "db://assets/app-bundle/app-view/pop/betamout/resources/betAmout_gird_normal.png",
+      "name": "betAmout_gird_normal.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betamout/resources/betAmout_gird_normal.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betamout/resources/betAmout_gird_normal.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betamout/betAmout_gird_normal.png"
+    },
+    {
+      "uuid": "c157752c-9766-4d06-a81b-a1d81db0ab5d",
+      "url": "db://assets/app-bundle/app-view/pop/betamout/resources/betAmout_gird_select.png",
+      "name": "betAmout_gird_select.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betamout/resources/betAmout_gird_select.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betamout/resources/betAmout_gird_select.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betamout/betAmout_gird_select.png"
+    },
+    {
+      "uuid": "84c0589f-eee5-4e4f-9608-5e88081503f6",
+      "url": "db://assets/app-bundle/app-view/pop/betamout/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betamout/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betamout/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betamout/singleColor.png"
+    },
+    {
+      "uuid": "cef67797-ecd6-4dfd-a304-6d6936b05566",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/bet_record_line.png",
+      "name": "bet_record_line.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/bet_record_line.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/bet_record_line.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/bet_record_line.png"
+    },
+    {
+      "uuid": "427e688d-a5e3-49e4-8dd0-5d319d60686a",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/bet_record_title.png",
+      "name": "bet_record_title.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/bet_record_title.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/bet_record_title.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/bet_record_title.png"
+    },
+    {
+      "uuid": "074c8a0a-f8b9-4d75-8f05-6404f77d32f3",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/dateSelect_bg.png",
+      "name": "dateSelect_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/dateSelect_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/dateSelect_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/dateSelect_bg.png"
+    },
+    {
+      "uuid": "3f621352-c86f-48bf-9a86-0dd2765aa4dd",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/recordBig_bg.png",
+      "name": "recordBig_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/recordBig_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/recordBig_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/recordBig_bg.png"
+    },
+    {
+      "uuid": "26d17902-6204-47ee-8e56-543f240f03fe",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/recordCard_bg.png",
+      "name": "recordCard_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/recordCard_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/recordCard_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/recordCard_bg.png"
+    },
+    {
+      "uuid": "1d9360d9-73b5-4134-9798-84f55a6e4baa",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/recordCard_gird.png",
+      "name": "recordCard_gird.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/recordCard_gird.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/recordCard_gird.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/recordCard_gird.png"
+    },
+    {
+      "uuid": "71cabb7e-001f-4db7-9248-83c05b1db89f",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/record_green_bg.png",
+      "name": "record_green_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/record_green_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/record_green_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/record_green_bg.png"
+    },
+    {
+      "uuid": "59266d12-6e69-4083-ad24-16cffc98a599",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/record_red_bg.png",
+      "name": "record_red_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/record_red_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/record_red_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/record_red_bg.png"
+    },
+    {
+      "uuid": "a7a9e56f-086d-405f-8fc9-44e1c087c296",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/singleColor.png"
+    },
+    {
+      "uuid": "b1682cc7-b9b8-47fd-bab7-c410c4db86bd",
+      "url": "db://assets/app-bundle/app-view/pop/betrecorddetail/resources/emptyicon.png",
+      "name": "emptyicon.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecorddetail/resources/emptyicon.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecorddetail/resources/emptyicon.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecorddetail/emptyicon.png"
+    },
+    {
+      "uuid": "3e225fba-a8da-49a5-86fc-fa8017d67341",
+      "url": "db://assets/app-bundle/app-view/pop/betrecorddetail/resources/recordDetailBig_bg.png",
+      "name": "recordDetailBig_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecorddetail/resources/recordDetailBig_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecorddetail/resources/recordDetailBig_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecorddetail/recordDetailBig_bg.png"
+    },
+    {
+      "uuid": "07356b34-2dd6-45a5-b747-f0571440b1ab",
+      "url": "db://assets/app-bundle/app-view/pop/betrecorddetail/resources/recordDetailCard_bg.png",
+      "name": "recordDetailCard_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecorddetail/resources/recordDetailCard_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecorddetail/resources/recordDetailCard_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecorddetail/recordDetailCard_bg.png"
+    },
+    {
+      "uuid": "ddc878e0-d8fb-49be-82f0-f984a4b4310e",
+      "url": "db://assets/app-bundle/app-view/pop/betrecorddetail/resources/recordDetail_gird.png",
+      "name": "recordDetail_gird.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecorddetail/resources/recordDetail_gird.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecorddetail/resources/recordDetail_gird.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecorddetail/recordDetail_gird.png"
+    },
+    {
+      "uuid": "86755f79-2dd2-4c83-b1c2-765b293bd10a",
+      "url": "db://assets/app-bundle/app-view/pop/betrecorddetail/resources/record_detail.png",
+      "name": "record_detail.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecorddetail/resources/record_detail.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecorddetail/resources/record_detail.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecorddetail/record_detail.png"
+    },
+    {
+      "uuid": "42fc1266-b8f3-4498-bc00-a87cdaaa58dc",
+      "url": "db://assets/app-bundle/app-view/pop/betrecorddetail/resources/record_detail_itembg.png",
+      "name": "record_detail_itembg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecorddetail/resources/record_detail_itembg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecorddetail/resources/record_detail_itembg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecorddetail/record_detail_itembg.png"
+    },
+    {
+      "uuid": "b76e52bf-da4f-4b6f-bf0e-e1fef05888cf",
+      "url": "db://assets/app-bundle/app-view/pop/betrecorddetail/resources/record_detail_number_Bg.png",
+      "name": "record_detail_number_Bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecorddetail/resources/record_detail_number_Bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecorddetail/resources/record_detail_number_Bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecorddetail/record_detail_number_Bg.png"
+    },
+    {
+      "uuid": "edb34294-1d86-4ea7-8553-5a8933ce5af2",
+      "url": "db://assets/app-bundle/app-view/pop/betrecorddetail/resources/record_detail_title.png",
+      "name": "record_detail_title.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecorddetail/resources/record_detail_title.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecorddetail/resources/record_detail_title.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecorddetail/record_detail_title.png"
+    },
+    {
+      "uuid": "0503d197-fced-4cd0-8ea2-3482c283008a",
+      "url": "db://assets/app-bundle/app-view/pop/betrecorddetail/resources/record_item_line.png",
+      "name": "record_item_line.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecorddetail/resources/record_item_line.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecorddetail/resources/record_item_line.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecorddetail/record_item_line.png"
+    },
+    {
+      "uuid": "33133975-e0fb-4ace-8d14-00ff81c003cc",
+      "url": "db://assets/app-bundle/app-view/pop/betrecorddetail/resources/record_roll_frame.png",
+      "name": "record_roll_frame.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecorddetail/resources/record_roll_frame.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecorddetail/resources/record_roll_frame.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecorddetail/record_roll_frame.png"
+    },
+    {
+      "uuid": "309dbcc4-fc53-4de4-a087-49d938f580ca",
+      "url": "db://assets/app-bundle/app-view/pop/betrecorddetail/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecorddetail/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecorddetail/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecorddetail/singleColor.png"
+    },
+    {
+      "uuid": "c5b37b89-d865-4908-9312-c87a4dce4541",
+      "url": "db://assets/app-bundle/app-view/pop/buybonus/resources/buyBouns_add.png",
+      "name": "buyBouns_add.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/buybonus/resources/buyBouns_add.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/buybonus/resources/buyBouns_add.png",
+      "type": "image",
+      "exportUiPath": "image/pop-buybonus/buyBouns_add.png"
+    },
+    {
+      "uuid": "186d845c-9c2b-4927-98d2-aa0bd37c5e3a",
+      "url": "db://assets/app-bundle/app-view/pop/buybonus/resources/buyBouns_buy.png",
+      "name": "buyBouns_buy.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/buybonus/resources/buyBouns_buy.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/buybonus/resources/buyBouns_buy.png",
+      "type": "image",
+      "exportUiPath": "image/pop-buybonus/buyBouns_buy.png"
+    },
+    {
+      "uuid": "c9a89c0d-4aa5-42a4-b730-fdd38b5b04cb",
+      "url": "db://assets/app-bundle/app-view/pop/buybonus/resources/buyBouns_sub.png",
+      "name": "buyBouns_sub.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/buybonus/resources/buyBouns_sub.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/buybonus/resources/buyBouns_sub.png",
+      "type": "image",
+      "exportUiPath": "image/pop-buybonus/buyBouns_sub.png"
+    },
+    {
+      "uuid": "3b01f9b4-37cf-4fd5-a05c-312ac5a48d1c",
+      "url": "db://assets/app-bundle/app-view/pop/buybonus/resources/buyBouns_title.png",
+      "name": "buyBouns_title.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/buybonus/resources/buyBouns_title.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/buybonus/resources/buyBouns_title.png",
+      "type": "image",
+      "exportUiPath": "image/pop-buybonus/buyBouns_title.png"
+    },
+    {
+      "uuid": "2e53a6cf-2616-4aa6-af74-c30402bd7dcd",
+      "url": "db://assets/app-bundle/app-view/pop/buybonus/resources/buy_bonus_bg.png",
+      "name": "buy_bonus_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/buybonus/resources/buy_bonus_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/buybonus/resources/buy_bonus_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-buybonus/buy_bonus_bg.png"
+    },
+    {
+      "uuid": "3f43ca46-e476-47ac-983c-5978a317bbca",
+      "url": "db://assets/app-bundle/app-view/pop/buybonus/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/buybonus/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/buybonus/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/pop-buybonus/singleColor.png"
+    },
+    {
+      "uuid": "ea567708-ac3d-46d5-9b70-f57fb2046f44",
+      "url": "db://assets/app-bundle/app-view/pop/error-pop/resources/errorPop_error.png",
+      "name": "errorPop_error.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/error-pop/resources/errorPop_error.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/error-pop/resources/errorPop_error.png",
+      "type": "image",
+      "exportUiPath": "image/pop-error-pop/errorPop_error.png"
+    },
+    {
+      "uuid": "1c7dde91-dfee-400e-97e3-e4a912523f78",
+      "url": "db://assets/app-bundle/app-view/pop/error-pop/resources/errorPop_titps.png",
+      "name": "errorPop_titps.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/error-pop/resources/errorPop_titps.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/error-pop/resources/errorPop_titps.png",
+      "type": "image",
+      "exportUiPath": "image/pop-error-pop/errorPop_titps.png"
+    },
+    {
+      "uuid": "57ac84f1-007c-40f7-8f2a-ec0be7efebb7",
+      "url": "db://assets/app-bundle/app-view/pop/error-pop/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/error-pop/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/error-pop/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/pop-error-pop/singleColor.png"
+    },
+    {
+      "uuid": "a58473dd-9e36-4993-93b0-c6c8a9a69050",
+      "url": "db://assets/app-bundle/app-view/pop/error-pop/resources/textContainer_bg.png",
+      "name": "textContainer_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/error-pop/resources/textContainer_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/error-pop/resources/textContainer_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-error-pop/textContainer_bg.png"
+    },
+    {
+      "uuid": "d3c3caf0-24ce-4427-aa47-a81121d9038a",
+      "url": "db://assets/app-bundle/app-view/pop/free-spin-result/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/free-spin-result/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/free-spin-result/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/pop-free-spin-result/singleColor.png"
+    },
+    {
+      "uuid": "8f940496-89ef-4d9e-84bd-a8ef6cca090b",
+      "url": "db://assets/app-bundle/app-view/pop/grand-prize/resources/max_win.png",
+      "name": "max_win.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/grand-prize/resources/max_win.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/grand-prize/resources/max_win.png",
+      "type": "image",
+      "exportUiPath": "image/pop-grand-prize/max_win.png"
+    },
+    {
+      "uuid": "6bf2997c-01b8-4eaf-b8e4-36c4dff5b745",
+      "url": "db://assets/app-bundle/app-view/pop/grand-prize/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/grand-prize/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/grand-prize/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/pop-grand-prize/singleColor.png"
+    },
+    {
+      "uuid": "ef6ac5ee-57d5-4147-89ea-4c9a1d85f3c5",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/rule1.png",
+      "name": "rule1.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/rule1.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/rule1.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/rule1.png"
+    },
+    {
+      "uuid": "47f7178d-86b6-41e1-8e9e-730e1da34bf7",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/rule2.png",
+      "name": "rule2.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/rule2.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/rule2.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/rule2.png"
+    },
+    {
+      "uuid": "d76a8f7c-86c5-4b53-a1e9-ac950acc183a",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/rule3.png",
+      "name": "rule3.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/rule3.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/rule3.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/rule3.png"
+    },
+    {
+      "uuid": "fd575ef0-e3a0-432a-abe5-19543ed4c40f",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/rule4.png",
+      "name": "rule4.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/rule4.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/rule4.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/rule4.png"
+    },
+    {
+      "uuid": "57bb8266-e6d3-4b38-a09e-680095d26873",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/rule_border_d.png",
+      "name": "rule_border_d.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/rule_border_d.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/rule_border_d.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/rule_border_d.png"
+    },
+    {
+      "uuid": "730db902-9872-49ff-a8bd-d92227c3cfc5",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/rule_border_m.png",
+      "name": "rule_border_m.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/rule_border_m.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/rule_border_m.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/rule_border_m.png"
+    },
+    {
+      "uuid": "360a0dae-8166-4747-a348-d3f16cc3a113",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/rule_border_top.png",
+      "name": "rule_border_top.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/rule_border_top.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/rule_border_top.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/rule_border_top.png"
+    },
+    {
+      "uuid": "e0dbf39f-cd96-43b4-9fdf-4f90afe14aca",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/rule_xiaochu.png",
+      "name": "rule_xiaochu.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/rule_xiaochu.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/rule_xiaochu.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/rule_xiaochu.png"
+    },
+    {
+      "uuid": "f0b61230-beea-4e7f-8922-af7eecbd1164",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/ruletitleIcon.png",
+      "name": "ruletitleIcon.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/ruletitleIcon.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/ruletitleIcon.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/ruletitleIcon.png"
+    },
+    {
+      "uuid": "ea2fb686-e874-48d5-917f-66fd59352682",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/singleColor.png"
+    },
+    {
+      "uuid": "5a037b94-e54e-4fa8-af50-a2c708da7f3b",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/sybomItembg.png",
+      "name": "sybomItembg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/sybomItembg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/sybomItembg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/sybomItembg.png"
+    },
+    {
+      "uuid": "0d1052ce-7053-4332-83e8-02956488da02",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/symboxItemBg.png",
+      "name": "symboxItemBg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/symboxItemBg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/symboxItemBg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/symboxItemBg.png"
+    },
+    {
+      "uuid": "b40f9617-69d1-4719-8316-a29722f6daa2",
+      "url": "db://assets/app-bundle/app-view/pop/rule/resources/title_gamerules.png",
+      "name": "title_gamerules.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/rule/resources/title_gamerules.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/rule/resources/title_gamerules.png",
+      "type": "image",
+      "exportUiPath": "image/pop-rule/title_gamerules.png"
+    },
+    {
+      "uuid": "e5121493-09c9-41cd-83ab-0babe9c5de93",
+      "url": "db://assets/app-bundle/app-view/pop/settings/resources/setting_item_bg.png",
+      "name": "setting_item_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/settings/resources/setting_item_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/settings/resources/setting_item_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-settings/setting_item_bg.png"
+    },
+    {
+      "uuid": "e2695aef-8026-4f93-b1b7-ba49532a5caa",
+      "url": "db://assets/app-bundle/app-view/pop/settings/resources/setting_progress_bar.png",
+      "name": "setting_progress_bar.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/settings/resources/setting_progress_bar.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/settings/resources/setting_progress_bar.png",
+      "type": "image",
+      "exportUiPath": "image/pop-settings/setting_progress_bar.png"
+    },
+    {
+      "uuid": "1d71bc26-966e-4640-864a-9ea5d5cb314a",
+      "url": "db://assets/app-bundle/app-view/pop/settings/resources/setting_progress_bg.png",
+      "name": "setting_progress_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/settings/resources/setting_progress_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/settings/resources/setting_progress_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-settings/setting_progress_bg.png"
+    },
+    {
+      "uuid": "bd382160-5f4a-47ac-ace4-37edf209624c",
+      "url": "db://assets/app-bundle/app-view/pop/settings/resources/setting_title.png",
+      "name": "setting_title.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/settings/resources/setting_title.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/settings/resources/setting_title.png",
+      "type": "image",
+      "exportUiPath": "image/pop-settings/setting_title.png"
+    },
+    {
+      "uuid": "9762fc75-5ca5-4852-b479-2a05b25beb6b",
+      "url": "db://assets/app-bundle/app-view/pop/settings/resources/setup_music_off.png",
+      "name": "setup_music_off.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/settings/resources/setup_music_off.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/settings/resources/setup_music_off.png",
+      "type": "image",
+      "exportUiPath": "image/pop-settings/setup_music_off.png"
+    },
+    {
+      "uuid": "227ba452-be1d-480e-9bbc-b37f586db4d3",
+      "url": "db://assets/app-bundle/app-view/pop/settings/resources/setup_music_on.png",
+      "name": "setup_music_on.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/settings/resources/setup_music_on.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/settings/resources/setup_music_on.png",
+      "type": "image",
+      "exportUiPath": "image/pop-settings/setup_music_on.png"
+    },
+    {
+      "uuid": "900cee16-b960-459a-9fd0-db16f616e7ee",
+      "url": "db://assets/app-bundle/app-view/pop/settings/resources/setup_vioce_off.png",
+      "name": "setup_vioce_off.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/settings/resources/setup_vioce_off.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/settings/resources/setup_vioce_off.png",
+      "type": "image",
+      "exportUiPath": "image/pop-settings/setup_vioce_off.png"
+    },
+    {
+      "uuid": "fed863b3-0d39-46e0-8a1a-4b8948f4022b",
+      "url": "db://assets/app-bundle/app-view/pop/settings/resources/setup_vioce_on.png",
+      "name": "setup_vioce_on.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/settings/resources/setup_vioce_on.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/settings/resources/setup_vioce_on.png",
+      "type": "image",
+      "exportUiPath": "image/pop-settings/setup_vioce_on.png"
+    },
+    {
+      "uuid": "51757203-8d01-48a1-8713-72bcaac9e488",
+      "url": "db://assets/app-bundle/app-view/pop/settings/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/settings/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/settings/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/pop-settings/singleColor.png"
+    },
+    {
+      "uuid": "76080a9a-1387-4a7a-b76b-03a76915835d",
+      "url": "db://assets/app-bundle/app-view/pop/starthome/resources/SkipBg.png",
+      "name": "SkipBg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/starthome/resources/SkipBg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/starthome/resources/SkipBg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-starthome/SkipBg.png"
+    },
+    {
+      "uuid": "9a89df6d-3bf2-423c-9278-cd66b99c8586",
+      "url": "db://assets/app-bundle/app-view/pop/starthome/resources/home_bg.png",
+      "name": "home_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/starthome/resources/home_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/starthome/resources/home_bg.png",
+      "type": "image",
+      "exportUiPath": "image/pop-starthome/home_bg.png"
+    },
+    {
+      "uuid": "6b3efa77-b6cf-4cbd-9014-ccff0e55f644",
+      "url": "db://assets/app-bundle/app-view/pop/starthome/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/starthome/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/starthome/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/pop-starthome/singleColor.png"
+    },
+    {
+      "uuid": "b3537a8d-8987-4a37-b445-abe024a69899",
+      "url": "db://assets/app-bundle/app-view/pop/starthome/resources/skip.png",
+      "name": "skip.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/starthome/resources/skip.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/starthome/resources/skip.png",
+      "type": "image",
+      "exportUiPath": "image/pop-starthome/skip.png"
+    },
+    {
+      "uuid": "5efb7b9c-7e05-4c9f-b241-2fa3e65bcab9",
+      "url": "db://assets/app-bundle/app-view/pop/starthome/resources/skipBox_gou.png",
+      "name": "skipBox_gou.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/starthome/resources/skipBox_gou.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/starthome/resources/skipBox_gou.png",
+      "type": "image",
+      "exportUiPath": "image/pop-starthome/skipBox_gou.png"
+    },
+    {
+      "uuid": "337e3c54-171b-49e0-b1e8-1b3b2a7bb161",
+      "url": "db://assets/app-bundle/app-view/pop/starthome/resources/skipBoxdi.png",
+      "name": "skipBoxdi.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/starthome/resources/skipBoxdi.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/starthome/resources/skipBoxdi.png",
+      "type": "image",
+      "exportUiPath": "image/pop-starthome/skipBoxdi.png"
+    },
+    {
+      "uuid": "7176a244-3367-4316-8de7-d01b7c1301bb",
+      "url": "db://assets/app-bundle/app-view/pop/starthome/resources/skipText.png",
+      "name": "skipText.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/starthome/resources/skipText.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/starthome/resources/skipText.png",
+      "type": "image",
+      "exportUiPath": "image/pop-starthome/skipText.png"
+    },
+    {
+      "uuid": "056dbec6-8a10-49f9-9b99-5614f25321b8",
+      "url": "db://assets/app-bundle/app-view/paper/home/activity/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/activity/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/activity/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/singleColor.png"
+    },
+    {
+      "uuid": "646660ba-b4c9-4262-8835-b5188e9cc8fb",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/singleColor_00d223.png"
+    },
+    {
+      "uuid": "ca0b63e2-cb80-4d04-b353-c18c22da230b",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/singleColor.png",
+      "name": "singleColor.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/singleColor.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/singleColor.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/singleColor_f1d908.png"
+    },
+    {
+      "uuid": "51d9114c-6103-4977-b398-072c9fd65c6c",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/selectDateView/bb_aelectDate.png",
+      "name": "bb_aelectDate.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/selectDateView/bb_aelectDate.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/selectDateView/bb_aelectDate.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/bb_aelectDate.png"
+    },
+    {
+      "uuid": "c0d6515c-87ac-429b-81bc-deea57349d1c",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/selectDateView/btn_arrow.png",
+      "name": "btn_arrow.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/selectDateView/btn_arrow.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/selectDateView/btn_arrow.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/btn_arrow.png"
+    },
+    {
+      "uuid": "21d241dc-be65-47d2-9b85-b938d6daebd5",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/selectDateView/select_date_view_border.png",
+      "name": "select_date_view_border.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/selectDateView/select_date_view_border.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/selectDateView/select_date_view_border.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/select_date_view_border.png"
+    },
+    {
+      "uuid": "980a5bb9-d820-44d1-8470-4f20f52a0133",
+      "url": "db://assets/app-bundle/app-view/pop/betrecord/resources/selectDateView/select_date_view_line.png",
+      "name": "select_date_view_line.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/betrecord/resources/selectDateView/select_date_view_line.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/betrecord/resources/selectDateView/select_date_view_line.png",
+      "type": "image",
+      "exportUiPath": "image/pop-betrecord/select_date_view_line.png"
+    },
+    {
+      "uuid": "997a08ec-3d7f-40c4-b77f-164cfcbfbc02",
+      "url": "db://assets/app-bundle/app-view/pop/free-spin-result/resources/images/free_spin_have_win.png",
+      "name": "free_spin_have_win.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/free-spin-result/resources/images/free_spin_have_win.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/free-spin-result/resources/images/free_spin_have_win.png",
+      "type": "image",
+      "exportUiPath": "image/pop-free-spin-result/free_spin_have_win.png"
+    },
+    {
+      "uuid": "66288de8-114a-4138-8ec6-53cae2477939",
+      "url": "db://assets/app-bundle/app-view/pop/free-spin-result/resources/images/free_spin_max_win.png",
+      "name": "free_spin_max_win.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/free-spin-result/resources/images/free_spin_max_win.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/free-spin-result/resources/images/free_spin_max_win.png",
+      "type": "image",
+      "exportUiPath": "image/pop-free-spin-result/free_spin_max_win.png"
+    },
+    {
+      "uuid": "b262705d-8366-422c-b566-465308e4942b",
+      "url": "db://assets/app-bundle/app-view/pop/free-spin-result/resources/images/free_spin_subtext.png",
+      "name": "free_spin_subtext.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/free-spin-result/resources/images/free_spin_subtext.png",
+      "exportPath": "default/images/app-bundle/app-view/pop/free-spin-result/resources/images/free_spin_subtext.png",
+      "type": "image",
+      "exportUiPath": "image/pop-free-spin-result/free_spin_subtext.png"
+    },
+    {
+      "uuid": "dca24b45-0c84-4781-953d-5b828bb5b48b",
+      "url": "db://assets/app-bundle/app-view/paper/home/activity/resources/Image/SkipBg.png",
+      "name": "SkipBg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/activity/resources/Image/SkipBg.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/activity/resources/Image/SkipBg.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/SkipBg.png"
+    },
+    {
+      "uuid": "2a6a1ce1-b251-4a7f-ad8e-ea242b15f322",
+      "url": "db://assets/app-bundle/app-view/paper/home/activity/resources/Image/skip.png",
+      "name": "skip.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/activity/resources/Image/skip.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/activity/resources/Image/skip.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/skip.png"
+    },
+    {
+      "uuid": "694620e6-2999-437c-a46c-6174daca3f8b",
+      "url": "db://assets/app-bundle/app-view/paper/home/activity/resources/Image/skipBox_gou.png",
+      "name": "skipBox_gou.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/activity/resources/Image/skipBox_gou.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/activity/resources/Image/skipBox_gou.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/skipBox_gou.png"
+    },
+    {
+      "uuid": "437fcea5-d692-48a7-88f7-eb1ea400091d",
+      "url": "db://assets/app-bundle/app-view/paper/home/activity/resources/Image/skipBoxdi.png",
+      "name": "skipBoxdi.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/activity/resources/Image/skipBoxdi.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/activity/resources/Image/skipBoxdi.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/skipBoxdi.png"
+    },
+    {
+      "uuid": "00da86a3-6518-4c0f-8136-ec3b8dc4b5eb",
+      "url": "db://assets/app-bundle/app-view/paper/home/activity/resources/Image/skipText.png",
+      "name": "skipText.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/activity/resources/Image/skipText.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/activity/resources/Image/skipText.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/skipText.png"
+    },
+    {
+      "uuid": "1ee86d6f-9d72-4902-a6c0-716ae937f328",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/images/FreeSpinBox.png",
+      "name": "FreeSpinBox.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/images/FreeSpinBox.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/images/FreeSpinBox.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/FreeSpinBox.png"
+    },
+    {
+      "uuid": "8ea3e878-9804-4aa3-9e5e-d85d6981b48c",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/images/FreeSpinWin.png",
+      "name": "FreeSpinWin.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/images/FreeSpinWin.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/images/FreeSpinWin.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/FreeSpinWin.png"
+    },
+    {
+      "uuid": "53d740e6-b981-415d-a433-4a847c009fce",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/images/FreeSpinsBtn.png",
+      "name": "FreeSpinsBtn.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/images/FreeSpinsBtn.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/images/FreeSpinsBtn.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/FreeSpinsBtn.png"
+    },
+    {
+      "uuid": "d776c900-b545-4aff-a4be-b27d23e1a2ad",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/images/circle_shadow.png",
+      "name": "circle_shadow.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/images/circle_shadow.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/images/circle_shadow.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/circle_shadow.png"
+    },
+    {
+      "uuid": "3ae03d96-4092-4fb7-a8ff-15ba5d8846d8",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/images/home_icon.png",
+      "name": "home_icon.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/images/home_icon.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/images/home_icon.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/home_icon.png"
+    },
+    {
+      "uuid": "04f62d53-2fbe-4358-a068-c0040e01d0c4",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/images/home_marquee_bg.png",
+      "name": "home_marquee_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/images/home_marquee_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/images/home_marquee_bg.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/home_marquee_bg.png"
+    },
+    {
+      "uuid": "ef79c1a3-58ca-49cf-9090-4086d34cf5bc",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/images/Home_reward_bg.png",
+      "name": "Home_reward_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/images/Home_reward_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/images/Home_reward_bg.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/Home_reward_bg.png"
+    },
+    {
+      "uuid": "2206f12f-d2c0-46f4-aa7d-b90ac3ee916a",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/images/disk_1.png",
+      "name": "disk_1.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/images/disk_1.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/images/disk_1.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/disk_1.png"
+    },
+    {
+      "uuid": "3524e042-3077-4030-aa6c-c7b2cd0425c5",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/images/disk_2.png",
+      "name": "disk_2.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/images/disk_2.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/images/disk_2.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/disk_2.png"
+    },
+    {
+      "uuid": "903ffe63-e6df-4e37-9e3e-40dd8161bcb6",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/images/good.png",
+      "name": "good.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/images/good.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/images/good.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/good.png"
+    },
+    {
+      "uuid": "b8cd6da0-0606-4a2b-943c-922ba9c7059c",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/images/homeRoll_frame.png",
+      "name": "homeRoll_frame.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/images/homeRoll_frame.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/images/homeRoll_frame.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/homeRoll_frame.png"
+    },
+    {
+      "uuid": "eb08ac28-4bcf-4cbd-a9b8-8510bec8de70",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/images/home_board_bg.png",
+      "name": "home_board_bg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/images/home_board_bg.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/images/home_board_bg.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/home_board_bg.png"
+    },
+    {
+      "uuid": "4e4813b3-114e-44da-8e3a-f3477d568646",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/images/place.png",
+      "name": "place.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/images/place.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/images/place.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/place.png"
+    },
+    {
+      "uuid": "18c9081b-044b-41cf-b984-0b77ec96004a",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/images/wheelBg1.webp",
+      "name": "wheelBg1.webp",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/images/wheelBg1.webp",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/images/wheelBg1.webp",
+      "type": "image",
+      "exportUiPath": "image/paper-home/wheelBg1.webp"
+    },
+    {
+      "uuid": "7a529003-dc90-4fb9-9aa3-da0e633336b8",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/images/wheelBg2.webp",
+      "name": "wheelBg2.webp",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/images/wheelBg2.webp",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/images/wheelBg2.webp",
+      "type": "image",
+      "exportUiPath": "image/paper-home/wheelBg2.webp"
+    },
+    {
+      "uuid": "7f9ef115-f850-4c2d-b8f4-639814fab397",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/images/win.png",
+      "name": "win.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/images/win.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/images/win.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/win.png"
+    },
+    {
+      "uuid": "69feb43f-5f49-4b2f-a9c3-1b743a19d604",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/images1/wheelBg5.png",
+      "name": "wheelBg5.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/images1/wheelBg5.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/images1/wheelBg5.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/wheelBg5.png"
+    },
+    {
+      "uuid": "57395ad5-3e17-4d28-ae74-d4e864a19ec5",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV0.png",
+      "name": "LV0.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV0.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV0.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/LV0.png"
+    },
+    {
+      "uuid": "6a340c32-fb07-49d1-b380-9ca7b167c2e7",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV1.png",
+      "name": "LV1.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV1.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV1.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/LV1.png"
+    },
+    {
+      "uuid": "03ab3408-2c1e-4d1d-8c2d-bfb58c422b45",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV2.png",
+      "name": "LV2.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV2.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV2.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/LV2.png"
+    },
+    {
+      "uuid": "4ad7dae8-283f-4c2a-b6d4-a7925f1129ad",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV3.png",
+      "name": "LV3.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV3.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV3.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/LV3.png"
+    },
+    {
+      "uuid": "a53ae12f-b1f3-47aa-81c1-b518dd150775",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV4.png",
+      "name": "LV4.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV4.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV4.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/LV4.png"
+    },
+    {
+      "uuid": "f9f4050e-4abf-43be-b407-a1595e129300",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV5.png",
+      "name": "LV5.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV5.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/body/resources/images/vipicons/LV5.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/LV5.png"
+    },
+    {
+      "uuid": "82af84fc-c4e4-401b-beaf-d56b8496d620",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Spine/1/251_00000.png",
+      "name": "251_00000.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Spine/1/251_00000.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/Spine/1/251_00000.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/251_00000.png"
+    },
+    {
+      "uuid": "7e1cb776-cd37-48bb-8775-00f205803241",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Spine/1/glow1.png",
+      "name": "glow1.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Spine/1/glow1.png",
+      "exportPath": "default/images/app-bundle/app-view/paper/home/roll/resources/Spine/1/glow1.png",
+      "type": "image",
+      "exportUiPath": "image/paper-home/glow1.png"
+    }
+  ],
+  "spine": [
+    {
+      "uuid": "fbd42bcd-0e41-4f0b-9791-a908a9794716",
+      "url": "db://assets/app-appinit/res/spine/loading.atlas",
+      "name": "loading.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/spine/loading.atlas",
+      "exportPath": "default/spine/app-appinit/res/spine/loading.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/app-appinit/loading.atlas"
+    },
+    {
+      "uuid": "8067b237-1343-40d9-b876-6a5d9fb0110e",
+      "url": "db://assets/app-appinit/res/spine/loading.png",
+      "name": "loading.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/spine/loading.png",
+      "exportPath": "default/spine/app-appinit/res/spine/loading.png",
+      "type": "spine",
+      "exportUiPath": "spine/app-appinit/loading.png"
+    },
+    {
+      "uuid": "1476f943-f678-4379-acad-e648e71aa0ee",
+      "url": "db://assets/app-appinit/res/spine/loading.skel",
+      "name": "loading.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-appinit/res/spine/loading.skel",
+      "exportPath": "default/spine/app-appinit/res/spine/loading.skel",
+      "type": "spine",
+      "exportUiPath": "spine/app-appinit/loading.skel"
+    },
+    {
+      "uuid": "95ea272a-0bfa-4855-8550-1914f1f60584",
+      "url": "db://assets/resources/Spines/OtherSpine/LamAng_wineff.atlas",
+      "name": "LamAng_wineff.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/LamAng_wineff.atlas",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/LamAng_wineff.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/LamAng_wineff.atlas"
+    },
+    {
+      "uuid": "f22b0129-37f3-4f9b-a232-ea3421cc1022",
+      "url": "db://assets/resources/Spines/OtherSpine/LamAng_wineff.png",
+      "name": "LamAng_wineff.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/LamAng_wineff.png",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/LamAng_wineff.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/LamAng_wineff.png"
+    },
+    {
+      "uuid": "7e2dcdc3-765f-4f4e-ae03-0476b548243d",
+      "url": "db://assets/resources/Spines/OtherSpine/LamAng_wineff.skel",
+      "name": "LamAng_wineff.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/LamAng_wineff.skel",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/LamAng_wineff.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/LamAng_wineff.skel"
+    },
+    {
+      "uuid": "3d071f4f-c597-4026-9302-035397ada630",
+      "url": "db://assets/resources/Spines/OtherSpine/congratlilation.atlas",
+      "name": "congratlilation.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/congratlilation.atlas",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/congratlilation.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/congratlilation.atlas"
+    },
+    {
+      "uuid": "0952f2e0-9461-4049-b263-d8e876609467",
+      "url": "db://assets/resources/Spines/OtherSpine/congratlilation.png",
+      "name": "congratlilation.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/congratlilation.png",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/congratlilation.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/congratlilation.png"
+    },
+    {
+      "uuid": "c6318144-c563-4c9f-adc2-996fbb944c65",
+      "url": "db://assets/resources/Spines/OtherSpine/congratlilation.skel",
+      "name": "congratlilation.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/congratlilation.skel",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/congratlilation.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/congratlilation.skel"
+    },
+    {
+      "uuid": "8025ae1c-6a7d-4e78-85f1-a233c97ecff2",
+      "url": "db://assets/resources/Spines/OtherSpine/jiesuan.atlas",
+      "name": "jiesuan.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/jiesuan.atlas",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/jiesuan.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/jiesuan.atlas"
+    },
+    {
+      "uuid": "611ee7d3-0b05-4fa6-b229-0776409ee156",
+      "url": "db://assets/resources/Spines/OtherSpine/jiesuan.json",
+      "name": "jiesuan.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/jiesuan.json",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/jiesuan.json",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/jiesuan.json"
+    },
+    {
+      "uuid": "b6488e64-0b0d-4164-b568-e5f3d01f581f",
+      "url": "db://assets/resources/Spines/OtherSpine/jiesuan.png",
+      "name": "jiesuan.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/jiesuan.png",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/jiesuan.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/jiesuan.png"
+    },
+    {
+      "uuid": "3ee464c5-1f0c-45fc-94ac-f524dd401cac",
+      "url": "db://assets/resources/Spines/OtherSpine/mayali_zhuanchang.atlas",
+      "name": "mayali_zhuanchang.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/mayali_zhuanchang.atlas",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/mayali_zhuanchang.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/mayali_zhuanchang.atlas"
+    },
+    {
+      "uuid": "42799b2a-f900-43f0-8fb3-6dfbc318222b",
+      "url": "db://assets/resources/Spines/OtherSpine/mayali_zhuanchang.png",
+      "name": "mayali_zhuanchang.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/mayali_zhuanchang.png",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/mayali_zhuanchang.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/mayali_zhuanchang.png"
+    },
+    {
+      "uuid": "7ccff3fa-4041-4244-a6a0-ea1d93294426",
+      "url": "db://assets/resources/Spines/OtherSpine/mayali_zhuanchang.skel",
+      "name": "mayali_zhuanchang.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/mayali_zhuanchang.skel",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/mayali_zhuanchang.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/mayali_zhuanchang.skel"
+    },
+    {
+      "uuid": "4fe5c6ec-61db-4fbd-8b6c-158e1f3f3e15",
+      "url": "db://assets/resources/Spines/OtherSpine/nvshen_zhuanchang.atlas",
+      "name": "nvshen_zhuanchang.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/nvshen_zhuanchang.atlas",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/nvshen_zhuanchang.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/nvshen_zhuanchang.atlas"
+    },
+    {
+      "uuid": "95bb9331-9ffb-4d6a-885e-0213645ab268",
+      "url": "db://assets/resources/Spines/OtherSpine/nvshen_zhuanchang.png",
+      "name": "nvshen_zhuanchang.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/nvshen_zhuanchang.png",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/nvshen_zhuanchang.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/nvshen_zhuanchang.png"
+    },
+    {
+      "uuid": "e874e65d-fe1b-48a9-b4a1-288baaa29891",
+      "url": "db://assets/resources/Spines/OtherSpine/nvshen_zhuanchang.skel",
+      "name": "nvshen_zhuanchang.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/nvshen_zhuanchang.skel",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/nvshen_zhuanchang.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/nvshen_zhuanchang.skel"
+    },
+    {
+      "uuid": "856c37d8-e85c-489c-8615-736c5f525d2b",
+      "url": "db://assets/resources/Spines/OtherSpine/nvshen_zhuanchang2.png",
+      "name": "nvshen_zhuanchang2.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/nvshen_zhuanchang2.png",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/nvshen_zhuanchang2.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/nvshen_zhuanchang2.png"
+    },
+    {
+      "uuid": "2d24426a-8fd6-457d-948d-ce1bb03a7a96",
+      "url": "db://assets/resources/Spines/OtherSpine/rollBetBtn.atlas",
+      "name": "rollBetBtn.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/rollBetBtn.atlas",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/rollBetBtn.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/rollBetBtn.atlas"
+    },
+    {
+      "uuid": "28dc2f5e-c542-4a7d-8647-27384c2e8324",
+      "url": "db://assets/resources/Spines/OtherSpine/rollBetBtn.json",
+      "name": "rollBetBtn.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/rollBetBtn.json",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/rollBetBtn.json",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/rollBetBtn.json"
+    },
+    {
+      "uuid": "d938b6a3-3b60-4c9f-9543-03a11357e6d7",
+      "url": "db://assets/resources/Spines/OtherSpine/rollBetBtn.png",
+      "name": "rollBetBtn.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/rollBetBtn.png",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/rollBetBtn.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/rollBetBtn.png"
+    },
+    {
+      "uuid": "3632e40d-4b5b-43da-a48e-62ef21b135a1",
+      "url": "db://assets/resources/Spines/OtherSpine/win.atlas",
+      "name": "win.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/win.atlas",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/win.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/win.atlas"
+    },
+    {
+      "uuid": "b6ddaa94-a923-4bcf-aba7-a3d60de9b0ae",
+      "url": "db://assets/resources/Spines/OtherSpine/win.png",
+      "name": "win.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/win.png",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/win.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/win.png"
+    },
+    {
+      "uuid": "c946c04c-7b79-4172-9ca2-165bec3f5c0a",
+      "url": "db://assets/resources/Spines/OtherSpine/win.skel",
+      "name": "win.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/win.skel",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/win.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/win.skel"
+    },
+    {
+      "uuid": "49c0f6bf-76b3-4d81-88c0-bb983a39202a",
+      "url": "db://assets/resources/Spines/OtherSpine/win2.png",
+      "name": "win2.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/OtherSpine/win2.png",
+      "exportPath": "default/spine/resources/Spines/OtherSpine/win2.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/win2.png"
+    },
+    {
+      "uuid": "446311be-077f-4c65-8c92-d80c3e90a960",
+      "url": "db://assets/resources/Spines/RollSpine/bianhuan.atlas",
+      "name": "bianhuan.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/bianhuan.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/bianhuan.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/bianhuan.atlas"
+    },
+    {
+      "uuid": "edae4542-d045-4878-9c2a-ec3e475036c3",
+      "url": "db://assets/resources/Spines/RollSpine/bianhuan.json",
+      "name": "bianhuan.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/bianhuan.json",
+      "exportPath": "default/spine/resources/Spines/RollSpine/bianhuan.json",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/bianhuan.json"
+    },
+    {
+      "uuid": "5c36f4bb-0eef-42e5-8339-f7977dc4665d",
+      "url": "db://assets/resources/Spines/RollSpine/bianhuan.png",
+      "name": "bianhuan.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/bianhuan.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/bianhuan.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/bianhuan.png"
+    },
+    {
+      "uuid": "82d050cb-268f-4a6c-b8fe-e98ac48ae47c",
+      "url": "db://assets/resources/Spines/RollSpine/bz.atlas",
+      "name": "bz.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/bz.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/bz.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/bz.atlas"
+    },
+    {
+      "uuid": "78c19d8a-5b50-40a5-a451-746a44e800b0",
+      "url": "db://assets/resources/Spines/RollSpine/bz.json",
+      "name": "bz.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/bz.json",
+      "exportPath": "default/spine/resources/Spines/RollSpine/bz.json",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/bz.json"
+    },
+    {
+      "uuid": "a60b60d9-e38d-4172-89d9-738414dd4a71",
+      "url": "db://assets/resources/Spines/RollSpine/bz.png",
+      "name": "bz.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/bz.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/bz.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/bz.png"
+    },
+    {
+      "uuid": "861f2f8d-78c9-4395-b144-50f7d199eca8",
+      "url": "db://assets/resources/Spines/RollSpine/dao.atlas",
+      "name": "dao.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/dao.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/dao.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/dao.atlas"
+    },
+    {
+      "uuid": "555158d2-48f1-440b-9d71-d075fa8d7831",
+      "url": "db://assets/resources/Spines/RollSpine/dao.png",
+      "name": "dao.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/dao.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/dao.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/dao.png"
+    },
+    {
+      "uuid": "f86d79b4-f021-4265-99ac-babc020c309b",
+      "url": "db://assets/resources/Spines/RollSpine/dao.skel",
+      "name": "dao.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/dao.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/dao.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/dao.skel"
+    },
+    {
+      "uuid": "e6f71ae1-e995-454b-9c7d-817b4f42436d",
+      "url": "db://assets/resources/Spines/RollSpine/dao_in.atlas",
+      "name": "dao_in.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/dao_in.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/dao_in.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/dao_in.atlas"
+    },
+    {
+      "uuid": "a7f107ef-0031-40a7-9367-ae90ec1ee631",
+      "url": "db://assets/resources/Spines/RollSpine/dao_in.png",
+      "name": "dao_in.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/dao_in.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/dao_in.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/dao_in.png"
+    },
+    {
+      "uuid": "b7c073e7-2d23-4a11-b8cd-f5d47e42a1c0",
+      "url": "db://assets/resources/Spines/RollSpine/dao_in.skel",
+      "name": "dao_in.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/dao_in.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/dao_in.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/dao_in.skel"
+    },
+    {
+      "uuid": "69ac7296-5707-4434-9281-c030e96e3908",
+      "url": "db://assets/resources/Spines/RollSpine/gun.atlas",
+      "name": "gun.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/gun.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/gun.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/gun.atlas"
+    },
+    {
+      "uuid": "d77836f2-d1c1-4950-a9e2-f3c135bcf15f",
+      "url": "db://assets/resources/Spines/RollSpine/gun.png",
+      "name": "gun.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/gun.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/gun.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/gun.png"
+    },
+    {
+      "uuid": "9d9bc145-eca7-4978-9870-b26210874607",
+      "url": "db://assets/resources/Spines/RollSpine/gun.skel",
+      "name": "gun.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/gun.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/gun.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/gun.skel"
+    },
+    {
+      "uuid": "6a338b8b-b067-4ef2-b528-24a34fa7694e",
+      "url": "db://assets/resources/Spines/RollSpine/gun_in.atlas",
+      "name": "gun_in.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/gun_in.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/gun_in.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/gun_in.atlas"
+    },
+    {
+      "uuid": "dc5086a1-e854-412d-872f-f398f682e347",
+      "url": "db://assets/resources/Spines/RollSpine/gun_in.png",
+      "name": "gun_in.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/gun_in.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/gun_in.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/gun_in.png"
+    },
+    {
+      "uuid": "c558ad01-5d59-4575-9682-27ee86595cf1",
+      "url": "db://assets/resources/Spines/RollSpine/gun_in.skel",
+      "name": "gun_in.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/gun_in.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/gun_in.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/gun_in.skel"
+    },
+    {
+      "uuid": "5a02fafc-2a25-443e-8b3d-315715f14d16",
+      "url": "db://assets/resources/Spines/RollSpine/gunzhou.atlas",
+      "name": "gunzhou.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/gunzhou.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/gunzhou.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/gunzhou.atlas"
+    },
+    {
+      "uuid": "1623a0f4-3246-45a4-95ab-86502cef838a",
+      "url": "db://assets/resources/Spines/RollSpine/gunzhou.png",
+      "name": "gunzhou.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/gunzhou.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/gunzhou.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/gunzhou.png"
+    },
+    {
+      "uuid": "192962cb-2e93-45e6-bdca-449380538419",
+      "url": "db://assets/resources/Spines/RollSpine/gunzhou.skel",
+      "name": "gunzhou.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/gunzhou.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/gunzhou.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/gunzhou.skel"
+    },
+    {
+      "uuid": "e68f4243-a9ab-40d5-8bc4-10b10cef0e11",
+      "url": "db://assets/resources/Spines/RollSpine/mfl.atlas",
+      "name": "mfl.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/mfl.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/mfl.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/mfl.atlas"
+    },
+    {
+      "uuid": "f850efd0-28f1-40fd-83ab-7d110f91d42f",
+      "url": "db://assets/resources/Spines/RollSpine/mfl.json",
+      "name": "mfl.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/mfl.json",
+      "exportPath": "default/spine/resources/Spines/RollSpine/mfl.json",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/mfl.json"
+    },
+    {
+      "uuid": "412172ba-dba0-4ad2-bcf8-d23af99a9a99",
+      "url": "db://assets/resources/Spines/RollSpine/mfl.png",
+      "name": "mfl.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/mfl.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/mfl.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/mfl.png"
+    },
+    {
+      "uuid": "b506f96e-dadb-471d-bbac-b1e833ed33c8",
+      "url": "db://assets/resources/Spines/RollSpine/nvshen.atlas",
+      "name": "nvshen.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/nvshen.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/nvshen.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/nvshen.atlas"
+    },
+    {
+      "uuid": "399df425-dd0c-49a5-864e-67214143828f",
+      "url": "db://assets/resources/Spines/RollSpine/nvshen.png",
+      "name": "nvshen.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/nvshen.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/nvshen.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/nvshen.png"
+    },
+    {
+      "uuid": "31e78251-4098-4597-a45b-d8ff692c42b8",
+      "url": "db://assets/resources/Spines/RollSpine/nvshen.skel",
+      "name": "nvshen.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/nvshen.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/nvshen.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/nvshen.skel"
+    },
+    {
+      "uuid": "c694080b-d7ad-4d5b-b054-b0f609777ed0",
+      "url": "db://assets/resources/Spines/RollSpine/skeleton.atlas",
+      "name": "skeleton.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/skeleton.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/skeleton.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/skeleton.atlas"
+    },
+    {
+      "uuid": "f9b3742b-7894-418a-ad48-68a8829d6568",
+      "url": "db://assets/resources/Spines/RollSpine/skeleton.json",
+      "name": "skeleton.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/skeleton.json",
+      "exportPath": "default/spine/resources/Spines/RollSpine/skeleton.json",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/skeleton.json"
+    },
+    {
+      "uuid": "bd037cec-a8fe-4d12-90ab-d334b147988b",
+      "url": "db://assets/resources/Spines/RollSpine/skeleton.png",
+      "name": "skeleton.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/skeleton.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/skeleton.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/skeleton.png"
+    },
+    {
+      "uuid": "5f05d556-22b4-4271-846c-3db20a0158e0",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1001.atlas",
+      "name": "symbol_1001.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1001.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1001.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1001.atlas"
+    },
+    {
+      "uuid": "a81773da-720e-4f44-a0bf-e0c132eec445",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1001.png",
+      "name": "symbol_1001.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1001.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1001.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1001.png"
+    },
+    {
+      "uuid": "6f39fd9a-fdce-4ae6-a7a9-f9f7a428a9d4",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1001.skel",
+      "name": "symbol_1001.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1001.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1001.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1001.skel"
+    },
+    {
+      "uuid": "8417998d-a6a2-4c04-a29c-628ddd388d36",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1002.atlas",
+      "name": "symbol_1002.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1002.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1002.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1002.atlas"
+    },
+    {
+      "uuid": "63fa32b3-a656-49d6-918a-5ef8a803847a",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1002.png",
+      "name": "symbol_1002.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1002.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1002.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1002.png"
+    },
+    {
+      "uuid": "a5a67b18-081b-4031-bbe5-89f94f46e40b",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1002.skel",
+      "name": "symbol_1002.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1002.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1002.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1002.skel"
+    },
+    {
+      "uuid": "f8127109-1644-4886-a28f-eca40fdf9408",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1003.atlas",
+      "name": "symbol_1003.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1003.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1003.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1003.atlas"
+    },
+    {
+      "uuid": "d6d3d43d-4581-4b57-8631-fa356062906b",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1003.png",
+      "name": "symbol_1003.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1003.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1003.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1003.png"
+    },
+    {
+      "uuid": "9ce7d4e7-e18c-4084-a184-5a2fcf64d832",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1003.skel",
+      "name": "symbol_1003.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1003.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1003.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1003.skel"
+    },
+    {
+      "uuid": "261daef3-9259-43f6-a1de-fa4db9d8c852",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1004.atlas",
+      "name": "symbol_1004.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1004.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1004.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1004.atlas"
+    },
+    {
+      "uuid": "f0102db9-f0fe-41c2-aec6-e49769b634bf",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1004.png",
+      "name": "symbol_1004.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1004.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1004.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1004.png"
+    },
+    {
+      "uuid": "8c30a564-8542-45df-a289-d1cba9d797e1",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1004.skel",
+      "name": "symbol_1004.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1004.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1004.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1004.skel"
+    },
+    {
+      "uuid": "0b49e013-e16b-48be-beba-6edbf74f9af0",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1005.atlas",
+      "name": "symbol_1005.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1005.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1005.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1005.atlas"
+    },
+    {
+      "uuid": "f5e3e967-19a5-443b-a4e4-57eda94fdd8c",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1005.png",
+      "name": "symbol_1005.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1005.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1005.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1005.png"
+    },
+    {
+      "uuid": "d5651134-c706-41dc-86b9-8c16260eb402",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1005.skel",
+      "name": "symbol_1005.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1005.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1005.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1005.skel"
+    },
+    {
+      "uuid": "d402ca38-0cdc-46ad-b4d4-f936214d4aa7",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1006.atlas",
+      "name": "symbol_1006.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1006.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1006.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1006.atlas"
+    },
+    {
+      "uuid": "a0a14c5e-1922-400b-977e-c47b6647e542",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1006.png",
+      "name": "symbol_1006.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1006.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1006.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1006.png"
+    },
+    {
+      "uuid": "b9ab3a68-15af-4b3a-88df-12c2eab947f3",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1006.skel",
+      "name": "symbol_1006.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1006.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1006.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1006.skel"
+    },
+    {
+      "uuid": "0b3c7d02-f4e7-4476-b2f1-1f5e8812ddec",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1007.atlas",
+      "name": "symbol_1007.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1007.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1007.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1007.atlas"
+    },
+    {
+      "uuid": "d24a5445-396f-4ca2-be5a-00568c32d5f9",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1007.png",
+      "name": "symbol_1007.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1007.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1007.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1007.png"
+    },
+    {
+      "uuid": "444c228f-dac1-4ac0-906a-7229cc672bcb",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1007.skel",
+      "name": "symbol_1007.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1007.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1007.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1007.skel"
+    },
+    {
+      "uuid": "082e64b0-5cf3-4756-83d5-6cda40892be9",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1008.atlas",
+      "name": "symbol_1008.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1008.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1008.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1008.atlas"
+    },
+    {
+      "uuid": "f770c1b5-7bb3-4da2-b204-9e5a1fd92101",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1008.png",
+      "name": "symbol_1008.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1008.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1008.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1008.png"
+    },
+    {
+      "uuid": "9dbdc891-dd5e-443c-846a-90fb3667034c",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1008.skel",
+      "name": "symbol_1008.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1008.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1008.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1008.skel"
+    },
+    {
+      "uuid": "c4953e0a-ff3d-4012-b71e-72df5d7b5ad7",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1009.atlas",
+      "name": "symbol_1009.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1009.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1009.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1009.atlas"
+    },
+    {
+      "uuid": "e9b5b1ae-cb33-4477-b6cd-40713ee82a6b",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1009.png",
+      "name": "symbol_1009.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1009.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1009.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1009.png"
+    },
+    {
+      "uuid": "24453c3d-d8e8-4ec8-b301-c60a21b1e54e",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1009.skel",
+      "name": "symbol_1009.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1009.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1009.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1009.skel"
+    },
+    {
+      "uuid": "4a7e693b-6617-43e1-8ebb-d1145f5ceb78",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1010.atlas",
+      "name": "symbol_1010.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1010.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1010.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1010.atlas"
+    },
+    {
+      "uuid": "1a4745ce-dde4-4391-b85a-d59cc04e4524",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1010.png",
+      "name": "symbol_1010.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1010.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1010.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1010.png"
+    },
+    {
+      "uuid": "439ec245-8320-428a-bc85-369138db189e",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_1010.skel",
+      "name": "symbol_1010.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_1010.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_1010.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_1010.skel"
+    },
+    {
+      "uuid": "10104c66-055f-467b-8295-0c65529b8ed6",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_3001.atlas",
+      "name": "symbol_3001.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_3001.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_3001.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_3001.atlas"
+    },
+    {
+      "uuid": "1deb53cc-912b-444b-8e14-1912d57a9be2",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_3001.png",
+      "name": "symbol_3001.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_3001.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_3001.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_3001.png"
+    },
+    {
+      "uuid": "ae91147e-39b6-4de6-8386-96e4770a7031",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_3001.skel",
+      "name": "symbol_3001.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_3001.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_3001.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_3001.skel"
+    },
+    {
+      "uuid": "e05bce8b-dc1e-405e-94fe-a4d2598a9dbc",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_4010.atlas",
+      "name": "symbol_4010.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_4010.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_4010.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_4010.atlas"
+    },
+    {
+      "uuid": "52073a1b-b1fd-41a7-abb2-881af2fb8c69",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_4010.png",
+      "name": "symbol_4010.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_4010.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_4010.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_4010.png"
+    },
+    {
+      "uuid": "ad179df6-3eea-45bd-a5b9-9ad56270ec61",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_4010.skel",
+      "name": "symbol_4010.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_4010.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_4010.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_4010.skel"
+    },
+    {
+      "uuid": "a34646e9-fb56-42d1-8e27-f98ca7329c8e",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_4011.atlas",
+      "name": "symbol_4011.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_4011.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_4011.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_4011.atlas"
+    },
+    {
+      "uuid": "fde788ed-7088-4f40-b491-70501b503f26",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_4011.png",
+      "name": "symbol_4011.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_4011.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_4011.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_4011.png"
+    },
+    {
+      "uuid": "1d6adffe-d6ac-487a-80c9-f02d4dbdb03b",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_4011.skel",
+      "name": "symbol_4011.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_4011.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_4011.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_4011.skel"
+    },
+    {
+      "uuid": "c1f328d8-9473-438d-9344-ae9298a919d7",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_5001.atlas",
+      "name": "symbol_5001.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_5001.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_5001.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_5001.atlas"
+    },
+    {
+      "uuid": "89edf652-afae-4a6f-b29d-4e7ad74ec351",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_5001.png",
+      "name": "symbol_5001.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_5001.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_5001.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_5001.png"
+    },
+    {
+      "uuid": "66828597-7945-4d57-b35e-cf7260d682fb",
+      "url": "db://assets/resources/Spines/RollSpine/symbol_5001.skel",
+      "name": "symbol_5001.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/symbol_5001.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/symbol_5001.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/symbol_5001.skel"
+    },
+    {
+      "uuid": "0675916a-ed3b-4c2a-9cc5-e099ad69639a",
+      "url": "db://assets/resources/Spines/RollSpine/xiaochu.atlas",
+      "name": "xiaochu.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/xiaochu.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/xiaochu.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/xiaochu.atlas"
+    },
+    {
+      "uuid": "15b33cce-a69c-48fc-99fc-c0d4917be3b2",
+      "url": "db://assets/resources/Spines/RollSpine/xiaochu.png",
+      "name": "xiaochu.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/xiaochu.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/xiaochu.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/xiaochu.png"
+    },
+    {
+      "uuid": "d486480c-6e8a-47e9-9a4c-885643b4b1c3",
+      "url": "db://assets/resources/Spines/RollSpine/xiaochu.skel",
+      "name": "xiaochu.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/xiaochu.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/xiaochu.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/xiaochu.skel"
+    },
+    {
+      "uuid": "b3df4500-cbb7-495f-90fd-b230b9c27bb5",
+      "url": "db://assets/resources/Spines/RollSpine/zhuanpanjiesuan.atlas",
+      "name": "zhuanpanjiesuan.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/zhuanpanjiesuan.atlas",
+      "exportPath": "default/spine/resources/Spines/RollSpine/zhuanpanjiesuan.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/zhuanpanjiesuan.atlas"
+    },
+    {
+      "uuid": "f5fcfc4b-6516-4055-80f5-7bb7f88f4266",
+      "url": "db://assets/resources/Spines/RollSpine/zhuanpanjiesuan.png",
+      "name": "zhuanpanjiesuan.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/zhuanpanjiesuan.png",
+      "exportPath": "default/spine/resources/Spines/RollSpine/zhuanpanjiesuan.png",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/zhuanpanjiesuan.png"
+    },
+    {
+      "uuid": "ef2d6aa3-86ea-4d97-ab95-96122bdb35ba",
+      "url": "db://assets/resources/Spines/RollSpine/zhuanpanjiesuan.skel",
+      "name": "zhuanpanjiesuan.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/resources/Spines/RollSpine/zhuanpanjiesuan.skel",
+      "exportPath": "default/spine/resources/Spines/RollSpine/zhuanpanjiesuan.skel",
+      "type": "spine",
+      "exportUiPath": "spine/resources-Spines/zhuanpanjiesuan.skel"
+    },
+    {
+      "uuid": "7e623759-0c3e-419f-ad56-1cd8f2cdc565",
+      "url": "db://assets/app-bundle/app-view/page/home/resources/spine/changjing_down.atlas",
+      "name": "changjing_down.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/page/home/resources/spine/changjing_down.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/page/home/resources/spine/changjing_down.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/page-home/changjing_down.atlas"
+    },
+    {
+      "uuid": "646dec60-6eaf-4583-be0f-564fa41f9794",
+      "url": "db://assets/app-bundle/app-view/page/home/resources/spine/changjing_down.png",
+      "name": "changjing_down.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/page/home/resources/spine/changjing_down.png",
+      "exportPath": "default/spine/app-bundle/app-view/page/home/resources/spine/changjing_down.png",
+      "type": "spine",
+      "exportUiPath": "spine/page-home/changjing_down.png"
+    },
+    {
+      "uuid": "5a0596bb-a296-4d21-855b-a59f64df213e",
+      "url": "db://assets/app-bundle/app-view/page/home/resources/spine/changjing_down.skel",
+      "name": "changjing_down.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/page/home/resources/spine/changjing_down.skel",
+      "exportPath": "default/spine/app-bundle/app-view/page/home/resources/spine/changjing_down.skel",
+      "type": "spine",
+      "exportUiPath": "spine/page-home/changjing_down.skel"
+    },
+    {
+      "uuid": "d08ecff5-e98b-42c3-b7a9-62d6340a1cf9",
+      "url": "db://assets/app-bundle/app-view/page/home/resources/spine/mianfeichangjing.atlas",
+      "name": "mianfeichangjing.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/page/home/resources/spine/mianfeichangjing.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/page/home/resources/spine/mianfeichangjing.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/page-home/mianfeichangjing.atlas"
+    },
+    {
+      "uuid": "47407821-46d9-4b33-8bcc-20228ed3f80c",
+      "url": "db://assets/app-bundle/app-view/page/home/resources/spine/mianfeichangjing.png",
+      "name": "mianfeichangjing.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/page/home/resources/spine/mianfeichangjing.png",
+      "exportPath": "default/spine/app-bundle/app-view/page/home/resources/spine/mianfeichangjing.png",
+      "type": "spine",
+      "exportUiPath": "spine/page-home/mianfeichangjing.png"
+    },
+    {
+      "uuid": "a838e6e1-8bf9-430b-88f0-cb31507b0f3b",
+      "url": "db://assets/app-bundle/app-view/page/home/resources/spine/mianfeichangjing.skel",
+      "name": "mianfeichangjing.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/page/home/resources/spine/mianfeichangjing.skel",
+      "exportPath": "default/spine/app-bundle/app-view/page/home/resources/spine/mianfeichangjing.skel",
+      "type": "spine",
+      "exportUiPath": "spine/page-home/mianfeichangjing.skel"
+    },
+    {
+      "uuid": "a0caafb8-45c8-4429-a798-a33c62c02f8f",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/Free.atlas",
+      "name": "Free.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/Free.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/Free.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/Free.atlas"
+    },
+    {
+      "uuid": "54b02aa3-21a2-43b9-9621-6fa4a80f82f0",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/Free.json",
+      "name": "Free.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/Free.json",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/Free.json",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/Free.json"
+    },
+    {
+      "uuid": "f980ac33-47af-4161-a215-139b1f7911f6",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/Free.png",
+      "name": "Free.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/Free.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/Free.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/Free.png"
+    },
+    {
+      "uuid": "831dfa52-581e-43cc-9ea9-6081b3ecf3f2",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/fg_fs.atlas",
+      "name": "fg_fs.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/fg_fs.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/fg_fs.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/fg_fs.atlas"
+    },
+    {
+      "uuid": "0c1a4b8e-43a6-4adb-a4fa-c38e4dad7618",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/fg_fs.json",
+      "name": "fg_fs.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/fg_fs.json",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/fg_fs.json",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/fg_fs.json"
+    },
+    {
+      "uuid": "217286ff-52a0-428e-bd8c-d665b26c4f76",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/fg_fs.png",
+      "name": "fg_fs.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/fg_fs.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/fg_fs.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/fg_fs.png"
+    },
+    {
+      "uuid": "ecfe2edb-93d3-4c35-b3f2-6c9e22cceca6",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_FS.atlas",
+      "name": "huxi_FS.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_FS.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_FS.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/huxi_FS.atlas"
+    },
+    {
+      "uuid": "fed55989-0356-421e-8147-c8eb7772eb82",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_FS.json",
+      "name": "huxi_FS.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_FS.json",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_FS.json",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/huxi_FS.json"
+    },
+    {
+      "uuid": "b50360c2-b373-4a93-b5c2-0c71082e9cf7",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_FS.png",
+      "name": "huxi_FS.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_FS.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_FS.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/huxi_FS.png"
+    },
+    {
+      "uuid": "d9093b6b-9f08-4013-aa0b-ef52aaf8adfe",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_cg.atlas",
+      "name": "huxi_cg.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_cg.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_cg.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/huxi_cg.atlas"
+    },
+    {
+      "uuid": "450492d2-c30b-4eb9-9eff-126c027997fd",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_cg.json",
+      "name": "huxi_cg.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_cg.json",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_cg.json",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/huxi_cg.json"
+    },
+    {
+      "uuid": "80df13c4-bce3-4357-9030-affa4896e05b",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_cg.png",
+      "name": "huxi_cg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_cg.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/huxi_cg.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/huxi_cg.png"
+    },
+    {
+      "uuid": "970ef4c8-d22b-42d7-a85b-c2bb9941b990",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/jiantou.atlas",
+      "name": "jiantou.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/jiantou.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/jiantou.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/jiantou.atlas"
+    },
+    {
+      "uuid": "5d7d2f6b-105c-4c60-b436-c2d02a887b0d",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/jiantou.png",
+      "name": "jiantou.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/jiantou.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/jiantou.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/jiantou.png"
+    },
+    {
+      "uuid": "85236327-7c93-440d-b5af-cabb5d074492",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/jiantou.skel",
+      "name": "jiantou.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/jiantou.skel",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/jiantou.skel",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/jiantou.skel"
+    },
+    {
+      "uuid": "074d761d-ee01-458a-ab35-3589e42b5a7c",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/spin_btn.atlas",
+      "name": "spin_btn.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/spin_btn.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/spin_btn.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/spin_btn.atlas"
+    },
+    {
+      "uuid": "6dc9b86a-19a7-4995-ad8a-3d106c101200",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/spin_btn.png",
+      "name": "spin_btn.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/spin_btn.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/spin_btn.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/spin_btn.png"
+    },
+    {
+      "uuid": "a602d470-3ca8-4850-a189-0e452555c130",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/spin_btn.skel",
+      "name": "spin_btn.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/spin_btn.skel",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/spin_btn.skel",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/spin_btn.skel"
+    },
+    {
+      "uuid": "efd4050c-369e-4293-95e1-eebbeba590f2",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/tx_fg.atlas",
+      "name": "tx_fg.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/tx_fg.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/tx_fg.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/tx_fg.atlas"
+    },
+    {
+      "uuid": "d8996817-b135-4196-a04b-acd505a11e5c",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/tx_fg.json",
+      "name": "tx_fg.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/tx_fg.json",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/tx_fg.json",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/tx_fg.json"
+    },
+    {
+      "uuid": "f939292b-66f2-4bd8-aa73-316c59e7f624",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/tx_fg.png",
+      "name": "tx_fg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/GameStateSpine/tx_fg.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/GameStateSpine/tx_fg.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/tx_fg.png"
+    },
+    {
+      "uuid": "ca1126d8-305e-4b3c-9d41-2b991b09b095",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_auto.atlas",
+      "name": "IbongAdarna_auto.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_auto.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_auto.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/IbongAdarna_auto.atlas"
+    },
+    {
+      "uuid": "eaf14cbe-685d-484f-8e8c-2d709bb12570",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_auto.json",
+      "name": "IbongAdarna_auto.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_auto.json",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_auto.json",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/IbongAdarna_auto.json"
+    },
+    {
+      "uuid": "41353f2d-3cc8-4f95-b402-3cd0a79c1e20",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_auto.png",
+      "name": "IbongAdarna_auto.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_auto.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_auto.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/IbongAdarna_auto.png"
+    },
+    {
+      "uuid": "dfa70a5f-4903-4a85-824b-22d5de2aab67",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_bet.atlas",
+      "name": "IbongAdarna_bet.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_bet.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_bet.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/IbongAdarna_bet.atlas"
+    },
+    {
+      "uuid": "026d7478-4938-4d1d-ba84-107f0541ad7a",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_bet.json",
+      "name": "IbongAdarna_bet.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_bet.json",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_bet.json",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/IbongAdarna_bet.json"
+    },
+    {
+      "uuid": "720c2bcb-840e-45f9-aa49-07f6674d1a18",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_bet.png",
+      "name": "IbongAdarna_bet.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_bet.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_bet.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/IbongAdarna_bet.png"
+    },
+    {
+      "uuid": "27c8a367-cfb8-490d-b067-d66d6a29f603",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_spin.atlas",
+      "name": "IbongAdarna_spin.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_spin.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_spin.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/IbongAdarna_spin.atlas"
+    },
+    {
+      "uuid": "7ff0ed09-e9dd-46d6-ad95-88f6f468ecfb",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_spin.json",
+      "name": "IbongAdarna_spin.json",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_spin.json",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_spin.json",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/IbongAdarna_spin.json"
+    },
+    {
+      "uuid": "27eca240-171e-4611-9495-ea824232ffbb",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_spin.png",
+      "name": "IbongAdarna_spin.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_spin.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/body/resources/Spine/IbongAdarna_spin.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/IbongAdarna_spin.png"
+    },
+    {
+      "uuid": "e634c40f-676f-445d-bbd8-dbf0f7f82d68",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Spine/changjing_up.atlas",
+      "name": "changjing_up.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Spine/changjing_up.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/roll/resources/Spine/changjing_up.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/changjing_up.atlas"
+    },
+    {
+      "uuid": "8c17ef9b-63d6-46e5-9f57-4693372e3e5d",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Spine/changjing_up.png",
+      "name": "changjing_up.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Spine/changjing_up.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/roll/resources/Spine/changjing_up.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/changjing_up.png"
+    },
+    {
+      "uuid": "838b1c25-4af9-43d1-a65c-64b607390835",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Spine/changjing_up.skel",
+      "name": "changjing_up.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Spine/changjing_up.skel",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/roll/resources/Spine/changjing_up.skel",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/changjing_up.skel"
+    },
+    {
+      "uuid": "1adf1844-0e9f-43ac-9613-52174fe40929",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Spine/guang.atlas",
+      "name": "guang.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Spine/guang.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/roll/resources/Spine/guang.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/guang.atlas"
+    },
+    {
+      "uuid": "26fa47da-7c4b-4a43-9498-1f3f519286b8",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Spine/guang.png",
+      "name": "guang.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Spine/guang.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/roll/resources/Spine/guang.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/guang.png"
+    },
+    {
+      "uuid": "4f18b676-2c9e-495a-aae1-2d5c5b41bc08",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Spine/guang.skel",
+      "name": "guang.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Spine/guang.skel",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/roll/resources/Spine/guang.skel",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/guang.skel"
+    },
+    {
+      "uuid": "37ca48a9-6338-4f04-9e8c-f96d4e904468",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Spine/ui.atlas",
+      "name": "ui.atlas",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Spine/ui.atlas",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/roll/resources/Spine/ui.atlas",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/ui.atlas"
+    },
+    {
+      "uuid": "37ace8b1-281e-4701-8e28-da2d084a7b29",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Spine/ui.png",
+      "name": "ui.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Spine/ui.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/roll/resources/Spine/ui.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/ui.png"
+    },
+    {
+      "uuid": "1515fcc2-a2eb-4423-8f9b-678bad8473f6",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Spine/ui.skel",
+      "name": "ui.skel",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Spine/ui.skel",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/roll/resources/Spine/ui.skel",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/ui.skel"
+    },
+    {
+      "uuid": "0187cfe9-3a44-4fa5-a006-282e268734fd",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Spine/ui2.png",
+      "name": "ui2.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Spine/ui2.png",
+      "exportPath": "default/spine/app-bundle/app-view/paper/home/roll/resources/Spine/ui2.png",
+      "type": "spine",
+      "exportUiPath": "spine/paper-home/ui2.png"
+    }
+  ],
+  "fonts": [
+    {
+      "uuid": "9086b787-8e45-4794-8899-6b5ab00055c3",
+      "url": "db://assets/app-bundle/app-view/pop/free-spin-result/resources/fonts/MFLJS_SZ.fnt",
+      "name": "MFLJS_SZ.fnt",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/free-spin-result/resources/fonts/MFLJS_SZ.fnt",
+      "exportPath": "default/fonts/app-bundle/app-view/pop/free-spin-result/resources/fonts/MFLJS_SZ.fnt",
+      "type": "font",
+      "exportUiPath": "font/pop-free-spin-result/MFLJS_SZ.fnt"
+    },
+    {
+      "uuid": "7f54605b-c2d8-47f7-b3cf-704bd572c1ce",
+      "url": "db://assets/app-bundle/app-view/pop/free-spin-result/resources/fonts/MFLJS_SZ.png",
+      "name": "MFLJS_SZ.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/free-spin-result/resources/fonts/MFLJS_SZ.png",
+      "exportPath": "default/fonts/app-bundle/app-view/pop/free-spin-result/resources/fonts/MFLJS_SZ.png",
+      "type": "font",
+      "exportUiPath": "font/pop-free-spin-result/MFLJS_SZ.png"
+    },
+    {
+      "uuid": "f1cc7f44-7d75-4503-8026-ea2658333bc8",
+      "url": "db://assets/app-bundle/app-view/pop/free-spin-result/resources/fonts/MFLJS_WZSZ.fnt",
+      "name": "MFLJS_WZSZ.fnt",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/free-spin-result/resources/fonts/MFLJS_WZSZ.fnt",
+      "exportPath": "default/fonts/app-bundle/app-view/pop/free-spin-result/resources/fonts/MFLJS_WZSZ.fnt",
+      "type": "font",
+      "exportUiPath": "font/pop-free-spin-result/MFLJS_WZSZ.fnt"
+    },
+    {
+      "uuid": "4641d86d-633d-4173-bebf-696a183163b4",
+      "url": "db://assets/app-bundle/app-view/pop/free-spin-result/resources/fonts/MFLJS_WZSZ.png",
+      "name": "MFLJS_WZSZ.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/free-spin-result/resources/fonts/MFLJS_WZSZ.png",
+      "exportPath": "default/fonts/app-bundle/app-view/pop/free-spin-result/resources/fonts/MFLJS_WZSZ.png",
+      "type": "font",
+      "exportUiPath": "font/pop-free-spin-result/MFLJS_WZSZ.png"
+    },
+    {
+      "uuid": "cb167293-9c57-445b-93ef-2dea8851178c",
+      "url": "db://assets/app-bundle/app-view/pop/free-spin-result/resources/fonts/bonusAmout.fnt",
+      "name": "bonusAmout.fnt",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/free-spin-result/resources/fonts/bonusAmout.fnt",
+      "exportPath": "default/fonts/app-bundle/app-view/pop/free-spin-result/resources/fonts/bonusAmout.fnt",
+      "type": "font",
+      "exportUiPath": "font/pop-free-spin-result/bonusAmout.fnt"
+    },
+    {
+      "uuid": "0ad7f33a-d6a6-4e11-b54d-7a5ab3822fb8",
+      "url": "db://assets/app-bundle/app-view/pop/free-spin-result/resources/fonts/bonusAmout.png",
+      "name": "bonusAmout.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/pop/free-spin-result/resources/fonts/bonusAmout.png",
+      "exportPath": "default/fonts/app-bundle/app-view/pop/free-spin-result/resources/fonts/bonusAmout.png",
+      "type": "font",
+      "exportUiPath": "font/pop-free-spin-result/bonusAmout.png"
+    },
+    {
+      "uuid": "72a98ca8-f280-4bf8-a924-e8cd7e2d64b1",
+      "url": "db://assets/app-bundle/app-view/paper/home/activity/resources/Font/freeTimes.fnt",
+      "name": "freeTimes.fnt",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/activity/resources/Font/freeTimes.fnt",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/activity/resources/Font/freeTimes.fnt",
+      "type": "font",
+      "exportUiPath": "font/paper-home/freeTimes.fnt"
+    },
+    {
+      "uuid": "1145fc4e-fc7a-4543-9eb9-1551f94b6d72",
+      "url": "db://assets/app-bundle/app-view/paper/home/activity/resources/Font/freeTimes.png",
+      "name": "freeTimes.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/activity/resources/Font/freeTimes.png",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/activity/resources/Font/freeTimes.png",
+      "type": "font",
+      "exportUiPath": "font/paper-home/freeTimes.png"
+    },
+    {
+      "uuid": "5a9f796b-363b-4d9a-b613-5acb652db32c",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/Font/FreeSpinWIn.fnt",
+      "name": "FreeSpinWIn.fnt",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/Font/FreeSpinWIn.fnt",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/body/resources/Font/FreeSpinWIn.fnt",
+      "type": "font",
+      "exportUiPath": "font/paper-home/FreeSpinWIn.fnt"
+    },
+    {
+      "uuid": "82049036-7fb3-4476-ac88-8ee1086b3a02",
+      "url": "db://assets/app-bundle/app-view/paper/home/body/resources/Font/FreeSpinWIn.png",
+      "name": "FreeSpinWIn.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/body/resources/Font/FreeSpinWIn.png",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/body/resources/Font/FreeSpinWIn.png",
+      "type": "font",
+      "exportUiPath": "font/paper-home/FreeSpinWIn.png"
+    },
+    {
+      "uuid": "5434ba35-0b58-42df-bf48-c4d9fc02819d",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Font/freeLest-font.fnt",
+      "name": "freeLest-font.fnt",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Font/freeLest-font.fnt",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/Font/freeLest-font.fnt",
+      "type": "font",
+      "exportUiPath": "font/paper-home/freeLest-font.fnt"
+    },
+    {
+      "uuid": "5723e348-6301-4296-b95e-524413dbb7e4",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Font/freeLest-font.png",
+      "name": "freeLest-font.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Font/freeLest-font.png",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/Font/freeLest-font.png",
+      "type": "font",
+      "exportUiPath": "font/paper-home/freeLest-font.png"
+    },
+    {
+      "uuid": "e370f393-0121-4c0f-b9e4-fc6be9313421",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Font/number.fnt",
+      "name": "number.fnt",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Font/number.fnt",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/Font/number.fnt",
+      "type": "font",
+      "exportUiPath": "font/paper-home/number.fnt"
+    },
+    {
+      "uuid": "8f4cc5ed-7d64-45a3-952c-ba6ff69eab75",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Font/number.png",
+      "name": "number.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Font/number.png",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/Font/number.png",
+      "type": "font",
+      "exportUiPath": "font/paper-home/number.png"
+    },
+    {
+      "uuid": "deb9d0fe-ccd9-4a6a-968d-fed99b9aa192",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Font/winnumber.fnt",
+      "name": "winnumber.fnt",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Font/winnumber.fnt",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/Font/winnumber.fnt",
+      "type": "font",
+      "exportUiPath": "font/paper-home/winnumber.fnt"
+    },
+    {
+      "uuid": "bca3a610-2cf3-4c58-b459-022e63e433b2",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Font/winnumber.png",
+      "name": "winnumber.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Font/winnumber.png",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/Font/winnumber.png",
+      "type": "font",
+      "exportUiPath": "font/paper-home/winnumber.png"
+    },
+    {
+      "uuid": "84d1c43d-6b2d-40d9-a681-41fb8754c3a4",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/WinNumber/WinNumber.fnt",
+      "name": "WinNumber.fnt",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/WinNumber/WinNumber.fnt",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/WinNumber/WinNumber.fnt",
+      "type": "font",
+      "exportUiPath": "font/paper-home/WinNumber.fnt"
+    },
+    {
+      "uuid": "05ba5168-83f4-4fcb-a6db-6f9a5faf85ca",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/WinNumber/WinNumber.png",
+      "name": "WinNumber.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/WinNumber/WinNumber.png",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/WinNumber/WinNumber.png",
+      "type": "font",
+      "exportUiPath": "font/paper-home/WinNumber.png"
+    },
+    {
+      "uuid": "b4f2c9dc-9f37-4f2b-b8fd-f780e608d5a3",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/winBg/winBg.fnt",
+      "name": "winBg.fnt",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/winBg/winBg.fnt",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/winBg/winBg.fnt",
+      "type": "font",
+      "exportUiPath": "font/paper-home/winBg.fnt"
+    },
+    {
+      "uuid": "90ed0fad-661b-4d69-b48a-6e5b54da2935",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/winBg/winBg.png",
+      "name": "winBg.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/winBg/winBg.png",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/winBg/winBg.png",
+      "type": "font",
+      "exportUiPath": "font/paper-home/winBg.png"
+    },
+    {
+      "uuid": "99045e37-a5ef-4ce2-81cf-49d334d08b4b",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Font/wheelNumber/wheelNumber.fnt",
+      "name": "wheelNumber.fnt",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Font/wheelNumber/wheelNumber.fnt",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/Font/wheelNumber/wheelNumber.fnt",
+      "type": "font",
+      "exportUiPath": "font/paper-home/wheelNumber.fnt"
+    },
+    {
+      "uuid": "726a765e-4a2f-4677-a6f6-59031e6d8ec2",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Font/wheelNumber/wheelNumber.png",
+      "name": "wheelNumber.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Font/wheelNumber/wheelNumber.png",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/Font/wheelNumber/wheelNumber.png",
+      "type": "font",
+      "exportUiPath": "font/paper-home/wheelNumber.png"
+    },
+    {
+      "uuid": "f3af7ae9-f847-4004-8ceb-5246b7cd0564",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Font/wheelNumber/wheelNumber2.fnt",
+      "name": "wheelNumber2.fnt",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Font/wheelNumber/wheelNumber2.fnt",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/Font/wheelNumber/wheelNumber2.fnt",
+      "type": "font",
+      "exportUiPath": "font/paper-home/wheelNumber2.fnt"
+    },
+    {
+      "uuid": "e360b511-7762-4750-9fb4-e7afe06b74cb",
+      "url": "db://assets/app-bundle/app-view/paper/home/roll/resources/Font/wheelNumber/wheelNumber2.png",
+      "name": "wheelNumber2.png",
+      "sourceFile": "/Users/lv/work/cocos/mayari-cocos/assets/app-bundle/app-view/paper/home/roll/resources/Font/wheelNumber/wheelNumber2.png",
+      "exportPath": "default/fonts/app-bundle/app-view/paper/home/roll/resources/Font/wheelNumber/wheelNumber2.png",
+      "type": "font",
+      "exportUiPath": "font/paper-home/wheelNumber2.png"
+    }
+  ]
+}

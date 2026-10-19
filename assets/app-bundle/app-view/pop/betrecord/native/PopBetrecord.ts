@@ -371,6 +371,7 @@ export class PopBetrecord extends BaseView {
       this.TimeTabs.children.forEach(tab => {
         if (currentTab === tab) {
           tab.getComponent(Sprite).spriteFrame = this.SelectIconOn;
+          tab.children[0].getComponent(Label).color = new Color().fromHEX('#FFFFFF');
 
           this._ageMinutes = parseInt(tab.children[0].name) || 0;
 
@@ -395,6 +396,7 @@ export class PopBetrecord extends BaseView {
           this.getData();
         } else {
           tab.getComponent(Sprite).spriteFrame = this.SelectIconOff;
+          tab.children[0].getComponent(Label).color = new Color().fromHEX('#051E58');
         }
       });
     }
@@ -405,7 +407,7 @@ export class PopBetrecord extends BaseView {
       // }
       this._selectedDate = date;
       const DataLabel = this.ClickToSelectADateLabel.getComponent(Label);
-      DataLabel.color = new Color().fromHEX('#FFFFFF');
+      DataLabel.color = new Color().fromHEX('#051E58');
       DataLabel.string = dayjs(date).format('YYYY-MM-DD');
 
       this._pageParams = {
@@ -448,7 +450,7 @@ export class PopBetrecord extends BaseView {
 
     private clearDay() {
       const DataLabel = this.ClickToSelectADateLabel.getComponent(Label);
-      DataLabel.color = new Color().fromHEX('#7F7F7F');
+      DataLabel.color = new Color().fromHEX('#6F87A5');
       DataLabel.string = 'Click to select a date';
     }
 
@@ -461,7 +463,7 @@ export class PopBetrecord extends BaseView {
         cleared_value: DataLabel.string
       });
       EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
-      DataLabel.color = new Color().fromHEX('#7F7F7F');
+      DataLabel.color = new Color().fromHEX('#6F87A5');
       DataLabel.string = 'Click to select a date';
     }
 
@@ -473,7 +475,7 @@ export class PopBetrecord extends BaseView {
       this.selectTabTime(null);
       // 清空日期显示
       const DataLabel = this.ClickToSelectADateLabel.getComponent(Label);
-      DataLabel.color = new Color().fromHEX('#7F7F7F');
+      DataLabel.color = new Color().fromHEX('#6F87A5');
       DataLabel.string = 'Click to select a date';
       
       this._pageParams = {

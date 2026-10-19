@@ -1,4 +1,4 @@
-import { _decorator, Label, Node, RichText, Sprite, SpriteAtlas, UITransform } from 'cc';
+import { _decorator, Color, Label, Node, RichText, Sprite, SpriteAtlas, UITransform } from 'cc';
 import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { app } from 'db://assets/app/app';
 import { ApiPath, ErrorType } from 'db://assets/common/script/extra/https/Constant';
@@ -146,6 +146,7 @@ export class PopErrorPop extends BaseView {
     if (this.enableRichText && !this.richText) {
       this.richText =
         this.toastText.getComponent(RichText) || this.toastText.addComponent(RichText);
+      this.richText.color = new Color().fromHEX('#051E58');
       this.richText.fontSize = 32;
       this.richText.lineHeight = 33;
       this.richText.maxWidth = this.textContainer.getComponent(UITransform).width;
@@ -157,6 +158,7 @@ export class PopErrorPop extends BaseView {
     }
     if (!this.enableRichText && !this.labelText) {
       this.labelText = this.toastText.getComponent(Label) || this.toastText.addComponent(Label);
+      this.labelText.color = new Color().fromHEX('#051E58');
       this.labelText.fontSize = 32;
       this.labelText.lineHeight = 33;
       this.labelText.horizontalAlign = Label.HorizontalAlign.CENTER;
@@ -167,7 +169,8 @@ export class PopErrorPop extends BaseView {
 
   private updateTextLabel(msg: string) {
     if (this.enableRichText) {
-      this.richText.string = msg;
+      // Legacy maintenance emphasis was cyan on the previous dark skin.
+      this.richText.string = msg.replace(/<color=#00ffff>/gi, '<color=#051E58>');
     } else {
       this.labelText.string = msg;
     }

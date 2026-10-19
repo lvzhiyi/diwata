@@ -1,0 +1,53 @@
+{
+"skeleton": { "hash": "QeGAEanCHxwVoaXU87dJ/FR4Cc8", "spine": "3.8.99", "images": "./img/", "audio": "./img/" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "gx", "parent": "root", "length": 610.2, "rotation": 89.81, "scaleX": 0.2865, "scaleY": 0.5438 }
+],
+"slots": [
+	{ "name": "gx", "bone": "gx", "blend": "additive" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"gx": {
+				"gx": { "x": 324.86, "y": -4.56, "rotation": -89.81, "width": 412, "height": 682 }
+			}
+		}
+	}
+],
+"events": {
+	"free": {}
+},
+"animations": {
+	"daiji": {},
+	"dianji": {
+		"slots": {
+			"gx": {
+				"color": [
+					{ "time": 0.3333, "color": "ffffffff" },
+					{ "time": 0.5667, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "name": "gx" }
+				]
+			}
+		},
+		"bones": {
+			"gx": {
+				"scale": [
+					{ "x": 0, "y": 0 },
+					{ "time": 0.3333, "x": 1.08, "y": 1.08 },
+					{ "time": 0.5, "x": 1.179, "y": 1.179 },
+					{ "time": 0.6667 }
+				]
+			}
+		},
+		"events": [
+			{ "time": 0.3333, "name": "free" }
+		]
+	},
+	"zhihui": {}
+}
+}

@@ -1,0 +1,146 @@
+
+IbongAdarna_auto.png
+size: 105,1786
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+eff/SkunksStash_jackpot_collect_last_01
+  rotate: false
+  xy: 2, 1406
+  size: 96, 92
+  orig: 108, 100
+  offset: 7, 4
+  index: -1
+eff/SkunksStash_jackpot_collect_last_02
+  rotate: false
+  xy: 2, 1500
+  size: 97, 93
+  orig: 108, 100
+  offset: 7, 4
+  index: -1
+eff/SkunksStash_jackpot_collect_last_03
+  rotate: true
+  xy: 2, 82
+  size: 85, 92
+  orig: 108, 100
+  offset: 19, 5
+  index: -1
+eff/SkunksStash_jackpot_collect_last_04
+  rotate: false
+  xy: 2, 860
+  size: 92, 91
+  orig: 108, 100
+  offset: 11, 6
+  index: -1
+eff/SkunksStash_jackpot_collect_last_05
+  rotate: false
+  xy: 2, 1133
+  size: 96, 89
+  orig: 108, 100
+  offset: 6, 8
+  index: -1
+eff/SkunksStash_jackpot_collect_last_06
+  rotate: false
+  xy: 2, 953
+  size: 98, 86
+  orig: 108, 100
+  offset: 3, 11
+  index: -1
+eff/SkunksStash_jackpot_collect_last_07
+  rotate: false
+  xy: 2, 339
+  size: 98, 81
+  orig: 108, 100
+  offset: 3, 16
+  index: -1
+eff/SkunksStash_jackpot_collect_last_08
+  rotate: false
+  xy: 2, 257
+  size: 99, 80
+  orig: 108, 100
+  offset: 2, 17
+  index: -1
+eff/SkunksStash_jackpot_collect_last_09
+  rotate: false
+  xy: 2, 1317
+  size: 100, 87
+  orig: 108, 100
+  offset: 2, 10
+  index: -1
+eff/SkunksStash_jackpot_collect_last_10
+  rotate: false
+  xy: 2, 1595
+  size: 100, 92
+  orig: 108, 100
+  offset: 2, 5
+  index: -1
+eff/SkunksStash_jackpot_collect_last_11
+  rotate: false
+  xy: 2, 1689
+  size: 101, 95
+  orig: 108, 100
+  offset: 2, 2
+  index: -1
+eff/SkunksStash_jackpot_collect_last_12
+  rotate: true
+  xy: 2, 594
+  size: 85, 96
+  orig: 108, 100
+  offset: 3, 1
+  index: -1
+eff/SkunksStash_jackpot_collect_last_13
+  rotate: true
+  xy: 2, 2
+  size: 78, 95
+  orig: 108, 100
+  offset: 3, 1
+  index: -1
+eff/SkunksStash_jackpot_collect_last_14
+  rotate: true
+  xy: 2, 169
+  size: 86, 92
+  orig: 108, 100
+  offset: 3, 1
+  index: -1
+eff/SkunksStash_jackpot_collect_last_15
+  rotate: false
+  xy: 2, 768
+  size: 92, 90
+  orig: 108, 100
+  offset: 3, 2
+  index: -1
+eff/SkunksStash_jackpot_collect_last_16
+  rotate: false
+  xy: 2, 1041
+  size: 94, 90
+  orig: 108, 100
+  offset: 3, 2
+  index: -1
+eff/SkunksStash_jackpot_collect_last_17
+  rotate: false
+  xy: 2, 422
+  size: 95, 84
+  orig: 108, 100
+  offset: 3, 2
+  index: -1
+eff/SkunksStash_jackpot_collect_last_18
+  rotate: false
+  xy: 2, 508
+  size: 96, 84
+  orig: 108, 100
+  offset: 4, 2
+  index: -1
+eff/SkunksStash_jackpot_collect_last_19
+  rotate: false
+  xy: 2, 681
+  size: 97, 85
+  orig: 108, 100
+  offset: 5, 3
+  index: -1
+eff/SkunksStash_jackpot_collect_last_20
+  rotate: false
+  xy: 2, 1224
+  size: 95, 91
+  orig: 108, 100
+  offset: 7, 3
+  index: -1

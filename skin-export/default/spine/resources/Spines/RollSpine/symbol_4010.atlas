@@ -1,0 +1,34 @@
+
+symbol_4010.png
+size: 218,235
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bg_1
+  rotate: false
+  xy: 0, 0
+  size: 117, 109
+  orig: 119, 111
+  offset: 1, 1
+  index: -1
+frame_1
+  rotate: false
+  xy: 0, 109
+  size: 126, 126
+  orig: 128, 128
+  offset: 1, 1
+  index: -1
+sword_1
+  rotate: true
+  xy: 126, 39
+  size: 98, 91
+  orig: 100, 93
+  offset: 1, 1
+  index: -1
+sword_2
+  rotate: true
+  xy: 126, 137
+  size: 98, 92
+  orig: 100, 94
+  offset: 1, 1
+  index: -1

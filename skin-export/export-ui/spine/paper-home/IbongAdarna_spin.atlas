@@ -1,0 +1,55 @@
+
+IbongAdarna_spin.png
+size: 249,911
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+light/jn1
+  rotate: false
+  xy: 2, 491
+  size: 188, 188
+  orig: 188, 188
+  offset: 0, 0
+  index: -1
+light/light_dian_10
+  rotate: false
+  xy: 2, 313
+  size: 176, 176
+  orig: 200, 200
+  offset: 12, 12
+  index: -1
+spin/btn_bg
+  rotate: true
+  xy: 2, 158
+  size: 153, 156
+  orig: 155, 156
+  offset: 1, 0
+  index: -1
+spin/btn_bgLight
+  rotate: false
+  xy: 2, 2
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1
+spin/btn_spin
+  rotate: true
+  xy: 158, 66
+  size: 90, 89
+  orig: 92, 91
+  offset: 1, 1
+  index: -1
+spin/btn_txt
+  rotate: true
+  xy: 160, 158
+  size: 123, 46
+  orig: 124, 47
+  offset: 1, 1
+  index: -1
+spin/spin_light
+  rotate: false
+  xy: 2, 681
+  size: 228, 228
+  orig: 252, 252
+  offset: 12, 12
+  index: -1

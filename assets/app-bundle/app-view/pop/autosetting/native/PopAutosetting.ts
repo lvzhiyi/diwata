@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Sprite, SpriteFrame, EventTarget, Color } from 'cc';
+import { _decorator, Component, Node, Sprite, SpriteFrame, EventTarget, Color, Label } from 'cc';
 import { AddOrSub } from './expansion/AddOrSub';
 import { app } from 'db://assets/app/app';
 import BaseView from 'db://app/base/BaseView';
@@ -56,6 +56,7 @@ export class PopAutosetting extends BaseView {
           this.cancelSelectedButton();
 
           spin.getComponent(Sprite).spriteFrame = this.AmountButtonOn;
+          spin.children[0].getComponent(Label).color = new Color().fromHEX('#FFFFFF');
           this.amountButton = spin;
 
           // 保存点击按钮后的totalspins数据
@@ -92,6 +93,7 @@ export class PopAutosetting extends BaseView {
       if (key === 'totalSpins') {
         this.BottomNode.children.forEach(spin => {
           spin.getComponent(Sprite).spriteFrame = spin.children[0].name === value.toString() ? this.AmountButtonOn : this.AmountButtonOff;
+          spin.children[0].getComponent(Label).color = new Color().fromHEX(spin.children[0].name === value.toString() ? '#FFFFFF' : '#051E58');
         });
         this.changeSelectNodeUI(key, this.SelectTotalSpins);
       } else if (key === 'singleWin') {
@@ -119,6 +121,7 @@ export class PopAutosetting extends BaseView {
     cancelSelectedButton() {
       if (this.amountButton) {
         this.amountButton.getComponent(Sprite).spriteFrame = this.AmountButtonOff;
+        this.amountButton.children[0].getComponent(Label).color = new Color().fromHEX('#051E58');
       }
     }
 

@@ -1,0 +1,16 @@
+info face="wheelNumber" size=89 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=1,1,1,1 spacing=1,1
+common lineHeight=89 base=89 scaleW=272 scaleH=274 pages=1 packed=0
+page id=0 file="wheelNumber.png"
+chars count=12
+char id=32 x=0 y=0 width=0 height=0 xoffset=0 yoffset=0 xadvance=30 page=0 chnl=15
+char id=48 x=0 y=0 width=69 height=91 xoffset=-1 yoffset=-1 xadvance=67 page=0 chnl=15
+char id=49 x=210 y=0 width=51 height=89 xoffset=8 yoffset=0 xadvance=67 page=0 chnl=15
+char id=50 x=70 y=0 width=69 height=91 xoffset=-1 yoffset=-1 xadvance=67 page=0 chnl=15
+char id=51 x=0 y=184 width=67 height=90 xoffset=0 yoffset=0 xadvance=67 page=0 chnl=15
+char id=52 x=70 y=92 width=69 height=85 xoffset=-1 yoffset=2 xadvance=67 page=0 chnl=15
+char id=53 x=68 y=184 width=68 height=89 xoffset=-1 yoffset=0 xadvance=67 page=0 chnl=15
+char id=54 x=140 y=0 width=69 height=91 xoffset=-1 yoffset=-1 xadvance=67 page=0 chnl=15
+char id=55 x=137 y=184 width=65 height=89 xoffset=1 yoffset=0 xadvance=67 page=0 chnl=15
+char id=56 x=203 y=184 width=69 height=89 xoffset=-1 yoffset=0 xadvance=67 page=0 chnl=15
+char id=57 x=0 y=92 width=69 height=91 xoffset=-1 yoffset=-1 xadvance=67 page=0 chnl=15
+char id=120 x=140 y=92 width=69 height=68 xoffset=-1 yoffset=14 xadvance=67 page=0 chnl=15

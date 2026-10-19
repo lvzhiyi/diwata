@@ -281,9 +281,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 5,
+      "g": 30,
+      "b": 88,
       "a": 255
     },
     "_string": "8",
@@ -326,7 +326,8 @@
       "y": 2
     },
     "_shadowBlur": 2,
-    "_id": ""
+    "_id": "",
+    "_isOutlined": false
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -340,7 +341,7 @@
     "node": {
       "__id__": 4
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 10
     },
@@ -700,9 +701,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 243,
-      "g": 223,
-      "b": 255,
+      "r": 5,
+      "g": 30,
+      "b": 88,
       "a": 255
     },
     "_string": "1",
@@ -745,7 +746,8 @@
       "y": 2
     },
     "_shadowBlur": 2,
-    "_id": ""
+    "_id": "",
+    "_isOutlined": false
   },
   {
     "__type__": "cc.CompPrefabInfo",

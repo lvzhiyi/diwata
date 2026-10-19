@@ -47,9 +47,11 @@ export class BetAmountGrid extends Component {
 
       if (app.manager.global.betCount === realVal) {
         roundBorder.getComponent(Sprite).spriteFrame = this.activeSpriteFrame;
-        labelNode.enableShadow = true;
+        labelNode.color = new Color().fromHEX('#FFFFFF');
+        labelNode.enableShadow = false;
       } else {
         roundBorder.getComponent(Sprite).spriteFrame = this.unactiveSpriteFrame;
+        labelNode.color = new Color().fromHEX('#051E58');
         labelNode.enableShadow = false;
       }
 
@@ -73,10 +75,12 @@ export class BetAmountGrid extends Component {
       if (val === app.manager.global.betCount) {
         this.listRadiusRect[index].getComponent(Sprite).spriteFrame =
           this.activeSpriteFrame;
-        label.enableShadow = true;
+        label.color = new Color().fromHEX('#FFFFFF');
+        label.enableShadow = false;
       } else {
         this.listRadiusRect[index].getComponent(Sprite).spriteFrame =
           this.unactiveSpriteFrame;
+        label.color = new Color().fromHEX('#051E58');
         label.enableShadow = false;
       }
     });

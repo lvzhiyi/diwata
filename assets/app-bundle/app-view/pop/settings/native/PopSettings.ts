@@ -97,7 +97,7 @@ export class PopSettings extends BaseView {
     if (this.canClickAutoSetting()) {
       const button = this.AutoSettingBtn.getChildByName('ButtonItem').getComponent(Button);
       const titleLabel = this.AutoSettingBtn.getChildByName('ButtonItem').getChildByName('Label').getComponent(Label);
-      titleLabel.color = new Color().fromHEX('#FFFFFF');
+      titleLabel.color = new Color().fromHEX('#051E58');
       button.interactable = true;
     } else {
       const titleLabel = this.AutoSettingBtn.getChildByName('ButtonItem').getChildByName('Label').getComponent(Label);

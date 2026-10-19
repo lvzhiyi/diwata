@@ -1,0 +1,382 @@
+{
+  "source": "https://www.figma.com/design/veKhCFadXm5yGRmi19d00S/11?node-id=0-1",
+  "assets": [
+    {
+      "name": "panel",
+      "source": "panel-autospin.png",
+      "file": "assets/resources/skins/tropical-popups/panel.png",
+      "width": 690,
+      "height": 879,
+      "uuid": "41d7c171-9237-590f-9eaf-69f469223aca",
+      "sha256": "a8171ad722e5795c8ffd90b9d9eae5f63da0ca98ddd19fc10ca02fa364453125"
+    },
+    {
+      "name": "panel-tips",
+      "source": "panel-tips.png",
+      "file": "assets/resources/skins/tropical-popups/panel-tips.png",
+      "width": 690,
+      "height": 553,
+      "uuid": "6eb0ec55-e208-5446-9322-33f1d04afede",
+      "sha256": "49de4213b2b98a62622d6425d262ccbeb9a695b5050cdf8d3e965e50a492706e"
+    },
+    {
+      "name": "header",
+      "source": "Group 1564657546.png",
+      "file": "assets/resources/skins/tropical-popups/header.png",
+      "width": 690,
+      "height": 154,
+      "uuid": "f9ba98c8-458c-4456-a1ed-3c31e81f956a",
+      "sha256": "7d8d25ed06cb320e556831f4d10fc28b5e74031b948d87be0f71732d0dc6bb21"
+    },
+    {
+      "name": "record-header",
+      "source": "顶部底板.png",
+      "file": "assets/resources/skins/tropical-popups/record-header.png",
+      "width": 750,
+      "height": 114,
+      "uuid": "0d79ee9c-69fa-4d9c-b383-b3a05eb7cc32",
+      "sha256": "b94b996b55a7079cad645781c875d9cd75b39c694808abad754894e3d17d4dca"
+    },
+    {
+      "name": "bet-panel",
+      "source": "底板-5.png",
+      "file": "assets/resources/skins/tropical-popups/bet-panel.png",
+      "width": 690,
+      "height": 696,
+      "uuid": "47691020-f322-4c22-b5e7-8a6f88db801b",
+      "sha256": "12675bdac447fb14f84e8e06850b30f0fa5f202f8f52d558ddf064fd1b005ee9"
+    },
+    {
+      "name": "close",
+      "source": "关闭.png",
+      "file": "assets/resources/skins/tropical-popups/close.png",
+      "width": 86,
+      "height": 86,
+      "uuid": "de87d82c-61fd-5a88-9ae5-1f506606c054",
+      "sha256": "7e124d1f8611cc73a419a68a05fe7130e9f671886be9b9a96a1aeb878f39361c"
+    },
+    {
+      "name": "back",
+      "source": "返回.png",
+      "file": "assets/resources/skins/tropical-popups/back.png",
+      "width": 58,
+      "height": 58,
+      "uuid": "8a9cb881-fb59-41ac-9cf6-fea76b5b471a",
+      "sha256": "dcdc8fd9ebbee6fe00576968372e8a72a4b1c9ec448a0c8cef5ac11453f8dc38"
+    },
+    {
+      "name": "add",
+      "source": "+.png",
+      "file": "assets/resources/skins/tropical-popups/add.png",
+      "width": 50,
+      "height": 50,
+      "uuid": "036d9e93-c1ac-5039-85c8-1d7b87c37d69",
+      "sha256": "8ba964a20f1dcd28367829a8187f5f0da465381516559bcbcde8b98eeaae6d4b"
+    },
+    {
+      "name": "sub",
+      "source": "-.png",
+      "file": "assets/resources/skins/tropical-popups/sub.png",
+      "width": 50,
+      "height": 50,
+      "uuid": "bf7dee2c-8d4b-5aa4-bb86-e47b3b3e118a",
+      "sha256": "d1a6cb3cc2c51c608527290e7c64491e6aed72c5ade9891b0fce587dc8c95be0"
+    },
+    {
+      "name": "copy",
+      "source": "复制.png",
+      "file": "assets/resources/skins/tropical-popups/copy.png",
+      "width": 26,
+      "height": 26,
+      "uuid": "9f41334a-859f-5039-a61c-b78be653302d",
+      "sha256": "57d80e023cc65fc6d1d06f2b3a4c7185a75f7c575f9185b4e92be8706a88d942"
+    },
+    {
+      "name": "button-primary",
+      "source": "Confirm底板.png",
+      "file": "assets/resources/skins/tropical-popups/button-primary.png",
+      "width": 274,
+      "height": 106,
+      "uuid": "acac23c7-75a1-5c34-9d15-dc156deb34bd",
+      "sha256": "6737227200030f7b2e7317eed5b841a48c20323286d9de7757f54b66dd25999a"
+    },
+    {
+      "name": "button-secondary",
+      "source": "Cancel底板.png",
+      "file": "assets/resources/skins/tropical-popups/button-secondary.png",
+      "width": 274,
+      "height": 106,
+      "uuid": "b54997b0-c1ae-545b-90fd-b407edffb17c",
+      "sha256": "4d6f93df02c20c55de5c7cfc6eb55b920f682d2df0dd952018573265b164b415"
+    },
+    {
+      "name": "tips-confirm",
+      "source": "tips-confirm.png",
+      "file": "assets/resources/skins/tropical-popups/tips-confirm.png",
+      "width": 266,
+      "height": 98,
+      "uuid": "2b283f0f-245f-58cc-8d07-bf43c0e836cf",
+      "sha256": "251ecb78885bf30e6470bd48813fe5f46c94b8d0bd5b2485c4b15f41902eb364"
+    },
+    {
+      "name": "buy-play",
+      "source": "BUY&PLAY 底板.png",
+      "file": "assets/resources/skins/tropical-popups/buy-play.png",
+      "width": 642,
+      "height": 122,
+      "uuid": "0df8044b-e82b-5290-bf05-3ea8d0243eb7",
+      "sha256": "95bdd05e39dbe8ca60ba353270af8cbb5cbeb8b61861c97657a590cd642cc8f9"
+    },
+    {
+      "name": "spin-on",
+      "source": "选中.png",
+      "file": "assets/resources/skins/tropical-popups/spin-on.png",
+      "width": 130,
+      "height": 70,
+      "uuid": "93c7a063-18bf-5aca-9d9e-29db3c3c18e4",
+      "sha256": "f58137e9832291b60b74510452629009cf349e42ff462ed25b9f2b3947c1f51a"
+    },
+    {
+      "name": "spin-off",
+      "source": "未选中.png",
+      "file": "assets/resources/skins/tropical-popups/spin-off.png",
+      "width": 126,
+      "height": 66,
+      "uuid": "f4dd0ae9-6757-5d74-880d-568d2ea2f561",
+      "sha256": "06a1198e90b7d2f3d5cb502b0aff3c095250e81c11b0bc1111d46319b1b1bd42"
+    },
+    {
+      "name": "radio-on",
+      "source": "选中-1.png",
+      "file": "assets/resources/skins/tropical-popups/radio-on.png",
+      "width": 40,
+      "height": 40,
+      "uuid": "5df12b2b-e264-5e52-ad80-79e7f15daf3f",
+      "sha256": "277b4851ed6521c395ed3f3900790886e90365416bdd1855bf0afc403f1f9335"
+    },
+    {
+      "name": "radio-off",
+      "source": "未选中-1.png",
+      "file": "assets/resources/skins/tropical-popups/radio-off.png",
+      "width": 40,
+      "height": 40,
+      "uuid": "7519355f-e5a3-5ec4-ae10-12dab038a660",
+      "sha256": "f7bea2e890fb0be2e0bee76893922ed3b7bb23595e0253146eaa7c72faf01270"
+    },
+    {
+      "name": "tab-on",
+      "source": "选中-2.png",
+      "file": "assets/resources/skins/tropical-popups/tab-on.png",
+      "width": 166,
+      "height": 66,
+      "uuid": "cbbd669c-5389-5d79-9196-c65fb1b29753",
+      "sha256": "85d5e46bdbc0bc21760727cede88859400c800c7c6370d4cc679f4fe24484a26"
+    },
+    {
+      "name": "tab-off",
+      "source": "未选中-2.png",
+      "file": "assets/resources/skins/tropical-popups/tab-off.png",
+      "width": 166,
+      "height": 66,
+      "uuid": "a6d783dc-dd71-5495-92b7-b2ba7c468076",
+      "sha256": "791656437d8d0e2e07fa75b41f4acef35fbad800333f4d093d45cb7c5972e08c"
+    },
+    {
+      "name": "bet-on",
+      "source": "选中-3.png",
+      "file": "assets/resources/skins/tropical-popups/bet-on.png",
+      "width": 198,
+      "height": 92,
+      "uuid": "5018beee-5e4d-5dd5-9289-0a0432cdad76",
+      "sha256": "273e32ccd047910d4a04026ae8039676843e2a17ff16df0d940864a6f947c2d4"
+    },
+    {
+      "name": "bet-off",
+      "source": "未选中-3.png",
+      "file": "assets/resources/skins/tropical-popups/bet-off.png",
+      "width": 198,
+      "height": 92,
+      "uuid": "3ed70e91-16f4-595b-9a30-5bfd538e3b12",
+      "sha256": "85210008be1a424ac46193f9a768cb3d8d02596be9108b51f8060bffc06c9c2b"
+    },
+    {
+      "name": "search",
+      "source": "Search底板.png",
+      "file": "assets/resources/skins/tropical-popups/search.png",
+      "width": 116,
+      "height": 66,
+      "uuid": "9b78f78e-0560-5f33-89d9-dc0d75ad30f8",
+      "sha256": "a91e32130ee1e5cd3ebaa0c745e472a2c43473ad4948e208f33272989fc19de5"
+    },
+    {
+      "name": "clear",
+      "source": "Clear底板.png",
+      "file": "assets/resources/skins/tropical-popups/clear.png",
+      "width": 116,
+      "height": 66,
+      "uuid": "90c23d1f-51f0-5c16-993b-4151f3b2f4e2",
+      "sha256": "5c54c814d634fd4cf4cecf0b5865216e363b87e2b7bcc86158ab99eb4c312bd6"
+    },
+    {
+      "name": "input",
+      "source": "填充框-1.png",
+      "file": "assets/resources/skins/tropical-popups/input.png",
+      "width": 277,
+      "height": 58,
+      "uuid": "34206fd5-83f3-5b3a-95b7-e4995ff3442f",
+      "sha256": "fc0d74862d847d132577d091d7a7db56d5342c9df82bf5172c07e7e37780e42c"
+    },
+    {
+      "name": "number",
+      "source": "填充框.png",
+      "file": "assets/resources/skins/tropical-popups/number.png",
+      "width": 196,
+      "height": 56,
+      "uuid": "52453954-44da-5a74-b8db-74ebd5b60a78",
+      "sha256": "8e3d0d2b6cc69587f8b1cae72dd2fad1d8b44f581437d3016ebed96f97fd970a"
+    },
+    {
+      "name": "number-wide",
+      "source": "填充框底板.png",
+      "file": "assets/resources/skins/tropical-popups/number-wide.png",
+      "width": 260,
+      "height": 56,
+      "uuid": "ac680a03-2ea9-54af-a3ee-be20c34bd555",
+      "sha256": "f0c4879e609b01f8cce0a3735e3165be86c4830be5948c1cbd9da332fb61db42"
+    },
+    {
+      "name": "item",
+      "source": "底框.png",
+      "file": "assets/resources/skins/tropical-popups/item.png",
+      "width": 646,
+      "height": 119,
+      "uuid": "9bb2efd9-2139-5e90-bdf4-9c334f79437a",
+      "sha256": "40c30e032eb0188d4d8a3edece37e7f4bc44fb9d772f11577ec1aa8c11a8477c"
+    },
+    {
+      "name": "record-card",
+      "source": "底板-2.png",
+      "file": "assets/resources/skins/tropical-popups/record-card.png",
+      "width": 710,
+      "height": 324,
+      "uuid": "f3db2632-a28e-56ff-9757-b5487635aff9",
+      "sha256": "3b53a73cd4efe9e501cba12bca39fc5c960d25f0f2944cdd8404c2533a1bed80"
+    },
+    {
+      "name": "detail-card",
+      "source": "底板-4.png",
+      "file": "assets/resources/skins/tropical-popups/detail-card.png",
+      "width": 710,
+      "height": 398,
+      "uuid": "a8c3c645-a8c4-5ef0-92cd-c7ef91c92a6a",
+      "sha256": "2fdf715f93df93e542a19c055a15e1d71ff69b91326f664b6f1224951a4a122e"
+    },
+    {
+      "name": "detail-grid",
+      "source": "底板-3.png",
+      "file": "assets/resources/skins/tropical-popups/detail-grid.png",
+      "width": 710,
+      "height": 398,
+      "uuid": "babd941c-c6a8-5753-9436-58cb20637350",
+      "sha256": "941d3909619069f8cb490ef3bb8ae858ceb346537fef1d974b91747c9f1baa13"
+    },
+    {
+      "name": "row",
+      "source": "底板-1.png",
+      "file": "assets/resources/skins/tropical-popups/row.png",
+      "width": 630,
+      "height": 88,
+      "uuid": "1ff69273-12b8-5993-a0e1-000c3c2e23f4",
+      "sha256": "d41b76eef993a67c74ae876171b8b7de4ab8969240ac0f80f135271fe634a1cf"
+    },
+    {
+      "name": "icon-record",
+      "source": "Frame-5.png",
+      "file": "assets/resources/skins/tropical-popups/icon-record.png",
+      "width": 45,
+      "height": 45,
+      "uuid": "9ae68b12-29a1-5e66-908a-f5ff6fbecdce",
+      "sha256": "b884fe49134fbcefdc964ecf594cf08c7222dbccd7941e1995d5138f0712e397"
+    },
+    {
+      "name": "icon-rules",
+      "source": "Frame-3.png",
+      "file": "assets/resources/skins/tropical-popups/icon-rules.png",
+      "width": 45,
+      "height": 45,
+      "uuid": "6d004cb4-699a-58b8-96cb-d0eaabafdfe9",
+      "sha256": "58181b3cf8d83384c7a0bf34968fca4fbe9fa71c57e876d03c1b1f4fb5287fe2"
+    },
+    {
+      "name": "icon-auto",
+      "source": "Frame-4.png",
+      "file": "assets/resources/skins/tropical-popups/icon-auto.png",
+      "width": 45,
+      "height": 45,
+      "uuid": "03e809e5-d9de-5cea-8ad6-bace37f3400e",
+      "sha256": "753922b759b5090886896bd6b00c4ef7ff33f0a1fdb94938cced9763c6ab5042"
+    },
+    {
+      "name": "icon-sfx",
+      "source": "Frame-1.png",
+      "file": "assets/resources/skins/tropical-popups/icon-sfx.png",
+      "width": 50,
+      "height": 50,
+      "uuid": "8c53acfd-25a7-56b6-b809-ba4e03953043",
+      "sha256": "da82fdb2e84fb6df798c233e082c97b26d1ae2991f19c90f17734d027e771800"
+    },
+    {
+      "name": "icon-music",
+      "source": "Frame-2.png",
+      "file": "assets/resources/skins/tropical-popups/icon-music.png",
+      "width": 50,
+      "height": 50,
+      "uuid": "6452e547-c61f-5693-8dd1-0972dd9d4af1",
+      "sha256": "12f7cb8ad43e848177dd987a4f16a536ceb5d34a29a31e4138859c65477fffc7"
+    },
+    {
+      "name": "arrow",
+      "source": "右.png",
+      "file": "assets/resources/skins/tropical-popups/arrow.png",
+      "width": 32,
+      "height": 32,
+      "uuid": "73e4659d-6464-53b3-9e37-1dfbc8ff17e4",
+      "sha256": "cc7aeb3f8b7febdc06d8885eebbfd410c8b43ba8ab20177e48be325b20545d41"
+    },
+    {
+      "name": "progress-thumb",
+      "source": "进度条滑动.png",
+      "file": "assets/resources/skins/tropical-popups/progress-thumb.png",
+      "width": 42,
+      "height": 42,
+      "uuid": "9059ef88-811d-49a1-b673-c13b40b4f8b2",
+      "sha256": "9affaf72626e5980fa715b8206f9d070c5b52b3ea3a99b36d35915675094e27a"
+    }
+  ],
+  "popupPrefabs": [
+    "assets/app-bundle/app-view/pop/error-pop/native/PopErrorPop.prefab",
+    "assets/app-bundle/app-view/pop/settings/native/PopSettings.prefab",
+    "assets/app-bundle/app-view/pop/settings/native/expansion/Progress.prefab",
+    "assets/app-bundle/app-view/pop/settings/native/expansion/SettingItem.prefab",
+    "assets/app-bundle/app-view/pop/autosetting/native/PopAutosetting.prefab",
+    "assets/app-bundle/app-view/pop/autosetting/native/expansion/AddOrSub.prefab",
+    "assets/app-bundle/app-view/pop/buybonus/native/PopBuybonus.prefab",
+    "assets/app-bundle/app-view/pop/buybonus/native/expansion/FreeModal.prefab",
+    "assets/app-bundle/app-view/pop/buybonus/native/expansion/AddOrSubNode.prefab",
+    "assets/app-bundle/app-view/pop/betamout/native/PopBetamout.prefab",
+    "assets/app-bundle/app-view/pop/betamout/native/expansion/RoundBorder.prefab",
+    "assets/app-bundle/app-view/pop/betrecord/native/PopBetrecord.prefab",
+    "assets/app-bundle/app-view/pop/betrecord/native/expansion/TimeTabs.prefab",
+    "assets/app-bundle/app-view/pop/betrecord/native/expansion/Tab.prefab",
+    "assets/app-bundle/app-view/pop/betrecord/native/expansion/RecordCard.prefab",
+    "assets/app-bundle/app-view/pop/betrecorddetail/native/PopBetrecorddetail.prefab",
+    "assets/app-bundle/app-view/pop/betrecorddetail/native/expansion/DetailItem.prefab",
+    "assets/app-bundle/app-view/pop/betrecorddetail/native/expansion/ItemCard.prefab",
+    "assets/app-bundle/app-view/pop/betrecorddetail/native/expansion/RecordDetailModal.prefab",
+    "assets/app-bundle/app-view/pop/betrecorddetail/native/expansion/RewardLine.prefab",
+    "assets/app-bundle/app-view/pop/betrecorddetail/native/expansion/Col.prefab",
+    "assets/app-bundle/app-view/pop/betrecorddetail/native/expansion/RowItemCard.prefab",
+    "assets/app-bundle/app-view/pop/betrecord/native/expansion/RecordNavBar.prefab",
+    "assets/app-bundle/app-view/pop/betrecorddetail/native/expansion/RecordDetailNavBar.prefab"
+  ]
+}

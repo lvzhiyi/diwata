@@ -1,0 +1,55 @@
+
+rollBetBtn.png
+size: 387,1070
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+A
+  rotate: false
+  xy: 2, 44
+  size: 168, 167
+  orig: 172, 172
+  offset: 3, 0
+  index: -1
+A1
+  rotate: false
+  xy: 2, 213
+  size: 207, 212
+  orig: 212, 212
+  offset: 0, 0
+  index: -1
+A2
+  rotate: true
+  xy: 211, 92
+  size: 164, 165
+  orig: 172, 172
+  offset: 4, 7
+  index: -1
+F1
+  rotate: true
+  xy: 211, 92
+  size: 164, 165
+  orig: 172, 172
+  offset: 4, 7
+  index: -1
+F
+  rotate: false
+  xy: 211, 258
+  size: 167, 167
+  orig: 172, 172
+  offset: 4, 0
+  index: -1
+gx (2)
+  rotate: false
+  xy: 2, 427
+  size: 383, 641
+  orig: 412, 682
+  offset: 9, 2
+  index: -1
+xz
+  rotate: true
+  xy: 172, 2
+  size: 88, 89
+  orig: 109, 111
+  offset: 11, 11
+  index: -1

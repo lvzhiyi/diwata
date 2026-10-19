@@ -155,9 +155,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 5,
+      "g": 30,
+      "b": 88,
       "a": 255
     },
     "_string": "15 mins",
@@ -200,7 +200,8 @@
       "y": 2
     },
     "_shadowBlur": 2,
-    "_id": ""
+    "_id": "",
+    "_isOutlined": false
   },
   {
     "__type__": "cc.CompPrefabInfo",

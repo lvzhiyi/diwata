@@ -1,0 +1,153 @@
+
+zhuanpanjiesuan.png
+size: 1920,520
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+57
+  rotate: false
+  xy: 0, 1
+  size: 20, 20
+  orig: 26, 26
+  offset: 3, 3
+  index: -1
+shine2_0
+  rotate: false
+  xy: 0, 21
+  size: 417, 108
+  orig: 460, 237
+  offset: 22, 62
+  index: -1
+shine2_10
+  rotate: false
+  xy: 1263, 346
+  size: 407, 174
+  orig: 460, 237
+  offset: 27, 27
+  index: -1
+shine2_12
+  rotate: false
+  xy: 815, 6
+  size: 361, 49
+  orig: 460, 237
+  offset: 32, 94
+  index: -1
+shine2_14
+  rotate: false
+  xy: 1201, 10
+  size: 322, 49
+  orig: 460, 237
+  offset: 74, 94
+  index: -1
+shine2_16
+  rotate: false
+  xy: 1523, 18
+  size: 308, 41
+  orig: 460, 237
+  offset: 72, 97
+  index: -1
+shine2_18
+  rotate: false
+  xy: 417, 0
+  size: 313, 40
+  orig: 460, 237
+  offset: 70, 97
+  index: -1
+shine2_2
+  rotate: false
+  xy: 841, 337
+  size: 422, 183
+  orig: 460, 237
+  offset: 21, 24
+  index: -1
+shine2_4
+  rotate: false
+  xy: 0, 324
+  size: 423, 196
+  orig: 460, 237
+  offset: 20, 17
+  index: -1
+shine2_6
+  rotate: false
+  xy: 0, 129
+  size: 421, 195
+  orig: 460, 237
+  offset: 21, 18
+  index: -1
+shine2_8
+  rotate: false
+  xy: 423, 328
+  size: 418, 192
+  orig: 460, 237
+  offset: 22, 19
+  index: -1
+shine_0
+  rotate: false
+  xy: 1631, 86
+  size: 210, 75
+  orig: 459, 179
+  offset: 123, 54
+  index: -1
+shine_10
+  rotate: false
+  xy: 1263, 199
+  size: 406, 147
+  orig: 459, 179
+  offset: 25, 18
+  index: -1
+shine_12
+  rotate: false
+  xy: 421, 40
+  size: 394, 145
+  orig: 459, 179
+  offset: 30, 19
+  index: -1
+shine_14
+  rotate: false
+  xy: 1247, 59
+  size: 384, 140
+  orig: 459, 179
+  offset: 35, 22
+  index: -1
+shine_16
+  rotate: true
+  xy: 1670, 161
+  size: 359, 133
+  orig: 459, 179
+  offset: 47, 27
+  index: -1
+shine_2
+  rotate: true
+  xy: 1803, 192
+  size: 328, 117
+  orig: 459, 179
+  offset: 64, 33
+  index: -1
+shine_4
+  rotate: false
+  xy: 823, 55
+  size: 378, 136
+  orig: 459, 179
+  offset: 39, 23
+  index: -1
+shine_6
+  rotate: false
+  xy: 423, 185
+  size: 400, 143
+  orig: 459, 179
+  offset: 27, 20
+  index: -1
+shine_8
+  rotate: false
+  xy: 841, 191
+  size: 406, 146
+  orig: 459, 179
+  offset: 24, 19
+  index: -1
+white
+  rotate: false
+  xy: 1803, 161
+  size: 58, 31
+  orig: 68, 35
+  offset: 5, 2
+  index: -1

@@ -1,0 +1,48 @@
+
+jiesuan.png
+size: 1730,494
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+1
+  rotate: false
+  xy: 2, 2
+  size: 722, 490
+  orig: 722, 490
+  offset: 0, 0
+  index: -1
+Gx
+  rotate: true
+  xy: 1332, 117
+  size: 375, 394
+  orig: 375, 412
+  offset: 0, 11
+  index: -1
+Gxxx
+  rotate: false
+  xy: 726, 175
+  size: 604, 317
+  orig: 604, 319
+  offset: 0, 2
+  index: -1
+bt
+  rotate: false
+  xy: 1046, 13
+  size: 682, 102
+  orig: 687, 106
+  offset: 2, 2
+  index: -1
+coin_002
+  rotate: true
+  xy: 726, 13
+  size: 160, 158
+  orig: 163, 164
+  offset: 2, 4
+  index: -1
+coin_008
+  rotate: true
+  xy: 886, 13
+  size: 160, 158
+  orig: 163, 164
+  offset: 2, 4
+  index: -1

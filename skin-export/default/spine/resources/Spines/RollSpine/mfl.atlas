@@ -1,0 +1,13 @@
+
+mfl.png
+size: 1128,907
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+A1
+  rotate: false
+  xy: 2, 2
+  size: 1124, 903
+  orig: 1126, 919
+  offset: 1, 7
+  index: -1

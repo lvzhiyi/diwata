@@ -1,0 +1,387 @@
+{
+  "source": "https://www.figma.com/design/veKhCFadXm5yGRmi19d00S/11?node-id=0-1",
+  "exportedVia": "Figma PNG export in Google Chrome",
+  "scale": 1,
+  "count": 54,
+  "note": "Full-screen reference frames include the game background and must not be used as popup sprite assets. Duplicate layer names retain the suffix assigned by Figma ZIP export.",
+  "assets": [
+    {
+      "file": "original/+-1.png",
+      "width": 50,
+      "height": 50,
+      "bytes": 3383,
+      "sha256": "92f707431b9a52466cb4b88af41c30cca8264ab1b264a5e8f3b4129c68a9cf6d"
+    },
+    {
+      "file": "original/+-2.png",
+      "width": 58,
+      "height": 58,
+      "bytes": 4674,
+      "sha256": "44d646e66494da75051999207f1db40635cc3a1897d66a38cda15927f225bc05"
+    },
+    {
+      "file": "original/+.png",
+      "width": 50,
+      "height": 50,
+      "bytes": 3279,
+      "sha256": "8ba964a20f1dcd28367829a8187f5f0da465381516559bcbcde8b98eeaae6d4b"
+    },
+    {
+      "file": "original/--1.png",
+      "width": 50,
+      "height": 50,
+      "bytes": 3349,
+      "sha256": "d977aa709da2ca4f1ec6b8802bd86bc95e5630abb7ebad8d4afa2fda1e1aabc9"
+    },
+    {
+      "file": "original/--2.png",
+      "width": 58,
+      "height": 58,
+      "bytes": 4607,
+      "sha256": "8845b35bc23eb95c6edb20cbdb255663231ef4426bb0ef7be3fdfe830730651f"
+    },
+    {
+      "file": "original/-.png",
+      "width": 50,
+      "height": 50,
+      "bytes": 3257,
+      "sha256": "d1a6cb3cc2c51c608527290e7c64491e6aed72c5ade9891b0fce587dc8c95be0"
+    },
+    {
+      "file": "original/AutoSpin Setting.png",
+      "width": 920,
+      "height": 1629,
+      "bytes": 1279118,
+      "sha256": "4810c763cdbb0b2e05704e59e30beb5cdb2e0011d4db366cc4468c68fd9e30f8"
+    },
+    {
+      "file": "original/BUY&PLAY 底板.png",
+      "width": 642,
+      "height": 122,
+      "bytes": 38813,
+      "sha256": "95bdd05e39dbe8ca60ba353270af8cbb5cbeb8b61861c97657a590cd642cc8f9"
+    },
+    {
+      "file": "original/Bet Amount.png",
+      "width": 920,
+      "height": 1629,
+      "bytes": 1431366,
+      "sha256": "2bd36e5c119cf8d2e25e0feb9e6f1e31aa4f10aef772e246e8fcd2ddd88f11e0"
+    },
+    {
+      "file": "original/Buy Bonus-1.png",
+      "width": 920,
+      "height": 1629,
+      "bytes": 625681,
+      "sha256": "5e71aa684cb945c9e03e90306c128140967bd46ae615642f88caca166fc4863e"
+    },
+    {
+      "file": "original/Buy Bonus.png",
+      "width": 920,
+      "height": 1629,
+      "bytes": 1239070,
+      "sha256": "cf875adf3a9946f839e3903093ad91958dd43fb668a7135620bba96cd10649d2"
+    },
+    {
+      "file": "original/Cancel底板.png",
+      "width": 274,
+      "height": 106,
+      "bytes": 23188,
+      "sha256": "4d6f93df02c20c55de5c7cfc6eb55b920f682d2df0dd952018573265b164b415"
+    },
+    {
+      "file": "original/Clear底板.png",
+      "width": 116,
+      "height": 66,
+      "bytes": 8179,
+      "sha256": "5c54c814d634fd4cf4cecf0b5865216e363b87e2b7bcc86158ab99eb4c312bd6"
+    },
+    {
+      "file": "original/Confirm底板.png",
+      "width": 274,
+      "height": 106,
+      "bytes": 26081,
+      "sha256": "6737227200030f7b2e7317eed5b841a48c20323286d9de7757f54b66dd25999a"
+    },
+    {
+      "file": "original/Frame-1.png",
+      "width": 50,
+      "height": 50,
+      "bytes": 2409,
+      "sha256": "da82fdb2e84fb6df798c233e082c97b26d1ae2991f19c90f17734d027e771800"
+    },
+    {
+      "file": "original/Frame-2.png",
+      "width": 50,
+      "height": 50,
+      "bytes": 1873,
+      "sha256": "12f7cb8ad43e848177dd987a4f16a536ceb5d34a29a31e4138859c65477fffc7"
+    },
+    {
+      "file": "original/Frame-3.png",
+      "width": 45,
+      "height": 45,
+      "bytes": 2050,
+      "sha256": "58181b3cf8d83384c7a0bf34968fca4fbe9fa71c57e876d03c1b1f4fb5287fe2"
+    },
+    {
+      "file": "original/Frame-4.png",
+      "width": 45,
+      "height": 45,
+      "bytes": 2098,
+      "sha256": "753922b759b5090886896bd6b00c4ef7ff33f0a1fdb94938cced9763c6ab5042"
+    },
+    {
+      "file": "original/Frame-5.png",
+      "width": 45,
+      "height": 45,
+      "bytes": 1825,
+      "sha256": "b884fe49134fbcefdc964ecf594cf08c7222dbccd7941e1995d5138f0712e397"
+    },
+    {
+      "file": "original/Frame.png",
+      "width": 50,
+      "height": 50,
+      "bytes": 2062,
+      "sha256": "fd4a5fb8b839642054bb4774d697e1186d1c19227ca1e53f9fe3fe3718d6c474"
+    },
+    {
+      "file": "original/Game Details.png",
+      "width": 920,
+      "height": 1629,
+      "bytes": 2276081,
+      "sha256": "42cfcd0156ada3cdac4ea823ea3b49c0ec751a10d6bc9299676f0c8ed20ac94b"
+    },
+    {
+      "file": "original/Group 1564657546.png",
+      "width": 690,
+      "height": 154,
+      "bytes": 12666,
+      "sha256": "7d8d25ed06cb320e556831f4d10fc28b5e74031b948d87be0f71732d0dc6bb21"
+    },
+    {
+      "file": "original/Search底板.png",
+      "width": 116,
+      "height": 66,
+      "bytes": 8390,
+      "sha256": "a91e32130ee1e5cd3ebaa0c745e472a2c43473ad4948e208f33272989fc19de5"
+    },
+    {
+      "file": "original/Settings.png",
+      "width": 920,
+      "height": 1629,
+      "bytes": 1247640,
+      "sha256": "61573dde7e3619fe43f5365d660772a158e3b3f096c57305554efe692913dc1e"
+    },
+    {
+      "file": "original/tips.png",
+      "width": 920,
+      "height": 1629,
+      "bytes": 1498252,
+      "sha256": "ad071bf679ef8959c9a41dbf9fb56938493112fad09a5ef76041a5081a47d903"
+    },
+    {
+      "file": "original/关.png",
+      "width": 125,
+      "height": 59,
+      "bytes": 7242,
+      "sha256": "dbf10b99cb75c43d1a3d81fa75980e3341859cb7ee190e84b99c2c4d54c2bec6"
+    },
+    {
+      "file": "original/关闭.png",
+      "width": 86,
+      "height": 86,
+      "bytes": 9824,
+      "sha256": "7e124d1f8611cc73a419a68a05fe7130e9f671886be9b9a96a1aeb878f39361c"
+    },
+    {
+      "file": "original/右.png",
+      "width": 32,
+      "height": 32,
+      "bytes": 815,
+      "sha256": "cc7aeb3f8b7febdc06d8885eebbfd410c8b43ba8ab20177e48be325b20545d41"
+    },
+    {
+      "file": "original/填充框-1.png",
+      "width": 277,
+      "height": 58,
+      "bytes": 1799,
+      "sha256": "fc0d74862d847d132577d091d7a7db56d5342c9df82bf5172c07e7e37780e42c"
+    },
+    {
+      "file": "original/填充框.png",
+      "width": 196,
+      "height": 56,
+      "bytes": 1883,
+      "sha256": "8e3d0d2b6cc69587f8b1cae72dd2fad1d8b44f581437d3016ebed96f97fd970a"
+    },
+    {
+      "file": "original/填充框底板.png",
+      "width": 260,
+      "height": 56,
+      "bytes": 1944,
+      "sha256": "f0c4879e609b01f8cce0a3735e3165be86c4830be5948c1cbd9da332fb61db42"
+    },
+    {
+      "file": "original/复制.png",
+      "width": 26,
+      "height": 26,
+      "bytes": 372,
+      "sha256": "57d80e023cc65fc6d1d06f2b3a4c7185a75f7c575f9185b4e92be8706a88d942"
+    },
+    {
+      "file": "original/底板-1.png",
+      "width": 630,
+      "height": 88,
+      "bytes": 1314,
+      "sha256": "d41b76eef993a67c74ae876171b8b7de4ab8969240ac0f80f135271fe634a1cf"
+    },
+    {
+      "file": "original/底板-2.png",
+      "width": 710,
+      "height": 324,
+      "bytes": 31519,
+      "sha256": "3b53a73cd4efe9e501cba12bca39fc5c960d25f0f2944cdd8404c2533a1bed80"
+    },
+    {
+      "file": "original/底板-3.png",
+      "width": 710,
+      "height": 398,
+      "bytes": 36169,
+      "sha256": "941d3909619069f8cb490ef3bb8ae858ceb346537fef1d974b91747c9f1baa13"
+    },
+    {
+      "file": "original/底板-4.png",
+      "width": 710,
+      "height": 398,
+      "bytes": 35807,
+      "sha256": "2fdf715f93df93e542a19c055a15e1d71ff69b91326f664b6f1224951a4a122e"
+    },
+    {
+      "file": "original/底板-5.png",
+      "width": 690,
+      "height": 696,
+      "bytes": 5084,
+      "sha256": "12675bdac447fb14f84e8e06850b30f0fa5f202f8f52d558ddf064fd1b005ee9"
+    },
+    {
+      "file": "original/底板.png",
+      "width": 350,
+      "height": 80,
+      "bytes": 14985,
+      "sha256": "962fb4c48037287d6a4fd6260483441792caa4b6a9df762b890852084fb30e57"
+    },
+    {
+      "file": "original/底框.png",
+      "width": 646,
+      "height": 119,
+      "bytes": 31553,
+      "sha256": "40c30e032eb0188d4d8a3edece37e7f4bc44fb9d772f11577ec1aa8c11a8477c"
+    },
+    {
+      "file": "original/开.png",
+      "width": 125,
+      "height": 59,
+      "bytes": 7097,
+      "sha256": "8d8cf1fff0461f7018f3bc06891ad97421158d3188bb16abc633eab151aa2d8e"
+    },
+    {
+      "file": "original/未选中-1.png",
+      "width": 40,
+      "height": 40,
+      "bytes": 1115,
+      "sha256": "f7bea2e890fb0be2e0bee76893922ed3b7bb23595e0253146eaa7c72faf01270"
+    },
+    {
+      "file": "original/未选中-2.png",
+      "width": 166,
+      "height": 66,
+      "bytes": 10620,
+      "sha256": "791656437d8d0e2e07fa75b41f4acef35fbad800333f4d093d45cb7c5972e08c"
+    },
+    {
+      "file": "original/未选中-3.png",
+      "width": 198,
+      "height": 92,
+      "bytes": 16972,
+      "sha256": "85210008be1a424ac46193f9a768cb3d8d02596be9108b51f8060bffc06c9c2b"
+    },
+    {
+      "file": "original/未选中.png",
+      "width": 126,
+      "height": 66,
+      "bytes": 8911,
+      "sha256": "06a1198e90b7d2f3d5cb502b0aff3c095250e81c11b0bc1111d46319b1b1bd42"
+    },
+    {
+      "file": "original/返回.png",
+      "width": 58,
+      "height": 58,
+      "bytes": 5069,
+      "sha256": "dcdc8fd9ebbee6fe00576968372e8a72a4b1c9ec448a0c8cef5ac11453f8dc38"
+    },
+    {
+      "file": "original/进度条滑动.png",
+      "width": 42,
+      "height": 42,
+      "bytes": 2751,
+      "sha256": "9affaf72626e5980fa715b8206f9d070c5b52b3ea3a99b36d35915675094e27a"
+    },
+    {
+      "file": "original/选中-1.png",
+      "width": 40,
+      "height": 40,
+      "bytes": 2010,
+      "sha256": "277b4851ed6521c395ed3f3900790886e90365416bdd1855bf0afc403f1f9335"
+    },
+    {
+      "file": "original/选中-2.png",
+      "width": 166,
+      "height": 66,
+      "bytes": 11111,
+      "sha256": "85d5e46bdbc0bc21760727cede88859400c800c7c6370d4cc679f4fe24484a26"
+    },
+    {
+      "file": "original/选中-3.png",
+      "width": 198,
+      "height": 92,
+      "bytes": 17832,
+      "sha256": "273e32ccd047910d4a04026ae8039676843e2a17ff16df0d940864a6f947c2d4"
+    },
+    {
+      "file": "original/选中.png",
+      "width": 130,
+      "height": 70,
+      "bytes": 10427,
+      "sha256": "f58137e9832291b60b74510452629009cf349e42ff462ed25b9f2b3947c1f51a"
+    },
+    {
+      "file": "original/顶部底板.png",
+      "width": 750,
+      "height": 114,
+      "bytes": 7511,
+      "sha256": "b94b996b55a7079cad645781c875d9cd75b39c694808abad754894e3d17d4dca"
+    },
+    {
+      "file": "original/panel-autospin.png",
+      "width": 690,
+      "height": 879,
+      "bytes": 15879,
+      "sha256": "a8171ad722e5795c8ffd90b9d9eae5f63da0ca98ddd19fc10ca02fa364453125"
+    },
+    {
+      "file": "original/tips-confirm.png",
+      "width": 266,
+      "height": 98,
+      "bytes": 1119,
+      "sha256": "251ecb78885bf30e6470bd48813fe5f46c94b8d0bd5b2485c4b15f41902eb364"
+    },
+    {
+      "file": "original/panel-tips.png",
+      "width": 690,
+      "height": 553,
+      "bytes": 14217,
+      "sha256": "49de4213b2b98a62622d6425d262ccbeb9a695b5050cdf8d3e965e50a492706e"
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+
+gun.png
+size: 1870,1693
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+gunhit_00
+  rotate: false
+  xy: 1293, 437
+  size: 431, 369
+  orig: 622, 441
+  offset: 81, 69
+  index: -1
+gunhit_01
+  rotate: false
+  xy: 585, 33
+  size: 611, 437
+  orig: 622, 441
+  offset: 7, 1
+  index: -1
+gunhit_02
+  rotate: false
+  xy: 1196, 0
+  size: 611, 437
+  orig: 622, 441
+  offset: 7, 1
+  index: -1
+gunhit_03
+  rotate: false
+  xy: 0, 90
+  size: 585, 423
+  orig: 622, 441
+  offset: 10, 15
+  index: -1
+gunhit_04
+  rotate: false
+  xy: 862, 470
+  size: 431, 336
+  orig: 622, 441
+  offset: 81, 102
+  index: -1
+gunhit_05
+  rotate: false
+  xy: 862, 806
+  size: 431, 304
+  orig: 622, 441
+  offset: 81, 134
+  index: -1
+gunhit_06
+  rotate: false
+  xy: 1293, 806
+  size: 431, 304
+  orig: 622, 441
+  offset: 81, 134
+  index: -1
+gunhit_07
+  rotate: false
+  xy: 0, 524
+  size: 431, 304
+  orig: 622, 441
+  offset: 81, 134
+  index: -1
+gunhit_08
+  rotate: false
+  xy: 431, 513
+  size: 431, 304
+  orig: 622, 441
+  offset: 81, 134
+  index: -1
+gunhit_09
+  rotate: false
+  xy: 0, 828
+  size: 431, 298
+  orig: 622, 441
+  offset: 81, 140
+  index: -1
+gunhit_10
+  rotate: false
+  xy: 431, 817
+  size: 431, 298
+  orig: 622, 441
+  offset: 81, 140
+  index: -1
+gunhit_11
+  rotate: false
+  xy: 431, 1115
+  size: 431, 296
+  orig: 622, 441
+  offset: 81, 142
+  index: -1
+gunhit_12
+  rotate: false
+  xy: 862, 1110
+  size: 431, 296
+  orig: 622, 441
+  offset: 81, 142
+  index: -1
+gunhit_13
+  rotate: false
+  xy: 1293, 1110
+  size: 431, 296
+  orig: 622, 441
+  offset: 81, 142
+  index: -1
+gunhit_14
+  rotate: false
+  xy: 0, 1126
+  size: 431, 295
+  orig: 622, 441
+  offset: 81, 143
+  index: -1
+gunhit_15
+  rotate: false
+  xy: 1036, 1406
+  size: 417, 287
+  orig: 622, 441
+  offset: 88, 143
+  index: -1
+gunhit_16
+  rotate: false
+  xy: 1453, 1406
+  size: 417, 287
+  orig: 622, 441
+  offset: 88, 143
+  index: -1
+gunhit_17
+  rotate: false
+  xy: 629, 1411
+  size: 407, 282
+  orig: 622, 441
+  offset: 93, 143
+  index: -1
+gunhit_18
+  rotate: false
+  xy: 240, 1421
+  size: 389, 272
+  orig: 622, 441
+  offset: 102, 143
+  index: -1
+gunhit_19
+  rotate: false
+  xy: 0, 1455
+  size: 240, 238
+  orig: 622, 441
+  offset: 146, 143
+  index: -1
