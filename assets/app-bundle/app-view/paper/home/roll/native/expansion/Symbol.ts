@@ -65,19 +65,45 @@ export class Symbol extends Component {
     // 当前图标的大小
     private _currentIconSize: Size = new Size();
 
+    @property({ tooltip: 'Animate the new bitmap symbols instead of legacy themed Spine art' })
+    private useSpriteAnimations = false;
+
+    private animateSkinIcon(remove = false): Promise<void> {
+      this.cleanupAnimationNodes();
+      this.iconNode.active = true;
+      this.iconNode.getComponent(UIOpacity).opacity = 255;
+      this.iconNode.scale = new Vec3(1, 1, 1);
+
+      return new Promise<void>(resolve => {
+        tween(this.iconNode)
+          .timeScale(app.manager.global.gameSpeed)
+          .to(0.12, { scale: new Vec3(1.08, 1.08, 1) })
+          .to(0.16, { scale: new Vec3(1, 1, 1) })
+          .call(() => {
+            if (remove) this.iconNode.active = false;
+            resolve();
+          })
+          .start();
+      });
+    }
+
     protected onLoad(): void {
       this.parentNode = this.node.parent;
 
       this.initSprites();
     }
 
+    private skinSymbolId(name: string): string {
+      return this.useSpriteAnimations ? name.replace(/^symbol-/, '') : name;
+    }
+
     initSprites() {
       this.symbolIcons.forEach((spriteFrame) => {
-        this.mapSymbols.set(spriteFrame.name, spriteFrame);
+        this.mapSymbols.set(this.skinSymbolId(spriteFrame.name), spriteFrame);
       });
 
       this.symbolBlurIcons.forEach((spriteFrame) => {
-        this.mapBlurSymbols.set(spriteFrame.name, spriteFrame);
+        this.mapBlurSymbols.set(this.skinSymbolId(spriteFrame.name), spriteFrame);
       });
     }
 
@@ -152,7 +178,7 @@ export class Symbol extends Component {
       const sprite = this.iconNode.getComponent(Sprite);
 
       if(sprite.spriteFrame) {
-        return sprite.spriteFrame.name;
+        return this.skinSymbolId(sprite.spriteFrame.name);
       }
 
       return this.currentSymbolItem.symbolId;
@@ -216,6 +242,8 @@ export class Symbol extends Component {
 
     /** 播放剑或者棒子的动画 */
     async playSwordOrBowAnimation(symbolId: string) {
+      if (this.useSpriteAnimations) return this.animateSkinIcon();
+
       try {
         /// 根据当前图片的尺寸，设置LightSpine的尺寸
         const iconSize = this.iconNode.getComponent(UITransform).contentSize;
@@ -248,6 +276,12 @@ export class Symbol extends Component {
      * 开始元素落地回弹动画
      */
     async startElementFallBackAnimation(symbolId: string): Promise<void> {
+      if (this.useSpriteAnimations) {
+        if (symbolId === '3001') EffectManager.inst.playEffect(AudioPath.GAME.SCATTER_SHOW, false, null, true);
+
+        return this.animateSkinIcon();
+      }
+
       return new Promise<void>(async (resolve) => {
         try {
           const timeout = setTimeout(() => {
@@ -293,6 +327,13 @@ export class Symbol extends Component {
      * 开始闪烁中奖和消除动画
      */
     async startLightAndRemoveAnimation(): Promise<void> {
+      if (this.useSpriteAnimations) {
+        await this.animateSkinIcon(true);
+        this.iconNode.active = false;
+
+        return;
+      }
+
       return new Promise<void>(async (resolve, reject) => {
         try {
           // 设置节点尺寸和状态
@@ -411,6 +452,8 @@ export class Symbol extends Component {
      * 播放scatter中奖动画
      */
     async startScatterActionAnimation(animationName: string): Promise<void> {
+      if (this.useSpriteAnimations) return this.animateSkinIcon();
+
       return new Promise<void>(async (resolve) => {
         this.LightSpine.active = true;
         this.LightSpine.scale = SymbolScale;
@@ -433,6 +476,8 @@ export class Symbol extends Component {
      * 一旦出现了scatter，播放scatter高亮动画
      */
     playScatterHighlightAnimation(): Promise<void> {
+      if (this.useSpriteAnimations) return this.getSymbolId() === '3001' ? this.animateSkinIcon() : Promise.resolve();
+
       if(this.getSymbolId() !== '3001') {
         return Promise.resolve();
       }
@@ -498,6 +543,14 @@ export class Symbol extends Component {
      * 播放wild动画，动画完成后删除动画，并在wildNode设置图片
      */
     async playWildAnimation(aniNode: Node, animationName: string, iconNode: Node, symbolId: string) {
+      if (this.useSpriteAnimations) {
+        iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
+        await this.animateSkinIcon();
+        this.destoryWildAnimationNode();
+
+        return;
+      }
+
       return new Promise<void>(async (resolve) => {
         try {
           // 0.4秒后执行
@@ -551,6 +604,13 @@ export class Symbol extends Component {
      * 播放爆炸动画，动画完成后删除动画，、
      */
     async playBowExplodeAnimation(aniNode: Node, animationName: string,) {
+      if (this.useSpriteAnimations) {
+        await this.animateSkinIcon();
+        this.destoryWildAnimationNode();
+
+        return;
+      }
+
       return new Promise<void>(async (resolve) => {
         try {
           // 添加动画

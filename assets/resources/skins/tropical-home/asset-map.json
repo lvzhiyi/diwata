@@ -1,0 +1,457 @@
+{
+  "loading-check.png": {
+    "source": "/Users/lv/Desktop/加载切图/check.png",
+    "uuid": "3fb91db4-b47c-4194-bd6c-e784d76b9dff",
+    "width": 47,
+    "height": 41,
+    "sha256": "9909a120fcd138db2e0423d603f6a25e867492a6041ab45ff2ec2c17e8095d6b"
+  },
+  "loading-yuan_01.png": {
+    "source": "/Users/lv/Desktop/加载切图/yuan_01.png",
+    "uuid": "315ab4c2-6a98-4511-8c96-0072ae12a0d6",
+    "width": 23,
+    "height": 23,
+    "sha256": "0de30f7733a6c31c1ee520baaf154358b0d238b456e581fb5e327cddcaa74411"
+  },
+  "loading-yuan_02.png": {
+    "source": "/Users/lv/Desktop/加载切图/yuan_02.png",
+    "uuid": "c9d9d9d5-2d5c-4206-9c44-a9e8f200f28c",
+    "width": 23,
+    "height": 23,
+    "sha256": "137595cd9b9aa920b3dce2a4375cc8514254990e267c0359adc55e167e13b8a0"
+  },
+  "loading-左边.png": {
+    "source": "/Users/lv/Desktop/加载切图/左边.png",
+    "uuid": "5d7f48f6-2720-430c-b2ef-52c9e764e624",
+    "width": 49,
+    "height": 65,
+    "sha256": "552f8d34696a9f0653abdda898d0c3e784d945b9f6c3ddf6fca22f204cdc8b76"
+  },
+  "loading-beijin_01.png": {
+    "source": "/Users/lv/Desktop/加载切图/beijin_01.png",
+    "uuid": "87452b3f-6439-49a5-b7de-ae6d1f36e964",
+    "width": 920,
+    "height": 1629,
+    "sha256": "5f4a8d908575f1d2f31952205440f22105c765a94b94b09db1a7e49b6b65eea5"
+  },
+  "loading-loading_number.png": {
+    "source": "/Users/lv/Desktop/加载切图/loading_number.png",
+    "uuid": "b172350e-e845-4c0a-b22c-016bcbe1264b",
+    "width": 140,
+    "height": 139,
+    "sha256": "11b5a689cfe49f8558c81ec9c64453aa89b9a0c42f6c824f8197ac6e07192c84"
+  },
+  "loading-logo.png": {
+    "source": "/Users/lv/Desktop/加载切图/logo.png",
+    "uuid": "21822813-308e-4491-b59d-d376e02b0370",
+    "width": 366,
+    "height": 204,
+    "sha256": "6c0817e0e0e68f01e005731854d1f72063db24b1d1f0e17da80a809fe2c58b07"
+  },
+  "loading-check_01.png": {
+    "source": "/Users/lv/Desktop/加载切图/check_01.png",
+    "uuid": "142b4de9-9166-4fb5-b48d-16042d9c4a6d",
+    "width": 71,
+    "height": 71,
+    "sha256": "1a6222ee5da4e581654cb22d1cc5ca731b7dc65bac1d7a41ab099cbaaea2805e"
+  },
+  "loading-jindu_02.png": {
+    "source": "/Users/lv/Desktop/加载切图/jindu_02.png",
+    "uuid": "ac683fd2-3558-45d4-834a-b05e4d8e8751",
+    "width": 654,
+    "height": 64,
+    "sha256": "37caad62f94b81990bbf7be816f1cf2ff2b238ba5b6fe9234f1ced2f1bf222bd"
+  },
+  "loading-Don't show next time.png": {
+    "source": "/Users/lv/Desktop/加载切图/Don't show next time.png",
+    "uuid": "b87b7faa-79eb-448d-a3a8-b9f23c7980e6",
+    "width": 372,
+    "height": 39,
+    "sha256": "5a97348aa9d15609eeee38f44782269590215d96e4829c178e4f29330334e976"
+  },
+  "loading-jindu_01.png": {
+    "source": "/Users/lv/Desktop/加载切图/jindu_01.png",
+    "uuid": "a26c6705-097d-44a6-a3c2-d87c821ddedc",
+    "width": 654,
+    "height": 64,
+    "sha256": "20f04a44ea74586280e66f1777e2d89956dde568d69c91fcafcfbfe96a7cc1d9"
+  },
+  "loading-jiantou_01.png": {
+    "source": "/Users/lv/Desktop/加载切图/jiantou_01.png",
+    "uuid": "4127ee5e-4633-4e90-87d9-2cf12e610e8c",
+    "width": 49,
+    "height": 65,
+    "sha256": "9b14dec54082e794901e915d90dec8c91ef25e0f78168844e74b9f6d196672de"
+  },
+  "loading-play.png": {
+    "source": "/Users/lv/Desktop/加载切图/play.png",
+    "uuid": "adbe53c9-184f-4334-ac88-25330fb0cdd4",
+    "width": 389,
+    "height": 134,
+    "sha256": "37ec7f92f822560657015cc4d6a21e0350d6d6e5cd965b54ce3df3d41f581b90"
+  },
+  "loading-Loading.png": {
+    "source": "/Users/lv/Desktop/加载切图/Loading.png",
+    "uuid": "5ed2e207-fee0-4315-9990-7d0d00f064e4",
+    "width": 205,
+    "height": 45,
+    "sha256": "3ed14b750f7f23feb043230993fcb40ae2c8b18097dcbf595e83aea23a30aa91"
+  },
+  "home_quick.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/home_quick.png",
+    "uuid": "f7741335-4699-45cd-bbc2-4f4c45970fc3",
+    "width": 82,
+    "height": 93,
+    "sha256": "8da2f93ebefb23131a1b39bf02ec83ab57378388bcf0d4075094329b4e6c6dc0"
+  },
+  "home_quick_turbo.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/home_quick_turbo.png",
+    "uuid": "00f62ce0-024c-48c3-971f-a96ac3beb4f7",
+    "width": 82,
+    "height": 93,
+    "sha256": "569ccf3a05926022fff39bb66c14a693e0bafa93f734c4b9de874b0bba25b1c7"
+  },
+  "Home_reward_bg.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/Home_reward_bg.png",
+    "uuid": "000de0c3-251e-4da3-89b6-5eb057ea14be",
+    "width": 663,
+    "height": 117,
+    "sha256": "3fb826c0c0a0a7a6fa2308f44e97d5f5e2bd1b598ff711e171a843a740148bca"
+  },
+  "home_money.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/home_money.png",
+    "uuid": "47e63567-8197-4c9c-9700-8916db7c1d2c",
+    "width": 77,
+    "height": 76,
+    "sha256": "ad580b043673a41078e04e30afab50222bd371225ccff6411fb831849f5f2e8c"
+  },
+  "home_icon.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/home_icon.png",
+    "uuid": "54b0ca12-fac9-459c-ab12-e9c4af5ab1c9",
+    "width": 78,
+    "height": 76,
+    "sha256": "5e8ea9b6c41c72e6f34f30640b973f2b96bfe3a325bbec273ddd92cddf783b57"
+  },
+  "home_bg_free.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/home_bg_free.png",
+    "uuid": "efcf18a0-7057-4306-a563-1e4312997e32",
+    "width": 920,
+    "height": 1629,
+    "sha256": "c66f90653b845b275fc74edcae3540f3634d3614e5bd834577fc93ccc6770e45"
+  },
+  "home_auto_off.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/home_auto_off.png",
+    "uuid": "f7da5560-ee79-4dab-ac4e-38904bd7c5de",
+    "width": 77,
+    "height": 76,
+    "sha256": "0da047a49e5e0caae1ea11e9b113ec83f870b0dcf33f842af65ef70430d9148c"
+  },
+  "wheelBg.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/wheelBg.png",
+    "uuid": "f6cce3b2-54dc-4371-bed3-bb27bd6b201c",
+    "width": 845,
+    "height": 845,
+    "sha256": "0d7f6322eee25699e3ada746adac544b7797b106672899005714e6766577a184"
+  },
+  "home_auto_on.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/home_auto_on.png",
+    "uuid": "6615dcc5-d142-461d-a036-23e2add81d55",
+    "width": 77,
+    "height": 76,
+    "sha256": "4f454bcf268295acca59bd53cc1347aeb2f679c60390aadd729adbe00c8a7cd5"
+  },
+  "home_bg.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/home_bg.png",
+    "uuid": "ade72de1-8b18-4827-973e-5ff3582a8565",
+    "width": 920,
+    "height": 1629,
+    "sha256": "162e565ba1aa08f2fa21e5020ad52193b0dad919d1628c779f6aab3e46f22178"
+  },
+  "spin 底部.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/spin 底部.png",
+    "uuid": "d30a65c3-2c42-4529-b4ea-3bde8e5f1905",
+    "width": 150,
+    "height": 145,
+    "sha256": "6a726548ac0821d64044d80d2a341d35a7cb1209ee5b690ac3aca1bef3ea05ae"
+  },
+  "spin 箭头.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/spin 箭头.png",
+    "uuid": "0218c94d-ba55-4b9c-802f-ea35b6455bbb",
+    "width": 82,
+    "height": 94,
+    "sha256": "648f04db7e48cc85676ebc97db4f5743b842bdd6d65111914039db549052bad7"
+  },
+  "home_quick_normal.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/home_quick_normal.png",
+    "uuid": "b6a6147f-577b-47de-bba9-8569185c1fb0",
+    "width": 82,
+    "height": 93,
+    "sha256": "b891e04ce752004d46f14fcfaac08f276dd04bf5ee8892dabe58e4c0742ca4ac"
+  },
+  "record_roll_frame.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/record_roll_frame.png",
+    "uuid": "a12367de-49e3-4233-b8fb-4b826c1234ee",
+    "width": 796,
+    "height": 638,
+    "sha256": "677cb31034bd224f4ffc0a0995381418bac34b880c95b5720a3a1445d99354c5"
+  },
+  "home_board_bg.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/home_board_bg.png",
+    "uuid": "ba881753-bad1-40d4-b662-047e122fdd09",
+    "width": 710,
+    "height": 536,
+    "sha256": "d1f7e146d9ed88e6ec74acf4eadada19d59f5fad1998789e42467af03fd3eb0b"
+  },
+  "棋盘底背景.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/棋盘底背景.png",
+    "uuid": "f872f2fc-f0a8-459d-8f04-9c223dc47ecb",
+    "width": 796,
+    "height": 638,
+    "sha256": "85e6ca9a05a18873a0e46689a7804cb45faec962d1f7f09393b0a5bf56ef3c79"
+  },
+  "disk.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/disk.png",
+    "uuid": "86504598-eda4-4fd7-9864-f5f9b69193eb",
+    "width": 166,
+    "height": 166,
+    "sha256": "d806d154f4afa106f610fbaebe31998ec195d70c27e1f806442de9ade973570f"
+  },
+  "人物形象.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/人物形象.png",
+    "uuid": "055e18d4-a4de-4fe6-a700-6b15ac7ba9c6",
+    "width": 405,
+    "height": 335,
+    "sha256": "db06cba8e5a0b9a776a1331f00078edce4c3505261d21f3146e2085781d6b844"
+  },
+  "home_setting.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/home_setting.png",
+    "uuid": "383fdfad-09d0-4ec2-be07-60170cded2a0",
+    "width": 76,
+    "height": 75,
+    "sha256": "5ec4fbd8b4faa5fa8173262336f7103d6d5906e6aaca26c901461a88bd1d6b3f"
+  },
+  "guide-combo.png": {
+    "source": "/tmp/home-skin-assets/guide-combo.png",
+    "uuid": "1213a832-6c30-4d0e-8b2a-93b50726c834",
+    "width": 571,
+    "height": 521,
+    "sha256": "b1715c0cc1c5f9efa41916d5cd70aa02590e9c56979b5d7521b298c6c1b365ff"
+  },
+  "guide-wild.png": {
+    "source": "/tmp/home-skin-assets/guide-wild.png",
+    "uuid": "bb923b78-91f7-43d7-87b2-8a59731af68f",
+    "width": 584,
+    "height": 469,
+    "sha256": "04e06a0b69d496e3ba5c540d345ad84dba99ff56ff63fb14da42ff1226f413a5"
+  },
+  "loading_number.png": {
+    "source": "/Users/lv/Desktop/加载切图/loading_number.png",
+    "uuid": "31c43c57-8a44-4c71-b57e-57dc7a88f902",
+    "width": 140,
+    "height": 139,
+    "sha256": "11b5a689cfe49f8558c81ec9c64453aa89b9a0c42f6c824f8197ac6e07192c84"
+  },
+  "home_font.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/home_font/home_font.png",
+    "uuid": "1ee09761-1c05-49c5-b416-04c4a3e4524e",
+    "width": 490,
+    "height": 490,
+    "sha256": "7c493774f78bd22d43ef9f0213348fb20d76ea0e3d42766608d77fcb98487d81"
+  },
+  "symbols/1009.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1009.png",
+    "uuid": "3fd58e57-3ff1-4544-a215-b2c86e6287be",
+    "width": 144,
+    "height": 130,
+    "sha256": "bb7e43e8a13f8950c22e169243c33a8e5a1ba1750a8f4a5ca4b1f38292a5d29d"
+  },
+  "symbols/4011.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/4011.png",
+    "uuid": "8128df64-0629-46c0-825a-a1f234385d00",
+    "width": 144,
+    "height": 130,
+    "sha256": "bcd611ca5bad1f5ee16e6aa2e0515ae47414e7571027d8565f5399b9a0699d9e"
+  },
+  "symbols/4010.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/4010.png",
+    "uuid": "1117cf42-8164-4757-92c7-67d1b75fa348",
+    "width": 144,
+    "height": 130,
+    "sha256": "224e1ba8be8c51dc89b9bbb4be318ee6cb8bb05b938ae547981bbef201fcae0a"
+  },
+  "symbols/1008.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1008.png",
+    "uuid": "d922d84d-f627-4bc8-b84e-2482b035dc54",
+    "width": 144,
+    "height": 130,
+    "sha256": "da91fd622b9231121acbf731ee48d7af4fd541557795f07ac6e857457095a729"
+  },
+  "symbols/1003.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1003.png",
+    "uuid": "e3044d06-3bf1-4b09-a612-57505d4cf66e",
+    "width": 144,
+    "height": 130,
+    "sha256": "6c581c62d963519de85578366bb15b7868af2d3a6c6e4e9518073122ada989db"
+  },
+  "symbols/1002.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1002.png",
+    "uuid": "afdeae69-7c7a-42fe-a850-a9eaf6068141",
+    "width": 144,
+    "height": 130,
+    "sha256": "d394dc76af544e4d75d8b0eaf0e3238c3adda2b9ca64039a9859dfa15f37a28d"
+  },
+  "symbols/1001.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1001.png",
+    "uuid": "3d45b2e7-e9fb-4ccb-b31d-246f80820aa4",
+    "width": 144,
+    "height": 130,
+    "sha256": "2bb818ae1c01a7fa752710ed570be8c5e300050c3a43c7c5ec91f9a57ce815db"
+  },
+  "symbols/1005.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1005.png",
+    "uuid": "5c246aad-e985-4248-b4c1-fef4578267be",
+    "width": 144,
+    "height": 130,
+    "sha256": "4e91b7081150e4577374f457f7c882f403870b43b65ab8a5ca7678e14e66157b"
+  },
+  "symbols/3001.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/3001.png",
+    "uuid": "21970285-62d9-4a0a-aef6-58e73b86ad33",
+    "width": 144,
+    "height": 130,
+    "sha256": "f3fb411d5d6208f9210c86b871ca6ed40851005c9a39beff2aeaa52fa1a51568"
+  },
+  "symbols/1010.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1010.png",
+    "uuid": "789a416d-fbde-4cc9-9843-90ebecb9d784",
+    "width": 144,
+    "height": 130,
+    "sha256": "234ded6db68f6d61ed8eb826faaa3a8b2ed747a74d20c5d93a86decd42da4cdb"
+  },
+  "symbols/1004.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1004.png",
+    "uuid": "2132d826-b680-46b2-954e-c6817b47af52",
+    "width": 144,
+    "height": 130,
+    "sha256": "e75dff0a7d88daa74b258ab3686dc298c58496cbafda8df6058a8f0ddf11eab5"
+  },
+  "symbols/1006.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1006.png",
+    "uuid": "34576a5d-e1a4-4454-ab75-94b5888e746c",
+    "width": 144,
+    "height": 130,
+    "sha256": "3360e8acdc018b7f7a35441f15779df785085a44f306cf1c1a08d584cd3bcb49"
+  },
+  "symbols/1007.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1007.png",
+    "uuid": "38854a97-db0e-474f-a176-483645dbb307",
+    "width": 144,
+    "height": 130,
+    "sha256": "5455da66f287174ebf0a199b80944efa0f93b16b6ce97fcfb41bf2f64ad76038"
+  },
+  "symbols/5001.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/5001.png",
+    "uuid": "a25d9cd3-2ba6-4fe0-96df-4616f82890b5",
+    "width": 144,
+    "height": 130,
+    "sha256": "95ee1bf4e1a8d1970598104a40eff905920fc6e3938be891d5b66aa75ad9de1d"
+  },
+  "symbols/normal/1009.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1009_96ccee.png",
+    "uuid": "adada947-a68c-4eea-b6da-341617e28924",
+    "width": 144,
+    "height": 130,
+    "sha256": "2054fffc5f4c937aac7b39beab4a04f9d79cbfc41178e0bd20084c52dadbb000"
+  },
+  "symbols/normal/4011.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/4011_e07290.png",
+    "uuid": "addbb6d7-a088-489f-8e1d-f1c5bbfac00f",
+    "width": 144,
+    "height": 130,
+    "sha256": "183da4747bc722536ebc8f7daa8384eac174660c8bc5e57beacea4354160c92f"
+  },
+  "symbols/normal/4010.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/4010_4cf777.png",
+    "uuid": "ad5a9dec-333e-45f9-831a-3dfbc28633b3",
+    "width": 144,
+    "height": 130,
+    "sha256": "da0fc102c74e39a2edd100f35ac73ca093087cb53d565064de46f2532a0fa39c"
+  },
+  "symbols/normal/1008.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1008_d921da.png",
+    "uuid": "adcbaae1-984e-4afa-816d-c092e072400e",
+    "width": 144,
+    "height": 130,
+    "sha256": "8f3ee84c086bd12a9c352f95a2ecf9930f1bf8b80970efcfd877f460a6dbe95f"
+  },
+  "symbols/normal/1003.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1003_d7d1ae.png",
+    "uuid": "adeede76-f344-4326-875b-c12ee4dacbdb",
+    "width": 144,
+    "height": 130,
+    "sha256": "be9f54c6fa9d43bc45c2d3ee9149823f8b408b2ac7beea188cd0332633267a62"
+  },
+  "symbols/normal/1002.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1002_fb3edc.png",
+    "uuid": "ad0e8a0c-2ec5-4bc5-a65c-aa4690bb76dd",
+    "width": 144,
+    "height": 130,
+    "sha256": "67699bf171a0b1c1229343af3c77d6a6a18e1675695eb485ef7e046a82f078bd"
+  },
+  "symbols/normal/1001.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1001_f6ad00.png",
+    "uuid": "adc1b2f2-6aec-42e4-8a19-c4cdf0cc2603",
+    "width": 144,
+    "height": 130,
+    "sha256": "725a17f74f69809ca93915f4bc19b2b0ca30b8c48eca33df1ee21ef51f05b444"
+  },
+  "symbols/normal/1005.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1005_6f668b.png",
+    "uuid": "adb37069-2db8-4837-bdf5-ac47d7e67f3f",
+    "width": 144,
+    "height": 130,
+    "sha256": "88f288010ec8e00362458ed3e9f5b2389fd7a0fc04236171d68ebf77cefb5cff"
+  },
+  "symbols/normal/3001.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/3001_ba88df",
+    "uuid": "ada962da-7abe-4d00-927f-1fe1535b6929",
+    "width": 144,
+    "height": 130,
+    "sha256": "ed2223652aa21c0047ebe4a810e7cb07189120023a48fd81a8802e85825d3084"
+  },
+  "symbols/normal/1010.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1010_1cd352.png",
+    "uuid": "ad3e0de4-df56-4036-932f-2760eb7bc290",
+    "width": 144,
+    "height": 130,
+    "sha256": "9bff68b2667d7fce2c4968b960d670db5857551e58b80e35a1a04c91ac04ab06"
+  },
+  "symbols/normal/1004.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1004_6d2e3d.png",
+    "uuid": "ad941aab-57a5-4258-862b-a53730c359ad",
+    "width": 144,
+    "height": 130,
+    "sha256": "29068753465c51a37f7897ed23ec0c4a9968e9a4585a15ffaefb747b0d556fa5"
+  },
+  "symbols/normal/1006.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1006_34677e.png",
+    "uuid": "ad8a5678-707e-4329-8f0a-84f214649376",
+    "width": 144,
+    "height": 130,
+    "sha256": "afa224f69ed4699391e9a4436423572b1e8b35fa705c3491ff4807ff5f70ff90"
+  },
+  "symbols/normal/1007.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/1007_fd3ee8.png",
+    "uuid": "ad954485-9aff-457d-987b-3eb7391b02c3",
+    "width": 144,
+    "height": 130,
+    "sha256": "47c4be04f922c6dba26fb353611fc3c033f7e8817594bc73c6ee772a4606b2f9"
+  },
+  "symbols/normal/5001.png": {
+    "source": "/Users/lv/Desktop/游戏主页切图/symbol/5001_ed1b50.png",
+    "uuid": "ad1d7151-348d-4270-915f-3a1e76b4a403",
+    "width": 144,
+    "height": 130,
+    "sha256": "6bff1ed1472a1b86a772c119de45879de0a70bd1e45dd6bb08ac007a05e89fe1"
+  }
+}

@@ -92,7 +92,7 @@ export class RecordDetailLayout extends Component {
   }
 
   loadCards() {
-    resources.loadDir('icons/symbols', SpriteFrame, (err, loadedTextures) => {
+    resources.loadDir('skins/tropical-home/symbols/normal', SpriteFrame, (err, loadedTextures) => {
       if (err) {
         console.error('加载批量图片失败:', err);
 

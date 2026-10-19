@@ -76,7 +76,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 35,
+      "width": 116,
       "height": 0
     },
     "_anchorPoint": {
@@ -115,7 +115,7 @@
     "_paddingTop": 0,
     "_paddingBottom": 0,
     "_spacingX": 0,
-    "_spacingY": 0,
+    "_spacingY": -23,
     "_verticalDirection": 1,
     "_horizontalDirection": 0,
     "_constraint": 0,

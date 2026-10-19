@@ -22,7 +22,16 @@ export class PopStarthome extends BaseView {
   private skipView: Node | null = null;
 
   // 初始化的相关逻辑写在这
+  @property({ tooltip: 'The new loading guide replaces the legacy opening cinematic' })
+  private skipLegacyOpening = false;
+
   onLoad() {
+    if (this.skipLegacyOpening) {
+      this.playStartAnimationComplete(false);
+
+      return;
+    }
+
     this.playStartHomeSpine();
   }
 

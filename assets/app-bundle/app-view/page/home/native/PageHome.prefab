@@ -182,7 +182,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "dcbf4bdb-0f4b-4914-a223-39f862a7a158@f9941",
+      "__uuid__": "ade72de1-8b18-4827-973e-5ff3582a8565@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -195,10 +195,11 @@
     },
     "_fillStart": 0,
     "_fillRange": 0,
-    "_isTrimmedMode": true,
+    "_isTrimmedMode": false,
     "_useGrayscale": false,
     "_atlas": null,
-    "_id": ""
+    "_id": "",
+    "_materials": []
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -318,8 +319,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 920,
-      "height": 1628
+      "width": 750,
+      "height": 1327.9891304347825
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -355,7 +356,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "dcbf4bdb-0f4b-4914-a223-39f862a7a158@f9941",
+      "__uuid__": "ade72de1-8b18-4827-973e-5ff3582a8565@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -368,10 +369,11 @@
     },
     "_fillStart": 0,
     "_fillRange": 0,
-    "_isTrimmedMode": true,
+    "_isTrimmedMode": false,
     "_useGrayscale": false,
     "_atlas": null,
-    "_id": ""
+    "_id": "",
+    "_materials": []
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -476,7 +478,7 @@
     "node": {
       "__id__": 18
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 22
     },
@@ -612,7 +614,7 @@
     "node": {
       "__id__": 24
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 28
     },
@@ -680,18 +682,18 @@
     "_shade": false,
     "_blockInput": true,
     "normalBg": {
-      "__uuid__": "dcbf4bdb-0f4b-4914-a223-39f862a7a158@f9941",
+      "__uuid__": "ade72de1-8b18-4827-973e-5ff3582a8565@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "cloudupNode": {
       "__id__": 18
     },
     "bgImageSpriteFrame": {
-      "__uuid__": "dcbf4bdb-0f4b-4914-a223-39f862a7a158@f9941",
+      "__uuid__": "ade72de1-8b18-4827-973e-5ff3582a8565@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "freeBgImageSpriteFrame": {
-      "__uuid__": "b95233e9-c5ad-46a1-9ce5-36fecc9145c6@f9941",
+      "__uuid__": "efcf18a0-7057-4306-a563-1e4312997e32@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_id": ""

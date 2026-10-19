@@ -777,7 +777,8 @@
     "skipView": {
       "__id__": 15
     },
-    "_id": ""
+    "_id": "",
+    "skipLegacyOpening": true
   },
   {
     "__type__": "cc.CompPrefabInfo",

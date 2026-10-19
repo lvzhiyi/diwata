@@ -65,8 +65,8 @@ export class RouletteWheel extends Component {
   private firstItemPostion: Vec3 = new Vec3(0, 0, 0);
   
   // 弧形参数
-  // 圆环半径 (直径 780)
-  private readonly ARC_RADIUS = 395;
+  // Figma: disk centers follow a 322.5px arc in the 920px design.
+  private readonly ARC_RADIUS = 322.5;
 
   // 触摸区域宽度，用于换算滑动距离到旋转角度
   private readonly VIEW_WIDTH = 750;
