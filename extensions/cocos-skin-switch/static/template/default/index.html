@@ -1,0 +1,28 @@
+<div class="skin-switch-panel">
+    <header class="panel-header">
+        <h2>快速换肤</h2>
+        <p class="panel-desc">导出至 export-ui（UI 换图）与 default（程序映射），替换时自动同步后写回项目。</p>
+    </header>
+
+    <section class="panel-section">
+        <ui-prop>
+            <ui-label slot="label">导出目录</ui-label>
+            <ui-input id="outputDir" slot="content" placeholder="项目根目录下的 skin-export"></ui-input>
+        </ui-prop>
+        <ui-prop>
+            <ui-label slot="label">排除路径</ui-label>
+            <ui-textarea id="excludePatterns" slot="content" placeholder="db://assets/activity/**"></ui-textarea>
+        </ui-prop>
+    </section>
+
+    <section class="panel-actions">
+        <ui-button id="exportBtn" type="primary">导出资源</ui-button>
+        <ui-button id="importBtn" type="warning">替换资源</ui-button>
+        <ui-button id="openFolderBtn">打开导出目录</ui-button>
+    </section>
+
+    <section class="panel-section panel-log">
+        <ui-label id="statusLabel" value="就绪"></ui-label>
+        <pre id="logArea" class="log-area"></pre>
+    </section>
+</div>

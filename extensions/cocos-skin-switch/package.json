@@ -1,0 +1,87 @@
+{
+    "$schema": "./@types/schema/package/index.json",
+    "package_version": 2,
+    "name": "skin-switch",
+    "version": "1.3.0",
+    "author": "kapre",
+    "editor": ">=3.8.5",
+    "description": "i18n:skin-switch.description",
+    "main": "./dist/main.js",
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc -w"
+    },
+    "dependencies": {
+        "fs-extra": "^11.3.0"
+    },
+    "devDependencies": {
+        "@cocos/creator-types": "^3.8.5",
+        "@types/fs-extra": "^9.0.5",
+        "@types/node": "^18.17.1",
+        "typescript": "^5.8.2"
+    },
+    "panels": {
+        "default": {
+            "title": "i18n:skin-switch.panel_title",
+            "type": "dockable",
+            "main": "dist/panels/default",
+            "size": {
+                "min-width": 420,
+                "min-height": 360,
+                "width": 520,
+                "height": 480
+            }
+        }
+    },
+    "contributions": {
+        "menu": [
+            {
+                "path": "i18n:menu.extension/快速换肤",
+                "label": "i18n:skin-switch.open_panel",
+                "message": "open-panel"
+            },
+            {
+                "path": "i18n:menu.extension/快速换肤",
+                "label": "i18n:skin-switch.export_assets",
+                "message": "export-assets"
+            },
+            {
+                "path": "i18n:menu.extension/快速换肤",
+                "label": "i18n:skin-switch.import_assets",
+                "message": "import-assets"
+            }
+        ],
+        "messages": {
+            "open-panel": {
+                "methods": [
+                    "openPanel"
+                ]
+            },
+            "export-assets": {
+                "methods": [
+                    "exportAssets"
+                ]
+            },
+            "import-assets": {
+                "methods": [
+                    "importAssets"
+                ]
+            },
+            "get-settings": {
+                "methods": [
+                    "getSettings"
+                ]
+            },
+            "save-settings": {
+                "methods": [
+                    "saveSettings"
+                ]
+            },
+            "open-output-dir": {
+                "methods": [
+                    "openOutputDir"
+                ]
+            }
+        }
+    }
+}
