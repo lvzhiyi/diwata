@@ -16,6 +16,11 @@ const { ccclass, property } = _decorator;
 
 const SymbolScale = new Vec3(1.1, 1.1, 1.1);
 
+// symbol 动画名（Spine 3.8.99 导出）：掉落抖动缓冲 appear，中奖 won，消除 xiaochu
+const SYMBOL_ANIM_APPEAR = 'appear';
+const SYMBOL_ANIM_WON = 'won';
+const SYMBOL_ANIM_XIAOCHU = 'xiaochu';
+
 @ccclass('Symbol')
 export class Symbol extends Component {
     @property(Node)
@@ -65,7 +70,8 @@ export class Symbol extends Component {
     // 当前图标的大小
     private _currentIconSize: Size = new Size();
 
-    @property({ tooltip: 'Animate the new bitmap symbols instead of legacy themed Spine art' })
+    // symbol 自身的 appear/won/xiaochu 始终使用 Spine，此开关只影响尚未换新美术的变 wild 和爆炸动画
+    @property({ tooltip: 'Use bitmap tweens instead of legacy Spine art for wild-change and explode animations' })
     private useSpriteAnimations = false;
 
     private animateSkinIcon(remove = false): Promise<void> {
@@ -242,8 +248,6 @@ export class Symbol extends Component {
 
     /** 播放剑或者棒子的动画 */
     async playSwordOrBowAnimation(symbolId: string) {
-      if (this.useSpriteAnimations) return this.animateSkinIcon();
-
       try {
         /// 根据当前图片的尺寸，设置LightSpine的尺寸
         const iconSize = this.iconNode.getComponent(UITransform).contentSize;
@@ -255,8 +259,7 @@ export class Symbol extends Component {
         const animationName = 'symbol_' + symbolId;
         skeleton.timeScale = app.manager.global.gameSpeed;
         skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
-        const animationPlayName = animationName + '_2';
-        skeleton.setAnimation(0, animationPlayName, false);
+        skeleton.setAnimation(0, SYMBOL_ANIM_WON, false);
         skeleton.setCompleteListener(() => {
           this.LightSpine.active = false;
           this.LightSpine.scale = new Vec3(1, 1, 1);
@@ -276,12 +279,6 @@ export class Symbol extends Component {
      * 开始元素落地回弹动画
      */
     async startElementFallBackAnimation(symbolId: string): Promise<void> {
-      if (this.useSpriteAnimations) {
-        if (symbolId === '3001') EffectManager.inst.playEffect(AudioPath.GAME.SCATTER_SHOW, false, null, true);
-
-        return this.animateSkinIcon();
-      }
-
       return new Promise<void>(async (resolve) => {
         try {
           const timeout = setTimeout(() => {
@@ -298,8 +295,7 @@ export class Symbol extends Component {
           const animationName = 'symbol_' + symbolId;
           skeleton.timeScale = app.manager.global.gameSpeed;
           skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
-          const animationPlayName = animationName + '_1';
-          skeleton.setAnimation(0, animationPlayName, false);
+          skeleton.setAnimation(0, SYMBOL_ANIM_APPEAR, false);
 
           // 如果当前元素是3001，则播放scatter出现音频
           if(symbolId === '3001') {
@@ -327,13 +323,6 @@ export class Symbol extends Component {
      * 开始闪烁中奖和消除动画
      */
     async startLightAndRemoveAnimation(): Promise<void> {
-      if (this.useSpriteAnimations) {
-        await this.animateSkinIcon(true);
-        this.iconNode.active = false;
-
-        return;
-      }
-
       return new Promise<void>(async (resolve, reject) => {
         try {
           // 设置节点尺寸和状态
@@ -341,45 +330,35 @@ export class Symbol extends Component {
           this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
           this.LightSpine.active = true;
           this.LightSpine.scale = SymbolScale;
+          this.iconNode.active = false;
+          // 新的消除动画只有一条 xiaochu，不再区分上下层
           this.removeUpSpineNode.active = true;
-          this.removeDownSpineNode.active = true;
+          this.removeDownSpineNode.active = false;
 
           // 获取或添加Skeleton组件
           const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
           skeleton.timeScale = app.manager.global.gameSpeed;
           const removeUpSkeleton = this.removeUpSpineNode.getComponent(sp.Skeleton) || this.removeUpSpineNode.addComponent(sp.Skeleton);
           removeUpSkeleton.timeScale = app.manager.global.gameSpeed;
-          const removeDownSkeleton = this.removeDownSpineNode.getComponent(sp.Skeleton) || this.removeDownSpineNode.addComponent(sp.Skeleton);
-          removeDownSkeleton.timeScale = app.manager.global.gameSpeed;
           // 播放消除动画
-          removeUpSkeleton.setAnimation(0, 'xiaochu_up', false);
-          removeDownSkeleton.setAnimation(0, 'xiaochu_down', false);
+          removeUpSkeleton.setAnimation(0, SYMBOL_ANIM_XIAOCHU, false);
 
           // 加载并播放中奖动画
           const animationName = 'symbol_' + this.getSymbolId();
           skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
-          const animationPlayName = animationName + '_2';
-          
-          skeleton.setAnimation(0, animationPlayName, false);
+          skeleton.setAnimation(0, SYMBOL_ANIM_WON, false);
           skeleton.setCompleteListener(() => {
             skeleton.setCompleteListener(null);
             skeleton.skeletonData = null;
             this.LightSpine.active = false;
             this.LightSpine.scale = new Vec3(1, 1, 1);
-            this.iconNode.active = false;
           });
-          removeUpSkeleton.setEventListener((trackEntry, event: sp.spine.Event) => {
-            if (event.data.name === 'baozha') {
-              this.LightSpine.active = false;
-              this.LightSpine.scale = new Vec3(1, 1, 1);
-              this.removeDownSpineNode.active = false;
-              this.iconNode.active = false;
-              resolve();
-            }
-          });
+          // 消除动画结束即视为该元素已消除
           removeUpSkeleton.setCompleteListener(() => {
             removeUpSkeleton.setCompleteListener(null);
-            this.removeUpSpineNode.active = false;
+            this.cleanupAnimationNodes();
+            this.iconNode.active = false;
+            resolve();
           });
 
           // 添加超时保护
@@ -452,15 +431,13 @@ export class Symbol extends Component {
      * 播放scatter中奖动画
      */
     async startScatterActionAnimation(animationName: string): Promise<void> {
-      if (this.useSpriteAnimations) return this.animateSkinIcon();
-
       return new Promise<void>(async (resolve) => {
         this.LightSpine.active = true;
         this.LightSpine.scale = SymbolScale;
         const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
         skeleton.timeScale = app.manager.global.gameSpeed;
         skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
-        skeleton.setAnimation(0, 'symbol_3001_2', false);
+        skeleton.setAnimation(0, SYMBOL_ANIM_WON, false);
         console.log('播放scatter高亮动画2');
         skeleton.setCompleteListener(() => {
           this.LightSpine.active = false;
@@ -476,8 +453,6 @@ export class Symbol extends Component {
      * 一旦出现了scatter，播放scatter高亮动画
      */
     playScatterHighlightAnimation(): Promise<void> {
-      if (this.useSpriteAnimations) return this.getSymbolId() === '3001' ? this.animateSkinIcon() : Promise.resolve();
-
       if(this.getSymbolId() !== '3001') {
         return Promise.resolve();
       }
@@ -488,7 +463,8 @@ export class Symbol extends Component {
         skeleton.timeScale = app.manager.global.gameSpeed;
         const skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.LAMANG_ICON_SCATTER);
         skeleton.skeletonData = skeletonData;
-        skeleton.setAnimation(0, 'symbol_3001_3', true);
+        // 新 scatter 只有 appear/won，高亮改为循环播放 won
+        skeleton.setAnimation(0, SYMBOL_ANIM_WON, true);
         console.log('播放scatter高亮动画3');
         resolve();
       });
@@ -583,9 +559,8 @@ export class Symbol extends Component {
           const wildSkeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
           wildSkeleton.timeScale = app.manager.global.gameSpeed;
           wildSkeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES['5001']);
-          const wildPlayName = 'symbol_5001_4';
           this.iconNode.active = false;
-          wildSkeleton.setAnimation(0, wildPlayName, false);
+          wildSkeleton.setAnimation(0, SYMBOL_ANIM_APPEAR, false);
           wildSkeleton.setCompleteListener(() => {
             this.iconNode.active = true;
             wildSkeleton.setCompleteListener(null);
