@@ -1,4 +1,4 @@
-import { _decorator, Label, Node, sp, Tween, tween, Vec3 } from 'cc';
+import { _decorator, Label, Node, sp, Tween, tween, UITransform, Vec3 } from 'cc';
 import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { app } from 'db://assets/app/app';
 import { RewardSubTypeEnum } from 'db://assets/basePlate/middleWare/enums/bet';
@@ -20,6 +20,16 @@ const animationMap: any = {
   [RewardSubTypeEnum.MEGA]: ['01nice_', '02mega_'],
   [RewardSubTypeEnum.SUPER]: ['01nice_', '02mega_', '03super_'],
 };
+
+// 每个档位对应的骨骼动画资源，动画名统一为 start/loop/end
+const spineResourceMap: { [key: string]: string } = {
+  '01nice_': SPINE_RESOURCE_NAMES.GRAND_PRIZE_BIG,
+  '02mega_': SPINE_RESOURCE_NAMES.GRAND_PRIZE_MEGA,
+  '03super_': SPINE_RESOURCE_NAMES.GRAND_PRIZE_SUPER,
+};
+
+// 金额挂点骨骼路径，bigwin/megawin/superwin 三个文件一致
+const AMOUNT_SOCKET_PATH = 'root/money/jine';
 
 const effectBGMap :any = {
   '01nice_': AudioPath.BGM.NICE_OPEN,
@@ -65,6 +75,16 @@ export class PopGrandPrize extends BaseView {
 
   @property({ type: Node, tooltip: 'bg' })
   private bgNode: Node;
+
+  /**
+   * 金额容器节点（AmontBox）
+   */
+  private amountBox: Node;
+
+  /**
+   * 金额挂点节点，由骨骼 socket 驱动变换，AmontBox 挂在其下以保留自身缩放动画
+   */
+  private amountSocketNode: Node;
 
   /**
    * 资源前缀
@@ -141,6 +161,28 @@ export class PopGrandPrize extends BaseView {
   onLoad() {
     // 初始化数字动画控制器
     this.numberWinBgAnimator = new NumberAnimator(this.AmountLabel);
+    this.initAmountSocket();
+  }
+
+  /**
+   * 创建金额挂点节点，并把 AmontBox 移到挂点下
+   * socket 目标必须是骨骼节点的直接子节点，且其 matrix 每帧会被骨骼覆盖
+   */
+  private initAmountSocket() {
+    this.amountBox = this.node.getChildByName('AmontBox');
+    this.amountSocketNode = new Node('AmountSocket');
+    this.amountSocketNode.layer = this.bgNode.layer;
+    this.amountSocketNode.addComponent(UITransform);
+    this.bgNode.addChild(this.amountSocketNode);
+    this.amountBox.setParent(this.amountSocketNode);
+    this.amountBox.setPosition(Vec3.ZERO);
+  }
+
+  /**
+   * 绑定金额挂点，需在 skeletonData 设置之后调用
+   */
+  private bindAmountSocket(spine: sp.Skeleton) {
+    spine.sockets = [new sp.SpineSocket(AMOUNT_SOCKET_PATH, this.amountSocketNode)];
   }
 
   /**
@@ -179,7 +221,7 @@ export class PopGrandPrize extends BaseView {
   private async initializeUI(params: any): Promise<void> {
     return new Promise<void>((resolve) => {
       // 获取并初始化金额文本节点
-      const textNode = this.node.getChildByName('AmontBox');
+      const textNode = this.amountBox;
       textNode.active = false;
       textNode.setScale(new Vec3(1, 1, 1));
 
@@ -234,7 +276,7 @@ export class PopGrandPrize extends BaseView {
     }
 
     const spine = this.bgNode.getComponent(sp.Skeleton) || this.bgNode.addComponent(sp.Skeleton);
-    const textNode = this.node.getChildByName('AmontBox');
+    const textNode = this.amountBox;
     // 显示金额文本并播放循环动画
     textNode.active = true;
     textNode.setScale(new Vec3(1, 1, 1));
@@ -245,23 +287,22 @@ export class PopGrandPrize extends BaseView {
       const musicName = effectMap[animationName];
       this.playGrandPrizeSound(musicName);
       // 根据奖励类型加载对应的骨骼动画资源
-      const spineAtlas: sp.SkeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.GRAND_PRIZE);
+      const spineAtlas: sp.SkeletonData = await GameResourceManager.instance.getSpineAnimationDataByName(spineResourceMap[animationName]);
 
       // 资源检查，确保所有必要元素都存在
       if (!spine || !this.rewardSubType || !spineAtlas) return;
       // 设置骨骼动画数据
       spine.skeletonData = spineAtlas;
-      // 设置骨骼动画数据
-      spine.setSkin(animationName);
+      this.bindAmountSocket(spine);
       console.log('animationName', animationName);
       spine.timeScale = app.manager.global.gameSpeed;
-      
+
       this.currentAnimationName = animationName;
 
       // 播放入场动画
-      await this.playSpineAnimation(spine, `${animationName}in`, false);
-       
-      this.playSpineAnimation(spine, `${animationName}loop`, true);
+      await this.playSpineAnimation(spine, 'start', false);
+
+      this.playSpineAnimation(spine, 'loop', true);
       // 执行整体缩放动画
       this.GrandprizeScaleAnimation();
 
@@ -423,15 +464,13 @@ export class PopGrandPrize extends BaseView {
     // 获取骨骼动画组件和文本节点
     const spine = this.bgNode.getComponent(sp.Skeleton);
     spine.timeScale = app.manager.global.gameSpeed;
-    const textNode = this.node.getChildByName('AmontBox');
+    const textNode = this.amountBox;
 
     // 保存原始位置用于后续重置
     // const originalPosition = textNode.position.clone();
 
     // 播放关闭骨骼动画
-    const animationName = this.currentAnimationName + 'out';
-    // 播放关闭骨骼动画
-    this.playSpineAnimation(spine, animationName, false);
+    this.playSpineAnimation(spine, 'end', false);
 
     return new Promise<void>((resolve) => {
       // 文本放大动画：放大并略微下移
@@ -489,7 +528,7 @@ export class PopGrandPrize extends BaseView {
     const musicName = effectMap[this.currentAnimationName];
     EffectManager.inst.stopAllEffectsByName(musicName);
     // 清除 textNode 身上所有的tween动画
-    const textNode = this.node.getChildByName('AmontBox');
+    const textNode = this.amountBox;
     Tween.stopAllByTarget(textNode);
 
     // 恢复背景音乐，如果当前是免费区间就播免费轮音乐，

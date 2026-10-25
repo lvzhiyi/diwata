@@ -1,4 +1,4 @@
-import { _decorator, Label, Node, sp, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Label, Node, sp, Sprite, SpriteFrame, Vec3 } from 'cc';
 import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { NumberAnimator } from 'db://assets/basePlate/middleWare/commonUI/NumberAnimator';
 import { getP, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
@@ -11,6 +11,10 @@ import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
 
 const { ccclass, property } = _decorator;
+
+// 金额、免费轮次数在 congratlilation 骨骼中的挂点路径
+const AMOUNT_SOCKET_PATH = 'root/money';
+const TIMES_SOCKET_PATH = 'root/you HAVE WON2/1010';
 @ccclass('PopFreeSpinResult')
 export class PopFreeSpinResult extends BaseView {
   @property({ type: Label, tooltip: '金额Label' })
@@ -45,6 +49,24 @@ export class PopFreeSpinResult extends BaseView {
     this.numberWinBgAnimator = new NumberAnimator(this.AmountLabel);
     console.log('this.spineNode', this.spineNode);
     this.spineSkeleton = this.spineNode.getComponent(sp.Skeleton);
+    // socket 目标必须是骨骼节点的直接子节点
+    const subTextNode = this.FreeSpinTimesLabel.node.parent;
+    this.FreeSpinTimesLabel.node.setParent(this.spineNode);
+    // "You Have Won"、"In x free spins" 已由 congratlilation 骨骼绘制，隐藏 prefab 中重复的图片
+    this.subTitleNode.active = false;
+    subTextNode.active = false;
+    this.AmountLabel.node.setPosition(Vec3.ZERO);
+    this.FreeSpinTimesLabel.node.setPosition(Vec3.ZERO);
+  }
+
+  /**
+   * 绑定金额、次数挂点，需在 skeletonData 设置之后调用
+   */
+  private bindSockets() {
+    this.spineSkeleton.sockets = [
+      new sp.SpineSocket(AMOUNT_SOCKET_PATH, this.AmountLabel.node),
+      new sp.SpineSocket(TIMES_SOCKET_PATH, this.FreeSpinTimesLabel.node),
+    ];
   }
 
   onShow(params: any) {
@@ -79,6 +101,7 @@ export class PopFreeSpinResult extends BaseView {
       this.spineSkeleton.premultipliedAlpha = false;
       // 设置骨骼动画数据
       this.spineSkeleton.skeletonData = spineAtlas;
+      this.bindSockets();
 
       this.spineSkeleton.timeScale = app.manager.global.gameSpeed;
       this.startAnimation();
@@ -138,8 +161,9 @@ export class PopFreeSpinResult extends BaseView {
   }
 
   startAnimation() {
-    this.spineSkeleton.setAnimation(0, 'congratlilation_in', false);
-    this.spineSkeleton.addAnimation(0, 'congratlilation_loop', true);
+    // 结算动画：start/end 只播一次，loop 循环
+    this.spineSkeleton.setAnimation(0, 'start', false);
+    this.spineSkeleton.addAnimation(0, 'loop', true);
   }
 
   stopAnimation() {
@@ -149,7 +173,7 @@ export class PopFreeSpinResult extends BaseView {
 
     this.isCloseInProgress = true;
     EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.SETTLE);
-    this.spineSkeleton.setAnimation(0, 'congratlilation_out', false);
+    this.spineSkeleton.setAnimation(0, 'end', false);
     this.spineSkeleton.setCompleteListener(() => {
       app.manager.ui.hide({ name: 'PopFreeSpinResult' });
     });

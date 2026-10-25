@@ -7,8 +7,10 @@ const { ccclass, property } = _decorator;
 export const SPINE_RESOURCE_NAMES: { [key: string]: string } = {
   // 免费轮转场动画
   FREE_BONUS_TRANSITION: 'nvshen_zhuanchang',
-  // 大奖弹框动画
-  GRAND_PRIZE: 'win',
+  // 大奖弹框动画，按档位分为三个文件，共用 win.png
+  GRAND_PRIZE_BIG: 'bigwin',
+  GRAND_PRIZE_MEGA: 'megawin',
+  GRAND_PRIZE_SUPER: 'superwin',
   // 免费轮结果动画
   FREE_SPIN_RESULT: 'congratlilation',
 };
