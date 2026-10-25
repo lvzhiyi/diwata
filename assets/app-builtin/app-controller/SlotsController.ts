@@ -2,8 +2,6 @@ import BaseController from 'db://app/base/BaseController';
 import { app } from '../../app/app';
 import { BetSubTypes, BetTypes } from '../../basePlate/middleWare/enums/bet';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
-import { freeSpinManager } from '../../res-native/script/FreeSpinManager';
-import { ActivityDataMgr } from '../../common/script/data/ActivityDataMgr';
 
 export class SlotsController extends BaseController<
   SlotsController,
@@ -65,10 +63,6 @@ export class SlotsController extends BaseController<
     this.isFreeBonusSpin = isFreeBonusSpin;
     app.manager.global.setBuyFreeBonusMode(isFreeBonusSpin);
     this.emit(SlotsController.Event.FreeBonusSpinChange, isFreeBonusSpin);
-
-    if(!isFreeBonusSpin){
-      this.resetBetAmount();
-    }
   }
 
   /**
@@ -90,20 +84,15 @@ export class SlotsController extends BaseController<
 
     app.controller.home.gameStart();
 
-    app.controller.home.getBetResult(app.manager.global.betCount, BetTypes.normal, BetSubTypes.normal, app.manager.global.isFreespinMode, freeSpinManager.freespinCampaignId);
+    app.controller.home.getBetResult(app.manager.global.betCount, BetTypes.normal, BetSubTypes.normal, app.manager.global.isFreespinMode);
   }
 
   /**
    * 购买免费轮按钮点击
    */
-  betBuyFreeSpin(starCardData?: any) {
+  betBuyFreeSpin() {
     app.controller.home.gameStart();
-
-    if (starCardData) {
-      app.controller.home.buyBonusBetResult(app.manager.global.betCount, BetTypes.buy, BetSubTypes.buySpinNormal, starCardData);
-    }else{
-      app.controller.home.getBetResult(app.manager.global.betCount, BetTypes.buy, BetSubTypes.buySpinNormal);
-    }
+    app.controller.home.getBetResult(app.manager.global.betCount, BetTypes.buy, BetSubTypes.buySpinNormal);
   }
 
   /**
@@ -125,18 +114,6 @@ export class SlotsController extends BaseController<
     } else {
       // 购买免费轮投注
       app.controller.home.getBetFreeSpinResult(app.manager.global.betCount, BetTypes.buy, BetSubTypes.buySpinFreeSpin, this.betRecordId);
-    }
-  }
-
-  /**
-   * 复原投注金额
-   */
-  resetBetAmount() {
-    const tempBetCount = app.manager.global.tempBetCount;
-    const starCardData = ActivityDataMgr.instance.getGoodsData();
-
-    if(tempBetCount && starCardData){
-      app.manager.global.setBetCount(tempBetCount);
     }
   }
 }

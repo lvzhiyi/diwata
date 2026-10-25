@@ -1,5 +1,5 @@
 // eslint-disable-next-line max-len
-import { _decorator, Component, Node, Label, tween, UITransform, view, instantiate, Prefab, Vec3, Sprite, Color, input, Input, EventTouch, math, sp, SpriteFrame, TweenEasing } from 'cc';
+import { _decorator, Component, Node, Label, tween, UITransform, view, instantiate, Prefab, Vec3, Sprite, input, Input, EventTouch, math, sp, SpriteFrame, TweenEasing } from 'cc';
 import { app } from 'db://assets/app/app';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
@@ -230,18 +230,18 @@ export class RouletteWheel extends Component {
         // 根据数值大小动态设置字体大小
         const value = this.dataList[i];
 
-        if (value < 10) {
-          label.fontSize = 42;
-        } else if (value < 100) {
-          label.fontSize = 30;
+        // 按设计稿比例：一两位数的数字高约为圆盘蓝色内圈（约 93 宽）的 0.43，
+        // 位数多时按宽度收小，每档最宽的值（x64、x256、x1024）约 90 宽，基本撑满内圈
+        if (value < 100) {
+          label.fontSize = 44;
         } else if (value < 1000) {
-          label.fontSize = 24;
+          label.fontSize = 36;
         } else {
-          label.fontSize = 18;
-          label.color = new Color().fromHEX('#C50909');
+          label.fontSize = 29;
         }
 
-        label.string = `x${this.dataList[i]}`;
+        // 设计稿写法：数字在前，如 1x、1024x
+        label.string = `${this.dataList[i]}x`;
         label.node.active = true;
       }
       
@@ -324,7 +324,7 @@ export class RouletteWheel extends Component {
         if (this.chooseSprite) sprite.spriteFrame = this.chooseSprite;
         this.textSpineNode.active = true;
         const textSpine = this.textSpineNode.getComponent(sp.Skeleton);
-        const animationName = textString.indexOf('x1024') === -1 ? 'beilvshuzishanguang' : 'beilvshuzishanguang2';
+        const animationName = textString !== '1024x' ? 'beilvshuzishanguang' : 'beilvshuzishanguang2';
         textSpine.setAnimation(0, animationName, false);
         textSpine.setCompleteListener(() => {
           textSpine.setCompleteListener(null);

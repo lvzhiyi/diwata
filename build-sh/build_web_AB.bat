@@ -23,50 +23,6 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-REM 拉取子模块 - 配置带token的URL
-echo Updating submodules with token authentication...
-if exist "assets\activity" rmdir /s /q "assets\activity"
-if exist "assets\common" rmdir /s /q "assets\common"
-
-REM 设置子模块URL包含token
-echo Setting submodule URLs with authentication...
-git submodule set-url assets/activity https://%GITHUB_TOKEN%@github.com/InnovaTech-Game/cocos_activity.git
-git submodule set-url assets/common https://%GITHUB_TOKEN%@github.com/InnovaTech-Game/cocos-common.git
-
-REM 初始化并更新子模块
-echo Initializing and updating submodules...
-git submodule update --init --recursive
-if %errorlevel% neq 0 (
-    echo Error updating submodules
-    exit /b 1
-)
-
-REM 强制拉取并覆盖本地分支 - activity
-echo Updating activity submodule to branch %COMMON_BRANCH%...
-cd assets\activity
-git fetch --all --prune
-git checkout %COMMON_BRANCH% --force
-git reset --hard origin/%COMMON_BRANCH%
-if %errorlevel% neq 0 (
-    echo Error updating activity submodule
-    cd ..\..\
-    exit /b 1
-)
-cd ..\..\
-
-REM 强制拉取并覆盖本地分支 - common
-echo Updating common submodule to branch %COMMON_BRANCH%...
-cd assets\common
-git fetch --all --prune
-git checkout %COMMON_BRANCH% --force
-git reset --hard origin/%COMMON_BRANCH%
-if %errorlevel% neq 0 (
-    echo Error updating common submodule
-    cd ..\..\
-    exit /b 1
-)
-cd ..\..\
-
 REM 根据第四个参数决定构建方式
 if /i "%BUILD_AB%"=="true" (
     echo 开始构建AB包...

@@ -2,7 +2,6 @@ import { Label, Node, Prefab, SpriteFrame, _decorator, sp } from 'cc';
 import BaseAppInit from '../../../extensions/app/assets/base/BaseAppInit';
 import { app } from '../../app/app';
 import Core from 'db://app/Core';
-import { GlobalMgr } from '../../common/script/extra/GlobalMgr';
 import { calculateWithBase, getIsGap, getRuntimeEnv, getUrlParameters, } from '../../common/script/extra/Utils/common';
 import { getPlayerLevel, getUserCredit, login } from '../../basePlate/middleWare/services/user';
 import { ProgressBar } from '../../basePlate/middleWare/commonUI/ProgressBar/ProgressBar';
@@ -153,7 +152,6 @@ export class AppInit extends BaseAppInit {
     this._configService();
     await this._configPlayerInfo();
     await this._getUserLevel();
-    await this.configureActivityEntry();
     this.appInitArms();
   }
 
@@ -303,7 +301,6 @@ export class AppInit extends BaseAppInit {
       // 后端返回的是1厘比索，前端显示的是1比索，所以需要除以1000
       const creditCount = calculateWithBase(res.data, true);
       app.manager.global.setCreditCount(creditCount);
-      GlobalMgr.instance.balance = creditCount;
     }
   }
 
@@ -349,17 +346,6 @@ export class AppInit extends BaseAppInit {
 
     // 重试请求拦截器
     serverHookManager.initRetryResponseInterceptor();
-  }
-
-  /**
-   * 配置活动系统入口的信息
-  */
-  private async configureActivityEntry() {
-    // IGO不初始化成就系统
-    if (app.store.user.isInitActivityModule) {
-      // 配置活动系统的入口配置信息
-      await serverHookManager.configureActivityEntry();
-    }
   }
 
   /**

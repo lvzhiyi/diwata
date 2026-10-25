@@ -1,0 +1,1 @@
+export const mockUrl = 'http://mock.makillingslot.net/mock/67ce5222b3e4b400171ce912/wegame/capi/game/capi/game';

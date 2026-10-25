@@ -1,6 +1,5 @@
 import { _decorator, Button, Component, Node, sp, tween, UIOpacity } from 'cc';
 import { app } from 'db://assets/app/app';
-import { igoPathSuffix } from 'db://assets/common/script/ActivityDefine';
 import { getIsGap } from 'db://assets/common/script/extra/Utils/common';
 
 const { ccclass, property } = _decorator;

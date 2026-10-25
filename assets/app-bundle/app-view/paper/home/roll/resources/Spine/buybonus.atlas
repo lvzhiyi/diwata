@@ -1,0 +1,48 @@
+
+buybonus.png
+size: 282,123
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Buy Bonus
+  rotate: true
+  xy: 2, 2
+  size: 119, 63
+  orig: 119, 63
+  offset: 0, 0
+  index: -1
+di
+  rotate: false
+  xy: 120, 15
+  size: 119, 34
+  orig: 119, 34
+  offset: 0, 0
+  index: -1
+hong
+  rotate: false
+  xy: 233, 53
+  size: 47, 68
+  orig: 47, 68
+  offset: 0, 0
+  index: -1
+lan
+  rotate: false
+  xy: 182, 55
+  size: 49, 66
+  orig: 49, 66
+  offset: 0, 0
+  index: -1
+qian
+  rotate: true
+  xy: 67, 2
+  size: 119, 51
+  orig: 119, 51
+  offset: 0, 0
+  index: -1
+xiong
+  rotate: true
+  xy: 120, 51
+  size: 70, 60
+  orig: 70, 60
+  offset: 0, 0
+  index: -1

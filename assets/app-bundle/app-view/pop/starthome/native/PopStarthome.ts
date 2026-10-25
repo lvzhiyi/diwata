@@ -1,8 +1,6 @@
 import { _decorator, Node, sp } from 'cc';
 import BaseView from '../../../../../../extensions/app/assets/base/BaseView';
 import { app } from 'db://assets/app/app';
-import { GlobalActivity } from 'db://assets/common/script/extra/GlobalMgr';
-import { freeSpinManager } from 'db://assets/res-native/script/FreeSpinManager';
 import { SpineTool } from 'db://assets/res-native/script/SpineTool';
 import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';

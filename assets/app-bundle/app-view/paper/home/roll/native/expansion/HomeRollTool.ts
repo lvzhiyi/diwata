@@ -10,6 +10,12 @@ import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass,  } = _decorator;
 
+// 飞镖光柱中心位于 spine 原点下方 47，节点上移这段距离使光柱对齐列中心
+const DART_BEAM_OFFSET_Y = 47;
+
+// 飞镖落下、光柱亮起后再把整列变为 wild（毫秒）
+const DART_WILD_DELAY = 300;
+
 export interface ChangeWildData {
   node?: Node;
   nodes?: Node[];
@@ -31,28 +37,29 @@ export class HomeRollTool  {
   // }
 
   /**
-   * 
-   * @param {Node} targetNode - 需要显示光环动画的目标节点
-   * @param {Node} overlayNode - 用于显示光环动画的覆盖节点
-   * @param {number} scaleRatio - 缩放比例，默认为0.8
-   * @returns {Promise<void>} - 返回一个在动画完成时解析的 Promise
+   * 整列变 wild 的飞镖动画：飞镖落下后整列亮起光柱
+   * @param {Node} targetNode - 需要变 wild 的列（Roll 节点）
+   * @param {Node} overlayNode - 用于显示动画的覆盖节点
+   * @returns {Promise<void>} - 光柱亮起、可以把整列变为 wild 时解析
    */
   async showSwordHaloAnimation(
     targetNode: Node,
     overlayNode: Node,
   ): Promise<void> {
     const spineManager = GameResourceManager.instance;
-    const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SWORD_HIT);
+    const dartName = HomeRollTool.getDartAnimationName(targetNode);
+    const skeleonData = await spineManager.getRollSpineAnimationDataByName(dartName);
 
     if (skeleonData != null) {
       // 创建spine节点并设置大小
       const spineNode = this.createSpineNode(targetNode, overlayNode, true);
-            
+      const pos = spineNode.position;
+      spineNode.setPosition(pos.x, pos.y + DART_BEAM_OFFSET_Y, pos.z);
+
       return new Promise<void>(async (resolve) => {
-        // 0.3秒后执行
         setTimeout(() => {
           resolve();
-        }, 600);
+        }, DART_WILD_DELAY / app.manager.global.gameSpeed);
 
         try {
           // 添加动画
@@ -60,20 +67,28 @@ export class HomeRollTool  {
           skeleton.premultipliedAlpha = false;
           skeleton.skeletonData = skeleonData;
           skeleton.timeScale = app.manager.global.gameSpeed;
-       
-          // 播放多个动画序列
+
           EffectManager.inst.playEffect(AudioPath.GAME.SWORD_RETURN, false, null, true);
-          HomeRollTool.playAnimationSequence(skeleton, ['dao_atk', 'dao_hit'], async () => {
-            console.log('播放剑动画序列完成');
-          });
+          // 播放结束后所有插槽都已透明，节点留给 destoryOverlayNodeLight 统一清理
+          skeleton.setAnimation(0, dartName, false);
         } catch (error) {
-          console.error('加载spine/LamAng_wild动画失败', error);
+          console.error(`加载spine/${dartName}动画失败`, error);
           this.destoryAnimationNode(spineNode);
         }
       });
     } else {
       return Promise.resolve();
     }
+  }
+
+  /**
+   * 按列的可见行数选择飞镖动画（fbx3/fbx4/fbx5）
+   */
+  static getDartAnimationName(rollNode: Node): string {
+    // itemCount = 可见行数 + 1
+    const rows = math.clamp(rollNode.getComponent(Roll).getItemCount() - 1, 3, 5);
+
+    return ROLL_RESOURCE_NAMES[`DART_WILD_${rows}`];
   }
 
   creatSwordLightSpineNode(targetNode: Node, rollNode: Node): Node[] {

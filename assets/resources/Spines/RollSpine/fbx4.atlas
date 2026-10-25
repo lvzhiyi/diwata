@@ -1,0 +1,104 @@
+
+feibiao.png
+size: 1460,316
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+a
+  rotate: true
+  xy: 2, 186
+  size: 128, 793
+  orig: 152, 793
+  offset: 16, 0
+  index: -1
+b
+  rotate: true
+  xy: 797, 114
+  size: 200, 512
+  orig: 200, 512
+  offset: 0, 0
+  index: -1
+huang
+  rotate: false
+  xy: 1311, 221
+  size: 39, 93
+  orig: 39, 97
+  offset: 0, 4
+  index: -1
+tex_02/01
+  rotate: true
+  xy: 2, 2
+  size: 33, 328
+  orig: 84, 400
+  offset: 44, 28
+  index: -1
+tex_02/02
+  rotate: true
+  xy: 700, 4
+  size: 51, 348
+  orig: 84, 400
+  offset: 25, 25
+  index: -1
+tex_02/03
+  rotate: true
+  xy: 709, 57
+  size: 55, 349
+  orig: 84, 400
+  offset: 20, 25
+  index: -1
+tex_02/04
+  rotate: true
+  xy: 2, 117
+  size: 67, 355
+  orig: 84, 400
+  offset: 8, 24
+  index: -1
+tex_02/05
+  rotate: true
+  xy: 352, 37
+  size: 72, 346
+  orig: 84, 400
+  offset: 3, 26
+  index: -1
+tex_02/06
+  rotate: true
+  xy: 2, 42
+  size: 73, 348
+  orig: 84, 400
+  offset: 2, 26
+  index: -1
+tex_02/07
+  rotate: true
+  xy: 359, 111
+  size: 73, 348
+  orig: 84, 400
+  offset: 2, 26
+  index: -1
+tex_02/08
+  rotate: true
+  xy: 1060, 38
+  size: 74, 337
+  orig: 84, 400
+  offset: 1, 27
+  index: -1
+tex_02/09
+  rotate: false
+  xy: 1399, 17
+  size: 59, 297
+  orig: 84, 400
+  offset: 16, 28
+  index: -1
+tex_02/10
+  rotate: true
+  xy: 332, 16
+  size: 19, 280
+  orig: 84, 400
+  offset: 56, 45
+  index: -1
+tex_02/11
+  rotate: true
+  xy: 1050, 21
+  size: 15, 280
+  orig: 84, 400
+  offset: 59, 58
+  index: -1

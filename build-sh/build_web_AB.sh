@@ -7,24 +7,6 @@ echo "环境变量: $4"
 # 安装 node 依赖
 pnpm i
 
-# 拉取子模块
-rm -rf assets/activity
-rm -rf assets/common
-git submodule update --init
-
-# 强制拉取并覆盖本地分支
-cd assets/activity
-git fetch --all --prune         # 清空本地缓存并重新拉取
-git checkout $2 --force    # 强制切换到指定分支
-git reset --hard origin/$2 # 对齐本地代码与远程分支
-cd ../../
-
-cd assets/common
-git fetch --all --prune
-git checkout $2 --force
-git reset --hard origin/$2
-cd ../../
-
 # 提取hash值的函数
 extract_hash_values() {
   local base_path=$1

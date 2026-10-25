@@ -573,22 +573,22 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 2,
+      "r": 255,
       "g": 255,
-      "b": 0,
+      "b": 255,
       "a": 255
     },
     "_string": "10",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 52,
-    "_fontSize": 52,
+    "_actualFontSize": 72,
+    "_fontSize": 72,
     "_fontFamily": "Arial",
-    "_lineHeight": 52,
+    "_lineHeight": 72,
     "_overflow": 0,
     "_enableWrapText": true,
     "_font": {
-      "__uuid__": "cb167293-9c57-445b-93ef-2dea8851178c",
+      "__uuid__": "2f4fd2a1-a226-460b-8f49-f6a100d6455e",
       "__expectedType__": "cc.BitmapFont"
     },
     "_isSystemFontUsed": false,

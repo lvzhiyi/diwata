@@ -19,7 +19,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <link rel="preload" href="./images/10.png" />
   <link rel="preload" href="./images/20.png" />
-  <link rel="preload" href="./images/mayari.png"/>
 	<link rel="stylesheet" type="text/css" href="./index.css" />
 
 	<style type="text/css">
@@ -59,7 +58,7 @@
         width: 2.21rem;
         position: relative;
       }
-      
+
       .loading-page-logo img {
         width: 100%;
         height: auto;
@@ -92,7 +91,7 @@
         transform: translateY(-3%);
       }
       .sm-img {
-        width: 2.38rem; 
+        width: 2.38rem;
         height: auto;
       }
       .middle-box {
@@ -117,7 +116,7 @@
         color: rgba(255, 255, 255, 0.6);
         margin-top: 0.05rem;
         text-align: center; /* 文字内部居中 */
-     
+
       }
 
       /* =========================================
@@ -129,10 +128,10 @@
         border-radius: 8px;
         background-color: #574b2f;
       }
-      
+
       /* 营销界面的进度条可能需要不同的宽度，这里微调 */
       .sm-logo-container .progress-bar {
-         width: 1.72rem; 
+         width: 1.72rem;
          height: 0.1rem;
          margin: 0 auto;
          overflow: hidden;
@@ -196,7 +195,7 @@
 				</div>
 			</div>
 		</div>
-		
+
         <!-- UI A: 默认 Loading 界面 -->
 		<div class="loading-page" id="default-loading-page">
 			<div class="loading-page-logo">
@@ -216,8 +215,6 @@
                 <div class="middle-box">
                     <img class="num-img" data-num="10" src="./images/10.png" />
                     <img class="num-img" data-num="20" src="./images/20.png" />
-                    <!-- 固定显示 mayari -->
-                    <img class="free-img mayari" src="./images/mayari.png" style="display: none;" />
                 </div>
                 <!-- 营销版进度条容器 -->
                 <div class="progress-bar">
@@ -244,12 +241,12 @@
           var bgOriginHeight = 1334;
           var bgWidth = bgOriginWidth * minScale;
           var bgHeight = bgOriginHeight * minScale;
-          
+
           document.documentElement.style.setProperty('--window-width', innerWidth + 'px');
           document.documentElement.style.setProperty('--window-content-width', contentWidth + 'px');
           document.documentElement.style.setProperty('--render-ui-scale', minScale);
           document.documentElement.style.setProperty('--bg-size', bgWidth + 'px ' + bgHeight + 'px');
-          
+
           var rem = minScale * 100;
           document.documentElement.style.setProperty('font-size', rem + 'px');
         }
@@ -261,10 +258,10 @@
 
         // 统一控制进度条更新的核心函数
         function updateProgress(progress) {
-            console.log('Loading Progress:', progress); 
+            console.log('Loading Progress:', progress);
             // 更新默认界面的进度条
             var defVal = document.getElementById('default-progress-val');
-            if(defVal) defVal.style.width = progress * 2.21 + 'rem'; 
+            if(defVal) defVal.style.width = progress * 2.21 + 'rem';
 
             // 更新营销界面的进度条
             var promoVal = document.getElementById('promo-progress-val');
@@ -275,7 +272,7 @@
 
         // 监听 Cocos 3.x 标准回调
         window.ccEngineProgress = updateProgress;
-        
+
         // 监听参考模板中的回调 (以防万一)
         window.onEngineLoadProgress = function(percent) {
             // 有的引擎版本传进来是 0-100，有的是 0-1
@@ -316,7 +313,7 @@
                     // --- 核心逻辑：根据 URL 参数决定显示哪套 UI ---
                     const params = new URLSearchParams(location.search);
                     // const c = params.get("c");
-            
+
                     // const c = params.get("c");
                     const c = params.get("c") || "FreeSpinCarnival_20";
 
@@ -326,7 +323,7 @@
                         // 有参数 c -> 显示营销界面
                         console.log('Mode: Promo Loading');
                         activeLoadingPage = document.getElementById('promo-loading-page');
-                        
+
                         // 处理营销界面的图片显示逻辑
                         const match = c.match(/(\d+)$/);
                         const num = match ? Number(match[1]) : null;
@@ -337,11 +334,7 @@
                                 numEl.style.display = "block";
                             }
                         }
-                        // 固定显示 mayari
-                        const gameEl = document.querySelector(".free-img.mayari");
-                        if (gameEl) {
-                            gameEl.style.display = "block";
-                        }
+
 
                     } else {
                         // 无参数 c -> 显示默认界面
@@ -361,7 +354,7 @@
 					window.hideLoadingPage = function hideLoadingPage() {
 						console.log('hideLoadingPage');
                         if (!activeLoadingPage) return;
-                        
+
 						activeLoadingPage.style.opacity = 0;
 						activeLoadingPage.style.perspective = '1000px';
 						activeLoadingPage.style.transition = 'all 0.2s ease-out';

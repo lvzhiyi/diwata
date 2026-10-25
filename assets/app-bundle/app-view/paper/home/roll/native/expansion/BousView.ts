@@ -40,17 +40,28 @@ export class BousView extends Component {
       this.BuyBonusView.active = !getIsGap();
       this.FreeTimeView.active = false;
       this.FreeSpineView.active = false;
-      this.node.getComponent(Sprite).spriteFrame = this.NormalBg;
+      this.setBackground(this.NormalBg);
     } else if (status == 2) {
       this.BuyBonusView.active = false;
       this.FreeTimeView.active = false;
       this.FreeSpineView.active = true;
-      this.node.getComponent(Sprite).spriteFrame = this.freeSpineBg;
+      this.setBackground(this.freeSpineBg);
     } else if (status == 3) {
       this.BuyBonusView.active = false;
       this.FreeTimeView.active = true;
       this.FreeSpineView.active = false;
-      this.node.getComponent(Sprite).spriteFrame = this.NormalBg;
+      this.setBackground(this.NormalBg);
+    }
+  }
+
+  /**
+   * 切换按钮底图；按钮背景改为 buybonus 骨骼动画后节点上没有 Sprite，此时不处理
+   */
+  private setBackground(spriteFrame: SpriteFrame) {
+    const sprite = this.node.getComponent(Sprite);
+
+    if (sprite) {
+      sprite.spriteFrame = spriteFrame;
     }
   }
 

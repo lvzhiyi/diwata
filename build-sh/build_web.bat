@@ -32,32 +32,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-REM 2. 删除旧子模块
-echo 🗑 删除旧子模块...
-rmdir /s /q assets\activity
-rmdir /s /q assets\common
-
-REM 3. 拉取子模块（带 token）
-echo 🔄 更新子模块...
-git submodule set-url assets/activity https://%token%@github.com/InnovaTech-Game/cocos_activity.git
-git submodule set-url assets/common https://%token%@github.com/InnovaTech-Game/cocos-common.git
-git submodule update --init --recursive
-
-REM 4. 更新 activity 模块
-cd assets\activity
-git fetch --all --prune
-git checkout %BRANCH% --force
-git reset --hard origin/%BRANCH%
-cd ..\..
-
-REM 5. 更新 common 模块
-cd assets\common
-git fetch --all --prune
-git checkout %BRANCH% --force
-git reset --hard origin/%BRANCH%
-cd ..\..
-
-REM 6. 构建产物
+REM 2. 构建产物
 set "COCOS_PATH=C:\ProgramData\cocos\editors\Creator\3.8.5\CocosCreator.exe"
 if not exist "%COCOS_PATH%" (
     echo ❌ 找不到 Cocos Creator: %COCOS_PATH%

@@ -1,16 +1,7 @@
-import { _decorator, find, Label, Node, sp, Vec3 } from 'cc';
+import { _decorator, Label, Node, sp } from 'cc';
 import BaseView from '../../../../../../../extensions/app/assets/base/BaseView';
-import { GameUtilTool } from 'db://assets/common/script/extra/GameUtilTool';
-import { ActivityEventMgr, ActivityEventMgrEventsType } from 'db://assets/common/script/ActivityEventMgr';
 import { app } from 'db://assets/app/app';
-import { ActivityDataMgr, GameDataMgrEventsType } from 'db://assets/common/script/data/ActivityDataMgr';
-import { serverHookManager } from 'db://assets/basePlate/middleWare/serverManager/ServerHookManager';
-import { getUserCredit } from 'db://assets/basePlate/middleWare/services/user';
-import { HTTP_STATUS_CODES } from 'db://assets/common/script/extra/Request';
 import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsController';
-import { GlobalActivity, GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
-import { calculateWithBase } from 'db://assets/common/script/extra/Utils/common';
-import { freeSpinManager } from 'db://assets/res-native/script/FreeSpinManager';
 import { GameResourceManager, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { SpineTool } from 'db://assets/res-native/script/SpineTool';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
@@ -19,9 +10,6 @@ import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 const { ccclass, property } = _decorator;
 @ccclass('PaperHomeActivity')
 export class PaperHomeActivity extends BaseView.BindController(SlotsController) {
-    @property({ type: Node, tooltip: 'ActivityEntry' })
-    private activityEntry: Node = null;
-
     @property({ type: Node, tooltip: 'BousSpineView 节点' })
     private BousSpineView: Node = null;
 
@@ -71,33 +59,6 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
 
     // 界面打开时的相关逻辑写在这(onShow可被多次调用-它与onHide不成对)
     onShow(params: any) {
-      if (app.store.user.isInitActivityModule) {
-        // 监听是否点击了星卡消费
-        ActivityEventMgr.instance.on(ActivityEventMgrEventsType.useGoods, this.onUseStarCard, this);
-        // 余额变动通知
-        ActivityEventMgr.instance.on(
-          ActivityEventMgrEventsType.otherMessage,
-          this.otherMessage,
-          this
-        );
-        this.controller.on(SlotsController.Event.GameOver, (a: BetResult) => {
-          // 当前轮游戏结束，更新freeSpin次数
-          if(app.controller.slots.isFreeBonusSpin === false && app.manager.global.isFreespinMode === true && this.checkFreeSpinisRealEnd(a)) {
-            freeSpinManager.onRoundEnd();
-          }
-
-          return true;
-        });
-        this.controller.on(SlotsController.Event.FreeBonusSpinChange, (a: boolean) => {
-          this.onFreeBonusSpinStateChange(a);
-  
-          return true;
-        });
-        this.setupStarCardPostion();
-        GlobalActivity.showEntryDialog();
-        freeSpinManager.init();
-      }
-
       app.manager.event.on('begainfreeBonusAnimation', this.showFreeBonusSpineAnimation, this);
       // 调整免费轮动画节点的层级
       this.scheduleOnce(() => {
@@ -109,110 +70,12 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
 
     protected beforeShow(next: (error?: string) => void, data?: any) {
       next();
-      this.addActivityRootNode();
-    }
-
-    /**
-     * freeSpin结束的需要判断当前不是mock的faild数据，credit 为 -1，并且当前轮没有中免费轮，则也不需要任务是结束
-    */
-    private checkFreeSpinisRealEnd(result: BetResult) {
-      // 先遍历result.resultDetail.resultList，判断是否中免费轮
-      const isFreeRound = result.resultDetail.resultList.some(item => item.freeWheelFlag === 1);
-
-      if(result.credit !== -1 && !isFreeRound) {
-        return true;
-      }
-
-      return false;
-    }
-
-    /**
-     * 添加活动视图的根节点
-    */
-    addActivityRootNode() {
-      GameUtilTool.createXforgeActivityRootNode(this.activityEntry);
-    }
-
-    /**
-   * 消费星卡
-   * @param starCardData 星卡的数据
-   */
-    public onUseStarCard(starCardData: any) {
-      if (starCardData == null) {
-        return;
-      }
-
-      const betAmout = starCardData.bet;
-  
-      if (betAmout > 0) {
-        // 临时记录修改投注金额变化
-        let tempBetCount = app.manager.global.betCount;
-        app.manager.global.setTempBetCount(tempBetCount);
-        app.manager.global.setBetCount(betAmout, false);
-        app.manager.global.setIsStartCardMode(true);
-        app.manager.global.setStartCardBetAmount(betAmout);
-      }
-
-      // 关闭结算弹窗
-      app.controller.slots.closeFreeSpinSettlementDialog();
-      // 发生一次购买免费轮
-      app.manager.event.emit('buyFreeSpinTimes', betAmout, 1, starCardData);
-    }
-
-    /**
-   * 关闭免费轮结算弹窗
-   */
-    public closeSettlementDialog() {
-      app.controller.slots.closeFreeSpinSettlementDialog();
-    }
-
-    /** 更新余额的通知 */
-    async otherMessage(data: any) {
-      if (serverHookManager.isServerMaintenance) {
-        return;
-      }
-      if (data.msgType === 'CREDIT_CHANGE_RES') {
-        console.log('余额变动通知');
-        const res = await getUserCredit();
-
-        if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data !== null) {
-          // 后端返回的是1厘比索，前端显示的是1比索，所以需要除以1000
-          const creditCount = calculateWithBase(res.data, true);
-          app.manager.global.setCreditCount(creditCount);
-          GlobalMgr.instance.balance = creditCount;
-        }
-      }
-    }
-  
-    /**
-   * 处理免费轮状态变化事件
-   * @param freeSpinState 免费轮状态
-   */
-    private onFreeBonusSpinStateChange(freeBonusSpinState: boolean) {
-      if (freeBonusSpinState) {
-        GlobalActivity.dispatchEvent(GameDataMgrEventsType.updateBuyFreeCount, 1);
-      } else {
-        GlobalActivity.dispatchEvent(GameDataMgrEventsType.updateBuyFreeCount, 0);
-        const starCardData = ActivityDataMgr.instance.getGoodsData();
-
-        // 免费轮结束即清除星卡模式，不依赖 getGoodsData() 是否仍存在
-        app.manager.global.setIsStartCardMode(false);
-        app.manager.global.setStartCardBetAmount(0);
-
-        // 仅星卡模式结束时恢复投注额；花钱购买免费轮时 tempBetCount 可能是上次星卡的旧值，不能覆盖当前 betCount
-        if (starCardData != null && app.manager.global.tempBetCount != null) {
-          ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.hideStarCard, null);
-          app.manager.global.setBetCount(app.manager.global.tempBetCount);
-        }
-      }
     }
 
     /**
      * 展示免费轮中奖动画
      */
     private async showFreeBonusSpineAnimation(callback: () => void) {
-      // sm节点隐藏
-      GlobalActivity.setEntryDialogActive(false);
       this.BousSpineView.active = true;
       this.NumberLable.getComponent(Label).string = app.manager.global.freeBonusTimes.toString();
       // 开始播放动画
@@ -237,7 +100,6 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
         console.log('动画播放超时');
         this.BousSpineView.active = false;
         this.NumberLable.active = false;
-        GlobalActivity.setEntryDialogActive(true);
         Skeleton.clearAnimations();
         Skeleton.skeletonData = null;
         Skeleton.setEventListener(null);
@@ -245,32 +107,16 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
       }, 4400);
 
       Skeleton.setCompleteListener((track: sp.spine.TrackEntry) => {
-        clearTimeout(timeoutId); 
+        clearTimeout(timeoutId);
         Skeleton.setCompleteListener(null);
-        clearTimeout(timeoutId); 
+        clearTimeout(timeoutId);
         this.BousSpineView.active = false;
         this.NumberLable.active = false;
-        GlobalActivity.setEntryDialogActive(true);
         Skeleton.clearAnimations();
         Skeleton.skeletonData = null;
         Skeleton.setEventListener(null);
         callback();
       });
-    }
-
-    /**
-    * 设置星卡特效飞行终点位置
-   */
-    setupStarCardPostion() {
-      // 延迟设置星卡特效飞行终点位置
-      this.scheduleOnce(() => {
-        const betBtn = find('Canvas/UserInterface/Paper/PaperHomeBody/bottomView/buttonBox/hboxLayout/BetAmoutView');
-        const betCountScreenPosition = GameUtilTool.getCardPosByNode(betBtn);
-        const amoutBtnScreenNewPosition = new Vec3(betCountScreenPosition.x, betCountScreenPosition.y - 160, 0);
-        const quickBtn = find('Canvas/UserInterface/Paper/PaperHomeBody/bottomView/buttonBox/quickBtnView/quickBtn');
-        const quikeModeScreenPosition = GameUtilTool.getCardPosByNode(quickBtn);
-        GlobalActivity.setStarCardPosData(amoutBtnScreenNewPosition, quikeModeScreenPosition);
-      }, 0);
     }
 
     // 界面关闭时的相关逻辑写在这(已经关闭的界面不会触发onHide)

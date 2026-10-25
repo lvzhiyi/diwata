@@ -21,6 +21,9 @@ const SYMBOL_ANIM_APPEAR = 'appear';
 const SYMBOL_ANIM_WON = 'won';
 const SYMBOL_ANIM_XIAOCHU = 'xiaochu';
 
+// 元素变 wild 时外圈扩散的光圈动画（RollSpine/change）
+const WILD_CHANGE_ANIM = 'change';
+
 @ccclass('Symbol')
 export class Symbol extends Component {
     @property(Node)
@@ -70,7 +73,7 @@ export class Symbol extends Component {
     // 当前图标的大小
     private _currentIconSize: Size = new Size();
 
-    // symbol 自身的 appear/won/xiaochu 始终使用 Spine，此开关只影响尚未换新美术的变 wild 和爆炸动画
+    // symbol 自身的 appear/won/xiaochu 始终使用 Spine，此开关只影响变 wild 和爆炸动画（爆炸仍是旧美术）
     @property({ tooltip: 'Use bitmap tweens instead of legacy Spine art for wild-change and explode animations' })
     private useSpriteAnimations = false;
 
@@ -211,7 +214,7 @@ export class Symbol extends Component {
         this.wildAnimationNode.setWorldPosition(originalPos);
 
         // 播放wild动画，动画完成后删除动画，并在wildNode设置图片
-        await this.playWildAnimation(this.wildAnimationNode, 'gun_in', this.iconNode, '5001');
+        await this.playWildAnimation(this.wildAnimationNode, WILD_CHANGE_ANIM, this.iconNode, '5001');
 
         resolve();
       });
@@ -539,7 +542,7 @@ export class Symbol extends Component {
           const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
           skeleton.premultipliedAlpha = false;
           skeleton.timeScale = app.manager.global.gameSpeed;
-          skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.LAMANG_WILD);
+          skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.WILD_CHANGE);
           skeleton.setAnimation(0, animationName, false);
           console.log('播放wild动画-数据', animationName);
           iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);

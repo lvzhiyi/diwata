@@ -1,14 +1,10 @@
-import { _decorator, Vec3 } from 'cc';
+import { _decorator } from 'cc';
 import { app } from 'db://assets/app/app';
 import { ApiPath, ErrorType } from 'db://assets/common/script/extra/https/Constant';
 import { http, HTTP_STATUS_CODES } from 'db://assets/common/script/extra/Request';
-import { createAuthHeaders, createWSAuthString, getRealServerTime } from 'db://assets/common/script/extra/Utils/common';
+import { createAuthHeaders, getRealServerTime } from 'db://assets/common/script/extra/Utils/common';
 import { showErrorPop, showServerMaintenanceTip } from '../../core/baseUtil/BaseCommonUtil';
 import CpPostMessage from 'db://assets/common/script/extra/tmBridge/cpPostMessage';
-import { GlobalActivity, GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
-import { CONFIG, getApiUrl, getGameEnv, getWebSocketUrl } from 'db://assets/common/script/extra/config/envConfig';
-import { GameDataMgrEventsType } from 'db://assets/common/script/data/ActivityDataMgr';
-import { Environment } from 'db://assets/common/script/extra/config/env';
 
 const { ccclass } = _decorator;
 
@@ -312,73 +308,6 @@ class ServerHookManager {
   /** 取消所有请求 */
   private cancelAllRequests() {
     this.http.cancelAllRequest();
-  }
-
-  /**
-    * 配置活动系统入口的信息
-   */
-  public async configureActivityEntry() {
-    const env = getGameEnv();
-    const wenv = getGameEnv();
-    let hostUrl = getApiUrl(env as Environment);
-    let wshostUrl = getWebSocketUrl(wenv as Environment);
-    // 外部必配字段
-    const realServerTime = getRealServerTime();
-    const wsSignature = createWSAuthString(realServerTime);
-    const token = app.manager.global.getToken();
-    let wsUrl = `${wshostUrl}/${token}?timestamp=${realServerTime}&signature=${wsSignature}&gameId=${app.config.app.GAME_ID}`;
-
-    // 如果是压测环境还是不走验证签名的
-    if (getGameEnv() === 'info') {
-      wsUrl = `${wshostUrl}/${token}`;
-    }
-
-    GlobalActivity.initExternal(
-      {
-        gameId: app.config.app.GAME_ID,
-        userLevel: app.manager.global.getUserInfo().vipLevel,
-        token: token,
-        hostUrl: hostUrl,
-        wshostUrl: wsUrl,
-        playerId: app.manager.global.playerId,
-        playerName: app.manager.global.playerName,
-      }
-    );
-    GlobalActivity.initActivity({
-      activityIDs: [1, 2, 3, 4, 5, 6, 7, 8],
-      httpHeadUrl: hostUrl,
-      token: token,
-      gameID: app.config.app.GAME_ID,
-      effect: { volume: parseFloat(localStorage.getItem('audioSFXVolume') || '1'), audioClip: null },
-      gameEnv: getGameEnv() as any,
-      listener: GlobalActivity.getEventTarget(),
-      moveToPos: new Vec3(),
-      cardPos: new Vec3(),
-      userInfo: {
-        balance: GlobalMgr.instance.balance,
-        vipLevel: GlobalMgr.instance.userLevel,
-        uid: GlobalMgr.instance.playerId,
-      },
-      igoBaseParam: {
-        accessToken: app.store.user.userParams.accessToken,
-        channelId: app.store.user.userParams.channelId,
-        pId: app.store.user.userParams.pId,
-        playerName: GlobalMgr.instance.playerName,
-      },
-      playerLevelData: app.store.user.PlayerLevelData,
-      turnstileVerifyUrl: CONFIG[env as Environment].turnstileVerifyUrl,
-    });
-
-    try {
-      await GlobalActivity.preloadEntry();
-      // //设置默认成就系统的音效音量
-      GlobalActivity.dispatchEvent(
-        GameDataMgrEventsType.updateVolume,
-        parseFloat(localStorage.getItem('effectVolumeScale') || '1')
-      );
-    } catch (error) {
-      console.error('configureActivityEntry error', error);
-    }
   }
 }
 

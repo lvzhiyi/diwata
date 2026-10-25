@@ -1,16 +1,29 @@
-import { _decorator, Component, Node, sp, Vec3, Tween, tween, Label } from 'cc';
+import { _decorator, Component, Node, sp, Vec3, Label } from 'cc';
 import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 import { app } from 'db://assets/app/app';
 
 const { ccclass, property } = _decorator;
 
+// spin 按钮 Spine 动画名：待机 daiji（箭头慢转一圈），点击 dianji，免费旋转模式点击 freespins（隐藏箭头）
+const SPIN_ANIM_IDLE = 'daiji';
+const SPIN_ANIM_CLICK = 'dianji';
+const SPIN_ANIM_FREESPIN = 'freespins';
+
+// 免费旋转次数挂点
+const FREESPIN_TIMES_SOCKET_PATH = 'root/spin/number';
+
+// daiji 动画中箭头转一圈的时长（秒）
+const IDLE_ROTATE_DURATION = 10 / 3;
+
 @ccclass('StartButtonState')
 export class StartButtonState extends Component {
-    private _speedMap = {
-      slow: 5,
-      fast: 0.26,
-      turbo: 0.1,
-    };
+      /**
+       * 滚动中箭头转一圈的时长（秒）
+       */
+      private _rotateDurationMap = {
+        fast: 0.26,
+        turbo: 0.1,
+      };
     
       private _state: 'normal' | 'freespin' = 'normal';
     
@@ -18,106 +31,28 @@ export class StartButtonState extends Component {
       private disbleImageNode: Node = null;
 
       /**
-       * 普通模式下的箭头节点
+       * 旋转按钮节点，按钮、箭头和点击特效都在这个 Spine 里
        */
-      @property({ tooltip: '普通模式下的箭头节点', type: Node })
-      private arrowNode: Node = null;
-
-       /**
-       * 普通模式下的背景
-       */
-       @property({ tooltip: '普通模式下的背景节点', type: Node })
-       private normalBgNode: Node = null;
-    
-      /**
-       * freespin模式标识节点
-       */
-      @property({ tooltip: 'freespin模式标识节点', type: Node })
-      private freespinFlagNode: Node = null;
-    
-      /**
-       * 发光动效节点
-       */
-      @property({ tooltip: '发光动效节点', type: Node })
-      private glowNode: Node = null;
-    
-      /**
-       * 呼吸灯效果节点
-       */
-      @property({ tooltip: '呼吸灯效果节点', type: Node })
-      private breathNode: Node = null;
-    
-      /**
-       * freespin模式标识节点动画资源
-       */
-      @property({ type: sp.SkeletonData, tooltip: 'freespin模式标识节点动画资源' })
-      private freespinFlagSpineData: sp.SkeletonData = null;
-    
-      /**
-       * freespin模式标识节点动画组件
-       */
-      private freespinFlagSpine: sp.Skeleton = null;
-    
-      /**
-       * 旋转按钮动效节点动画组件
-       */
-      private spinButtonSpine: sp.Skeleton = null;
-    
-      /**
-       * 呼吸灯动效节点动画组件
-       */
-      private breathSpine: sp.Skeleton = null;
-    
-      /**
-       * 箭头动效节点动画组件
-       */
-      private arrowSpine: sp.Skeleton = null;
-    
-      /**
-       * 按钮发光动效动画资源
-       */
-      @property({ type: sp.SkeletonData, tooltip: '普通模式下按钮发光动画资源' })
-      private normalGlowSpinData: sp.SkeletonData = null;
-    
-      @property({ type: sp.SkeletonData, tooltip: 'freespin模式下按钮发光动画资源' })
-      private freespinGlowSpinData: sp.SkeletonData = null;
-    
-      /**
-       * 待机模式下的呼吸灯动效动画资源
-       */
-      @property({ type: sp.SkeletonData, tooltip: '待机模式下的呼吸灯动画资源' })
-      private slowBreathSpinData: sp.SkeletonData = null;
-    
-      /**
-       * 快速旋转模式下的呼吸灯动效动画资源
-       */
-      @property({ type: sp.SkeletonData, tooltip: '快速旋转模式下的呼吸灯动画资源' })
-      private fastBreathSpinData: sp.SkeletonData = null;
+      @property({ tooltip: '旋转按钮 Spine 节点', type: Node })
+      private normalBgNode: Node = null;
       
       @property({ type: Node, tooltip: 'freespin模式下旋转次数节点' })
       private freespinTimesNode: Node = null;
     
       /**
-       * 普通模式下发光动效动画组件
+       * 旋转按钮动画组件
        */
-      private glowSpine: sp.Skeleton = null;
+      private spinButtonSpine: sp.Skeleton = null;
+
+      /**
+       * 当前播放的按钮动画
+       */
+      private currentSpinAnimation = '';
     
       /**
        * freespin模式下旋转次数
        */
       private freespinTimes = 0;
-    
-      /**
-       * 旋转速度
-       */
-      private rotateSpeed: 'slow' | 'fast' | 'turbo' = 'slow';
-    
-      /**
-       * 复用的旋转向量，避免频繁创建Vec3对象
-       */
-      private rotateVec3: Vec3 = new Vec3();
-    
-      private rotateArrowTween: Tween<Node> = null;
     
       /**
        * 是否正在播放动画
@@ -165,6 +100,9 @@ export class StartButtonState extends Component {
       }
     
       onLoad() {
+        this.spinButtonSpine = this.normalBgNode.getComponent(sp.Skeleton);
+        this.bindFreespinTimesSocket();
+
         app.manager.event.on('freespin:state:change', this.onFreespinModeChange, this);
         // GameStateEvent.on('freespin:times:change', this.onFreespinTimesChange, this);
         // GameStateEvent.on('freespin:times:visible', this.onFreespinTimesVisibleChange, this);
@@ -176,6 +114,16 @@ export class StartButtonState extends Component {
         app.manager.event.on('game:isGoing', this.onGameStateChange, this);
   
         this.processIdleAnimations();
+      }
+
+      /**
+       * 把免费旋转次数绑定到按钮中心的挂点
+       * socket 目标必须是骨骼节点的直接子节点
+       */
+      private bindFreespinTimesSocket() {
+        this.freespinTimesNode.setParent(this.normalBgNode);
+        this.freespinTimesNode.setPosition(Vec3.ZERO);
+        this.spinButtonSpine.sockets = [new sp.SpineSocket(FREESPIN_TIMES_SOCKET_PATH, this.freespinTimesNode)];
       }
         
       /**
@@ -209,29 +157,6 @@ export class StartButtonState extends Component {
       disimageChange(isActive:boolean){
         if(this.disbleImageNode){
           this.disbleImageNode.active = isActive;
-        }
-      }
-    
-      /**
-       * 处理点击动画
-       */
-      private processClickAnimation() {
-        this.disimageChange(false);
-
-        if (this._state === 'normal') {
-          // 播放按钮点击动画
-          this.playSpinButtonAnimation('dianji', false);
-          // 播放普通模式下按钮发光动画
-          this.playNormalSpinGlowAnimation('1c');
-          // 播放箭头动画
-          this.playArrowAnimation('faguang', false);
-        } else {
-          // 播放按钮点击动画
-          this.playSpinButtonAnimation('dianji', false);
-          // 播放普通模式下按钮发光动画
-          this.playNormalSpinGlowAnimation('1c');
-          // 播放freespin模式下按钮发光动画
-          // this.playFreespinSpinGlowAnimation('dianji', false);
         }
       }
     
@@ -300,15 +225,11 @@ export class StartButtonState extends Component {
        * 处理待机状态下的动画
        */
       private processIdleAnimations() {
-        this.playSpinButtonAnimation('daiji', true);
-    
         if (this._state === 'normal') {
-          // 开始旋转箭头节点，慢慢的旋转
-          this.changeArrowRotateSpeed('slow');
-          this.playArrowAnimation('daiji');
+          // 箭头按 daiji 原速慢慢旋转
+          this.playSpinButtonAnimation(SPIN_ANIM_IDLE, true);
         } else {
-          this.playFreespinFlagAnimation('daiji');
-          this.playBreathAnimation('slow');
+          this.showFreespinPose();
         }
       }
     
@@ -316,29 +237,37 @@ export class StartButtonState extends Component {
        * 处理游戏开始状态下的动画
        */
       private processPlayingAnimations() {
-        this.processClickAnimation();
-    
+        this.disimageChange(false);
+
         if (this._state === 'freespin') {
-          this.playBreathAnimation('fast');
-        } else {
-          this.changeArrowRotateSpeed('fast');
+          this.playSpinButtonAnimation(SPIN_ANIM_FREESPIN, false);
+
+          return;
         }
+
+        this.playSpinButtonAnimation(SPIN_ANIM_CLICK, false);
+        // 点击动画结束后，箭头按滚动速度持续旋转
+        const entry = this.spinButtonSpine.addAnimation(0, SPIN_ANIM_IDLE, true);
+
+        if (entry) {
+          entry.timeScale = IDLE_ROTATE_DURATION / this._rotateDurationMap[this.getPlayingRotateSpeed()];
+        }
+      }
+
+      /**
+       * 滚动中的箭头转速档位
+       */
+      private getPlayingRotateSpeed(): 'fast' | 'turbo' {
+        return app.manager.global.quikeMode !== IQuickMode.nomal ? 'turbo' : 'fast';
       }
     
       /**
        * 处理中奖动画播放过程中的按钮动画
        */
       private processRewardAnimations() {
-        this.playSpinButtonAnimation('zhihui', false);
-    
         if (this._state === 'normal') {
-          this.stopArrowAnimation();
-          this.playArrowAnimation('zhihui');
-    
-          return;
+          this.stopArrowRotate();
         }
-    
-        this.stopBreathAnimation();
       }
 
       private  async startButtonDisableAndRecover() {
@@ -352,23 +281,34 @@ export class StartButtonState extends Component {
        * 处理投注按钮禁用状态下的动画
        */
       private processDisableStateAnimations() {
-        this.playSpinButtonAnimation('zhihui', false);
-    
         if (this._state === 'normal') {
-          this.playArrowAnimation('zhihui');
+          this.stopArrowRotate();
         }
       }
-    
+
       /**
-       * 处理freespin模式下的动画
+       * 箭头停在当前角度
        */
-      private processFreespinAnimations() {
-        // 先停止并隐藏掉普通模式下的箭头和动画
-        this.stopArrowAnimationAndHideArrow();
-        // 播放freespin模式标识节点动画
-        this.playFreespinFlagAnimation('chuxian');
-        // 播放呼吸灯动画
-        this.playBreathAnimation('slow');
+      private stopArrowRotate() {
+        const entry = this.spinButtonSpine.getCurrent(0);
+
+        if (entry && this.currentSpinAnimation === SPIN_ANIM_IDLE) {
+          entry.timeScale = 0;
+        } else {
+          this.playSpinButtonAnimation(SPIN_ANIM_IDLE, true).timeScale = 0;
+        }
+      }
+
+      /**
+       * freespin 模式的静止姿态：停在 freespins 最后一帧，箭头隐藏，不播放点击特效
+       */
+      private showFreespinPose() {
+        if (this.currentSpinAnimation === SPIN_ANIM_FREESPIN) {
+          return;
+        }
+
+        const entry = this.playSpinButtonAnimation(SPIN_ANIM_FREESPIN, false);
+        entry.trackTime = entry.animationEnd;
       }
     
       /**
@@ -376,160 +316,12 @@ export class StartButtonState extends Component {
        * @param animationName 动画名称
        * @param isLoop 是否循环播放
        */
-      private playSpinButtonAnimation(animationName: 'daiji' | 'dianji' | 'zhihui', isLoop = true) {
-        if (!this.spinButtonSpine) {
-          this.spinButtonSpine = this.normalBgNode.getComponent(sp.Skeleton);
-        }
-    
-        this.spinButtonSpine.setAnimation(0, animationName, isLoop);
-      }
-    
-      /**
-       * 播放按钮发光动画
-       * @param animationName 动画名称
-       */
-      private async playNormalSpinGlowAnimation(animationName: '1c') {
-        if (!this.glowNode.active) {
-          this.glowNode.active = true;
-        }
-      
-        if (!this.glowSpine) {
-          this.glowSpine = this.glowNode.getComponent(sp.Skeleton);
-        }
-    
-        this.glowSpine.skeletonData = this.normalGlowSpinData;
-        this.glowSpine.setAnimation(0, animationName, false);
-        await wrapSpineCompleteListener(this.glowSpine);
-        this.glowNode.active = false;
-      }
-    
-      /**
-       * 播放箭头动画
-       * @param animationName 动画名称
-       * @param isLoop 是否循环播放
-       */
-      private async playArrowAnimation(animationName: 'daiji' | 'faguang' | 'zhihui', isLoop = true) {
-        if (!this.arrowSpine) {
-          this.arrowSpine = this.arrowNode.getComponent(sp.Skeleton);
-        }
-    
-        this.arrowSpine.setAnimation(0, animationName, isLoop);
-      }
-    
-      /**
-       * 切换呼吸灯动画
-       * @param type 呼吸灯动画类型
-       */
-      private playBreathAnimation(type: 'slow' | 'fast') {
-        if (!this.breathNode.active) {
-          this.breathNode.active = true;
-        }
-    
-        if (!this.breathSpine) {
-          this.breathSpine = this.breathNode.getComponent(sp.Skeleton);
-        }
-    
-        this.breathSpine.skeletonData = type === 'slow' ? this.slowBreathSpinData : this.fastBreathSpinData;
-        this.breathSpine.setAnimation(0, 'xunhuan', true);
-      }
-      
-      /**
-       * 停止呼吸灯动画
-       */
-      private stopBreathAnimation() {
-        this.breathSpine?.clearAnimations();
-        this.breathNode.active = false;
-      }
-    
-      /**
-       * 播放freespin模式下按钮发光动画
-       * @param animationName 动画名称
-       * @param isLoop 是否循环播放
-       */
-      private async playFreespinSpinGlowAnimation(animationName: 'daiji' | 'dianji' | 'zhihui', isLoop = true) {
-        if (!this.glowNode.active) {
-          this.glowNode.active = true;
-        }
-    
-        if (!this.glowSpine) {
-          this.glowSpine = this.glowNode.getComponent(sp.Skeleton);
-        }
-    
-        this.glowSpine.skeletonData = this.freespinGlowSpinData;
-        this.glowSpine.setAnimation(0, animationName, isLoop);
-    
-        if (!isLoop) {
-          await wrapSpineCompleteListener(this.glowSpine);
-        }
-      }
-    
-      /**
-       * 播放freespin模式标识节点动画
-       */
-      private async playFreespinFlagAnimation(animationName: 'daiji' | 'chuxian') {
-        if (!this.freespinFlagNode.active) {
-          this.freespinFlagNode.active = true;
-        }
-        if (!this.freespinFlagSpine) {
-          this.freespinFlagSpine = this.freespinFlagNode.getComponent(sp.Skeleton);
-        }
-    
-        this.freespinFlagSpine.skeletonData = this.freespinFlagSpineData;
-        this.freespinFlagSpine.setAnimation(0, animationName, true);
-    
-        if (animationName === 'chuxian') {
-          // 先播放完毕出现时的动画，再切换到待机动画
-          await wrapSpineCompleteListener(this.freespinFlagSpine);
-          this.freespinFlagSpine.setAnimation(0, 'daiji', true);
-        }
-      }
-    
-      /**
-       * 停止并隐藏掉普通模式下的箭头和动画
-       */
-      private stopArrowAnimationAndHideArrow() {
-        this.stopArrowAnimation();
-        this.arrowNode.active = false;
-      }
-    
-      /**
-       * 停止箭头旋转动画
-       */
-      private stopArrowAnimation() {
-        if (this.rotateArrowTween) {
-          this.rotateArrowTween.stop();
-          this.rotateArrowTween = null;
-        }
-      }
-    
-      /**
-       * 切换箭头旋转速度
-       * @param speed 旋转速度
-       */
-      private changeArrowRotateSpeed(speed: 'slow' | 'fast') {
-        this.rotateSpeed = speed === 'fast' && app.manager.global.quikeMode !== IQuickMode.nomal ? 'turbo' : speed;
-        console.log('this.rotateSpeed', this.rotateSpeed);
-        this.rotateArrow();
-      }
-    
-      /**
-       * 旋转箭头动画节点, 无限循环逆时针旋转
-       * @param speed 旋转速度
-       */
-      private rotateArrow() {
-        if (!this.arrowNode) return;
-        
-        // 停止之前的旋转动画
-        this.stopArrowAnimation();
-        
-        // 设置复用的旋转向量值
-        this.rotateVec3.set(0, 0, -360);
-        
-        // 开始逆时针旋转动画
-        this.rotateArrowTween = tween(this.arrowNode)
-          .by(this._speedMap[this.rotateSpeed], { eulerAngles: this.rotateVec3 })
-          .repeatForever()
-          .start();
+      private playSpinButtonAnimation(animationName: string, isLoop = true): sp.spine.TrackEntry {
+        this.currentSpinAnimation = animationName;
+        // freespins 会隐藏箭头而 daiji 不控制该插槽，切换前先回到初始姿态
+        this.spinButtonSpine.setToSetupPose();
+
+        return this.spinButtonSpine.setAnimation(0, animationName, isLoop);
       }
       
       /**
@@ -557,8 +349,8 @@ export class StartButtonState extends Component {
        */
       private switchFreespinState(freespinTimes: number) {
         this.initFreespinTimes(freespinTimes);
-        this.stopArrowAnimationAndHideArrow();
-        this.processFreespinAnimations();
+        // 进入时完整播放一次 freespins，之后停在隐藏箭头的姿态
+        this.playSpinButtonAnimation(SPIN_ANIM_FREESPIN, false);
       }
     
       /**
@@ -567,9 +359,6 @@ export class StartButtonState extends Component {
       private switchNormalState() {
         this.resetFreespinTimes();
         this.processIdleAnimations();
-        this.stopBreathAnimation();
-        this.arrowNode.active = true;
-        this.freespinFlagNode.active = false;
       }
     
       /**

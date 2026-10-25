@@ -1,7 +1,6 @@
 import { _decorator, Node, director, find, sys, UITransform } from 'cc';
 import BaseManager from '../../../../extensions/app/assets/base/BaseManager';
 import { app } from 'db://assets/app/app';
-import { GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
 
@@ -69,9 +68,6 @@ export class GlobalManager extends BaseManager {
 
   // 投注金额
   private _betCount: number = 2;
-
-  // 临时记录的bet
-  private _tempBetCount: number | null = null;
 
   // 购买次数
   private _quantity: number = 0;
@@ -161,12 +157,6 @@ export class GlobalManager extends BaseManager {
    /** 赠送的免费游玩模式投注金额 */
    private _freespinBetAmount: number = 0;
  
-   /** 是否星卡模式 */
-   private _isStartCardMode: boolean = false;
- 
-   /** 星卡模式投注金额 */
-   private _startCardBetAmount: number = 0;
-
    // 开屏动画是否永远不播放
    private _isNeverPlayOpenHomeAnimtion: boolean = false;
 
@@ -234,20 +224,6 @@ export class GlobalManager extends BaseManager {
      this._freespinBetAmount = val;
    }
 
-   /** 获取星卡模式状态 */
-   public get isStartCardMode(): boolean {
-     return this._isStartCardMode;
-   }
-
-   public setIsStartCardMode(bool: boolean): void {
-     this._isStartCardMode = bool;
-   }
-
-   /** 设置星卡模式投注金额 */
-   public setStartCardBetAmount(val: number): void {
-     this._startCardBetAmount = val;
-   }
-
    /** 下次打开是否不需要显示引导页 */
    public get isDontShowNextTime() {
      const isDontShowNextTime = sys.localStorage.getItem('isDontShowNextTime');
@@ -276,9 +252,6 @@ export class GlobalManager extends BaseManager {
      if(this._isFreespinMode){
        betCount = this._freespinBetAmount;
      }
-     if(this._isStartCardMode){
-       betCount = this._startCardBetAmount;
-     }
 
      return  betCount;
    }
@@ -293,14 +266,6 @@ export class GlobalManager extends BaseManager {
 
      this._betCount = val;
      app.manager.event.emit('betCountChange', val);
-   }
-
-   public get tempBetCount() {
-     return this._tempBetCount;
-   }
-
-   public setTempBetCount(val: number | null) {
-     this._tempBetCount = val;
    }
 
    public get quantity() {
@@ -353,7 +318,6 @@ export class GlobalManager extends BaseManager {
    public setStartAutoPlay(bool: boolean) {
      this._startAutoplay = bool;
      app.manager.event.emit('startAutoPlayChange', bool);
-     GlobalMgr.instance.autoPlayMode = bool;
    }
 
    public get currentAutoPlayTimes() {
@@ -443,7 +407,6 @@ export class GlobalManager extends BaseManager {
   public setAllwaysAutoPlay(bool: boolean) {
     this._allwaysAutoPlay = bool;
     app.manager.event.emit('allwaysAutoPlayChange', bool);
-    GlobalMgr.instance.autoPlayMode = bool;
   }
 
   public get isGoing() {

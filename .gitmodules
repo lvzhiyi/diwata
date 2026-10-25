@@ -1,6 +1,0 @@
-[submodule "assets/activity"]
-	path = assets/activity
-	url = https://github.com/InnovaTech-Game/cocos_activity.git
-[submodule "assets/common"]
-	path = assets/common
-	url = https://github.com/InnovaTech-Game/cocos-common.git

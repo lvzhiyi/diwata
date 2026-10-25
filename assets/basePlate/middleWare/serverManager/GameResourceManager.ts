@@ -17,12 +17,17 @@ export const SPINE_RESOURCE_NAMES: { [key: string]: string } = {
 /// 滚动元素
 export const ROLL_RESOURCE_NAMES: { [key: string]: string } = {
  
-  // wild动画
-  LAMANG_WILD: 'gun_in',
+  // 元素变 wild 时外圈扩散的光圈动画，动画名 change
+  WILD_CHANGE: 'change',
   // scatter动画
   LAMANG_ICON_SCATTER: 'symbol_3001',
   // 剑被劈中的动画
   SWORD_HIT: 'dao',
+
+  // 整列变 wild 的飞镖动画，按列的可见行数 3/4/5 区分，动画名与文件名相同
+  DART_WILD_3: 'fbx3',
+  DART_WILD_4: 'fbx4',
+  DART_WILD_5: 'fbx5',
   
   // 棒子爆炸的动画
   BOW_EXPLODE: 'gun',

@@ -1,0 +1,90 @@
+
+change.png
+size: 741,570
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+01
+  rotate: false
+  xy: 570, 90
+  size: 127, 127
+  orig: 216, 196
+  offset: 44, 34
+  index: -1
+02
+  rotate: false
+  xy: 601, 419
+  size: 138, 149
+  orig: 216, 196
+  offset: 41, 22
+  index: -1
+03
+  rotate: false
+  xy: 570, 219
+  size: 157, 159
+  orig: 216, 196
+  offset: 31, 21
+  index: -1
+04
+  rotate: true
+  xy: 397, 21
+  size: 172, 169
+  orig: 216, 196
+  offset: 21, 17
+  index: -1
+05
+  rotate: false
+  xy: 396, 195
+  size: 172, 180
+  orig: 216, 196
+  offset: 24, 10
+  index: -1
+06
+  rotate: false
+  xy: 416, 380
+  size: 183, 188
+  orig: 216, 196
+  offset: 17, 8
+  index: -1
+07
+  rotate: false
+  xy: 205, 4
+  size: 190, 178
+  orig: 216, 196
+  offset: 15, 13
+  index: -1
+08
+  rotate: false
+  xy: 205, 184
+  size: 189, 191
+  orig: 216, 196
+  offset: 19, 5
+  index: -1
+09
+  rotate: false
+  xy: 2, 2
+  size: 201, 178
+  orig: 216, 196
+  offset: 9, 10
+  index: -1
+10
+  rotate: false
+  xy: 2, 182
+  size: 201, 193
+  orig: 216, 196
+  offset: 8, 3
+  index: -1
+11
+  rotate: false
+  xy: 216, 377
+  size: 198, 191
+  orig: 216, 196
+  offset: 5, 5
+  index: -1
+12
+  rotate: false
+  xy: 2, 377
+  size: 212, 191
+  orig: 216, 196
+  offset: 4, 5
+  index: -1

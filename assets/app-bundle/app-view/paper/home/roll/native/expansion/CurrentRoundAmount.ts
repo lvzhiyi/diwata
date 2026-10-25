@@ -52,7 +52,8 @@ export class CurrentRoundAmount extends Component {
       label.string = `${getP()}${sliceAmount(originalAmount)}`;
       const multipleValue = Math.pow(2, multiple);
       console.log('startNum-开始动画', originalAmount, multipleValue);
-      this.multipleNode.getComponent(Label).string = `x${multipleValue}`;
+      // 与转盘倍率一致，数字在前，如 2x
+      this.multipleNode.getComponent(Label).string = `${multipleValue}x`;
       this.multipleNode.active = multipleValue > 1;
       this.multipleBgSpine.active = multipleValue > 1;
       // 动态设置字体大小

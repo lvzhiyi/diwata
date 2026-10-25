@@ -1,13 +1,118 @@
 
 spin_btn.png
-size: 150,150
+size: 1510,534
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-di
+01
+  rotate: true
+  xy: 1400, 236
+  size: 102, 104
+  orig: 327, 351
+  offset: 118, 130
+  index: -1
+02
   rotate: false
-  xy: 0, 0
+  xy: 1228, 6
+  size: 142, 144
+  orig: 327, 351
+  offset: 92, 114
+  index: -1
+03
+  rotate: false
+  xy: 1248, 340
+  size: 208, 192
+  orig: 327, 351
+  offset: 54, 73
+  index: -1
+04
+  rotate: false
+  xy: 1014, 298
+  size: 232, 234
+  orig: 327, 351
+  offset: 49, 49
+  index: -1
+05
+  rotate: true
+  xy: 2, 2
+  size: 264, 241
+  orig: 327, 351
+  offset: 47, 49
+  index: -1
+06
+  rotate: false
+  xy: 766, 283
+  size: 246, 249
+  orig: 327, 351
+  offset: 45, 41
+  index: -1
+07
+  rotate: false
+  xy: 255, 276
+  size: 255, 256
+  orig: 327, 351
+  offset: 44, 38
+  index: -1
+08
+  rotate: true
+  xy: 2, 268
+  size: 264, 251
+  orig: 327, 351
+  offset: 37, 44
+  index: -1
+09
+  rotate: true
+  xy: 245, 4
+  size: 262, 257
+  orig: 327, 351
+  offset: 41, 42
+  index: -1
+10
+  rotate: true
+  xy: 758, 22
+  size: 252, 247
+  orig: 327, 351
+  offset: 52, 46
+  index: -1
+11
+  rotate: false
+  xy: 504, 18
+  size: 252, 256
+  orig: 327, 351
+  offset: 52, 41
+  index: -1
+12
+  rotate: false
+  xy: 512, 276
+  size: 252, 256
+  orig: 327, 351
+  offset: 52, 47
+  index: -1
+13
+  rotate: false
+  xy: 1007, 41
+  size: 219, 240
+  orig: 327, 351
+  offset: 72, 50
+  index: -1
+G
+  rotate: true
+  xy: 1372, 16
+  size: 134, 136
+  orig: 136, 140
+  offset: 1, 2
+  index: -1
+spin
+  rotate: false
+  xy: 1248, 188
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
+  index: -1
+spinjt
+  rotate: true
+  xy: 1400, 152
+  size: 82, 94
+  orig: 94, 94
+  offset: 6, 0
   index: -1

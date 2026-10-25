@@ -7,12 +7,9 @@ import GameProcessCtrl, { GameState } from '../../common/script/extra/GameProces
 import { sys } from 'cc';
 import { mockFailedData, mockSuccessData, mockSuccessData1 } from '../../basePlate/core/baseUtil/mockDataUtils';
 import { ToastView } from '../../basePlate/middleWare/commonUI/ToastView';
-import { ActivityEventMgr, ActivityEventMgrEventsType } from '../../common/script/ActivityEventMgr';
-import { GlobalMgr } from '../../common/script/extra/GlobalMgr';
 import { MoneyUtil } from '../../basePlate/core/baseUtil/MoneyUtil';
 import EventTrackManager from '../../basePlate/middleWare/serverManager/EventTrackManager';
 import { IQuickMode } from '../app-manager/global/GlobalManager';
-import { ActivityDataMgr } from '../../common/script/data/ActivityDataMgr';
 import { BGMManager } from '../../basePlate/middleWare/serverManager/BGMManager';
 
 // TODO 测试用
@@ -83,8 +80,6 @@ export class HomeController extends BaseController<
     GameProcessCtrl.gameState = GameState.GameStarting;
     app.manager.global.setIsGoing(true);
     app.manager.event.emit('roll:start', true);
-    // 活动系统需要游戏的状态
-    GlobalMgr.instance.isGameing = true;
     this.isEndGame = false;
     app.controller.slots.startRolling();
   }
@@ -95,7 +90,6 @@ export class HomeController extends BaseController<
   async gameOver() {
     console.log('游戏结束事件');
     GameProcessCtrl.gameState = GameState.GameEnded;
-    GlobalMgr.instance.isGameing = false;
     app.controller.slots.gameOver(this.betResult);
 
     // 普通轮且没有命中免费轮，或达到最大倍数
@@ -155,7 +149,6 @@ export class HomeController extends BaseController<
    * @param amount 投注金额
    * @param betType 投注类型
    * @param betSubType 投注子类型
-   * @param starCardData 星卡数据
    * @param isFreeSpin 是否是使用free spin
    * @param compainId 活动ID
    */
@@ -263,41 +256,23 @@ export class HomeController extends BaseController<
   }
 
   /**
-   * 花钱购买免费轮或者使用星卡
+   * 花钱购买免费轮
   */
-  async buyBonusBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, starCardData?: any) {
+  async buyBonusBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes) {
     app.controller.slots.setBetType(betType, betSubType);
-    const isUseStarCard = !!starCardData; 
     let res: ApiResponse<BetResult> = null;
-    let betData: any = null;
-    const _betAmount = calculateWithBase(isUseStarCard ? starCardData.bet ?? 0 : amount, false);
+    const _betAmount = calculateWithBase(amount, false);
     // 购买金额，购买金额是投注金额的100倍
-    const payAmount = isUseStarCard ? _betAmount : _betAmount * app.config.app.BUY_FREE_SPIN_TIMES_RATIO;
-
-    if (starCardData != null) {
-      betData = {
-        gameId: app.config.app.GAME_ID,
-        betType: betType,
-        betSubType: betSubType,
-        betDetail: {
-          payAmount,
-          betAmount: _betAmount,
-          useStarCard: true,
-          rewardConfigId: starCardData.rewardConfigId,
-          rewardId: starCardData.reward_id
-        },
-      };
-    } else {
-      betData = {
-        gameId: app.config.app.GAME_ID,
-        betType: betType,
-        betSubType: betSubType,
-        betDetail: {
-          betAmount: _betAmount,
-          payAmount,
-        },
-      };
-    }
+    const payAmount = _betAmount * app.config.app.BUY_FREE_SPIN_TIMES_RATIO;
+    const betData = {
+      gameId: app.config.app.GAME_ID,
+      betType: betType,
+      betSubType: betSubType,
+      betDetail: {
+        betAmount: _betAmount,
+        payAmount,
+      },
+    };
     try {
       res = await doBet(betData);
     } catch (error) {
@@ -312,7 +287,7 @@ export class HomeController extends BaseController<
     if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data) {
       const old_balance = app.manager.global.creditCount;
       app.manager.global.setCreditCount(
-        app.manager.global.creditCount - (app.manager.global.betCount * (isUseStarCard ?  1 : app.config.app.BUY_FREE_SPIN_TIMES_RATIO ))
+        app.manager.global.creditCount - (app.manager.global.betCount * app.config.app.BUY_FREE_SPIN_TIMES_RATIO)
       );
       this.credit = res.data.credit;
       this.betResult = res.data;
@@ -320,25 +295,11 @@ export class HomeController extends BaseController<
       // 埋点
       this.trackSpinStart(old_balance, true);
 
-      if (isUseStarCard) {
-        // 星卡使用成功
-        ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.useGoodsSuccess);
-      }
-
       app.controller.slots.stopRolling(this.betResult);
     } else {
       this.credit = calculateWithBase(app.manager.global.creditCount, false);
       this.betResult = mockFailedData;
       ToastView.showCommonToast('Unstable Network,Bet failed');
-
-      // 星卡使用失败
-      if (isUseStarCard) {
-        // 购买失败，复原星卡使用状态，复原投注金额
-        app.controller.slots.resetBetAmount();
-        ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.hideStarCard, null);
-        app.manager.global.setIsStartCardMode(false);
-        app.manager.global.setStartCardBetAmount(0);
-      }
 
       app.controller.slots.freeBonusSpinChange(false);
 
@@ -354,7 +315,6 @@ export class HomeController extends BaseController<
   async getBetFreeSpinResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, betRecordId: string) {
     this.autoPlayType = betType;
     const betAmount = calculateWithBase(amount, false);
-    const starCardData = ActivityDataMgr.instance.getGoodsData() || null;
     const res = await doBet({
       gameId: app.config.app.GAME_ID,
       betType,
@@ -364,7 +324,7 @@ export class HomeController extends BaseController<
         gameRecordId: app.manager.global.gameRecordIds[app.manager.global.gameRecordIndex],
         betAmount: betAmount,
         payAmount: 0,
-        useStarCard: starCardData ? true : false,
+        useStarCard: false,
         useFreeSpin:app.manager.global.isFreespinMode,
       },
     });

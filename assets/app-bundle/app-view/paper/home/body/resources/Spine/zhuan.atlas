@@ -1,0 +1,13 @@
+
+zhuan.png
+size: 151,151
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+zhuan
+  rotate: false
+  xy: 2, 2
+  size: 147, 147
+  orig: 208, 207
+  offset: 31, 31
+  index: -1

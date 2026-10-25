@@ -1,8 +1,6 @@
 import { _decorator, Component, AudioClip, AudioSource, Node, resources, assetManager } from 'cc';
 import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 import { app } from 'db://assets/app/app';
-import { GameDataMgrEventsType } from 'db://assets/common/script/data/ActivityDataMgr';
-import { GlobalActivity } from 'db://assets/common/script/extra/GlobalMgr';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass } = _decorator;
@@ -446,38 +444,6 @@ export class EffectManager extends Component {
     
     this._effectVolume = volume;
     this._isMuted = isMute;
-
-    this.syncSubPackageEffectVolume();
-  }
-  
-  /**
-   * 同步侧边栏展开页面的音量设置
-   */
-  public syncSubPackageEffectVolume(): void {
-    if (!this._isMuted) {
-      this.updateSubPackageVolume(this._effectVolume);
-
-      return;
-    }
-
-    // 如果音量值为0，需要先初始化成非0，在同步真实的音量值。
-    this.updateSubPackageVolume(1);
-    this.scheduleOnce(() => {
-      this.updateSubPackageVolume(0);
-    }, 0.1);
-  }
-
-  /**
-   * 更新侧边栏展开页面的音量设置
-   * @param volume 音量值
-   */
-  private updateSubPackageVolume(volume: number): void {
-    if (app.store.user.isInitActivityModule && GlobalActivity.getEventTarget()) {
-      GlobalActivity.getEventTarget().emit(
-        GameDataMgrEventsType.updateVolume,
-        volume,
-      );
-    }
   }
 
   /**
@@ -832,8 +798,6 @@ export class EffectManager extends Component {
     // 同步到xforge框架（保持兼容性）
     app.manager.sound.setEffectMute(this._isMuted);
     app.manager.sound.setEffectVolumeScale(this._effectVolume, true);
-    
-    this.updateSubPackageVolume(this._effectVolume);
   }
 
   /**

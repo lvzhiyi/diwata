@@ -15,7 +15,6 @@ import { preventRapidClickDecorator } from 'db://assets/basePlate/core/baseUtil/
 import { AdvancedButtonBreath } from 'db://assets/basePlate/middleWare/animations/AdvancedButtonBreath';
 import EventTrackManager from 'db://assets/basePlate/middleWare/serverManager/EventTrackManager';
 import { CurrentRoundAmount } from './expansion/CurrentRoundAmount';
-import { GlobalActivity } from 'db://assets/common/script/extra/GlobalMgr';
 import { BousView } from './expansion/BousView';
 import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
 import GameProcessCtrl, { GameState } from 'db://assets/common/script/extra/GameProcessCtrl';
@@ -217,13 +216,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   clickBuyBonus() {
     console.log('点击免费轮购买或者展示freeSpin', this.freeSpinView.active);
 
-    if(this.freeSpinView.active) {
-      GlobalActivity.openFreeSpin(); 
-    } else {
-      if (this.canClickBuyBonus()) {
-        EventTrackManager.inst.trackBuyBonusOpen(app.manager.global.creditCount);
-        app.manager.ui.show({ name: 'PopBuybonus' });
-      }
+    if (!this.freeSpinView.active && this.canClickBuyBonus()) {
+      EventTrackManager.inst.trackBuyBonusOpen(app.manager.global.creditCount);
+      app.manager.ui.show({ name: 'PopBuybonus' });
     }
   }
 
@@ -1156,19 +1151,19 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * @param betCount 投注金额
    * @param quantity 数量
    */
-  buyFreeSpinTimes(betCount: number, quantity: number, starCardData?: any) {
+  buyFreeSpinTimes(betCount: number, quantity: number) {
     app.manager.global.setQuantity(quantity);
-    app.manager.global.setBetCount(betCount, starCardData === null ? true : false);
+    app.manager.global.setBetCount(betCount, false);
 
-    this.startBuyFreeSpinGame(starCardData);
+    this.startBuyFreeSpinGame();
   }
 
   /**
    * 开始购买免费轮游戏
    */
-  private startBuyFreeSpinGame(starCardData?: any)  {
+  private startBuyFreeSpinGame()  {
     app.manager.global.setQuantity(app.manager.global.quantity - 1);
-    app.controller.slots.betBuyFreeSpin(starCardData);
+    app.controller.slots.betBuyFreeSpin();
     this.showFreeBonusTimes();
   }
 

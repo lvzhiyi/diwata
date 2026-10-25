@@ -35,8 +35,6 @@ import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/Ef
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
 import { BalanceString, BetString } from 'db://assets/common/script/extra/Utils/PlatformConfig';
-import { ActivityEventMgr, ActivityEventMgrEventsType } from 'db://assets/common/script/ActivityEventMgr';
-import { GlobalMgr } from 'db://assets/common/script/extra/GlobalMgr';
 
 const { ccclass, property } = _decorator;
 
@@ -231,8 +229,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     app.manager.event.on('quantityChange', this.quantityChange, this);
     // 重置自动投注
     app.manager.event.on('resetGameMode', this.resetGameMode, this);
-    // 监听玩家等级变化
-    ActivityEventMgr.instance.on(ActivityEventMgrEventsType.updatePlayerLevel, this.updatePlayerLevel, this);
   }
 
   // 界面关闭时的相关逻辑写在这(已经关闭的界面不会触发onHide)
@@ -256,21 +252,8 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
    */
   creditCountChange(val: number) {
     this.creditLable.getComponent(Label).string = getP() + numberToMoney(val);
-    GlobalMgr.instance.balance = val;
   }
 
-  /**
-   * 更新玩家等级
-   * @param val
-   */
-  updatePlayerLevel(val: number) {
-    if(val > -1){
-      this.vipNode.getComponent(Sprite).spriteFrame = this.vipIcons[val];
-    }else{
-      this.vipNode.active = false;
-    }
-  }
-  
   /**
    * 免费轮状态变化
    */
@@ -437,10 +420,9 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
   }
 
   /**
-   *点击vip
+   *点击vip（prefab 按钮仍绑定此方法；等级弹窗随成就系统移除）
   */
   clickVip(){
-    ActivityEventMgr.instance.dispatchEvent(ActivityEventMgrEventsType.showLevelDialog);
   }
 
   // 防止快速点击
