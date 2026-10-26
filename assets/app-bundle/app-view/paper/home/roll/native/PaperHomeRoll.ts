@@ -177,7 +177,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     rollFrameNode.setParent(this.overLayNode);
 
     this.rollFrameSkeleton = rollFrameNode.addComponent(sp.Skeleton);
-    this.rollFrameSkeleton.premultipliedAlpha = false;
+    // 听牌贴图已转成预乘 Alpha（screen 混合要求预乘），按非预乘渲染发光条会变成黑边
+    this.rollFrameSkeleton.premultipliedAlpha = true;
     // 默认先用 5 行的听牌动画，播放时再按列的行数切换
     this.rollFrameSkeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SCATTER_EXPECT_5);
     this.rollFrameSkeleton.timeScale = app.manager.global.gameSpeed;

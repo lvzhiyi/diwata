@@ -8,6 +8,9 @@ import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/Ef
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
+
+// 中免费轮动画从入场到开始退场的停留时间（毫秒）
+const FREE_BONUS_SHOW_TIME = 3500;
 @ccclass('PaperHomeActivity')
 export class PaperHomeActivity extends BaseView.BindController(SlotsController) {
     @property({ type: Node, tooltip: 'BousSpineView 节点' })
@@ -73,50 +76,55 @@ export class PaperHomeActivity extends BaseView.BindController(SlotsController) 
     }
 
     /**
-     * 展示免费轮中奖动画
+     * 展示免费轮中奖动画：start 入场，loop 停留一段时间，end 退场后继续游戏
      */
     private async showFreeBonusSpineAnimation(callback: () => void) {
       this.BousSpineView.active = true;
       this.NumberLable.getComponent(Label).string = app.manager.global.freeBonusTimes.toString();
-      // 开始播放动画
       const Skeleton = this.BousSpineView.getComponent(sp.Skeleton);
       const spineData = await GameResourceManager.instance.getSpineAnimationDataByName(SPINE_RESOURCE_NAMES.FREE_BONUS_TRANSITION);
 
-      if(Skeleton && spineData) {
+      let endTimeoutId: ReturnType<typeof setTimeout> = null;
+      let fallbackTimeoutId: ReturnType<typeof setTimeout> = null;
+      let isFinished = false;
+
+      const finish = () => {
+        if (isFinished) return;
+        isFinished = true;
+        clearTimeout(endTimeoutId);
+        clearTimeout(fallbackTimeoutId);
+        Skeleton.setCompleteListener(null);
+        this.BousSpineView.active = false;
+        this.NumberLable.active = false;
+        Skeleton.clearAnimations();
+        Skeleton.skeletonData = null;
+        callback();
+      };
+
+      if (Skeleton && spineData) {
         Skeleton.skeletonData = spineData;
-        Skeleton.setAnimation(0, 'show', false);
+        // 次数 Label 通过 root/number 挂点跟随动画
+        this.NumberLable.active = true;
+        Skeleton.setAnimation(0, 'start', false);
+        Skeleton.addAnimation(0, 'loop', true);
         EffectManager.inst.playEffect(AudioPath.GAME.FREE_BONUS_TRANSITION);
-        // 监听自定义事件 "sz"
-        Skeleton.setEventListener((trackEntry: sp.spine.TrackEntry, event: sp.spine.Event) => {
-          if (event.data.name === 'sz') {
-            console.log('监听到 sz 事件:', event);
-            this.NumberLable.active = true;
-          }
-        });
       }
 
-      // 设置一个超时定时器，4秒后执行callback
-      const timeoutId = setTimeout(() => {
-        console.log('动画播放超时');
-        this.BousSpineView.active = false;
-        this.NumberLable.active = false;
-        Skeleton.clearAnimations();
-        Skeleton.skeletonData = null;
-        Skeleton.setEventListener(null);
-        callback();
-      }, 4400);
+      // 停留一段时间后播放退场动画，退场结束再继续
+      endTimeoutId = setTimeout(() => {
+        Skeleton.setCompleteListener((track: sp.spine.TrackEntry) => {
+          if (track.animation.name === 'end') {
+            finish();
+          }
+        });
+        Skeleton.setAnimation(0, 'end', false);
+      }, FREE_BONUS_SHOW_TIME);
 
-      Skeleton.setCompleteListener((track: sp.spine.TrackEntry) => {
-        clearTimeout(timeoutId);
-        Skeleton.setCompleteListener(null);
-        clearTimeout(timeoutId);
-        this.BousSpineView.active = false;
-        this.NumberLable.active = false;
-        Skeleton.clearAnimations();
-        Skeleton.skeletonData = null;
-        Skeleton.setEventListener(null);
-        callback();
-      });
+      // 兜底：动画异常时也能继续游戏
+      fallbackTimeoutId = setTimeout(() => {
+        console.log('动画播放超时');
+        finish();
+      }, FREE_BONUS_SHOW_TIME + 1000);
     }
 
     // 界面关闭时的相关逻辑写在这(已经关闭的界面不会触发onHide)

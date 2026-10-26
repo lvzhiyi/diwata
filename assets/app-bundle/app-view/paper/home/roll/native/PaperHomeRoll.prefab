@@ -5762,7 +5762,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -8.472,
+      "y": 7.5,
       "z": 0
     },
     "_lrot": {
@@ -7731,7 +7731,7 @@
     },
     "defaultSkin": "default",
     "defaultAnimation": "pt",
-    "_premultipliedAlpha": false,
+    "_premultipliedAlpha": true,
     "_timeScale": 1,
     "_preCacheMode": 0,
     "_cacheMode": 0,
@@ -7867,7 +7867,7 @@
     },
     "defaultSkin": "default",
     "defaultAnimation": "pt",
-    "_premultipliedAlpha": false,
+    "_premultipliedAlpha": true,
     "_timeScale": 1,
     "_preCacheMode": 0,
     "_cacheMode": 0,

@@ -2,8 +2,8 @@ import { Label, Node, Prefab, SpriteFrame, _decorator, sp } from 'cc';
 import BaseAppInit from '../../../extensions/app/assets/base/BaseAppInit';
 import { app } from '../../app/app';
 import Core from 'db://app/Core';
-import { calculateWithBase, getIsGap, getRuntimeEnv, getUrlParameters, } from '../../common/script/extra/Utils/common';
-import { getPlayerLevel, getUserCredit, login } from '../../basePlate/middleWare/services/user';
+import { getIsGap, getRuntimeEnv, getUrlParameters, } from '../../common/script/extra/Utils/common';
+import { getPlayerLevel, login } from '../../basePlate/middleWare/services/user';
 import { ProgressBar } from '../../basePlate/middleWare/commonUI/ProgressBar/ProgressBar';
 import { loadBundle, loadResource, showErrorPop } from '../../basePlate/core/baseUtil/BaseCommonUtil';
 import { DEBUG } from 'cc/env';
@@ -23,6 +23,10 @@ import { SpineTool } from '../../res-native/script/SpineTool';
 import { ArmsReportUtil } from '../../common/script/extra/armsSDK/reportUtil';
 
 const { ccclass, property } = _decorator;
+
+// demo：固定的初始余额（显示单位）
+const DEMO_INITIAL_CREDIT = 2000;
+
 @ccclass('AppInit')
 export class AppInit extends BaseAppInit {
   @property(Node)
@@ -293,15 +297,10 @@ export class AppInit extends BaseAppInit {
 
   /**
    * 获取用户余额
+   * demo：不请求服务端余额，固定初始余额，之后的输赢由前端计算
    */
   private async _getUserCredit() {
-    const res = await getUserCredit();
-
-    if (res.code === HTTP_STATUS_CODES.SUCCESS && res.data !== null) {
-      // 后端返回的是1厘比索，前端显示的是1比索，所以需要除以1000
-      const creditCount = calculateWithBase(res.data, true);
-      app.manager.global.setCreditCount(creditCount);
-    }
+    app.manager.global.setCreditCount(DEMO_INITIAL_CREDIT);
   }
 
   /*

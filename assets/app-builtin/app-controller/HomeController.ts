@@ -198,6 +198,15 @@ export class HomeController extends BaseController<
   }
 
   /**
+   * demo：余额由前端计算，前端扣注后的余额加上本局总奖金（含免费轮），不使用服务端返回的 credit
+   * @param totalPayoutAmount 本局总奖金，服务端单位
+   */
+  private getLocalCredit(totalPayoutAmount: number) {
+    // 显示单位换算回服务端单位时取整，避免浮点误差累积
+    return Math.round(calculateWithBase(app.manager.global.creditCount, false)) + (totalPayoutAmount ?? 0);
+  }
+
+  /**
   * 获取普通投注结果
  */
   async getNormalBetResult(amount: number, betType: BetTypes, betSubType: BetSubTypes, isFreeSpin?: boolean, compainId?: string) {
@@ -231,7 +240,7 @@ export class HomeController extends BaseController<
         app.manager.event.emit('freeSpin:addAmount', MoneyUtil.internalToDisplay(res.data.totalPayoutAmount));
       }
 
-      this.credit = res.data.credit;
+      this.credit = this.getLocalCredit(res.data.totalPayoutAmount);
       this.betResult = res.data;
       await delay(app.manager.global.quikeMode === IQuickMode.nomal ? 500 : 200);
       const resultDetail = res.data?.resultDetail;
@@ -289,7 +298,7 @@ export class HomeController extends BaseController<
       app.manager.global.setCreditCount(
         app.manager.global.creditCount - (app.manager.global.betCount * app.config.app.BUY_FREE_SPIN_TIMES_RATIO)
       );
-      this.credit = res.data.credit;
+      this.credit = this.getLocalCredit(res.data.totalPayoutAmount);
       this.betResult = res.data;
       await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 200 : 500);
       // 埋点

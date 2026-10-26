@@ -105,7 +105,8 @@ export interface JackpotRecordModel {
  * @returns
  */
 export const login = async <T>(params: Record<string, any>) => {
-  return http.post<T>('/user/login', params);
+  // demo：登录失败不走全局拦截弹窗，由调用方自行处理
+  return http.post<T>('/user/login', params, { autoIntercept: false, });
 };
 
 /**

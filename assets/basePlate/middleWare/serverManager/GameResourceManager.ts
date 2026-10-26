@@ -5,8 +5,8 @@ import { loadResource } from '../../core/baseUtil/BaseCommonUtil';
 const { ccclass, property } = _decorator;
 
 export const SPINE_RESOURCE_NAMES: { [key: string]: string } = {
-  // 免费轮转场动画
-  FREE_BONUS_TRANSITION: 'nvshen_zhuanchang',
+  // 中免费轮弹出的动画，动画 start/loop/end，次数挂在 root/number 骨骼上
+  FREE_BONUS_TRANSITION: 'buybonus',
   // 大奖弹框动画，按档位分为三个文件，共用 win.png
   GRAND_PRIZE_BIG: 'bigwin',
   GRAND_PRIZE_MEGA: 'megawin',

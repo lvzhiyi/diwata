@@ -197,8 +197,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1.1,
-      "y": 1.1,
+      "x": 0.8152173913043478,
+      "y": 0.8152173913043478,
       "z": 1
     },
     "_mobility": 0,
@@ -518,7 +518,7 @@
     "_skeletonData": null,
     "defaultSkin": "",
     "defaultAnimation": "",
-    "_premultipliedAlpha": false,
+    "_premultipliedAlpha": true,
     "_timeScale": 1,
     "_preCacheMode": 0,
     "_cacheMode": 0,
@@ -541,7 +541,7 @@
   },
   {
     "__type__": "sp.Skeleton.SpineSocket",
-    "path": "root/ALLLLLfree/t/t1/sz",
+    "path": "root/number",
     "target": {
       "__id__": 7
     }
