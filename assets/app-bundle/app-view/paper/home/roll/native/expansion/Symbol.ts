@@ -56,6 +56,9 @@ export class Symbol extends Component {
 
     private parentNode: Node;
 
+    // 悬浮层节点，挂在上面的动画不会被列遮罩裁切
+    private overlayNode: Node = null;
+
     // wild Node
     private wildNode: Node = null;
 
@@ -73,8 +76,8 @@ export class Symbol extends Component {
     // 当前图标的大小
     private _currentIconSize: Size = new Size();
 
-    // symbol 自身的 appear/won/xiaochu 始终使用 Spine，此开关只影响变 wild 和爆炸动画（爆炸仍是旧美术）
-    @property({ tooltip: 'Use bitmap tweens instead of legacy Spine art for wild-change and explode animations' })
+    // symbol 自身的 appear/won/xiaochu 和变 wild 的 change 始终使用 Spine，此开关只影响爆炸动画（爆炸仍是旧美术）
+    @property({ tooltip: 'Use bitmap tweens instead of legacy Spine art for explode animations' })
     private useSpriteAnimations = false;
 
     private animateSkinIcon(remove = false): Promise<void> {
@@ -100,6 +103,10 @@ export class Symbol extends Component {
       this.parentNode = this.node.parent;
 
       this.initSprites();
+    }
+
+    setOverlayNode(overlayNode: Node) {
+      this.overlayNode = overlayNode;
     }
 
     private skinSymbolId(name: string): string {
@@ -210,7 +217,8 @@ export class Symbol extends Component {
         this.wildAnimationNode.addComponent(UITransform);
         this.wildAnimationNode.getComponent(UITransform).setContentSize(this.iconNode.getComponent(UITransform).contentSize);
         this.wildAnimationNode.layer = this.node.layer;
-        this.wildAnimationNode.setParent(this.parentNode);
+        // change 光圈比列宽，挂到悬浮层上避免被列遮罩裁切
+        this.wildAnimationNode.setParent(this.overlayNode || this.parentNode);
         this.wildAnimationNode.setWorldPosition(originalPos);
 
         // 播放wild动画，动画完成后删除动画，并在wildNode设置图片
@@ -522,14 +530,6 @@ export class Symbol extends Component {
      * 播放wild动画，动画完成后删除动画，并在wildNode设置图片
      */
     async playWildAnimation(aniNode: Node, animationName: string, iconNode: Node, symbolId: string) {
-      if (this.useSpriteAnimations) {
-        iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
-        await this.animateSkinIcon();
-        this.destoryWildAnimationNode();
-
-        return;
-      }
-
       return new Promise<void>(async (resolve) => {
         try {
           // 0.4秒后执行
@@ -540,7 +540,8 @@ export class Symbol extends Component {
           }, 300 / app.manager.global.gameSpeed);
           // 添加动画
           const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
-          skeleton.premultipliedAlpha = false;
+          // change.png 是预乘 Alpha 贴图
+          skeleton.premultipliedAlpha = true;
           skeleton.timeScale = app.manager.global.gameSpeed;
           skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.WILD_CHANGE);
           skeleton.setAnimation(0, animationName, false);

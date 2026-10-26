@@ -341,6 +341,8 @@ export class Roll extends Component {
         symbol = instantiate(this.symbolPrefab);
       }
 
+      symbol.getComponent(Symbol).setOverlayNode(this.overlayNode);
+
       if(isBlur) {
         symbol.getComponent(Symbol).initBlurSymbol(symbolItem?.symbolId);
       } else {
