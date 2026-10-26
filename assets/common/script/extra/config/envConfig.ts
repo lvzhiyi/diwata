@@ -26,7 +26,7 @@ export const CONFIG = {
 		turnstileVerifyUrl: 'http://dev-turnstile.cpegame.com/captcha/verify'
   },
   [Environment.QAT]: {
-    apiHost: 'https://qat-capi.cpegame.com',
+    apiHost: 'http://47.131.56.191:9500',
     websocket: 'wss://qat-ws.cpegame.com',
     minesHost: 'https://qat-capi.cpegame.com',
     minesWebsocket: 'wss://qat-ws.cpegame.com',

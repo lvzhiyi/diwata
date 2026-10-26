@@ -20,6 +20,7 @@ import { ErrorType } from 'db://assets/common/script/extra/https/Constant';
 import GameProcessCtrl, { GameState } from 'db://assets/common/script/extra/GameProcessCtrl';
 import { IQuickMode } from 'db://assets/app-builtin/app-manager/global/GlobalManager';
 import { RewardBox } from './expansion/RewardBox';
+import { RouletteWheel } from './expansion/RouletteWheel';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMManager';
@@ -46,6 +47,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
   @property({ type: Node, tooltip: 'rollContainer节点' })
   private rollContainerNode: Node = null;
+
+  @property({ type: sp.Skeleton, tooltip: '棋盘动画，pt：普通轮，free：免费轮' })
+  private boardSkeleton: sp.Skeleton = null;
 
   /// 悬浮节点用于做动画 
   @property({ type: Node, tooltip: 'overLayNode' })
@@ -119,6 +123,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     this.initRollFrameSpine();
 
+    this.updateBoardSkin(app.controller.slots.isFreeBonusSpin);
+
     // 如果有开屏动画线隐藏节点
     this.hiddenAllNodes();
   }
@@ -151,6 +157,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   /**
+   * 切换棋盘、转盘、金额条状态：普通轮的灯不闪，免费轮循环播放动画
+   */
+  private updateBoardSkin(isFreeBonusSpin: boolean) {
+    this.boardSkeleton.setAnimation(0, isFreeBonusSpin ? 'free' : 'pt', true);
+    this.node.getComponentInChildren(RouletteWheel).setFreeMode(isFreeBonusSpin);
+    this.rewardBox.getComponent(RewardBox).setFreeMode(isFreeBonusSpin);
+  }
+
+  /**
    * 初始化rollFrameSpine
    */
   async initRollFrameSpine() {
@@ -163,7 +178,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     this.rollFrameSkeleton = rollFrameNode.addComponent(sp.Skeleton);
     this.rollFrameSkeleton.premultipliedAlpha = false;
-    this.rollFrameSkeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.LAMANG_RUN);
+    // 默认先用 5 行的听牌动画，播放时再按列的行数切换
+    this.rollFrameSkeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SCATTER_EXPECT_5);
     this.rollFrameSkeleton.timeScale = app.manager.global.gameSpeed;
   }
 
@@ -428,7 +444,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
       // 如果需要播放rollFrameSpine动画，则播放
       if (needPlayRollFrameSpine) {
-        await roll.getComponent(Roll).showRollFrameSpine(this.rollFrameSkeleton, 3);
+        // 听牌动画单次 2 秒，与旧动画播 3 遍的时长一致
+        await roll.getComponent(Roll).showRollFrameSpine(this.rollFrameSkeleton, 1);
       }
       
       resolve(true);
@@ -1186,6 +1203,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     }
 
     this.homeRollTool.switchGoddessSkin(this.goddessNode);
+    this.updateBoardSkin(isFreeBonusSpin);
   }
 
   /** 展示成就的免费模式 or隐藏成就的免费模式 */

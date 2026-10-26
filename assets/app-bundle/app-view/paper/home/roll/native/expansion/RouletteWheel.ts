@@ -23,6 +23,9 @@ export class RouletteWheel extends Component {
   @property(Node)
   private bg2SpineNode: Node = null;
 
+  @property({ type: sp.Skeleton, tooltip: '转盘大圆底动画，pt：普通轮，free：免费轮' })
+  private wheelBgSkeleton: sp.Skeleton = null;
+
   @property(SpriteFrame)
   private chooseSprite: SpriteFrame = null;
 
@@ -79,6 +82,9 @@ export class RouletteWheel extends Component {
 
   private isTouching: boolean = false;
 
+  // 是否免费轮，决定大圆底和倍率圆盘播放 pt 还是 free
+  private isFreeMode: boolean = false;
+
   protected onLoad(): void {
     app.manager.event.on('multipleIndexChange', this.multipleIndexChange, this);
     this.initSpine();
@@ -96,6 +102,23 @@ export class RouletteWheel extends Component {
     const spine2 = this.bg2SpineNode.getComponent(sp.Skeleton);
     spine2.setAnimation(0, 'gunzhoudi', false);
     spine2.timeScale = 0;
+  }
+
+  /**
+   * 切换普通轮 / 免费轮的转盘样式
+   */
+  public setFreeMode(isFreeBonusSpin: boolean): void {
+    this.isFreeMode = isFreeBonusSpin;
+    this.wheelBgSkeleton.setAnimation(0, this.getModeAnimationName(), true);
+    this.items.forEach(item => this.getDiskSkeleton(item).setAnimation(0, this.getModeAnimationName(), true));
+  }
+
+  private getModeAnimationName(): string {
+    return this.isFreeMode ? 'free' : 'pt';
+  }
+
+  private getDiskSkeleton(item: Node): sp.Skeleton {
+    return item.getChildByName('disk').getComponent(sp.Skeleton);
   }
 
   /**
@@ -223,6 +246,7 @@ export class RouletteWheel extends Component {
     for (let i = 0; i < totalItems; i++) {
       const item = instantiate(this.ItemNode);
       item.setParent(this.bgSpineNode);
+      this.getDiskSkeleton(item).setAnimation(0, this.getModeAnimationName(), true);
       //   // 设置item的label文本
       const label = item.getChildByName('text').getComponent(Label);
 
@@ -322,6 +346,10 @@ export class RouletteWheel extends Component {
         item.getChildByName('text').getComponent(Label).isBold = true;
         const textString = item.getChildByName('text').getComponent(Label).string;
         if (this.chooseSprite) sprite.spriteFrame = this.chooseSprite;
+        // 选中的倍率圆盘播一次 win，结束后回到当前模式的循环动画
+        const diskSpine = this.getDiskSkeleton(item);
+        diskSpine.setAnimation(0, 'win', false);
+        diskSpine.addAnimation(0, this.getModeAnimationName(), true);
         this.textSpineNode.active = true;
         const textSpine = this.textSpineNode.getComponent(sp.Skeleton);
         const animationName = textString !== '1024x' ? 'beilvshuzishanguang' : 'beilvshuzishanguang2';

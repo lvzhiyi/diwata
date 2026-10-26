@@ -689,22 +689,13 @@ export class HomeRollTool  {
   }
 
   /**
-   * 根据roll所在的Index,返回scatter期待的动画名字
-  */
-  static getScatterRunAnimationName(rollIndex: number): string {
-    switch (rollIndex) {
-      case 2:
-      case 3:
-        return 'chang';
-      case 1:
-      case 4:
-        return 'zhong';
-      case 0:
-      case 5:
-        return 'duan';
-      default:
-        return '';
-    }
+   * 按列的可见行数选择听牌动画（tingpaix3/tingpaix4/tingpaix5），动画名与文件名相同
+   */
+  static getScatterExpectAnimationName(rollNode: Node): string {
+    // itemCount = 可见行数 + 1
+    const rows = math.clamp(rollNode.getComponent(Roll).getItemCount() - 1, 3, 5);
+
+    return ROLL_RESOURCE_NAMES[`SCATTER_EXPECT_${rows}`];
   }
 
   static getRandomIndex(rollIndex: number): number {

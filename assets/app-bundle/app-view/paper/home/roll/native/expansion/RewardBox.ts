@@ -23,6 +23,9 @@ export class RewardBox extends Component {
 
     @property({ type: Node, tooltip: 'SpineWinSkeleton' })
     private SpineWinSkeleton: Node = null;
+
+    @property({ type: sp.Skeleton, tooltip: '金额条背景动画，pt：普通轮，free：免费轮' })
+    private bgSkeleton: sp.Skeleton = null;
   
     start() {
 
@@ -30,6 +33,13 @@ export class RewardBox extends Component {
 
     update(deltaTime: number) {
         
+    }
+
+    /**
+     * 切换金额条背景：普通轮 pt，免费轮 free
+     */
+    setFreeMode(isFreeBonusSpin: boolean) {
+      this.bgSkeleton.setAnimation(0, isFreeBonusSpin ? 'free' : 'pt', true);
     }
 
     showGoodLuck(): Promise<void> {

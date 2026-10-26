@@ -573,7 +573,13 @@ export class Roll extends Component {
       rollFrameSkeleton.node.active = true;
       rollFrameSkeleton.node.setPosition(this.originalWorldPosition);
       rollFrameSkeleton.timeScale = app.manager.global.gameSpeed;
-      const scatterAnimationName = HomeRollTool.getScatterRunAnimationName(this.rollIndex);
+      const scatterAnimationName = HomeRollTool.getScatterExpectAnimationName(this.node);
+      // 3/4/5 行的听牌动画是不同的 spine 文件，按列切换骨骼数据
+      const skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(scatterAnimationName);
+
+      if (rollFrameSkeleton.skeletonData !== skeletonData) {
+        rollFrameSkeleton.skeletonData = skeletonData;
+      }
       
       for (let i = 0; i < times; i++) {
         await this.playSingleAnimation(rollFrameSkeleton, scatterAnimationName);

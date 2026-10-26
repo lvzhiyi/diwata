@@ -37,8 +37,10 @@ export const ROLL_RESOURCE_NAMES: { [key: string]: string } = {
   // 元素消除
   XIAO_CHU: 'xiaochu',
 
-  // 滚轴动画
-  LAMANG_RUN: 'gunzhou',
+  // 听牌动画，按列的可见行数 3/4/5 区分，动画名与文件名相同
+  SCATTER_EXPECT_3: 'tingpaix3',
+  SCATTER_EXPECT_4: 'tingpaix4',
+  SCATTER_EXPECT_5: 'tingpaix5',
   // 刀 发光动画
   SWORD_HIT_LIGHT: 'dao_in',
   /// 1001-1014 图标动画
