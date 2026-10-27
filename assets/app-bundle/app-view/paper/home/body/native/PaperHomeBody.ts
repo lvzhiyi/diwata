@@ -479,6 +479,11 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
 
   /// 开始游戏
   startGame(event?: EventTouch) {
+    // 免费轮由系统自动转动，玩家点击 spin 按钮不做任何处理
+    if (event && app.controller.slots.isFreeBonusSpin) {
+      return;
+    }
+
     // 余额不足时，无法开始游戏
     if (app.manager.global.creditCount < app.manager.global.betCount && app.manager.global.isFreespinMode === false) {
       if(!getIsGap()){

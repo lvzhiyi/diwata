@@ -33,9 +33,11 @@ export class BousView extends Component {
     * 更新展示按钮状态
     * 1: 展示购买免费轮按钮
     * 2: 展示freeSpin按钮   
-    * 3: 展示免费轮剩余次数
+    * 3: 免费轮中，整个按钮隐藏（剩余次数改在 spin 按钮上显示）
    */
   updateBuyBonusStatus(status: number){
+    this.node.active = status !== 3 && !getIsGap();
+
     if(status == 1){
       this.BuyBonusView.active = !getIsGap();
       this.FreeTimeView.active = false;

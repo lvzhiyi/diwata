@@ -104,7 +104,7 @@ export class StartButtonState extends Component {
         this.bindFreespinTimesSocket();
 
         app.manager.event.on('freespin:state:change', this.onFreespinModeChange, this);
-        // GameStateEvent.on('freespin:times:change', this.onFreespinTimesChange, this);
+        app.manager.event.on('freespin:times:change', this.onFreespinTimesChange, this);
         // GameStateEvent.on('freespin:times:visible', this.onFreespinTimesVisibleChange, this);
         // GameStateEvent.on('button:enabled:change', this.onButtonEnabledChange, this);
         app.manager.event.on('roll:start', this.onRollStart, this);
@@ -399,10 +399,6 @@ export class StartButtonState extends Component {
        * 重置freespin模式下旋转次数
        */
       private resetFreespinTimes() {
-        if (this._state !== 'freespin') {
-          return;
-        }
-    
         this.freespinTimes = 0;
         this.freespinTimesNode.active = false;
         this.updateFreespinTimes();

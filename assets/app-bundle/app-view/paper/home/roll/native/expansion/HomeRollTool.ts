@@ -16,6 +16,12 @@ const DART_BEAM_OFFSET_Y = 47;
 // 飞镖落下、光柱亮起后再把整列变为 wild（毫秒）
 const DART_WILD_DELAY = 300;
 
+// 轮盘上方人物 renwu 的动画名：待机 daiji，刀劈 teshu1，竹竿 teshu2，赢了 win（免费模式共用同一套）
+const GODDESS_ANIM_IDLE = 'daiji';
+const GODDESS_ANIM_SWORD = 'teshu1';
+const GODDESS_ANIM_BOW = 'teshu2';
+const GODDESS_ANIM_WIN = 'win';
+
 export interface ChangeWildData {
   node?: Node;
   nodes?: Node[];
@@ -194,7 +200,7 @@ export class HomeRollTool  {
         resolve();
       }, delayTime / app.manager.global.gameSpeed);
       goddessSkeleton.setCompleteListener(() => {
-        goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation_fg' : 'animation', true);
+        goddessSkeleton.setAnimation(0, GODDESS_ANIM_IDLE, true);
         goddessSkeleton.setCompleteListener(null);
       });
     });
@@ -384,7 +390,7 @@ export class HomeRollTool  {
     return new Promise<void>(async (resolve) => {
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
       goddessSkeleton.premultipliedAlpha = false;
-      goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation_fg' : 'animation', true);
+      goddessSkeleton.setAnimation(0, GODDESS_ANIM_IDLE, true);
       resolve();
     });
   }
@@ -399,9 +405,9 @@ export class HomeRollTool  {
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
       goddessSkeleton.premultipliedAlpha = false;
       // EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER5);
-      goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation4_fg' : 'animation4', false);
+      goddessSkeleton.setAnimation(0, GODDESS_ANIM_WIN, false);
       goddessSkeleton.setCompleteListener(() => {
-        goddessSkeleton.setAnimation(0, app.manager.global.isBuyFreeBonusMode ? 'animation_fg' : 'animation', true);
+        goddessSkeleton.setAnimation(0, GODDESS_ANIM_IDLE, true);
       });
       resolve();
     });
@@ -416,29 +422,21 @@ export class HomeRollTool  {
     if (needPlaySword) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER1);
 
-      return app.manager.global.isBuyFreeBonusMode ? 'animation3_fg' : 'animation3';
-    // 返回女神挥剑animation3
-    } 
+      return GODDESS_ANIM_SWORD;
+    }
     if (needPlayBow) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER2);
 
-      return app.manager.global.isBuyFreeBonusMode ? 'animation2_fg' : 'animation2';
+      return GODDESS_ANIM_BOW;
     } 
   }
 
   /**
-   * 根据中的图标决定女神播放什么动效
+   * 女神叠加层（goddess2Node）动效：旧 nvshen 的 animation2_fx/animation3_fx 已随换皮废弃，新人物 renwu 不需要叠加层
   */
   getGoddess2Animation(
-    needPlayBow:boolean, needPlaySword:boolean
+    _needPlayBow:boolean, _needPlaySword:boolean
   ):string{
-    if (needPlayBow) {
-      return 'animation2_fx';
-    // 返回女神挥剑animation3
-    } else if (needPlaySword) {
-      return 'animation3_fx'; 
-    }
- 
     return '';
   }
 

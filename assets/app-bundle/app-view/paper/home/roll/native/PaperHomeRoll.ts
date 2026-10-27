@@ -1161,7 +1161,15 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    */
   private updateFreeSpinTimesNodeString() {
     const newFreeSpinNumber = app.manager.global.freeBonusTimes - app.manager.global.gameRecordIndex - 1;
-    this.FreeBonusSpinTimesNode.getComponent(Label).string = `${newFreeSpinNumber}`;
+    this.setFreeSpinTimes(newFreeSpinNumber);
+  }
+
+  /**
+   * 设置免费轮剩余次数，次数同步显示在 spin 按钮上
+   */
+  private setFreeSpinTimes(times: number) {
+    this.FreeBonusSpinTimesNode.getComponent(Label).string = `${times}`;
+    app.manager.event.emit('freespin:times:change', times);
   }
 
   /**
@@ -1203,6 +1211,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       }
     }
 
+    // spin 按钮切到 freespins 状态并显示剩余次数（本轮开始前为全部次数）
+    app.manager.event.emit('freespin:state:change', isFreeBonusSpin, app.manager.global.freeBonusTimes - app.manager.global.gameRecordIndex);
     this.homeRollTool.switchGoddessSkin(this.goddessNode);
     this.updateBoardSkin(isFreeBonusSpin);
   }
@@ -1258,7 +1268,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       this.BonusView.getComponent(BousView).updateBuyBonusStatus(1);
     }
 
-    this.FreeBonusSpinTimesNode.getComponent(Label).string = `${0}`;
+    this.setFreeSpinTimes(0);
 
     this.BonusView.getComponent(AdvancedButtonBreath).resumeBreath();
   }
@@ -1313,7 +1323,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.BonusView.getComponent(BousView).updateBuyBonusStatus(1);
 
     // 更新免费轮次数为 0
-    this.FreeBonusSpinTimesNode.getComponent(Label).string = `${0}`;
+    this.setFreeSpinTimes(0);
 
     // 设置为非免费轮
     app.manager.global.setGameRecordIndex(0);

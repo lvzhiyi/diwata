@@ -1,0 +1,143 @@
+{
+  "ver": "1.0.6",
+  "importer": "bitmap-font",
+  "imported": true,
+  "uuid": "b28ee736-f8b7-4fa6-965e-00a476f02d48",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {},
+  "userData": {
+    "fontSize": 72,
+    "textureUuid": "107e6b4c-7148-4fec-bb6c-ca439b29fda7",
+    "_fntConfig": {
+      "commonHeight": 90,
+      "fontSize": 72,
+      "atlasName": "freespinsnumber.png",
+      "fontDefDictionary": {
+        "32": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "xOffset": 0,
+          "yOffset": 0,
+          "xAdvance": 24
+        },
+        "48": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 38,
+            "height": 57
+          },
+          "xOffset": -1,
+          "yOffset": 16,
+          "xAdvance": 36
+        },
+        "49": {
+          "rect": {
+            "x": 0,
+            "y": 58,
+            "width": 28,
+            "height": 56
+          },
+          "xOffset": -1,
+          "yOffset": 16,
+          "xAdvance": 26
+        },
+        "50": {
+          "rect": {
+            "x": 0,
+            "y": 115,
+            "width": 38,
+            "height": 56
+          },
+          "xOffset": -1,
+          "yOffset": 16,
+          "xAdvance": 36
+        },
+        "51": {
+          "rect": {
+            "x": 39,
+            "y": 0,
+            "width": 37,
+            "height": 57
+          },
+          "xOffset": -1,
+          "yOffset": 16,
+          "xAdvance": 35
+        },
+        "52": {
+          "rect": {
+            "x": 72,
+            "y": 115,
+            "width": 38,
+            "height": 55
+          },
+          "xOffset": -1,
+          "yOffset": 17,
+          "xAdvance": 37
+        },
+        "53": {
+          "rect": {
+            "x": 77,
+            "y": 0,
+            "width": 39,
+            "height": 57
+          },
+          "xOffset": 0,
+          "yOffset": 16,
+          "xAdvance": 38
+        },
+        "54": {
+          "rect": {
+            "x": 29,
+            "y": 58,
+            "width": 41,
+            "height": 56
+          },
+          "xOffset": -1,
+          "yOffset": 16,
+          "xAdvance": 39
+        },
+        "55": {
+          "rect": {
+            "x": 39,
+            "y": 115,
+            "width": 32,
+            "height": 56
+          },
+          "xOffset": -1,
+          "yOffset": 16,
+          "xAdvance": 30
+        },
+        "56": {
+          "rect": {
+            "x": 117,
+            "y": 0,
+            "width": 38,
+            "height": 57
+          },
+          "xOffset": -1,
+          "yOffset": 16,
+          "xAdvance": 36
+        },
+        "57": {
+          "rect": {
+            "x": 71,
+            "y": 58,
+            "width": 40,
+            "height": 56
+          },
+          "xOffset": -1,
+          "yOffset": 16,
+          "xAdvance": 38
+        }
+      },
+      "kerningDict": {}
+    }
+  }
+}

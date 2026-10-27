@@ -4258,7 +4258,7 @@
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 0.5,
-      "y": 0.5
+      "y": 0.4
     },
     "_id": ""
   },
@@ -4292,13 +4292,13 @@
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 32,
-    "_fontSize": 32,
+    "_fontSize": 72,
     "_fontFamily": "Arial",
-    "_lineHeight": 40,
+    "_lineHeight": 90,
     "_overflow": 0,
     "_enableWrapText": true,
     "_font": {
-      "__uuid__": "7f1f38e3-f8ad-4f81-840e-42b03c90e0c2",
+      "__uuid__": "b28ee736-f8b7-4fa6-965e-00a476f02d48",
       "__expectedType__": "cc.BitmapFont"
     },
     "_isSystemFontUsed": false,

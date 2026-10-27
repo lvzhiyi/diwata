@@ -123,8 +123,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 20.788043478260867,
-      "y": 398.64130434782606,
+      "x": -4.5,
+      "y": 279.6,
       "z": 0
     },
     "_lrot": {
@@ -170,8 +170,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
+      "x": 31,
+      "y": 146,
       "z": 0
     },
     "_lrot": {
@@ -247,7 +247,7 @@
       "__id__": 2
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 8
@@ -410,7 +410,7 @@
     "node": {
       "__id__": 2
     },
-    "_enabled": false,
+    "_enabled": true,
     "__prefab": {
       "__id__": 16
     },
@@ -425,11 +425,11 @@
       "a": 255
     },
     "_skeletonData": {
-      "__uuid__": "31e78251-4098-4597-a45b-d8ff692c42b8",
+      "__uuid__": "c145b8f6-4ff4-404c-80ad-bed316784b65",
       "__expectedType__": "sp.SkeletonData"
     },
     "defaultSkin": "default",
-    "defaultAnimation": "animation",
+    "defaultAnimation": "daiji",
     "_premultipliedAlpha": false,
     "_timeScale": 1,
     "_preCacheMode": 0,
