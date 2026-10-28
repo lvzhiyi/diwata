@@ -39,9 +39,9 @@
     <!--<link rel="apple-touch-icon-precomposed" href=".png" />-->
     <link rel="shortcut icon" href="/favicon.ico" />
     <!-- 预加载营销图片，防止显示时闪烁 -->
-    <link rel="preload" href="./images/10.png" />
-    <link rel="preload" href="./images/20.png" />
-    <link rel="preload" href="./images/malakas.png" />
+    <link rel="preload" href="./images/10.png" as="image" />
+    <link rel="preload" href="./images/20.png" as="image" />
+    <link rel="preload" href="./images/malakas.png" as="image" />
     <style>
       html {
         -ms-touch-action: none;
@@ -438,16 +438,6 @@
       </div>
     </div>
 
-    <!-- Polyfills bundle. -->
-    <script src="src/polyfills.bundle.5adbf.js" charset="utf-8"></script>
-
-    <!-- SystemJS support. -->
-    <script src="src/system.bundle.543e6.js" charset="utf-8"></script>
-
-    {{ buildHashes }}
-    <!-- 构建时生成的hash配置 -->
-    <script src="getAB.js"></script>
-
     <script>
       (function () {
         // 解析参数
@@ -501,5 +491,8 @@
         });
       }
     </script>
+
+    <!-- Polyfills、SystemJS、import-map 及入口脚本由 Cocos 按构建配置生成（兼容 md5Cache） -->
+    <%- include(cocosTemplate, {}) %>
   </body>
 </html>
