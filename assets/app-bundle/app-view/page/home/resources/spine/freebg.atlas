@@ -1,0 +1,62 @@
+
+freebg.png
+size: 969,445
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+11
+  rotate: false
+  xy: 2, 212
+  size: 893, 231
+  orig: 913, 233
+  offset: 20, 2
+  index: -1
+22
+  rotate: false
+  xy: 2, 2
+  size: 876, 208
+  orig: 913, 233
+  offset: 0, 0
+  index: -1
+cd1
+  rotate: false
+  xy: 880, 111
+  size: 44, 46
+  orig: 45, 46
+  offset: 1, 0
+  index: -1
+cd2
+  rotate: true
+  xy: 897, 363
+  size: 80, 70
+  orig: 80, 71
+  offset: 0, 0
+  index: -1
+cd3
+  rotate: true
+  xy: 897, 289
+  size: 72, 65
+  orig: 72, 65
+  offset: 0, 0
+  index: -1
+cd4
+  rotate: true
+  xy: 880, 159
+  size: 51, 48
+  orig: 51, 48
+  offset: 0, 0
+  index: -1
+cd5
+  rotate: true
+  xy: 880, 57
+  size: 52, 37
+  orig: 52, 37
+  offset: 0, 0
+  index: -1
+lz
+  rotate: false
+  xy: 897, 226
+  size: 61, 61
+  orig: 73, 74
+  offset: 6, 7
+  index: -1

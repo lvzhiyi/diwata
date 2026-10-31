@@ -35,6 +35,8 @@ export class PageHome extends BaseView.BindController(SlotsController) {
 
   private blurBgNode: Node | null = null;
 
+  private freeSpineNode: Node | null = null;
+
   /**
      * 正在使用的 RenderTexture
      */
@@ -44,6 +46,7 @@ export class PageHome extends BaseView.BindController(SlotsController) {
   onLoad() {
     this.homeBgNode = this.node.getChildByName('homeImageBg');
     this.blurBgNode = this.node.getChildByName('blurBg');
+    this.freeSpineNode = this.node.getChildByName('FreeSpine');
 
     // 监听点击屏幕
     this.node.on(
@@ -65,10 +68,15 @@ export class PageHome extends BaseView.BindController(SlotsController) {
       this.homeBgNode.getComponent(Sprite).spriteFrame = this.freeBgImageSpriteFrame;
       this.blurBgNode.getComponent(Sprite).spriteFrame = this.freeBgImageSpriteFrame;
       this.cloudupNode.active = false;
+      if (this.freeSpineNode) {
+        this.freeSpineNode.active = true;
+        this.freeSpineNode.getComponent(sp.Skeleton)?.setAnimation(0, 'freebg', true);
+      }
     } else {
       this.homeBgNode.getComponent(Sprite).spriteFrame = this.bgImageSpriteFrame;
       this.blurBgNode.getComponent(Sprite).spriteFrame = this.bgImageSpriteFrame;
       this.cloudupNode.active = true; 
+      if (this.freeSpineNode) this.freeSpineNode.active = false;
     }
   }
 

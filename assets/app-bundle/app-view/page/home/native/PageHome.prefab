@@ -537,7 +537,7 @@
       "__id__": 1
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 25
@@ -552,7 +552,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -22.674,
+      "y": 0,
       "z": 0
     },
     "_lrot": {
@@ -614,7 +614,7 @@
     "node": {
       "__id__": 24
     },
-    "_enabled": false,
+    "_enabled": true,
     "__prefab": {
       "__id__": 28
     },
@@ -629,11 +629,11 @@
       "a": 255
     },
     "_skeletonData": {
-      "__uuid__": "a838e6e1-8bf9-430b-88f0-cb31507b0f3b",
+      "__uuid__": "f6919613-bd69-41a3-8ca0-4c725865747b",
       "__expectedType__": "sp.SkeletonData"
     },
     "defaultSkin": "default",
-    "defaultAnimation": "down",
+    "defaultAnimation": "freebg",
     "_premultipliedAlpha": false,
     "_timeScale": 1,
     "_preCacheMode": 0,

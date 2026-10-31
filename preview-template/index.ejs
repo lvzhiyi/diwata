@@ -209,20 +209,6 @@
 		</div>
 
         <!-- UI B: 营销 Loading 界面 -->
-        <div class="sm-logo-container" id="promo-loading-page">
-            <div class="logo-container">
-                <img class="sm-img" src="./images/logo.ico" />
-                <div class="middle-box">
-                    <img class="num-img" data-num="10" src="./images/10.png" />
-                    <img class="num-img" data-num="20" src="./images/20.png" />
-                </div>
-                <!-- 营销版进度条容器 -->
-                <div class="progress-bar">
-                    <div class="progress-bar-inner" id="promo-progress-val"></div>
-                </div>
-                <div class="loading-text">Loading...</div>
-            </div>
-        </div>
 
 		<%- include(cocosTemplate, {}) %>
 		<script>
@@ -319,29 +305,10 @@
 
                     console.log('Preview Params:', params, c);
 
-                    if (c) {
-                        // 有参数 c -> 显示营销界面
-                        console.log('Mode: Promo Loading');
-                        activeLoadingPage = document.getElementById('promo-loading-page');
 
-                        // 处理营销界面的图片显示逻辑
-                        const match = c.match(/(\d+)$/);
-                        const num = match ? Number(match[1]) : null;
-                        if (num !== null) {
-                            const numEl = document.querySelector(`.num-img[data-num="${num}"]`);
-                            if (numEl) {
-                                // numEl.src = numEl.dataset.src; // 不需要重新赋值src，HTML中已预设
-                                numEl.style.display = "block";
-                            }
-                        }
-
-
-                    } else {
                         // 无参数 c -> 显示默认界面
                         console.log('Mode: Default Loading');
                         activeLoadingPage = document.getElementById('default-loading-page');
-                    }
-
                     // 显示选中的 Loading 页
                     if (activeLoadingPage) {
                         activeLoadingPage.style.display = 'block';

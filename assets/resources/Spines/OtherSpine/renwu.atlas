@@ -1,124 +1,117 @@
 
 renwu.png
-size: 1076,345
+size: 920,331
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-aixin
-  rotate: true
-  xy: 326, 59
-  size: 248, 217
-  orig: 256, 229
-  offset: 4, 6
-  index: -1
 biyan
   rotate: false
-  xy: 392, 3
+  xy: 682, 17
   size: 94, 54
   orig: 95, 54
   offset: 1, 0
   index: -1
 di
   rotate: false
-  xy: 2, 53
+  xy: 2, 39
   size: 323, 292
   orig: 323, 293
   offset: 0, 0
   index: -1
 dudu
   rotate: false
-  xy: 216, 151
+  xy: 2, 16
   size: 61, 45
   orig: 407, 337
   offset: 148, 172
   index: -1
 houfa1
-  rotate: false
-  xy: 688, 106
+  rotate: 180
+  xy: 425, 38
   size: 205, 239
   orig: 205, 240
   offset: 0, 1
   index: -1
 houfa2
-  rotate: true
-  xy: 648, 14
+  rotate: false
+  xy: 780, 55
   size: 91, 134
   orig: 91, 135
   offset: 0, 0
   index: -1
 houfa3
   rotate: true
-  xy: 267, 4
+  xy: 501, 26
   size: 72, 124
   orig: 72, 124
   offset: 0, 0
   index: -1
 tf1
-  rotate: 180
-  xy: 958, 161
+  rotate: 270
+  xy: 795, 4
   size: 117, 123
   orig: 117, 123
   offset: 0, 0
   index: -1
 tf2
   rotate: false
-  xy: 995, 70
+  xy: 379, 23
   size: 42, 158
   orig: 42, 159
   offset: 0, 1
   index: -1
 tf3
-  rotate: false
-  xy: 2, 17
+  rotate: 270
+  xy: 744, 178
   size: 132, 134
   orig: 132, 134
   offset: 0, 0
   index: -1
 tou
-  rotate: false
-  xy: 790, 60
+  rotate: true
+  xy: 654, 200
   size: 130, 127
   orig: 130, 127
   offset: 0, 0
   index: -1
 xiongbu
-  rotate: 270
-  xy: 545, 163
+  rotate: true
+  xy: 223, 45
   size: 182, 169
   orig: 208, 169
   offset: 0, 0
   index: -1
 youbi
-  rotate: true
-  xy: 545, 52
+  rotate: false
+  xy: 393, 181
   size: 109, 148
   orig: 112, 151
   offset: 1, 1
   index: -1
 youshou
-  rotate: 270
-  xy: 800, 4
+  rotate: false
+  xy: 2, 40
   size: 108, 146
   orig: 108, 146
   offset: 0, 0
   index: -1
 zuiba
   rotate: true
-  xy: 937, 5
+  xy: 206, 7
   size: 72, 56
   orig: 75, 59
   offset: 2, 1
   index: -1
 zuobi
-  rotate: 270
-  xy: 190, 29
+  rotate: 180
+  xy: 672, 73
   size: 129, 136
   orig: 130, 137
   offset: 1, 1
   index: -1
 zuoshou
-  rotate: 180
-  xy: 885, 79
+  rotate: false
+  xy: 592, 63
   size: 112, 265
   orig: 112, 265
   offset: 0, 0
