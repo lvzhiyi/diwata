@@ -68,8 +68,8 @@ export class RouletteWheel extends Component {
   private firstItemPostion: Vec3 = new Vec3(0, 0, 0);
   
   // 弧形参数
-  // Figma: disk centers follow a 322.5px arc in the 920px design.
-  private readonly ARC_RADIUS = 322.5;
+  // 倍率盘圆心沿参考图的弧线分布。
+  private readonly ARC_RADIUS = 360;
 
   // 触摸区域宽度，用于换算滑动距离到旋转角度
   private readonly VIEW_WIDTH = 750;
@@ -302,13 +302,14 @@ export class RouletteWheel extends Component {
       // 每个数据项在圆周上均匀分布，加上当前旋转偏移
       const itemAngle = (i * this.DATA_ANGLE_STEP) + this.currentRotation;
       
-      item.active = true;
       this.setItemPosition(item, itemAngle);
 
       if (i === 0) {
         this.firstItemPostion = item.position.clone();
       }
     }
+
+    this.update();
 
     // 更新选中 / 未选中精灵
     const selectedIndex = ((Math.round(-this.currentRotation / this.DATA_ANGLE_STEP) % this.dataList.length) + this.dataList.length) % this.dataList.length;
@@ -456,7 +457,18 @@ export class RouletteWheel extends Component {
     ];
   }
 
-  update(deltaTime: number) {
-    // 可以在这里添加其他更新逻辑
+  update() {
+    const radians = this.bgSpineNode.eulerAngles.z * Math.PI / 180;
+    const sin = Math.sin(radians);
+    const cos = Math.cos(radians);
+    // 只显示棋盘上方的圆弧，旋转时按圆盘的实际位置切换可见性。
+    const visibleHeight = this.ARC_RADIUS / 2;
+
+    for (const item of this.items) {
+      const { x, y } = item.position;
+      const visible = x * sin + y * cos >= visibleHeight;
+
+      if (item.active !== visible) item.active = visible;
+    }
   }
 }

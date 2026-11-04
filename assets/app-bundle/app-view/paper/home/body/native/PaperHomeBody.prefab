@@ -615,8 +615,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.92,
+      "y": 0.92,
       "z": 1
     },
     "_mobility": 0,
@@ -666,7 +666,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0,
+      "y": -21,
       "z": 0
     },
     "_lrot": {
@@ -726,7 +726,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -473.63734782608697,
+      "y": -529,
       "z": 0
     },
     "_lrot": {
@@ -738,8 +738,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 0.8152173913043478,
-      "y": 0.8152173913043478,
+      "x": 1,
+      "y": 1,
       "z": 1
     },
     "_mobility": 0,
@@ -783,7 +783,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -116.99514666666667,
+      "y": -119.99514666666667,
       "z": 0
     },
     "_lrot": {
@@ -1104,7 +1104,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -24.5126953125,
+      "x": -26.76416015625,
       "y": 0,
       "z": 0
     },
@@ -1145,8 +1145,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 99.7216796875,
-      "height": 32.76
+      "width": 111.22802734375,
+      "height": 36.54
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1184,10 +1184,10 @@
     "_string": "Balance",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 26,
-    "_fontSize": 26,
+    "_actualFontSize": 29,
+    "_fontSize": 29,
     "_fontFamily": "Arial",
-    "_lineHeight": 26,
+    "_lineHeight": 29,
     "_overflow": 0,
     "_enableWrapText": true,
     "_font": null,
@@ -1263,7 +1263,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 35.34814453125,
+      "x": 38.849853515625,
       "y": 0,
       "z": 0
     },
@@ -1304,8 +1304,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 39.025390625,
-      "height": 32.76
+      "width": 43.5283203125,
+      "height": 36.54
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1343,10 +1343,10 @@
     "_string": "₱ 0",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
-    "_actualFontSize": 26,
-    "_fontSize": 26,
+    "_actualFontSize": 29,
+    "_fontSize": 29,
     "_fontFamily": "Arial",
-    "_lineHeight": 26,
+    "_lineHeight": 29,
     "_overflow": 0,
     "_enableWrapText": true,
     "_font": null,
@@ -1413,8 +1413,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 148.7470703125,
-      "height": 40
+      "width": 164.75634765625,
+      "height": 34
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1528,8 +1528,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 500,
-      "height": 40
+      "width": 375,
+      "height": 34
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2415,8 +2415,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.92,
+      "y": 0.92,
       "z": 1
     },
     "_mobility": 0,
@@ -2628,8 +2628,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 0,
-      "y": -60,
+      "x": -2.31,
+      "y": -53.299,
       "z": 0
     },
     "_lrot": {
@@ -2669,8 +2669,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 104.953125,
-      "height": 50.4
+      "width": 78.1552734375,
+      "height": 33.72
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2700,18 +2700,18 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 110,
+      "g": 56,
+      "b": 74,
       "a": 255
     },
     "_string": "Bet ₱ 2",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 32,
-    "_fontSize": 32,
+    "_actualFontSize": 22,
+    "_fontSize": 22,
     "_fontFamily": "Arial",
-    "_lineHeight": 40,
+    "_lineHeight": 22,
     "_overflow": 0,
     "_enableWrapText": true,
     "_font": null,
@@ -2722,15 +2722,15 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_enableOutline": false,
+    "_enableOutline": true,
     "_outlineColor": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
-    "_outlineWidth": 2,
+    "_outlineWidth": 3,
     "_enableShadow": false,
     "_shadowColor": {
       "__type__": "cc.Color",
@@ -2981,8 +2981,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.94,
+      "y": 0.94,
       "z": 1
     },
     "_mobility": 0,
@@ -3452,7 +3452,7 @@
     },
     "defaultSkin": "default",
     "defaultAnimation": "daiji",
-    "_premultipliedAlpha": false,
+    "_premultipliedAlpha": true,
     "_timeScale": 1,
     "_preCacheMode": 0,
     "_cacheMode": 0,
@@ -4622,8 +4622,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.92,
+      "y": 0.92,
       "z": 1
     },
     "_mobility": 0,
@@ -5020,8 +5020,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 147.962890625,
-      "height": 27.72
+      "width": 151.962890625,
+      "height": 31.72
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5051,9 +5051,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 110,
+      "g": 56,
+      "b": 74,
       "a": 255
     },
     "_string": "Hold for setting",
@@ -5073,12 +5073,12 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_enableOutline": false,
+    "_enableOutline": true,
     "_outlineColor": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
     "_outlineWidth": 2,
@@ -5593,8 +5593,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.92,
+      "y": 0.92,
       "z": 1
     },
     "_mobility": 0,

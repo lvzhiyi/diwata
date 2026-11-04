@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, sp, Sprite, SpriteFrame, tween, Vec3 } from 'cc';
+import { _decorator, Component, Label, Node, sp, Sprite, SpriteFrame } from 'cc';
 import { app } from 'db://assets/app/app';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { calculateWithBase, getP, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
@@ -77,22 +77,7 @@ export class RewardBox extends Component {
         console.log('startNum', startNum, endNum);
         const label = this.TipsNode.getComponent(Label);
         label.string = `${WinString().toUpperCase()} ${getP()}${numberToMoney(calculateWithBase(endNum), 3, false)}`;
-        // 缩放效果：从 0 放大到 1.2 再回弹到 1（小 pop）
-        this.TipsNode.setScale(0.25, 0.25, 1);
-        tween(this.TipsNode)
-          .to(0.35, { scale: new Vec3(1.2, 1.2, 1) }, { easing: 'quadOut' })
-          .to(0.25, { scale: new Vec3(1, 1, 1) }, { easing: 'quadIn' })
-          .call(() => resolve())
-          .start();
-        // tween(target).to(
-        //   0.8,
-        //   { value: endNum },
-        //   { onUpdate: () => label.string = `${WinString().toUpperCase()} ${getP()}${numberToMoney(calculateWithBase(target.value), 3, false)}` }
-        // ).call(() => {
-        //   // EffectManager.inst.stopAllEffectsByName(AudioPath.GAME.COIN_ADD);
-        // resolve();
-        // })
-        //   .start();
+        resolve();
       });
     }
 }

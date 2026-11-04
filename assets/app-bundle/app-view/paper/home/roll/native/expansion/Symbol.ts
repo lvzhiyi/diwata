@@ -1,4 +1,4 @@
-import { _decorator, Component, Material, Node, Size, sp, Sprite, SpriteFrame, tween, UIOpacity, UITransform, Vec2, Vec3 } from 'cc';
+import { _decorator, Color, Component, Material, Node, Size, sp, Sprite, SpriteFrame, tween, UIOpacity, UITransform, Vec2, Vec3 } from 'cc';
 import { app } from 'db://assets/app/app';
 import { loadResource } from 'db://assets/basePlate/core/baseUtil/BaseCommonUtil';
 import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
@@ -170,10 +170,11 @@ export class Symbol extends Component {
 
     /** 中奖动画时：true 变暗以凸显中奖元素，false 恢复亮度 */
     setDimmed(dim: boolean) {
-      const uiOpacity = this.iconNode.getComponent(UIOpacity) || this.iconNode.addComponent(UIOpacity);
-      uiOpacity.opacity = dim ? 75 : 255;
-      const lightOpacity = this.LightSpine.getComponent(UIOpacity) || this.LightSpine.addComponent(UIOpacity);
-      lightOpacity.opacity = dim ? 75 : 255;
+      const color = dim ? new Color(70, 70, 70) : Color.WHITE;
+      this.iconNode.getComponent(Sprite).color = color;
+      const light = this.LightSpine.getComponent(sp.Skeleton);
+
+      if (light) light.color = color;
     }
 
     initBlurSymbol(symbolId: string) {
@@ -203,29 +204,31 @@ export class Symbol extends Component {
     /**
      * 把普通元素变成wild
      */
-    changeToSingleWild(): Promise<void> {
-      // 如果当前symbol已经是wild，则不进行操作
-      if(this.getSymbolId() === SymbolType.WILD) {
-        return Promise.resolve();
+    async changeToSingleWild(): Promise<void> {
+      if (this.getSymbolId() === SymbolType.WILD) return;
+
+      const animationNode = new Node('WildChange');
+      animationNode.layer = this.node.layer;
+      animationNode.setParent(this.overlayNode || this.parentNode);
+      animationNode.setWorldPosition(this.node.getWorldPosition());
+
+      const skeleton = animationNode.addComponent(sp.Skeleton);
+      skeleton.premultipliedAlpha = true;
+
+      try {
+        skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.WILD_CHANGE);
+      } catch (error) {
+        console.error('加载 Wild 转换动画失败', error);
       }
 
-      return new Promise<void>(async (resolve) => {
-        // 获取当前symbol的位置
-        const originalPos = this.node.getWorldPosition().clone();
-        // 创建一个动画节点，用于播放wild动画
-        this.wildAnimationNode = new Node('Animation');
-        this.wildAnimationNode.addComponent(UITransform);
-        this.wildAnimationNode.getComponent(UITransform).setContentSize(this.iconNode.getComponent(UITransform).contentSize);
-        this.wildAnimationNode.layer = this.node.layer;
-        // change 光圈比列宽，挂到悬浮层上避免被列遮罩裁切
-        this.wildAnimationNode.setParent(this.overlayNode || this.parentNode);
-        this.wildAnimationNode.setWorldPosition(originalPos);
+      this.iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(SymbolType.WILD);
+      this.iconNode.active = true;
 
-        // 播放wild动画，动画完成后删除动画，并在wildNode设置图片
-        await this.playWildAnimation(this.wildAnimationNode, WILD_CHANGE_ANIM, this.iconNode, '5001');
-
-        resolve();
-      });
+      try {
+        if (skeleton.skeletonData) await this.playSymbolAnimation(skeleton, WILD_CHANGE_ANIM);
+      } finally {
+        animationNode.destroy();
+      }
     }
 
     /**
@@ -330,67 +333,56 @@ export class Symbol extends Component {
       });
     }
 
-    /**
-     * 开始闪烁中奖和消除动画
-     */
-    async startLightAndRemoveAnimation(): Promise<void> {
-      return new Promise<void>(async (resolve, reject) => {
-        try {
-          // 设置节点尺寸和状态
-          const iconSize = this.iconNode.getComponent(UITransform).contentSize;
-          this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
-          this.LightSpine.active = true;
-          this.LightSpine.scale = SymbolScale;
-          this.iconNode.active = false;
-          // 新的消除动画只有一条 xiaochu，不再区分上下层
-          this.removeUpSpineNode.active = true;
-          this.removeDownSpineNode.active = false;
+    async playWinAnimation(): Promise<void> {
+      const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
 
-          // 获取或添加Skeleton组件
-          const skeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
-          skeleton.timeScale = app.manager.global.gameSpeed;
-          const removeUpSkeleton = this.removeUpSpineNode.getComponent(sp.Skeleton) || this.removeUpSpineNode.addComponent(sp.Skeleton);
-          removeUpSkeleton.timeScale = app.manager.global.gameSpeed;
-          // 播放消除动画
-          removeUpSkeleton.setAnimation(0, SYMBOL_ANIM_XIAOCHU, false);
+      try {
+        skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName('symbol_' + this.getSymbolId());
 
-          // 加载并播放中奖动画
-          const animationName = 'symbol_' + this.getSymbolId();
-          skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
-          skeleton.setAnimation(0, SYMBOL_ANIM_WON, false);
-          skeleton.setCompleteListener(() => {
-            skeleton.setCompleteListener(null);
-            skeleton.skeletonData = null;
-            this.LightSpine.active = false;
-            this.LightSpine.scale = new Vec3(1, 1, 1);
-          });
-          // 消除动画结束即视为该元素已消除
-          removeUpSkeleton.setCompleteListener(() => {
-            removeUpSkeleton.setCompleteListener(null);
-            this.cleanupAnimationNodes();
-            this.iconNode.active = false;
-            resolve();
-          });
+        if (!skeleton.skeletonData) return;
 
-          // 添加超时保护
-          const timeout = setTimeout(() => {
-            console.warn('startLightAndRemoveAnimation 超时，强制完成');
-            this.cleanupAnimationNodes();
-            resolve();
-          }, 2500);
+        this.LightSpine.getComponent(UITransform).setContentSize(this.iconNode.getComponent(UITransform).contentSize);
+        this.LightSpine.scale = SymbolScale;
+        this.LightSpine.active = true;
+        this.iconNode.active = false;
+        await this.playSymbolAnimation(skeleton, SYMBOL_ANIM_WON);
+      } catch (error) {
+        this.cleanupAnimationNodes();
+        this.iconNode.active = true;
+        console.error('播放 symbol 中奖动画失败', error);
+      }
+    }
 
-          // 在resolve时清除超时
-          const originalResolve = resolve;
+    async playClearAnimation(): Promise<void> {
+      try {
+        this.LightSpine.active = false;
+        this.iconNode.active = false;
+        this.removeUpSpineNode.active = true;
+        await this.playSymbolAnimation(this.removeUpSpineNode.getComponent(sp.Skeleton), SYMBOL_ANIM_XIAOCHU);
+      } catch (error) {
+        console.error('播放 symbol 消除动画失败', error);
+      } finally {
+        this.cleanupAnimationNodes();
+        const skeleton = this.LightSpine.getComponent(sp.Skeleton);
 
-          resolve = () => {
-            clearTimeout(timeout);
-            originalResolve();
-          };
-        } catch (error) {
-          console.error('startLightAndRemoveAnimation 执行出错:', error);
-          this.cleanupAnimationNodes();
-          reject(error);
-        }
+        if (skeleton) skeleton.skeletonData = null;
+      }
+    }
+
+    private playSymbolAnimation(skeleton: sp.Skeleton, animation: string): Promise<void> {
+      skeleton.timeScale = app.manager.global.gameSpeed;
+      const track = skeleton.setAnimation(0, animation, false);
+
+      if (!track) return Promise.resolve();
+
+      return new Promise(resolve => {
+        const finish = () => {
+          clearTimeout(timeout);
+          skeleton.setCompleteListener(null);
+          resolve();
+        };
+        const timeout = setTimeout(finish, (track.animation.duration * 1000 + 500) / skeleton.timeScale);
+        skeleton.setCompleteListener(finish);
       });
     }
 
@@ -524,59 +516,6 @@ export class Symbol extends Component {
         // 停止所有动画
         skeleton.clearTracks();
       }
-    }
-
-    /**
-     * 播放wild动画，动画完成后删除动画，并在wildNode设置图片
-     */
-    async playWildAnimation(aniNode: Node, animationName: string, iconNode: Node, symbolId: string) {
-      return new Promise<void>(async (resolve) => {
-        try {
-          // 0.4秒后执行
-          const time = setTimeout(() => {
-            clearTimeout(time);
-            this.iconNode.active = true;
-            resolve();
-          }, 300 / app.manager.global.gameSpeed);
-          // 添加动画
-          const skeleton = aniNode.getComponent(sp.Skeleton) || aniNode.addComponent(sp.Skeleton);
-          // change.png 是预乘 Alpha 贴图
-          skeleton.premultipliedAlpha = true;
-          skeleton.timeScale = app.manager.global.gameSpeed;
-          skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.WILD_CHANGE);
-          skeleton.setAnimation(0, animationName, false);
-          console.log('播放wild动画-数据', animationName);
-          iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
-         
-          skeleton.setCompleteListener(() => {
-            // iconNode.getComponent(Sprite).spriteFrame = this.mapSymbols.get(symbolId);
-            this.destoryWildAnimationNode();
-            // resolve();
-          });
-          // 播放wild动画
-          // 设置节点尺寸和状态
-          const iconSize = this.iconNode.getComponent(UITransform).contentSize;
-          this.LightSpine.getComponent(UITransform).setContentSize(iconSize);
-          this.LightSpine.active = true;
-          this.LightSpine.scale = SymbolScale;
-          // 获取或添加Skeleton组件
-          const wildSkeleton = this.LightSpine.getComponent(sp.Skeleton) || this.LightSpine.addComponent(sp.Skeleton);
-          wildSkeleton.timeScale = app.manager.global.gameSpeed;
-          wildSkeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES['5001']);
-          this.iconNode.active = false;
-          wildSkeleton.setAnimation(0, SYMBOL_ANIM_APPEAR, false);
-          wildSkeleton.setCompleteListener(() => {
-            this.iconNode.active = true;
-            wildSkeleton.setCompleteListener(null);
-            wildSkeleton.skeletonData = null;
-            this.LightSpine.scale = new Vec3(1, 1, 1);
-          });
-        } catch (error) {
-          console.error('加载spine/LamAng_wild动画失败', error);
-          this.destoryWildAnimationNode();
-          resolve();
-        }
-      });
     }
 
     /**

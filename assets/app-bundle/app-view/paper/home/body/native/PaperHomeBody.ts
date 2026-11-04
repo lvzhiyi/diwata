@@ -13,7 +13,6 @@ import {
 
   UIOpacity,
 
-  Vec3,
 } from 'cc';
 import BaseView from '../../../../../../../extensions/app/assets/base/BaseView';
 import { app } from '../../../../../../app/app';
@@ -113,8 +112,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
     this.balanceLabel.getComponent(Label).string = BalanceString();
     this.vipNodeSetup();
 
-    this.onResizeScreen();
-
     // 如果有开屏动画线隐藏节点
     this.hiddenAllNodes();
 
@@ -173,17 +170,6 @@ export class PaperHomeBody extends BaseView.BindController(HomeController) {
         uiOpacity.opacity = 255;
       }
     });
-  }
-
-  /** *屏幕适配**/
-  onResizeScreen() {
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-    const screenScale =  screenHeight / screenWidth;
-
-    if (screenScale < 1.78) {
-      this.bottomView.setScale(new Vec3(0.85, 0.85, 1));
-    }
   }
 
   protected beforeShow(next: (error?: string) => void, data?: any): any {

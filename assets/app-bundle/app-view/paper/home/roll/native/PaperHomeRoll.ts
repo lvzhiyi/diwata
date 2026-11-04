@@ -1,4 +1,4 @@
-import { _decorator, EventTouch, Label, Node, Prefab, sp,  SpriteFrame,  tween, UIOpacity, UITransform, Vec3 } from 'cc';
+import { _decorator, Color, EventTouch, Graphics, Label, Node, Prefab, sp,  SpriteFrame,  tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import BaseView from 'db://app/base/BaseView';
 import { Roll } from './expansion/Roll';
 import { Symbol, SYMBOL_WILD_IDS } from './expansion/Symbol';
@@ -114,6 +114,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   // 滚轴边框动画
   private rollFrameSkeleton: sp.Skeleton = null;
 
+  private anticipationShade: Graphics = null;
+
   onLoad() {
     this.homeRollTool = new HomeRollTool();
   
@@ -169,6 +171,12 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * 初始化rollFrameSpine
    */
   async initRollFrameSpine() {
+    const shadeNode = new Node('AnticipationShade');
+    shadeNode.layer = this.node.layer;
+    shadeNode.setParent(this.overLayNode);
+    shadeNode.setSiblingIndex(0);
+    this.anticipationShade = shadeNode.addComponent(Graphics);
+
     const rollFrameNode = new Node();
     rollFrameNode.layer = this.node.layer;
     rollFrameNode.active = false;
@@ -182,6 +190,28 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     // 默认先用 5 行的听牌动画，播放时再按列的行数切换
     this.rollFrameSkeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.SCATTER_EXPECT_5);
     this.rollFrameSkeleton.timeScale = app.manager.global.gameSpeed;
+  }
+
+  private shadeOtherReels(activeReel: Node) {
+    const shade = this.anticipationShade;
+    shade.clear();
+    shade.fillColor = new Color(0, 0, 0, 185);
+
+    for (const [index, reel] of this.Rolls.entries()) {
+      if (reel === activeReel) continue;
+
+      const mask = reel.parent;
+      const { x, y } = mask.position;
+      const { width, height } = mask.getComponent(UITransform).contentSize;
+      const previousMask = this.Rolls[index - 1]?.parent;
+      const nextMask = this.Rolls[index + 1]?.parent;
+      // 相邻列共用同一条遮罩边界，盖住卷轴遮罩之间的留缝。
+      const left = previousMask ? (previousMask.position.x + x) / 2 : x - width / 2;
+      const right = nextMask ? (x + nextMask.position.x) / 2 : x + width / 2;
+      shade.rect(left, y - height / 2, right - left, height);
+    }
+
+    shade.fill();
   }
 
   /** *监听freespin按钮状态**/
@@ -402,55 +432,53 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
    * @param needPlayRollFrameSpine 是否需要播放rollFrameSpine动画
    */
   private async stopSingleRoll(roll: Node, rollIndex: number, needPlayRollFrameSpine: boolean, delayTime?: number) {
-    return new Promise(async (resolve) => {
-      // 获取当前roll的symbol列表
-      const rollList = this.resultList[this.roundIndex].wheel.map((item: any) => item[rollIndex]);
+    // 获取当前roll的symbol列表
+    const rollList = this.resultList[this.roundIndex].wheel.map((item: any) => item[rollIndex]);
 
-      if (delayTime) {
-        await delay(delayTime);
-        let audioDelayTime = 270 / app.manager.global.gameSpeed;
+    if (delayTime) {
+      await delay(delayTime);
+      let audioDelayTime = 270 / app.manager.global.gameSpeed;
 
-        if(rollIndex === 5){
-          audioDelayTime = 250 / app.manager.global.gameSpeed;
-        }
-
-        setTimeout(() => {
-          EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_3, false, null, true);
-        }, audioDelayTime);
+      if(rollIndex === 5){
+        audioDelayTime = 250 / app.manager.global.gameSpeed;
       }
-      // roll滚动完成回调
-      const onRollComplete = (rollIndex: number) => {
-        if (this.isAllRollsStopped()) {
-          // 如果rollFrameSpine动画播放中，则停止
-          if (this.rollFrameSkeleton.node.active) {
-            this.rollFrameSkeleton.node.active = false;
-            this.rollFrameSkeleton.clearAnimation();
-          }
 
-          // 派发滚动停止的事件
-          app.manager.event.emit('roll:stop', this.resultList?.some((item: BetResultItem) => item.rewardSymbolIndexSet?.length > 0));
+      setTimeout(() => {
+        EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_3, false, null, true);
+      }, audioDelayTime);
+    }
+    // roll滚动完成回调
+    const onRollComplete = (rollIndex: number) => {
+      if (this.isAllRollsStopped()) {
+        // 派发滚动停止的事件
+        app.manager.event.emit('roll:stop', this.resultList?.some((item: BetResultItem) => item.rewardSymbolIndexSet?.length > 0));
 
-          this.scheduleOnce(() => {
-            this.startRemoveSymbol();
-          }, 0.1);
-        }
-      };
-
-      // 停止滚轴
-      roll.getComponent(Roll).stopRolling(
-        rollList,
-        onRollComplete,
-        needPlayRollFrameSpine
-      );
-
-      // 如果需要播放rollFrameSpine动画，则播放
-      if (needPlayRollFrameSpine) {
-        // 听牌动画单次 2 秒，与旧动画播 3 遍的时长一致
-        await roll.getComponent(Roll).showRollFrameSpine(this.rollFrameSkeleton, 1);
+        this.scheduleOnce(() => {
+          this.startRemoveSymbol();
+        }, 0.1);
       }
-      
-      resolve(true);
-    });
+    };
+
+    // 停止滚轴
+    roll.getComponent(Roll).stopRolling(
+      rollList,
+      onRollComplete,
+      needPlayRollFrameSpine
+    );
+
+    // 如果需要播放rollFrameSpine动画，则播放
+    if (needPlayRollFrameSpine) {
+      // 听牌动画单次 2 秒，与旧动画播 3 遍的时长一致
+      this.shadeOtherReels(roll);
+      const reel = roll.getComponent(Roll);
+
+      try {
+        await reel.showRollFrameSpine(this.rollFrameSkeleton, 1);
+      } finally {
+        this.anticipationShade.clear();
+        reel.hideRollFrameSpine(this.rollFrameSkeleton);
+      }
+    }
   }
 
   /**
@@ -611,21 +639,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 开始执行闪烁和消除动画
      */
     console.log('开始执行闪烁消除动画');
-    this.playRemoveAuido(this.resultList[this.roundIndex].rewardSymbolIndexSet);
-    // 中奖动画前：未中奖的符号变暗，凸显中奖元素
-    this.dimNonWinningSymbols(rollsScript, true);
-    const hasLitghtAnimation = await Promise.all(rollsScript.map(async roll => {
-      const lightAndRemoveAnimation = await roll.startLightAndRemoveAnimation();
-      const rollRemoveData = roll.getRollRemoveData();
-
-      if (rollRemoveData.length > 0) {
-        await delay(100);
-      }
-
-      return lightAndRemoveAnimation;
-    }));
-    // 中奖动画结束后：恢复所有符号亮度
-    this.dimNonWinningSymbols(rollsScript, false);
+    const hasWinningSymbols = await this.playWinAndClear(rollsScript);
     /**
      * 更新tips中奖金额
      */
@@ -639,7 +653,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     /**
      * 添加到顶部然后下落 或者 播放Roll边框动画然后落下然后添加到顶部最后下落
      */
-    if (hasLitghtAnimation.some(item => item)) await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 100 : 200);
+    if (hasWinningSymbols) await delay(app.manager.global.quikeMode !== IQuickMode.nomal ? 100 : 200);
    
     await this.addToTopThenFallDowmOrRunRollFrameAnimationThenFallDownThenAddToTopThenFallDown(rollsScript, symbolAnimationData);
 
@@ -674,13 +688,21 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     this.endRemoveSymbol();
   }
 
-  // 播放消除音效
-  private playRemoveAuido(removeData:SymbolPosition[]|null){
-    if(removeData && removeData.length > 0) {
+  private async playWinAndClear(rollsScript: Roll[]) {
+    if (!rollsScript.some(roll => roll.getRollRemoveData().length > 0)) return false;
+
+    this.dimNonWinningSymbols(rollsScript, true);
+
+    try {
       EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_WIN);
-      setTimeout(() => {
-        EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_CLEAR);
-      }, 900 / app.manager.global.gameSpeed);
+      await Promise.all(rollsScript.map(roll => roll.playWinningSymbols()));
+      EffectManager.inst.playEffect(AudioPath.GAME.SYMBOL_CLEAR);
+      await Promise.all(rollsScript.map(roll => roll.clearWinningSymbols()));
+      await delay(100);
+
+      return true;
+    } finally {
+      this.dimNonWinningSymbols(rollsScript, false);
     }
   }
 
@@ -1374,12 +1396,20 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       // 设置异步操作进行中状态
       this.isAsyncOperationInProgress = true;
 
-      await  this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(amount, multipleIndex);
-    
-      // 设置异步操作进行中状态
+      let winDisplay: Promise<void> | undefined;
+      const showWinNumber = () => {
+        winDisplay ??= this.rewardBox.getComponent(RewardBox).showWinNumber(startNum, endNum);
+
+        return winDisplay;
+      };
+      await this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(
+        amount, multipleIndex, this.rewardBox, showWinNumber
+      );
+
       this.isAsyncOperationInProgress = false;
 
-      return this.rewardBox.getComponent(RewardBox).showWinNumber(startNum, endNum);
+      // 动画中断或超时时，也要更新累计中奖金额。
+      return showWinNumber();
     }
   } 
 

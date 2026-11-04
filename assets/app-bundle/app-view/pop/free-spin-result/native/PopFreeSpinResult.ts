@@ -39,6 +39,8 @@ export class PopFreeSpinResult extends BaseView {
 
   private spineSkeleton:sp.Skeleton = null;
 
+  private timesSocketNode: Node = null;
+
   private amount: number = 0;
 
   private isClickScreenToStop: boolean = false;
@@ -51,12 +53,16 @@ export class PopFreeSpinResult extends BaseView {
     this.spineSkeleton = this.spineNode.getComponent(sp.Skeleton);
     // socket 目标必须是骨骼节点的直接子节点
     const subTextNode = this.FreeSpinTimesLabel.node.parent;
-    this.FreeSpinTimesLabel.node.setParent(this.spineNode);
+    this.timesSocketNode = new Node('FreeSpinTimesSocket');
+    this.timesSocketNode.layer = this.spineNode.layer;
+    this.spineNode.addChild(this.timesSocketNode);
+    this.FreeSpinTimesLabel.node.setParent(this.timesSocketNode);
     // "You Have Won"、"In x free spins" 已由 congratlilation 骨骼绘制，隐藏 prefab 中重复的图片
     this.subTitleNode.active = false;
     subTextNode.active = false;
     this.AmountLabel.node.setPosition(Vec3.ZERO);
-    this.FreeSpinTimesLabel.node.setPosition(Vec3.ZERO);
+    // 补偿次数字体相对两侧 Spine 文字的垂直偏移。
+    this.FreeSpinTimesLabel.node.setPosition(0, 9, 0);
   }
 
   /**
@@ -65,7 +71,7 @@ export class PopFreeSpinResult extends BaseView {
   private bindSockets() {
     this.spineSkeleton.sockets = [
       new sp.SpineSocket(AMOUNT_SOCKET_PATH, this.AmountLabel.node),
-      new sp.SpineSocket(TIMES_SOCKET_PATH, this.FreeSpinTimesLabel.node),
+      new sp.SpineSocket(TIMES_SOCKET_PATH, this.timesSocketNode),
     ];
   }
 

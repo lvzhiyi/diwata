@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, sp, tween, Tween, UIOpacity, Vec3 } from 'cc';
+import { _decorator, Component, Label, Node, sp, tween, Tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import { app } from 'db://assets/app/app';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { getP, sliceAmount } from 'db://assets/common/script/extra/Utils/common';
@@ -23,14 +23,17 @@ export class CurrentRoundAmount extends Component {
 
   private tween: Tween = null;
 
+  private originParent: Node = null;
+
   private originPosition: Vec3 = new Vec3(0, 0, 0);
 
   onLoad() {
+    this.originParent = this.node.parent;
     this.originPosition = this.node.position.clone();
     this.node.scale = new Vec3(0.5, 0.5, 1);
   }
 
-  async showAmount(amount: number, multiple: number):Promise<void> {
+  async showAmount(amount: number, multiple: number, rewardBox: Node, onImpact: () => void):Promise<void> {
     return new Promise((resolve) => {
       if (this.tween?.running) {
         this.tween.stop();
@@ -60,7 +63,11 @@ export class CurrentRoundAmount extends Component {
       this.setMultipleNodeFontSize(multipleValue);
       // 重置节点状态
       this.resetState();
-      console.log('startNum-开始动画');
+      const spine = this.spineWinNode.getComponent(sp.Skeleton);
+      spine.timeScale = app.manager.global.gameSpeed;
+      spine.setAnimation(0, 'start', false);
+      const rewardParent = rewardBox.parent;
+      const rewardPosition = rewardParent.getComponent(UITransform).convertToNodeSpaceAR(rewardBox.getWorldPosition());
       
       this.tween = tween(this.node)
         .timeScale(app.manager.global.gameSpeed)
@@ -82,14 +89,11 @@ export class CurrentRoundAmount extends Component {
             .call(() => {
               // multipleNode动画完成后立马隐藏
               this.multipleBgSpine.getComponent(UIOpacity).opacity = 0;
-             
-              // 播放spine动画
-              const spine = this.spineWinNode.getComponent(sp.Skeleton);
-              spine.setAnimation(0, 'jineshanguang', false);
+
               label.string = `${getP()}${sliceAmount(amount)}`;
             }),
           
-          // 第三步：amountNode从Scale 1变到1.5，同时播放jineshanguang动画
+          // 第三步：放大结算后的金额
           tween().call(() => {
             // amountNode放大到1.5
             tween(this.amountNode)
@@ -100,18 +104,27 @@ export class CurrentRoundAmount extends Component {
           // 等待0.5秒
           tween().delay(0.56),
           
-          // 第四步：整个节点执行y轴位移动画到-380，同时scale缩小到0.2
+          // 金额保持字号，从棋盘中央加速砸向金额栏。
           tween(this.node)
-            .parallel(
-              tween(this.node).to(0.4, { position: new Vec3(0, -300, 0) }, { easing: 'sineOut' }),
-              tween(this.node).to(0.4, { scale: new Vec3(0.2, 0.2, 1) }, { easing: 'sineOut' })
-            ),
-          
+            .call(() => {
+              // 落向金额栏时移到其上层，避免底板遮住冲击中心。
+              this.node.setParent(rewardParent, true);
+              this.node.setSiblingIndex(rewardBox.getSiblingIndex() + 1);
+            })
+            .to(0.26, { position: rewardPosition }, { easing: 'quadIn' })
+            .call(() => {
+              this.amountNode.getComponent(UIOpacity).opacity = 0;
+              spine.setAnimation(0, 'win', false);
+              onImpact();
+            }),
+          tween().delay(0.45),
+
           // 动画结束，重置状态
           tween().call(() => {
             console.log('startNum-结束动画');
             clearTimeout(timeoutId); 
             this.node.getComponent(UIOpacity).opacity = 0;
+            this.node.setParent(this.originParent);
             this.node.setPosition(this.originPosition);
             this.amountNode.setPosition(Vec3.ZERO);
             this.amountNode.setScale(Vec3.ONE);
@@ -145,6 +158,8 @@ export class CurrentRoundAmount extends Component {
    * 重置状态
    */
   resetState() {
+    this.node.setParent(this.originParent);
+    this.node.setPosition(this.originPosition);
     this.node.scale = new Vec3(1, 1, 1);
     this.node.getComponent(UIOpacity).opacity = 255;
     this.amountNode.scale = new Vec3(0.5, 0.5, 1);
