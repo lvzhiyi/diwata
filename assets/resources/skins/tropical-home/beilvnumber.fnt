@@ -1,0 +1,16 @@
+info face="beilvnumber" size=72 bold=0 italic=0 charset="32,48-57,120" unicode=1 stretchH=100 smooth=1 aa=1 padding=1,1,1,1 spacing=1,1 outline=0
+common lineHeight=90 base=62 scaleW=202 scaleH=214 pages=1 packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4
+page id=0 file="beilvnumber.png"
+chars count=12
+char id=32 x=0 y=0 width=0 height=0 xoffset=0 yoffset=0 xadvance=24 page=0 chnl=15
+char id=48 x=110 y=0 width=59 height=71 xoffset=-1 yoffset=1 xadvance=57 page=0 chnl=15
+char id=49 x=170 y=0 width=32 height=67 xoffset=-1 yoffset=3 xadvance=31 page=0 chnl=15
+char id=50 x=49 y=145 width=48 height=69 xoffset=-1 yoffset=1 xadvance=46 page=0 chnl=15
+char id=51 x=98 y=145 width=47 height=69 xoffset=-1 yoffset=2 xadvance=45 page=0 chnl=15
+char id=52 x=146 y=145 width=55 height=69 xoffset=0 yoffset=2 xadvance=54 page=0 chnl=15
+char id=53 x=0 y=74 width=48 height=71 xoffset=-1 yoffset=0 xadvance=46 page=0 chnl=15
+char id=54 x=49 y=74 width=54 height=70 xoffset=-1 yoffset=1 xadvance=52 page=0 chnl=15
+char id=55 x=0 y=146 width=48 height=68 xoffset=-1 yoffset=2 xadvance=46 page=0 chnl=15
+char id=56 x=55 y=0 width=54 height=72 xoffset=-1 yoffset=0 xadvance=52 page=0 chnl=15
+char id=57 x=0 y=0 width=54 height=73 xoffset=-1 yoffset=-1 xadvance=52 page=0 chnl=15
+char id=120 x=104 y=74 width=54 height=50 xoffset=-1 yoffset=19 xadvance=52 page=0 chnl=15

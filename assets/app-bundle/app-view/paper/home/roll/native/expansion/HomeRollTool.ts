@@ -16,10 +16,9 @@ const DART_BEAM_OFFSET_Y = 47;
 // 飞镖落下、光柱亮起后再把整列变为 wild（毫秒）
 const DART_WILD_DELAY = 300;
 
-// 轮盘上方人物 renwu 的动画名：待机 daiji，刀劈 teshu1，竹竿 teshu2，赢了 win（免费模式共用同一套）
+// 新人物的刀和竹竿共用特殊动作，击打和变 Wild 仍按各自规则处理。
 const GODDESS_ANIM_IDLE = 'daiji';
-const GODDESS_ANIM_SWORD = 'teshu1';
-const GODDESS_ANIM_BOW = 'teshu2';
+const GODDESS_ANIM_SPECIAL = 'teshu';
 const GODDESS_ANIM_WIN = 'win';
 
 export interface ChangeWildData {
@@ -179,7 +178,7 @@ export class HomeRollTool  {
     delayTime: number = 800,
   ): Promise<void> {
     const goddessSkeleton = goddessNode?.getComponent(sp.Skeleton) || goddessNode?.addComponent(sp.Skeleton);
-    goddessSkeleton.premultipliedAlpha = false;
+    goddessSkeleton.premultipliedAlpha = true;
     goddessSkeleton.setAnimation(0, goddessAnimName, false);
 
     if (goddess2AnimName) {
@@ -236,11 +235,7 @@ export class HomeRollTool  {
       const goddess2AnimName = this.getGoddess2Animation(true, false);
       await this.playGoddessAnimationTogether(goddessNode, goddess2Node, goddessAnimName, goddess2AnimName);
 
-      for (const item of bowData) {
-        await this.showBowHitAnimation(item.nodes ?? [], overlayNode);
-        rollsScript[item.rollIndex!].symbolBowChangeToWildOnlyNonMain();
-      }
-
+      await this.changeBowSymbolsToWild(bowData, rollsScript);
       await Promise.all(bowData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolBowChangeToWildOnlyMain()));
       bowData.forEach(item => { item.hasShow = true; });
 
@@ -266,11 +261,7 @@ export class HomeRollTool  {
     const goddess2AnimBow = this.getGoddess2Animation(true, false);
     await this.playGoddessAnimationTogether(goddessNode, goddess2Node, goddessAnimBow, goddess2AnimBow);
 
-    for (const item of bowData) {
-      await this.showBowHitAnimation(item.nodes ?? [], overlayNode);
-      await rollsScript[item.rollIndex!].symbolBowChangeToWildOnlyNonMain();
-    }
-
+    await this.changeBowSymbolsToWild(bowData, rollsScript);
     await Promise.all(bowData.map((item: ChangeWildData) => rollsScript[item.rollIndex!].symbolBowChangeToWildOnlyMain()));
     bowData.forEach(item => { item.hasShow = true; });
 
@@ -321,63 +312,11 @@ export class HomeRollTool  {
     // this.nodePool.put(node);
   }
 
-  /**
-   * 播放棍子击中动画
-   * */ 
-  async showBowHitAnimation(
-    targetNodes: Node[],
-    overlayNode: Node,
-  ): Promise<void> {
-    const spineManager = GameResourceManager.instance;
-    const skeleonData = await spineManager.getRollSpineAnimationDataByName(ROLL_RESOURCE_NAMES.BOW_EXPLODE);
-   
-    if (skeleonData != null) {
-      return new Promise<void>(async (resolve) => {
-        const isAllMain = targetNodes.every(item => item.getComponent(Symbol).currentSymbolItem.main);
+  private async changeBowSymbolsToWild(bowData: ChangeWildData[], rolls: Roll[]): Promise<void> {
+    const hasNonMain = bowData.some(item => item.nodes?.some(node => !node.getComponent(Symbol).currentSymbolItem.main));
+    if (hasNonMain) EffectManager.inst.playEffect(AudioPath.GAME.STICK_BEAT, false, null, true);
 
-        if(!isAllMain){
-          EffectManager.inst.playEffect(AudioPath.GAME.STICK_BEAT, false, null, true);
-        }
-
-        const delayTime = isAllMain ? 100 : 400;
-        // 0.3秒后执行
-        const time = setTimeout(() => {
-          clearTimeout(time);
-          resolve();
-        }, delayTime / app.manager.global.gameSpeed);
-
-        targetNodes.map(item => {
-          // 过滤主元素
-          const isMain = item.getComponent(Symbol).currentSymbolItem.main;
-
-          if(!isMain){
-            // 创建spine节点并设置大小
-            const spineNode = this.createSpineNode(item, overlayNode, false);
-            console.log('spineNode', spineNode.name);
-
-            try {
-              // 添加动画
-              const skeleton = spineNode.getComponent(sp.Skeleton) || spineNode.addComponent(sp.Skeleton);
-              skeleton.premultipliedAlpha = false;
-              skeleton.skeletonData = skeleonData;
-              skeleton.timeScale = app.manager.global.gameSpeed;
-              
-              skeleton.setAnimation(0, 'gun_atk', false);
-           
-              skeleton.setCompleteListener((track) => {
-                if (track.animation.name === 'gun_atk') {
-                }
-              });
-            } catch (error) {
-              console.error('加载spine/gun动画失败', error);
-              this.destoryAnimationNode(spineNode);
-            }
-          }
-        });
-      });
-    } else {
-      return Promise.resolve();
-    }
+    await Promise.all(bowData.map(item => rolls[item.rollIndex!].symbolBowChangeToWildOnlyNonMain()));
   }
 
   /**
@@ -389,7 +328,7 @@ export class HomeRollTool  {
   ): Promise<void> {
     return new Promise<void>(async (resolve) => {
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
-      goddessSkeleton.premultipliedAlpha = false;
+      goddessSkeleton.premultipliedAlpha = true;
       goddessSkeleton.setAnimation(0, GODDESS_ANIM_IDLE, true);
       resolve();
     });
@@ -403,7 +342,7 @@ export class HomeRollTool  {
   ): Promise<void> {
     return new Promise<void>(async (resolve) => {
       const goddessSkeleton = goddessNode.getComponent(sp.Skeleton) || goddessNode.addComponent(sp.Skeleton);
-      goddessSkeleton.premultipliedAlpha = false;
+      goddessSkeleton.premultipliedAlpha = true;
       // EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER5);
       goddessSkeleton.setAnimation(0, GODDESS_ANIM_WIN, false);
       goddessSkeleton.setCompleteListener(() => {
@@ -422,12 +361,12 @@ export class HomeRollTool  {
     if (needPlaySword) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER1);
 
-      return GODDESS_ANIM_SWORD;
+      return GODDESS_ANIM_SPECIAL;
     }
     if (needPlayBow) {
       EffectManager.inst.playEffect(AudioPath.GAME.GODDESS_CHEER2);
 
-      return GODDESS_ANIM_BOW;
+      return GODDESS_ANIM_SPECIAL;
     } 
   }
 

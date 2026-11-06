@@ -74,7 +74,7 @@ test('winning symbol stays visible until the clear phase and then hides', async 
  const ts=require('typescript'),vm=require('node:vm'),exports={};
  class Vec3 { constructor(x=0,y=0,z=0){Object.assign(this,{x,y,z});} }
  class Skeleton {
-  setAnimation(_,name){this.animation=name;return {animation:{duration:1}};}
+  setAnimation(_,name){this.animation=name;return this.track={animation:{duration:1},trackTime:0};}
   setCompleteListener(listener){this.complete=listener;}
  }
  const cc={Component:class {},Vec3,Size:Vec3,sp:{Skeleton},_decorator:{ccclass:()=>x=>x,property:()=>()=>{}}};
@@ -103,6 +103,7 @@ test('winning symbol stays visible until the clear phase and then hides', async 
  assert.equal(symbol.LightSpine.active,true);
  const clearing=symbol.playClearAnimation();
  assert.equal(clear.animation,'xiaochu');
+ assert.equal(clear.track.trackTime,0.15);
  assert.equal(symbol.LightSpine.active,false);
  clear.complete();
  await clearing;

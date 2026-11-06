@@ -136,8 +136,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.9,
+      "y": 0.9,
       "z": 1
     },
     "_mobility": 0,
@@ -430,7 +430,7 @@
     },
     "defaultSkin": "default",
     "defaultAnimation": "daiji",
-    "_premultipliedAlpha": false,
+    "_premultipliedAlpha": true,
     "_timeScale": 1,
     "_preCacheMode": 0,
     "_cacheMode": 0,
@@ -1409,7 +1409,7 @@
     "node": {
       "__id__": 68
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 72
     },
@@ -1509,102 +1509,102 @@
       {
         "__type__": "cc.Vec2",
         "x": -118.66478873239436,
-        "y": 267.5
+        "y": 233.5
       },
       {
         "__type__": "cc.Vec2",
         "x": -118.66478873239436,
-        "y": 213.5
+        "y": 179.5
       },
       {
         "__type__": "cc.Vec2",
         "x": -236.33239436619718,
-        "y": 213.5
+        "y": 179.5
       },
       {
         "__type__": "cc.Vec2",
         "x": -236.33239436619718,
-        "y": 160.5
+        "y": 126.5
       },
       {
         "__type__": "cc.Vec2",
         "x": -354,
-        "y": 160.5
+        "y": 126.5
       },
       {
         "__type__": "cc.Vec2",
         "x": -354,
-        "y": -160.5
+        "y": -194.5
       },
       {
         "__type__": "cc.Vec2",
         "x": -236.33239436619718,
-        "y": -160.5
+        "y": -194.5
       },
       {
         "__type__": "cc.Vec2",
         "x": -236.33239436619718,
-        "y": -214.5
+        "y": -248.5
       },
       {
         "__type__": "cc.Vec2",
         "x": -118.66478873239436,
-        "y": -214.5
+        "y": -248.5
       },
       {
         "__type__": "cc.Vec2",
         "x": -118.66478873239436,
-        "y": -267.5
+        "y": -301.5
       },
       {
         "__type__": "cc.Vec2",
         "x": 118.66478873239436,
-        "y": -267.5
+        "y": -301.5
       },
       {
         "__type__": "cc.Vec2",
         "x": 118.66478873239436,
-        "y": -214.5
+        "y": -248.5
       },
       {
         "__type__": "cc.Vec2",
         "x": 236.33239436619715,
-        "y": -214.5
+        "y": -248.5
       },
       {
         "__type__": "cc.Vec2",
         "x": 236.33239436619715,
-        "y": -160.5
+        "y": -194.5
       },
       {
         "__type__": "cc.Vec2",
         "x": 354,
-        "y": -160.5
+        "y": -194.5
       },
       {
         "__type__": "cc.Vec2",
         "x": 354,
-        "y": 160.5
+        "y": 126.5
       },
       {
         "__type__": "cc.Vec2",
         "x": 236.33239436619715,
-        "y": 160.5
+        "y": 126.5
       },
       {
         "__type__": "cc.Vec2",
         "x": 236.33239436619715,
-        "y": 213.5
+        "y": 179.5
       },
       {
         "__type__": "cc.Vec2",
         "x": 118.66478873239436,
-        "y": 213.5
+        "y": 179.5
       },
       {
         "__type__": "cc.Vec2",
         "x": 118.66478873239436,
-        "y": 267.5
+        "y": 233.5
       }
     ],
     "_id": ""
@@ -1950,7 +1950,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0,
+      "y": -34,
       "z": 0
     },
     "_lrot": {
@@ -4042,7 +4042,7 @@
     "_top": 0,
     "_bottom": 0,
     "_horizontalCenter": 0,
-    "_verticalCenter": 0,
+    "_verticalCenter": -34,
     "_isAbsLeft": true,
     "_isAbsRight": true,
     "_isAbsTop": true,
@@ -4205,7 +4205,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0,
+      "y": -34,
       "z": 0
     },
     "_lrot": {
@@ -4630,7 +4630,7 @@
     "_overflow": 0,
     "_enableWrapText": true,
     "_font": {
-      "__uuid__": "f3af7ae9-f847-4004-8ceb-5246b7cd0564",
+      "__uuid__": "b50bfd7a-d756-40fa-9257-92ce18d89cdb",
       "__expectedType__": "cc.BitmapFont"
     },
     "_isSystemFontUsed": false,
@@ -4946,7 +4946,7 @@
       "_font"
     ],
     "value": {
-      "__uuid__": "f3af7ae9-f847-4004-8ceb-5246b7cd0564",
+      "__uuid__": "b50bfd7a-d756-40fa-9257-92ce18d89cdb",
       "__expectedType__": "cc.BitmapFont"
     }
   },
@@ -5108,7 +5108,7 @@
     "_top": 0,
     "_bottom": 0,
     "_horizontalCenter": 0,
-    "_verticalCenter": 0,
+    "_verticalCenter": -34,
     "_isAbsLeft": true,
     "_isAbsRight": true,
     "_isAbsTop": true,
@@ -6193,7 +6193,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 7.5,
+      "y": 13,
       "z": 0
     },
     "_lrot": {
@@ -6369,8 +6369,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 0,
-      "height": 52
+      "width": 560,
+      "height": 46
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -6405,15 +6405,15 @@
       "b": 255,
       "a": 255
     },
-    "_string": "",
+    "_string": "PLACE YOUR BETS",
     "_horizontalAlign": 1,
     "_verticalAlign": 0,
     "_actualFontSize": 46,
     "_fontSize": 46,
     "_fontFamily": "Arial",
-    "_lineHeight": 52,
-    "_overflow": 0,
-    "_enableWrapText": true,
+    "_lineHeight": 46,
+    "_overflow": 2,
+    "_enableWrapText": false,
     "_font": {
       "__uuid__": "7f1f38e3-f8ad-4f81-840e-42b03c90e0c2",
       "__expectedType__": "cc.BitmapFont"
@@ -6624,22 +6624,8 @@
     "__prefab": {
       "__id__": 354
     },
-    "placeImageNode": {
-      "__uuid__": "4e4813b3-114e-44da-8e3a-f3477d568646@f9941",
-      "__expectedType__": "cc.SpriteFrame"
-    },
-    "goodLuckImageNode": {
-      "__uuid__": "903ffe63-e6df-4e37-9e3e-40dd8161bcb6@f9941",
-      "__expectedType__": "cc.SpriteFrame"
-    },
     "TipsNode": {
       "__id__": 333
-    },
-    "TipsImageNode": {
-      "__id__": 327
-    },
-    "SpineWinSkeleton": {
-      "__id__": 334
     },
     "bgSkeleton": {
       "__id__": 324

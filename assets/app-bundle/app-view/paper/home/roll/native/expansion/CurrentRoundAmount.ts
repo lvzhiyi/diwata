@@ -6,7 +6,7 @@ import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const { ccclass, property } = _decorator;
 
-const MULTIPLE_BG_SPINE_POSITION = new Vec3(0, 352, 0);
+const AMOUNT_POSITION = new Vec3(0, 10, 0);
 @ccclass('CurrentRoundAmount')
 export class CurrentRoundAmount extends Component {
   @property({ type: Node, tooltip: '当前轮次金额' })
@@ -33,7 +33,7 @@ export class CurrentRoundAmount extends Component {
     this.node.scale = new Vec3(0.5, 0.5, 1);
   }
 
-  async showAmount(amount: number, multiple: number, rewardBox: Node, onImpact: () => void):Promise<void> {
+  async showAmount(amount: number, multiple: number, rewardBox: Node, multipleWorldPosition: Vec3, onImpact: () => void):Promise<void> {
     return new Promise((resolve) => {
       if (this.tween?.running) {
         this.tween.stop();
@@ -45,10 +45,10 @@ export class CurrentRoundAmount extends Component {
         return;
       }
 
-      // 设置一个超时定时器，4秒后执行callback
+      // 动画完整时长约 2.7 秒，额外留出调度余量。
       const timeoutId = setTimeout(() => {
         resolve();
-      }, 2200);
+      }, 3000);
 
       const label = this.amountNode.getComponent(Label);
       const originalAmount = amount / Math.pow(2, multiple);
@@ -63,6 +63,8 @@ export class CurrentRoundAmount extends Component {
       this.setMultipleNodeFontSize(multipleValue);
       // 重置节点状态
       this.resetState();
+      this.multipleBgSpine.setPosition(this.node.getComponent(UITransform).convertToNodeSpaceAR(multipleWorldPosition));
+      this.spineWinNode.active = true;
       const spine = this.spineWinNode.getComponent(sp.Skeleton);
       spine.timeScale = app.manager.global.gameSpeed;
       spine.setAnimation(0, 'start', false);
@@ -108,16 +110,18 @@ export class CurrentRoundAmount extends Component {
           tween(this.node)
             .call(() => {
               // 落向金额栏时移到其上层，避免底板遮住冲击中心。
+              this.spineWinNode.active = false;
               this.node.setParent(rewardParent, true);
               this.node.setSiblingIndex(rewardBox.getSiblingIndex() + 1);
             })
             .to(0.26, { position: rewardPosition }, { easing: 'quadIn' })
             .call(() => {
               this.amountNode.getComponent(UIOpacity).opacity = 0;
+              this.spineWinNode.active = true;
               spine.setAnimation(0, 'win', false);
               onImpact();
             }),
-          tween().delay(0.45),
+          tween().delay(0.9),
 
           // 动画结束，重置状态
           tween().call(() => {
@@ -126,9 +130,8 @@ export class CurrentRoundAmount extends Component {
             this.node.getComponent(UIOpacity).opacity = 0;
             this.node.setParent(this.originParent);
             this.node.setPosition(this.originPosition);
-            this.amountNode.setPosition(Vec3.ZERO);
+            this.amountNode.setPosition(AMOUNT_POSITION);
             this.amountNode.setScale(Vec3.ONE);
-            this.multipleBgSpine.setPosition(MULTIPLE_BG_SPINE_POSITION);
             this.multipleNode.setScale(Vec3.ONE);
             this.multipleBgSpine.getComponent(UIOpacity).opacity = 0;
             EffectManager.inst.playEffect(AudioPath.GAME.DOUBLE_NUMBER);
@@ -163,13 +166,12 @@ export class CurrentRoundAmount extends Component {
     this.node.scale = new Vec3(1, 1, 1);
     this.node.getComponent(UIOpacity).opacity = 255;
     this.amountNode.scale = new Vec3(0.5, 0.5, 1);
-    this.amountNode.setPosition(Vec3.ZERO);
+    this.amountNode.setPosition(AMOUNT_POSITION);
     
-    this.multipleBgSpine.setPosition(MULTIPLE_BG_SPINE_POSITION);
     this.multipleNode.scale = new Vec3(1, 1, 1);
 
     this.amountNode.getComponent(UIOpacity).opacity = 255;
-    this.multipleBgSpine.getComponent(UIOpacity).opacity = 255;
+    this.multipleBgSpine.getComponent(UIOpacity).opacity = 0;
   }
 
   /**

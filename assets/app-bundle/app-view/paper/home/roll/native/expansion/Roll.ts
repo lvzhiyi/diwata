@@ -816,14 +816,7 @@ export class Roll extends Component {
           promises.push(this.symbolChangeToSingleWild(index));
         }
       });
-      // 0.3秒后执行
-      const time = setTimeout(() => {
-        clearTimeout(time);
-
-        return Promise.resolve();
-      }, 400 / app.manager.global.gameSpeed);
-
-      // await Promise.all(promises);
+      await Promise.all(promises);
     }
 
     /**

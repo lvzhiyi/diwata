@@ -95,6 +95,10 @@ export class RouletteWheel extends Component {
     this.setupViewClipping();
   }
 
+  public getSelectedMultiplierWorldPosition(): Vec3 {
+    return this.textSpineNode.getWorldPosition();
+  }
+
   private initSpine(): void {
     const spine = this.bgSpineNode.getComponent(sp.Skeleton);
     spine.setAnimation(0, 'zhuanpan', false);

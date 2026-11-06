@@ -20,6 +20,7 @@ const SymbolScale = new Vec3(1.1, 1.1, 1.1);
 const SYMBOL_ANIM_APPEAR = 'appear';
 const SYMBOL_ANIM_WON = 'won';
 const SYMBOL_ANIM_XIAOCHU = 'xiaochu';
+const CLEAR_ANIMATION_LEAD = 0.15;
 
 // 元素变 wild 时外圈扩散的光圈动画（RollSpine/change）
 const WILD_CHANGE_ANIM = 'change';
@@ -358,7 +359,7 @@ export class Symbol extends Component {
         this.LightSpine.active = false;
         this.iconNode.active = false;
         this.removeUpSpineNode.active = true;
-        await this.playSymbolAnimation(this.removeUpSpineNode.getComponent(sp.Skeleton), SYMBOL_ANIM_XIAOCHU);
+        await this.playSymbolAnimation(this.removeUpSpineNode.getComponent(sp.Skeleton), SYMBOL_ANIM_XIAOCHU, CLEAR_ANIMATION_LEAD);
       } catch (error) {
         console.error('播放 symbol 消除动画失败', error);
       } finally {
@@ -369,11 +370,13 @@ export class Symbol extends Component {
       }
     }
 
-    private playSymbolAnimation(skeleton: sp.Skeleton, animation: string): Promise<void> {
+    private playSymbolAnimation(skeleton: sp.Skeleton, animation: string, startTime = 0): Promise<void> {
       skeleton.timeScale = app.manager.global.gameSpeed;
       const track = skeleton.setAnimation(0, animation, false);
 
       if (!track) return Promise.resolve();
+
+      track.trackTime = Math.min(startTime, track.animation.duration);
 
       return new Promise(resolve => {
         const finish = () => {
@@ -381,7 +384,7 @@ export class Symbol extends Component {
           skeleton.setCompleteListener(null);
           resolve();
         };
-        const timeout = setTimeout(finish, (track.animation.duration * 1000 + 500) / skeleton.timeScale);
+        const timeout = setTimeout(finish, ((track.animation.duration - track.trackTime) * 1000 + 500) / skeleton.timeScale);
         skeleton.setCompleteListener(finish);
       });
     }

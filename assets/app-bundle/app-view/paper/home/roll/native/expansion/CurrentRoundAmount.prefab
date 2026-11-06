@@ -180,7 +180,7 @@
     },
     "defaultSkin": "default",
     "defaultAnimation": "",
-    "_premultipliedAlpha": false,
+    "_premultipliedAlpha": true,
     "_timeScale": 1,
     "_preCacheMode": 0,
     "_cacheMode": 0,
@@ -379,7 +379,7 @@
     "_overflow": 0,
     "_enableWrapText": true,
     "_font": {
-      "__uuid__": "f3af7ae9-f847-4004-8ceb-5246b7cd0564",
+      "__uuid__": "b50bfd7a-d756-40fa-9257-92ce18d89cdb",
       "__expectedType__": "cc.BitmapFont"
     },
     "_isSystemFontUsed": false,
@@ -537,7 +537,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0,
+      "y": 10,
       "z": 0
     },
     "_lrot": {

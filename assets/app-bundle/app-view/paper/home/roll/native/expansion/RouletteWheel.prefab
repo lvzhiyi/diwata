@@ -346,7 +346,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 6.591,
+      "y": 0,
       "z": 0
     },
     "_lrot": {
@@ -432,7 +432,7 @@
     "_overflow": 0,
     "_enableWrapText": true,
     "_font": {
-      "__uuid__": "7f1f38e3-f8ad-4f81-840e-42b03c90e0c2",
+      "__uuid__": "b50bfd7a-d756-40fa-9257-92ce18d89cdb",
       "__expectedType__": "cc.BitmapFont"
     },
     "_isSystemFontUsed": false,

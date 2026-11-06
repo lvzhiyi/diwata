@@ -1402,8 +1402,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
         return winDisplay;
       };
+      const wheel = this.node.getComponentInChildren(RouletteWheel);
       await this.CurrentRoundAmount.getComponent(CurrentRoundAmount).showAmount(
-        amount, multipleIndex, this.rewardBox, showWinNumber
+        amount, multipleIndex, this.rewardBox, wheel.getSelectedMultiplierWorldPosition(), showWinNumber
       );
 
       this.isAsyncOperationInProgress = false;
