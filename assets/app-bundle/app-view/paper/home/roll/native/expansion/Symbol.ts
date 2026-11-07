@@ -15,6 +15,8 @@ export const SYMBOL_SWORD_WILD_IDS = ['4001', '4010'];
 const { ccclass, property } = _decorator;
 
 const SymbolScale = new Vec3(1.1, 1.1, 1.1);
+// 模糊素材的纵向拖影会增加可见高度，缩回到清晰图标的占位。
+const BLUR_ICON_Y_SCALE = 0.91;
 
 // symbol 动画名（Spine 3.8.99 导出）：掉落抖动缓冲 appear，中奖 won，消除 xiaochu
 const SYMBOL_ANIM_APPEAR = 'appear';
@@ -134,6 +136,7 @@ export class Symbol extends Component {
       }
 
       this.checkOpacity();
+      this.iconNode.setScale(1, 1, 1);
 
       // 从服务器获取数据时
       if(fromServer) {
@@ -184,7 +187,8 @@ export class Symbol extends Component {
       }
 
       this.checkOpacity();
-      
+      this.iconNode.setScale(1, BLUR_ICON_Y_SCALE, 1);
+
       this.iconNode.getComponent(Sprite).spriteFrame = this.mapBlurSymbols.get(`${symbolId}`);
     }
 
