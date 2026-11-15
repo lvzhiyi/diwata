@@ -89,6 +89,8 @@ export class EffectManager extends Component {
     AudioPath.POPUP.OPEN_HOME_AUDIO,
 
     AudioPath.GAME.SPINE_ROTATE,
+    AudioPath.GAME.MULTIPLE_GLOW,
+    AudioPath.GAME.AMOUNT_APPEAR,
     AudioPath.GAME.CHANGE_WILD,
     AudioPath.GAME.SWORD_AND_STICK,
     AudioPath.GAME.SWORD_START,

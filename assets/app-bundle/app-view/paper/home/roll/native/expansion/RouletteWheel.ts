@@ -195,29 +195,21 @@ export class RouletteWheel extends Component {
     EffectManager.inst.playEffect(AudioPath.GAME.SPINE_ROTATE);
 
     if(index === 0 ) {
-      const timeout = setTimeout(() => {
-        this.updateSelectedItem();
-        clearTimeout(timeout);
-      }, 300);
       tween(this.bgSpineNode)
         .timeScale(app.manager.global.gameSpeed)
         .to(0.5, { eulerAngles: new Vec3(0, 0, 0) }, { easing: this.bgEasingType })
         .call(() => {
-          this.bgCurrentRotation = 0;
+          this.finishBgAnimation(0);
         })
         .start();
     }
     if(index === 3) {
       const targetRotation = this.DATA_ANGLE_STEP * 3;
-      const timeout = setTimeout(() => {
-        this.updateSelectedItem();
-        clearTimeout(timeout);
-      }, 300);
       tween(this.bgSpineNode)
         .timeScale(app.manager.global.gameSpeed)
         .to(0.5, { eulerAngles: new Vec3(0, 0, targetRotation) }, { easing: this.bgEasingType })
         .call(() => {
-          this.bgCurrentRotation = targetRotation;
+          this.finishBgAnimation(targetRotation);
         })
         .start();
     }
@@ -401,10 +393,6 @@ export class RouletteWheel extends Component {
     EffectManager.inst.playEffect(AudioPath.GAME.SPINE_ROTATE);
     this.isBgAnimating = true;
     const animDuration = duration || this.bgAnimationDuration;
-    const timeout = setTimeout(() => {
-      this.updateSelectedItem();
-      clearTimeout(timeout);
-    }, 300);
     tween(this.bgSpineNode)
       .timeScale(app.manager.global.gameSpeed)
       .to(animDuration, { eulerAngles: new Vec3(0, 0, targetRotation) }, { easing: this.bgEasingType })
@@ -421,6 +409,9 @@ export class RouletteWheel extends Component {
   private finishBgAnimation(targetRotation: number): void {
     this.isBgAnimating = false;
     this.bgCurrentRotation = targetRotation;
+    // 使用补间完成时机，确保倍速模式下发光动画和音效也在转动结束后触发。
+    this.updateSelectedItem();
+    EffectManager.inst.playEffect(AudioPath.GAME.MULTIPLE_GLOW);
   }
 
   /**

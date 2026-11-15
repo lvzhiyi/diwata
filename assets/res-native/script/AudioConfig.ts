@@ -78,6 +78,10 @@ export const AudioPath = {
   GAME: {
     // 倍率盘旋转
     SPINE_ROTATE: 'Game/MultipleRotate',
+    // 转盘停止后与选中倍率的发光动画同步。
+    MULTIPLE_GLOW: 'Game/MultipleGlow',
+    // 中奖金额在棋盘中央弹出。
+    AMOUNT_APPEAR: 'Game/AmountAppear',
     // 变成WIld
     CHANGE_WILD: 'Game/ChangeWild',
     // 触发挥剑和挥棒
@@ -102,7 +106,7 @@ export const AudioPath = {
     ROLL_STOP_4: 'Game/RollStop4',
     // 滚轴停止旋转5
     ROLL_STOP_5: 'Game/RollStop5',
-    // 数字翻倍
+    // 中奖金额下落及落栏金币涌出。
     DOUBLE_NUMBER: 'Game/DoubleNumber',
     // 免费轮转场
     FREE_BONUS_TRANSITION: 'Game/FreeBonusShow',

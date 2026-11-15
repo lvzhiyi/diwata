@@ -67,6 +67,7 @@ export class CurrentRoundAmount extends Component {
       this.spineWinNode.active = true;
       const spine = this.spineWinNode.getComponent(sp.Skeleton);
       spine.timeScale = app.manager.global.gameSpeed;
+      EffectManager.inst.playEffect(AudioPath.GAME.AMOUNT_APPEAR);
       spine.setAnimation(0, 'start', false);
       const rewardParent = rewardBox.parent;
       const rewardPosition = rewardParent.getComponent(UITransform).convertToNodeSpaceAR(rewardBox.getWorldPosition());
@@ -109,6 +110,8 @@ export class CurrentRoundAmount extends Component {
           // 金额保持字号，从棋盘中央加速砸向金额栏。
           tween(this.node)
             .call(() => {
+              // 下落音效包含落栏金币声，从下落开始播放，避免动画结束后才响。
+              EffectManager.inst.playEffect(AudioPath.GAME.DOUBLE_NUMBER);
               // 落向金额栏时移到其上层，避免底板遮住冲击中心。
               this.spineWinNode.active = false;
               this.node.setParent(rewardParent, true);
@@ -134,7 +137,6 @@ export class CurrentRoundAmount extends Component {
             this.amountNode.setScale(Vec3.ONE);
             this.multipleNode.setScale(Vec3.ONE);
             this.multipleBgSpine.getComponent(UIOpacity).opacity = 0;
-            EffectManager.inst.playEffect(AudioPath.GAME.DOUBLE_NUMBER);
             this.tween?.stop();
             resolve();
           })
