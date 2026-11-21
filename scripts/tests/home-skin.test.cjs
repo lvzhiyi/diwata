@@ -186,3 +186,94 @@ test('anticipation shades neighboring columns without leaving bright seams', () 
  ]);
  assert.deepEqual(view.anticipationShade.fillColor.rgba,[0,0,0,185]);
 });
+
+test('the board keeps zooming through three anticipation reels and only restores when they stop', async () => {
+ const ts=require('typescript'),vm=require('node:vm'),exports={};
+ const tweens=[];
+ const cc={
+  Vec3:class {constructor(x,y,z){Object.assign(this,{x,y,z});}},
+  _decorator:{ccclass:()=>x=>x,property:()=>()=>{}},
+  sp:{Skeleton:class {}},
+  tween:target=>{
+   const animation={
+    target,
+    to(duration,{scale},{easing}){Object.assign(this,{duration,scale,easing});return this;},
+    call(callback){this.callback=callback;return this;},
+    start(){tweens.push(this);return this;},
+    stop(){this.stopped=true;},
+   };
+   return animation;
+  },
+ };
+ const app={manager:{event:{emit(){}},global:{quikeMode:0,gameSpeed:1}},controller:{slots:{isFreeBonusSpin:false}}};
+ const source=ts.transpileModule(fs.readFileSync(path.join(root,pop+'roll/native/PaperHomeRoll.ts'),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020,experimentalDecorators:true}}).outputText;
+ vm.runInNewContext(source,{exports,console,setTimeout(){},require:id=>{
+  if(id==='cc') return cc;
+  if(id.includes('BaseView')) return {default:{BindController:()=>class {}}};
+  if(id.includes('BaseCommonUtil')) return {preventRapidClickDecorator:()=>()=>{}};
+  if(id.includes('/Utils/common')) return {delay:async()=>{}};
+  if(id.endsWith('/GlobalManager')) return {IQuickMode:{nomal:0}};
+  if(id.endsWith('/app')) return {app};
+  return {};
+ }});
+ const view=new exports.PaperHomeRoll();
+ const {x,y,z}=node(read(pop+'roll/native/PaperHomeRoll.prefab'),'RollContainer')._lscale;
+ const baseScale=new cc.Vec3(x,y,z);
+ baseScale.clone=()=>new cc.Vec3(x,y,z);
+ const board={isValid:true,scale:baseScale};
+ view.rollContainerNode=board;
+ view.anticipationShade={clear(){}};
+ view.shadeOtherReels=()=>{};
+ view.scheduleOnce=()=>{};
+ const pending=[];
+ const reelStops=[];
+ view.Rolls=Array.from({length:6},(_,i)=>{
+  const reel={
+   isRolling:true,
+   stopRolling(_,complete){
+    reelStops[i]=()=>{
+     this.isRolling=false;
+     complete(i);
+    };
+   },
+   showRollFrameSpine:()=>new Promise(resolve=>pending.push({i,resolve})),
+   hideRollFrameSpine(){},
+  };
+  return {getComponent:()=>reel};
+ });
+ const stopWith=(...scatters)=>view.stopGame({resultDetail:{resultList:[{
+  wheel:[Array.from({length:6},(_,i)=>scatters.includes(i)?{symbolId:'3001'}:null)],
+ }]}});
+ const nextTurn=()=>new Promise(setImmediate);
+ await stopWith();
+ await nextTurn();
+ assert.equal(tweens.length,0);
+ const stopping=stopWith(0,2);
+ await nextTurn();
+ assert.deepEqual(pending.map(({i})=>i),[3]);
+ for(const settle of reelStops.slice(0,3)) settle();
+ assert.equal(tweens.length,1);
+ const [zoom]=tweens;
+ assert.equal(zoom.target,board);
+ assert.equal(zoom.easing,'linear');
+ assert.ok(zoom.duration>6.25,'zoom must run through three 2-second effects and the two reel delays');
+ near(zoom.scale.x,x*1.1);near(zoom.scale.y,y*1.1);near(zoom.scale.z,z);
+ pending[0].resolve();
+ reelStops[3]();
+ await nextTurn();
+ assert.deepEqual(pending.map(({i})=>i),[3,4]);
+ assert.equal(tweens.length,1);
+ pending[1].resolve();
+ reelStops[4]();
+ await nextTurn();
+ assert.deepEqual(pending.map(({i})=>i),[3,4,5]);
+ assert.equal(tweens.length,1);
+ pending[2].resolve();
+ await nextTurn();
+ assert.equal(tweens.length,1);
+ reelStops[5]();
+ await stopping;
+ assert.equal(tweens.length,2);
+ assert.equal(zoom.stopped,true);
+ assert.deepEqual(tweens[1].scale,new cc.Vec3(x,y,z));
+});

@@ -1,4 +1,4 @@
-import { _decorator, Color, EventTouch, Graphics, Label, Node, Prefab, sp,  SpriteFrame,  tween, UIOpacity, UITransform, Vec3 } from 'cc';
+import { _decorator, Color, EventTouch, Graphics, Label, Node, Prefab, sp, SpriteFrame, Tween, tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import BaseView from 'db://app/base/BaseView';
 import { Roll } from './expansion/Roll';
 import { Symbol, SYMBOL_WILD_IDS } from './expansion/Symbol';
@@ -27,6 +27,12 @@ import { BGMManager } from 'db://assets/basePlate/middleWare/serverManager/BGMMa
 import { SpineTool } from 'db://assets/res-native/script/SpineTool';
 
 const { ccclass, property } = _decorator;
+
+const ANTICIPATION_FRAME_DURATION = 2;
+
+function getReelStopDelay(rollIndex: number) {
+  return 350 - rollIndex * 50;
+}
 
 @ccclass('PaperHomeRoll')
 export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
@@ -115,6 +121,10 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   private rollFrameSkeleton: sp.Skeleton = null;
 
   private anticipationShade: Graphics = null;
+
+  private anticipationBaseScale: Vec3 = null;
+
+  private anticipationZoom: Tween<Node> = null;
 
   onLoad() {
     this.homeRollTool = new HomeRollTool();
@@ -212,6 +222,40 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     }
 
     shade.fill();
+  }
+
+  private zoomBoardForAnticipation(firstReelIndex: number) {
+    const board = this.rollContainerNode;
+    this.anticipationZoom?.stop();
+    this.anticipationBaseScale ??= board.scale.clone();
+    const {
+      x, y, z
+    } = this.anticipationBaseScale;
+    const scale = new Vec3(x * 1.1, y * 1.1, z);
+    const reelDuration = ANTICIPATION_FRAME_DURATION / app.manager.global.gameSpeed;
+    // 给滚轴进入减速和最后一帧停稳预留时间。
+    let duration = reelDuration + 0.1;
+
+    for (let index = firstReelIndex + 1; index < this.Rolls.length; index++) {
+      duration += getReelStopDelay(index) / 1000 + reelDuration;
+    }
+
+    this.anticipationZoom = tween(board)
+      .to(duration, { scale }, { easing: 'linear' })
+      .start();
+  }
+
+  private restoreAnticipationBoardScale() {
+    if (!this.anticipationBaseScale || !this.rollContainerNode.isValid) return;
+
+    this.anticipationZoom?.stop();
+    this.anticipationZoom = tween(this.rollContainerNode)
+      .to(0.4, { scale: this.anticipationBaseScale }, { easing: 'sineInOut' })
+      .call(() => {
+        this.anticipationBaseScale = null;
+        this.anticipationZoom = null;
+      })
+      .start();
   }
 
   /** *监听freespin按钮状态**/
@@ -362,14 +406,18 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   /**
    * 停止游戏
    */
-  stopGame(data: BetResult) {
+  async stopGame(data: BetResult) {
     this.resultData = data;
 
     if(data) {
       this.resultList = data.resultDetail?.resultList || [];
     }
 
-    this.stopAllRolls();
+    try {
+      await this.stopAllRolls();
+    } finally {
+      this.restoreAnticipationBoardScale();
+    }
   }
 
   /**
@@ -393,8 +441,7 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         syncStopRolls.push(async () => this.stopSingleRoll(roll, rollIndex, needPlayRollFrameSpine));
       } else {
         // 非快速模式 或者 快速模式并且有滚轮边框动画，则需要播放滚轮边框动画
-        // const delayTime = 1000 / (rollIndex + 1) + 100;
-        const delayTime = 350 - (rollIndex * 50);
+        const delayTime = getReelStopDelay(rollIndex);
         asyncStopRolls.push(async (stopDelayTime?: number) => this.stopSingleRoll(roll, rollIndex, needPlayRollFrameSpine, stopDelayTime ?? delayTime));
       }
     }
@@ -447,8 +494,17 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         EffectManager.inst.playEffect(AudioPath.GAME.ROLL_STOP_3, false, null, true);
       }, audioDelayTime);
     }
+
+    let completeAnticipationStop: () => void;
+
+    const anticipationStop = needPlayRollFrameSpine && rollIndex === this.Rolls.length - 1
+      ? new Promise<void>(resolve => { completeAnticipationStop = resolve; })
+      : null;
+
     // roll滚动完成回调
-    const onRollComplete = (rollIndex: number) => {
+    const onRollComplete = () => {
+      completeAnticipationStop?.();
+
       if (this.isAllRollsStopped()) {
         // 派发滚动停止的事件
         app.manager.event.emit('roll:stop', this.resultList?.some((item: BetResultItem) => item.rewardSymbolIndexSet?.length > 0));
@@ -468,16 +524,21 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     // 如果需要播放rollFrameSpine动画，则播放
     if (needPlayRollFrameSpine) {
-      // 听牌动画单次 2 秒，与旧动画播 3 遍的时长一致
       this.shadeOtherReels(roll);
       const reel = roll.getComponent(Roll);
 
       try {
+        if (!this.needPlayRollsFrameSpine[rollIndex - 1]) {
+          this.zoomBoardForAnticipation(rollIndex);
+        }
+
         await reel.showRollFrameSpine(this.rollFrameSkeleton, 1);
       } finally {
         this.anticipationShade.clear();
         reel.hideRollFrameSpine(this.rollFrameSkeleton);
       }
+
+      if (anticipationStop) await anticipationStop;
     }
   }
 

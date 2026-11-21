@@ -128,7 +128,7 @@ export class RouletteWheel extends Component {
   /**
    * 多倍索引改变
    * @param index 索引
-   * @param needAnimation 是否需要动画
+   * @param needAnimation 普通轮或免费轮复位时传 true，结算升倍时传 false
   */
   public multipleIndexChange(index: number, needAnimation: boolean = true): void {
     if (this.currentIndex === index) {
@@ -144,11 +144,11 @@ export class RouletteWheel extends Component {
       spine2.timeScale = 1;
       spine2.setAnimation(0, 'gunzhoudi', false);
     }
-    // 如果 index 为 0 和，3，强制复原到起始位置
-    if(index === 0 || index === 3) {
+    // 8x 既是免费轮的起始档，也可能是普通轮结算升倍的目标档。
+    if (index === 0 || index === 3) {
       this.currentIndex = index;
-      this.jumpToOriginalPosition(index);
-    }else{
+      this.jumpToOriginalPosition(index, !needAnimation);
+    } else {
       this.jumpToData(this.dataList[index]);
       this.currentIndex = index;
     }
@@ -190,29 +190,18 @@ export class RouletteWheel extends Component {
     this.animateBgToRotation(targetRotation);
   }
 
-  /** 跳到原始位置 */ 
-  jumpToOriginalPosition(index: number): void {
-    EffectManager.inst.playEffect(AudioPath.GAME.SPINE_ROTATE);
+  /** 复用起始档的固定角度补间，是否播放音效由本次倍率变更的用途决定。 */
+  private jumpToOriginalPosition(index: number, playMultiplierSound: boolean): void {
+    if (playMultiplierSound) EffectManager.inst.playEffect(AudioPath.GAME.SPINE_ROTATE);
 
-    if(index === 0 ) {
-      tween(this.bgSpineNode)
-        .timeScale(app.manager.global.gameSpeed)
-        .to(0.5, { eulerAngles: new Vec3(0, 0, 0) }, { easing: this.bgEasingType })
-        .call(() => {
-          this.finishBgAnimation(0);
-        })
-        .start();
-    }
-    if(index === 3) {
-      const targetRotation = this.DATA_ANGLE_STEP * 3;
-      tween(this.bgSpineNode)
-        .timeScale(app.manager.global.gameSpeed)
-        .to(0.5, { eulerAngles: new Vec3(0, 0, targetRotation) }, { easing: this.bgEasingType })
-        .call(() => {
-          this.finishBgAnimation(targetRotation);
-        })
-        .start();
-    }
+    const targetRotation = this.DATA_ANGLE_STEP * index;
+    tween(this.bgSpineNode)
+      .timeScale(app.manager.global.gameSpeed)
+      .to(0.5, { eulerAngles: new Vec3(0, 0, targetRotation) }, { easing: this.bgEasingType })
+      .call(() => {
+        this.finishBgAnimation(targetRotation, playMultiplierSound);
+      })
+      .start();
   }
 
   /**
@@ -397,7 +386,7 @@ export class RouletteWheel extends Component {
       .timeScale(app.manager.global.gameSpeed)
       .to(animDuration, { eulerAngles: new Vec3(0, 0, targetRotation) }, { easing: this.bgEasingType })
       .call(() => {
-        this.finishBgAnimation(targetRotation);
+        this.finishBgAnimation(targetRotation, true);
       })
       .start();
   }
@@ -405,13 +394,14 @@ export class RouletteWheel extends Component {
   /**
    * 完成背景动画
    * @param targetRotation 目标旋转角度
+   * @param playMultiplierSound 是否为需要音效的实际升倍
    */
-  private finishBgAnimation(targetRotation: number): void {
+  private finishBgAnimation(targetRotation: number, playMultiplierSound: boolean): void {
     this.isBgAnimating = false;
     this.bgCurrentRotation = targetRotation;
-    // 使用补间完成时机，确保倍速模式下发光动画和音效也在转动结束后触发。
+    // 复位仍更新选中项；升倍音效与发光动画同在补间完成时触发，兼容倍速模式。
     this.updateSelectedItem();
-    EffectManager.inst.playEffect(AudioPath.GAME.MULTIPLE_GLOW);
+    if (playMultiplierSound) EffectManager.inst.playEffect(AudioPath.GAME.MULTIPLE_GLOW);
   }
 
   /**
