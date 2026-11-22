@@ -5,7 +5,7 @@ import { Symbol, SYMBOL_WILD_IDS } from './expansion/Symbol';
 import { calculateWithBase, delay, getIsGap, numberToMoney } from 'db://assets/common/script/extra/Utils/common';
 import { app } from 'db://assets/app/app';
 import { PopGrandPrize } from '../../../../pop/grand-prize/native/PopGrandPrize';
-import { BetTypes, RewardSubTypeEnum, SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
+import { BetSubTypes, BetTypes, RewardSubTypeEnum, SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { PopFreeSpinResult } from '../../../../pop/free-spin-result/native/PopFreeSpinResult';
 import { SlotsController } from 'db://assets/app-builtin/app-controller/SlotsController';
 import { ToastManager } from 'db://assets/res-native/script/ToastManager';
@@ -498,12 +498,20 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
 
     let completeAnticipationStop: () => void;
 
-    const anticipationStop = needPlayRollFrameSpine && rollIndex === this.Rolls.length - 1
+    const isFinalAnticipationReel = needPlayRollFrameSpine && rollIndex === this.Rolls.length - 1;
+    const playScatterOnStop = needPlayRollFrameSpine
+      && app.controller.slots.betSubType === BetSubTypes.buySpinNormal
+      && rollList.some(item => item?.symbolId === '3001');
+    const anticipationStop = isFinalAnticipationReel
       ? new Promise<void>(resolve => { completeAnticipationStop = resolve; })
       : null;
 
     // roll滚动完成回调
     const onRollComplete = () => {
+      // 购买免费轮时，只有落停的听牌列实际含有 Scatter 才播一次。
+      if (playScatterOnStop) {
+        EffectManager.inst.playEffect(AudioPath.GAME.SCATTER_SHOW, false, null, true);
+      }
       completeAnticipationStop?.();
 
       if (this.isAllRollsStopped()) {

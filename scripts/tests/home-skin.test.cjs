@@ -232,9 +232,16 @@ test('anticipation shades neighboring columns without leaving bright seams', () 
  assert.deepEqual(view.anticipationShade.fillColor.rgba,[0,0,0,185]);
 });
 
-test('the board keeps zooming through three anticipation reels and only restores when they stop', async () => {
+for (const [betSubType, quikeMode, lastReelHasScatter] of [
+ ['NORMAL_BET', 0, true],
+ ['BUY_BET', 0, false],
+ ['BUY_BET', 1, true],
+ ['FREE_SPINS_BUY_BET', 0, true],
+]) {
+test(`anticipation preserves the zoom and plays ScatterShow only for a settled purchase reel with Scatter (${betSubType}, speed ${quikeMode})`, async () => {
  const ts=require('typescript'),vm=require('node:vm'),exports={};
  const tweens=[];
+ const sounds=[];
  const cc={
   Vec3:class {constructor(x,y,z){Object.assign(this,{x,y,z});}},
   _decorator:{ccclass:()=>x=>x,property:()=>()=>{}},
@@ -250,13 +257,16 @@ test('the board keeps zooming through three anticipation reels and only restores
    return animation;
   },
  };
- const app={manager:{event:{emit(){}},global:{quikeMode:0,gameSpeed:1}},controller:{slots:{isFreeBonusSpin:false}}};
+ const app={manager:{event:{emit(){}},global:{quikeMode,gameSpeed:1}},controller:{slots:{betSubType,isFreeBonusSpin:betSubType==='FREE_SPINS_BUY_BET'}}};
  const source=ts.transpileModule(fs.readFileSync(path.join(root,pop+'roll/native/PaperHomeRoll.ts'),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020,experimentalDecorators:true}}).outputText;
  vm.runInNewContext(source,{exports,console,setTimeout(){},require:id=>{
   if(id==='cc') return cc;
   if(id.includes('BaseView')) return {default:{BindController:()=>class {}}};
   if(id.includes('BaseCommonUtil')) return {preventRapidClickDecorator:()=>()=>{}};
   if(id.includes('/Utils/common')) return {delay:async()=>{}};
+  if(id.endsWith('/enums/bet')) return {BetSubTypes:{buySpinNormal:'BUY_BET'}};
+  if(id.endsWith('/AudioConfig')) return {AudioPath:{GAME:{SCATTER_SHOW:'ScatterShow'}}};
+  if(id.endsWith('/EffectManager')) return {EffectManager:{inst:{playEffect:(...args)=>sounds.push(args)}}};
   if(id.endsWith('/GlobalManager')) return {IQuickMode:{nomal:0}};
   if(id.endsWith('/app')) return {app};
   return {};
@@ -276,6 +286,7 @@ test('the board keeps zooming through three anticipation reels and only restores
   const reel={
    isRolling:true,
    stopRolling(_,complete){
+    this.isRolling=true;
     reelStops[i]=()=>{
      this.isRolling=false;
      complete(i);
@@ -287,13 +298,18 @@ test('the board keeps zooming through three anticipation reels and only restores
   return {getComponent:()=>reel};
  });
  const stopWith=(...scatters)=>view.stopGame({resultDetail:{resultList:[{
-  wheel:[Array.from({length:6},(_,i)=>scatters.includes(i)?{symbolId:'3001'}:null)],
+  wheel:[
+   Array.from({length:6},(_,i)=>scatters.includes(i)?{symbolId:'3001'}:null),
+   [null,null,null,{symbolId:scatters.includes(3)?'3001':'1001'},null,null],
+  ],
  }]}});
  const nextTurn=()=>new Promise(setImmediate);
  await stopWith();
  await nextTurn();
+ for(const settle of reelStops) settle();
+ assert.deepEqual(sounds,[]);
  assert.equal(tweens.length,0);
- const stopping=stopWith(0,2);
+ const stopping=stopWith(0,2,3,...(lastReelHasScatter?[5]:[]));
  await nextTurn();
  assert.deepEqual(pending.map(({i})=>i),[3]);
  for(const settle of reelStops.slice(0,3)) settle();
@@ -304,21 +320,34 @@ test('the board keeps zooming through three anticipation reels and only restores
  assert.ok(zoom.duration>6.25,'zoom must run through three 2-second effects and the two reel delays');
  near(zoom.scale.x,x*1.1);near(zoom.scale.y,y*1.1);near(zoom.scale.z,z);
  pending[0].resolve();
+ assert.deepEqual(sounds,[],'Scatter can be visible before its reel settles');
  reelStops[3]();
+ const cue=['ScatterShow',false,null,true];
+ const shouldPlay=betSubType==='BUY_BET';
+ assert.deepEqual(sounds,shouldPlay?[cue]:[],'play once on the first anticipation stop, even with multiple Scatter symbols');
  await nextTurn();
  assert.deepEqual(pending.map(({i})=>i),[3,4]);
  assert.equal(tweens.length,1);
  pending[1].resolve();
  reelStops[4]();
+ assert.deepEqual(sounds,shouldPlay?[cue]:[],'no cue when the stopped reel has no Scatter');
  await nextTurn();
  assert.deepEqual(pending.map(({i})=>i),[3,4,5]);
  assert.equal(tweens.length,1);
  pending[2].resolve();
  await nextTurn();
  assert.equal(tweens.length,1);
+ assert.deepEqual(sounds,shouldPlay?[cue]:[]);
  reelStops[5]();
+ assert.deepEqual(sounds,shouldPlay?(lastReelHasScatter?[cue,cue]:[cue]):[]);
  await stopping;
  assert.equal(tweens.length,2);
  assert.equal(zoom.stopped,true);
  assert.deepEqual(tweens[1].scale,new cc.Vec3(x,y,z));
+});
+}
+
+test('scatter appearance and bounce no longer play ScatterShow', () => {
+ const source=fs.readFileSync(path.join(root,pop+'roll/native/expansion/Symbol.ts'),'utf8');
+ assert.doesNotMatch(source,/SCATTER_SHOW/);
 });

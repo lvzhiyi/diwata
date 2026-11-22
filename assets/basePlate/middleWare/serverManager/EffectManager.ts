@@ -461,6 +461,8 @@ export class EffectManager extends Component {
     onEnded?: () => void,
     isForcePlay: boolean = false,
   ): Promise<number> {
+    // 听牌落停提示要和画面同步，不能等下一帧，也不能被极速模式过滤。
+    const isScatterLanding = name === AudioPath.GAME.SCATTER_SHOW;
     if (!this.isInitialized) {
       this.initializeEffectVolume();
     }
@@ -473,7 +475,7 @@ export class EffectManager extends Component {
     }
     // 如果的超快模式，则不播放pop,和game音效
     
-    if (this._isTurboMode && (name.indexOf('PopAudio') || name.indexOf('Game'))) {
+    if (!isScatterLanding && this._isTurboMode && (name.indexOf('PopAudio') || name.indexOf('Game'))) {
       onEnded?.();
 
       return -1;
@@ -601,8 +603,7 @@ export class EffectManager extends Component {
 
     // 播放音效
     try {
-      // 确保在下一帧播放，给引擎足够的时间处理状态变更
-      this.scheduleOnce(() => {
+      const play = () => {
         try {
           audioSource.play();
           this.playingMusic.uuid = effectId;
@@ -618,7 +619,13 @@ export class EffectManager extends Component {
         } catch (playError) {
           console.error(`EffectManager: 播放音效时发生异常 ${name}`, playError);
         }
-      }, 0);
+      };
+      if (isScatterLanding) {
+        play();
+      } else {
+        // 其余音效保留下一帧播放，给引擎足够的时间处理状态变更。
+        this.scheduleOnce(play, 0);
+      }
     } catch (error) {
       console.error(`EffectManager: 播放音效时发生错误 ${name}`, error);
 

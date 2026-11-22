@@ -7,6 +7,34 @@ const vm = require('node:vm');
 const root = path.resolve(__dirname, '../..');
 const read = p => fs.readFileSync(path.join(root, p), 'utf8');
 const expansion = 'assets/app-bundle/app-view/paper/home/roll/native/expansion/';
+test('ScatterShow plays without waiting for the next frame, including turbo mode', async () => {
+  const exports = {};
+  const cc = { Component: class {}, _decorator: { ccclass: () => x => x } };
+  const options = { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, experimentalDecorators: true } };
+  const audio = {};
+  vm.runInNewContext(ts.transpileModule(read('assets/res-native/script/AudioConfig.ts'), options).outputText, { exports: audio });
+  const file = 'assets/basePlate/middleWare/serverManager/EffectManager.ts';
+  vm.runInNewContext(ts.transpileModule(read(file), options).outputText, {
+    exports, console, require: id => id === 'cc' ? cc : id.endsWith('/AudioConfig') ? audio : {},
+  });
+  const { SCATTER_SHOW, SCATTER_EXPECT } = audio.AudioPath.GAME;
+  const fx = new exports.EffectManager();
+  const queued = [], played = [];
+  fx.isInitialized = true;
+  fx.loadAudioClip = async name => name;
+  fx.getAvailableAudioSource = () => ({ play() { played.push(this.clip); } });
+  fx.scheduleOnce = (callback, delay) => queued.push({ callback, delay });
+  fx._isTurboMode = true;
+  assert.ok(await fx.playEffect(SCATTER_SHOW, false, null, true) >= 0);
+  assert.equal(await fx.playEffect(SCATTER_EXPECT, false, null, true), -1);
+  assert.deepEqual(played, [SCATTER_SHOW]);
+  fx._isTurboMode = false;
+  await fx.playEffect(SCATTER_EXPECT, false, null, true);
+  assert.deepEqual(played, [SCATTER_SHOW]);
+  queued.find(x => x.delay === 0).callback();
+  assert.deepEqual(played, [SCATTER_SHOW, SCATTER_EXPECT]);
+});
+
 function createWheel() {
   const sounds = [], updates = [], completions = [], exports = {};
   class Component {}

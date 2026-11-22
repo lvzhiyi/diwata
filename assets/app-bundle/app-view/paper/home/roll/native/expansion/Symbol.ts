@@ -5,8 +5,6 @@ import { SymbolType } from 'db://assets/basePlate/middleWare/enums/bet';
 import { GameResourceManager, ROLL_RESOURCE_NAMES, SPINE_RESOURCE_NAMES } from 'db://assets/basePlate/middleWare/serverManager/GameResourceManager';
 import { delay } from 'db://assets/common/script/extra/Utils/common';
 import { HomeRollTool } from './HomeRollTool';
-import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
-import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
 
 const SYMBOL_NORMAL_IDS = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010'];
 export const SYMBOL_WILD_IDS = ['4001', '4010', '4011'];
@@ -315,11 +313,6 @@ export class Symbol extends Component {
           skeleton.timeScale = app.manager.global.gameSpeed;
           skeleton.skeletonData = await GameResourceManager.instance.getRollSpineAnimationDataByName(animationName);
           skeleton.setAnimation(0, SYMBOL_ANIM_APPEAR, false);
-
-          // 如果当前元素是3001，则播放scatter出现音频
-          if(symbolId === '3001') {
-            EffectManager.inst.playEffect(AudioPath.GAME.SCATTER_SHOW, false, null, true);
-          }
 
           skeleton.setCompleteListener(() => {
             clearTimeout(timeout);
