@@ -75,3 +75,39 @@ test('金额弹出和下落分别绑定到动画开始及下落回调', () => {
   assert.ok(fall < source.indexOf('.to(0.26'));
   assert.equal((source.match(/playEffect\(AudioPath.GAME.DOUBLE_NUMBER\)/g) || []).length, 1);
 });
+
+test('大奖逐档播放对应音乐，仅最终档使用带收尾的版本', async () => {
+  const compile = file => ts.transpileModule(read(file), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, experimentalDecorators: true } }).outputText;
+  const audioExports = {};
+  vm.runInNewContext(compile('assets/res-native/script/AudioConfig.ts'), { exports: audioExports });
+  const exports = {};
+  const RewardSubTypeEnum = { NICE: 1, MEGA: 2, SUPER: 3 };
+  const modules = {
+    cc: { _decorator: { ccclass: () => x => x, property: () => () => {} } },
+    BaseView: { default: class {} },
+    bet: { RewardSubTypeEnum },
+    AudioConfig: audioExports,
+    GameResourceManager: { SPINE_RESOURCE_NAMES: {} },
+  };
+  vm.runInNewContext(compile('assets/app-bundle/app-view/pop/grand-prize/native/PopGrandPrize.ts'), { exports, require: id => modules[id.split('/').pop()] });
+
+  const stages = ['01nice_', '02mega_', '03super_'];
+  const tracks = ['Nice', 'Mega', 'Super'];
+  for (const type of Object.values(RewardSubTypeEnum)) {
+    const popup = new exports.PopGrandPrize();
+    const events = [];
+    popup.pauseBGM = () => {};
+    popup.playAmountAnimation = () => {};
+    popup.initializeUI = async () => { popup.animationQueue = stages.slice(0, type); };
+    popup.playGrandPrizeBGSound = (track, loop) => {
+      assert.equal(loop, false);
+      assert.ok(fs.existsSync(path.join(root, `assets/resources/Audio/${track}.mp3`)));
+      events.push(track);
+    };
+    popup.playGrandPrizeAnimation = async stage => { events.push(stage); };
+    await popup.onShow({ rewardSubType: type });
+    assert.deepEqual(events, stages.slice(0, type).flatMap((stage, i) => [
+      `BGM/${tracks[i]}_Bg${i === type - 1 ? '_AndEnd' : ''}`, stage,
+    ]));
+  }
+});

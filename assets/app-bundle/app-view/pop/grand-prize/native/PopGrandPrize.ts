@@ -203,13 +203,13 @@ export class PopGrandPrize extends BaseView {
     // 初始化UI并播放大奖动画
     await this.initializeUI(params);
     this.playAmountAnimation();
-    // 播放背景音乐
     const lastAnimationName = this.animationQueue[this.animationQueue.length - 1];
-    const musicBGName = effectBGAndEndMap[lastAnimationName];
-    this.playGrandPrizeBGSound(musicBGName, false);
 
     for (const animationName of this.animationQueue) {
       if (this.isHideInProgress) break;
+      // 逐档切换获奖音乐，结束段只在最终档播放。
+      const musicMap = animationName === lastAnimationName ? effectBGAndEndMap : effectBGMap;
+      this.playGrandPrizeBGSound(musicMap[animationName], false);
       await this.playGrandPrizeAnimation(animationName);
     }
   }
