@@ -33,10 +33,14 @@ export class Progress extends Component {
     const content = this.node.getChildByName('Content');
 
     if (content) {
-      const progressPercent = content.getChildByName('ProgressBox').getChildByName('ProgressPercent');
-      const width = content.getChildByName('ProgressBox').getComponent(UITransform).width;
-      const  persent = (1 - (val / 100.0));
-      progressPercent.getComponent(Widget).right = persent * width;
+      const progressBox = content.getChildByName('ProgressBox');
+      const progressPercent = progressBox.getChildByName('ProgressPercent');
+      const width = progressBox.getComponent(UITransform).width;
+      const fillWidget = progressPercent.getComponent(Widget);
+      fillWidget.right = (1 - val / 100) * width;
+      // 先刷新进度条宽度，再将圆点对齐到进度条右端。
+      fillWidget.updateAlignment();
+      progressPercent.getChildByName('Thumb')?.getComponent(Widget)?.updateAlignment();
     }
   }
 }

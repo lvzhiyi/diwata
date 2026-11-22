@@ -51,6 +51,27 @@ function contrast(foreground, background) {
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 }
 
+test('volume thumb follows the fill immediately when stepping up and down', () => {
+  class Widget {}
+  class UITransform {}
+  const { Progress } = load('settings/native/expansion/Progress.ts', {}, { Widget, UITransform });
+  const view = new Progress();
+  const width = 510;
+  let fillEnd = width / 2;
+  let thumbX = fillEnd;
+  const fillWidget = { right: 0, updateAlignment() { fillEnd = width / 2 - this.right; } };
+  const thumbWidget = { updateAlignment() { thumbX = fillEnd; } };
+  const fill = { getComponent: () => fillWidget, getChildByName: name => name === 'Thumb' ? { getComponent: () => thumbWidget } : null };
+  const box = { getComponent: () => ({ width }), getChildByName: () => fill };
+  view.node = { getChildByName: () => ({ getChildByName: () => box }) };
+
+  for (const volume of [100, 75, 50, 25, 0, 25, 50, 75, 100]) {
+    view.setValue(volume);
+    assert.equal(thumbX, width * (volume / 100 - 0.5));
+    assert.equal(thumbX, fillEnd);
+  }
+});
+
 // Catch runtime state updates restoring white text over a pale Figma surface.
 test('enabled Auto Set remains readable on its pale menu row', () => {
   const app = { manager: { global: {} } };
