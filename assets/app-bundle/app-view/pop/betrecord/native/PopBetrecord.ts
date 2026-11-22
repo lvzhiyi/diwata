@@ -1,4 +1,4 @@
-import { _decorator, Color, EditBox, Graphics, instantiate, Label, Node, NodePool, Prefab, Size, Sprite, SpriteFrame, UITransform, view } from 'cc';
+import { _decorator, Color, EditBox, Graphics, instantiate, Label, Layout, Node, NodePool, Prefab, Size, Sprite, SpriteFrame, UITransform, view } from 'cc';
 import dayjs from 'dayjs';
 import { app } from 'db://assets/app/app';
 import { RecordCard } from './expansion/RecordCard';
@@ -15,6 +15,7 @@ import { preventRapidClickDecorator } from 'db://assets/basePlate/core/baseUtil/
 import { ToastView } from 'db://assets/basePlate/middleWare/commonUI/ToastView';
 import { EffectManager } from 'db://assets/basePlate/middleWare/serverManager/EffectManager';
 import { AudioPath } from 'db://assets/res-native/script/AudioConfig';
+import { BET_RECORD_CARD, styleBetRecordCalendar, styleBetRecordLayout } from './expansion/styleBetRecordCalendar';
 
 const { ccclass, property } = _decorator;
 
@@ -68,7 +69,7 @@ export class PopBetrecord extends BaseView {
     @property(SpriteFrame)
     private SelectIconOff: SpriteFrame;
 
-    private _selectedDate = new Date();
+    private _selectedDate: Date | null = null;
 
     private _ageMinutes = 0;
 
@@ -110,8 +111,7 @@ export class PopBetrecord extends BaseView {
       }
 
       this.createLayoutSize(w, h);
-
-      this.setCardListNodeHeight(h);
+      styleBetRecordLayout(this.BackIconNode, this.TimeTabs, this.ClickToSelectADateLabel, this.RoundNumberNode, this.cardScrollViewNode);
 
       this.initTimeTabsClickListener();
 
@@ -174,7 +174,7 @@ export class PopBetrecord extends BaseView {
 
       EventTrackManager.inst.trackExitBetRecord({
         search_time_range: this._ageMinutes === 60 ? '1 hour' : `${this._ageMinutes} mins`,
-        selected_date: dayjs(this._selectedDate).format('YYYY-MM-DD'),
+        selected_date: this._selectedDate ? dayjs(this._selectedDate).format('YYYY-MM-DD') : '',
         round_number: roundNumberScprit.string ? roundNumberScprit.string : '',
         search_used: this._isSearched,
         clicked_record_detail: this._isClickedRecordDetail,
@@ -201,22 +201,27 @@ export class PopBetrecord extends BaseView {
     }
 
     showCalendar() {
+      if (this.SelectDateView.active) {
+        this.hideCalendar();
+        return;
+      }
+      const field = this.ClickToSelectADateLabel.parent;
+      field.parent.parent.getComponent(Layout).updateLayout();
       this.SelectDateView.getComponent(SelectDateView).show(
         new Date(),
         (selectDateList: Date[]) => {
-          console.log(selectDateList);
           EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
           this.selectDate(selectDateList[0]);
         },
         0,
-        30
+        30,
+        this._selectedDate ?? undefined,
+        date => styleBetRecordCalendar(this.SelectDateView, field, date)
       );
-      this.SelectDateView.active = true;
       EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
     }
 
     hideCalendar() {
-      EffectManager.inst.playEffect(AudioPath.UI.CLOSE, false, null, true);
       this.SelectDateView.getComponent(SelectDateView).hide();
     }
 
@@ -260,7 +265,7 @@ export class PopBetrecord extends BaseView {
         this.addCard(item);
       });
 
-      if (res.data?.list?.length < this._pageParams.pageSize) {
+      if ((res.data?.list?.length ?? 0) < this._pageParams.pageSize) {
         this._hasMoreData = false;
         // 没有更多数据删除Loading
         this.content.removeChild(this.content.getChildByName('Loading'));
@@ -282,7 +287,7 @@ export class PopBetrecord extends BaseView {
 
       const ItemNode = new Node();
       ItemNode.layer = this.node.layer;
-      ItemNode.addComponent(UITransform).setContentSize(660, 280);
+      ItemNode.addComponent(UITransform).setContentSize(BET_RECORD_CARD.width, BET_RECORD_CARD.height);
 
       this.content.insertChild(ItemNode, this.content.children.length - 1);
 
@@ -349,11 +354,6 @@ export class PopBetrecord extends BaseView {
       graphic.fillRect(x, y, w, h);
     }
 
-    // 设置CardList的高度
-    private setCardListNodeHeight(h: number) {
-      this.cardScrollViewNode.getComponent(UITransform).height = h - 600;
-    }
-
     // 初始化时间选择点击事件
     private initTimeTabsClickListener() {
       this.TimeTabs.children.forEach(tab => {
@@ -396,7 +396,7 @@ export class PopBetrecord extends BaseView {
           this.getData();
         } else {
           tab.getComponent(Sprite).spriteFrame = this.SelectIconOff;
-          tab.children[0].getComponent(Label).color = new Color().fromHEX('#051E58');
+          tab.children[0].getComponent(Label).color = new Color().fromHEX('#040773');
         }
       });
     }
@@ -424,17 +424,15 @@ export class PopBetrecord extends BaseView {
     }
 
     private searchFromDate() {
-      if (!this._pageParams.startCreateTime) {
-        const date = +new Date();
-        this._pageParams.startCreateTime = dayjs(date).startOf('day').valueOf();
-        this._pageParams.endCreateTime = dayjs(date).endOf('day').valueOf();
-      }
+      this.SelectDateView.active = false;
+      const date = this._selectedDate ?? new Date();
+      this.selectDate(date);
 
       this._isSearched = true;
       // 上报日期范围
       EventTrackManager.inst.trackBetRecordSearch({
         search_time_range: '',
-        selected_date: dayjs(this._selectedDate).format('YYYY-MM-DD'),
+        selected_date: dayjs(date).format('YYYY-MM-DD'),
         round_number: '',
       });
       EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
@@ -449,12 +447,14 @@ export class PopBetrecord extends BaseView {
     }
 
     private clearDay() {
+      this._selectedDate = null;
       const DataLabel = this.ClickToSelectADateLabel.getComponent(Label);
-      DataLabel.color = new Color().fromHEX('#6F87A5');
+      DataLabel.color = new Color().fromHEX('#8EADC8');
       DataLabel.string = 'Click to select a date';
     }
 
     private clearDayAction() {
+      this.SelectDateView.active = false;
       // 上报清除日期事件
       // 埋点-用户点击日期清除按钮
       const DataLabel = this.ClickToSelectADateLabel.getComponent(Label);
@@ -463,8 +463,7 @@ export class PopBetrecord extends BaseView {
         cleared_value: DataLabel.string
       });
       EffectManager.inst.playEffect(AudioPath.UI.OPEN, false, null, true);
-      DataLabel.color = new Color().fromHEX('#6F87A5');
-      DataLabel.string = 'Click to select a date';
+      this.clearDay();
     }
 
 // 防止快速点击
@@ -474,9 +473,7 @@ export class PopBetrecord extends BaseView {
       // 清空时间
       this.selectTabTime(null);
       // 清空日期显示
-      const DataLabel = this.ClickToSelectADateLabel.getComponent(Label);
-      DataLabel.color = new Color().fromHEX('#6F87A5');
-      DataLabel.string = 'Click to select a date';
+      this.clearDay();
       
       this._pageParams = {
         ...this._pageParams,

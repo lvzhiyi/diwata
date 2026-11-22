@@ -25,7 +25,7 @@ const cc = {
 };
 const decorator = () => (_target, _key, descriptor) => descriptor;
 function load(relative, app, extra = {}) {
-  const filename = path.join(root, 'assets/app-bundle/app-view/pop', relative);
+  const filename = path.join(root, relative.startsWith('assets/') ? relative : path.join('assets/app-bundle/app-view/pop', relative));
   const compiled = ts.transpileModule(fs.readFileSync(filename, 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, experimentalDecorators: true },
   }).outputText;
@@ -101,6 +101,46 @@ test('selected date remains readable and retains the date filter', () => {
   assert.equal(node.label.string, '2026-10-17');
   assert.ok(view._pageParams.startCreateTime < view._pageParams.endCreateTime);
   assert.ok(contrast(node.label.color, new Color(240, 248, 255)) >= 4.5, 'date text must contrast with its pale input');
+});
+
+test('calendar keeps the selected day highlighted, with bounded month navigation', () => {
+  const { SelectDateView } = load('assets/basePlate/middleWare/commonUI/SelectDateView/SelectDateView.ts', {}, {
+    color: (...args) => new Color(...args),
+  });
+  const picker = new SelectDateView();
+  const cells = Array.from({ length: 42 }, (_, i) => {
+    const leaves = { Text: labelNode('Text'), Select: {}, Disable: {} };
+    const button = { interactable: false };
+    return { getChildByName: name => leaves[name], getComponent: () => button, getSiblingIndex: () => i };
+  });
+  Object.assign(picker, {
+    node: {}, leftButton: {}, rightButton: {}, yearLabel: {}, monthLabel: {},
+    selectDateLayout: { children: cells }, unschedule() {}, scheduleOnce() {},
+  });
+  const today = new Date(2026, 10, 22, 15);
+  let selected;
+  picker.show(today, dates => { selected = dates[0]; }, 0, 30, new Date(2026, 9, 23));
+  assert.equal(picker.monthLabel.string, 'October');
+  assert.equal(picker.leftButton.interactable, false);
+  assert.equal(picker.rightButton.interactable, true);
+  const index = new Date(2026, 9, 1).getDay() + 22;
+  assert.equal(cells[index].getChildByName('Select').active, true);
+  assert.equal(cells[index].getComponent().interactable, true, '30th past day is selectable');
+  assert.equal(cells[index - 1].getComponent().interactable, false);
+  picker.onRightButtonClick();
+  assert.equal(picker.monthLabel.string, 'November');
+  assert.equal(picker.rightButton.interactable, false);
+  picker.onDayClick({ target: cells[22] });
+  assert.equal(selected, undefined, 'future dates are not selectable');
+  picker.onDayClick({ target: cells[21] });
+  assert.equal(selected.getDate(), 22);
+});
+
+test('calendar fits short and six-week months without blank rows or clipped days', () => {
+  const { calendarRows } = load('betrecord/native/expansion/styleBetRecordCalendar.ts', {});
+  assert.equal(calendarRows(new Date(2026, 1, 1)), 4);
+  assert.equal(calendarRows(new Date(2026, 9, 1)), 5);
+  assert.equal(calendarRows(new Date(2026, 4, 1)), 6);
 });
 
 test('bet amount selection updates both button and text without changing preset values', () => {

@@ -66,6 +66,8 @@ export class SelectDateView extends Component {
  
     // 选择日期完成回调
     private _onSelectComplete?: Function;
+    private _onMonthRendered?: (date: Date) => void;
+    private _highlightedDate?: Date;
         
     // 选择日期类型   
     private _selectDateType: SelectDateType | null = null;
@@ -92,8 +94,8 @@ export class SelectDateView extends Component {
       this.scrollViewContent?.on(Node.EventType.TOUCH_END, this.onTouchEnd, this);
       this.scrollViewContent?.on(Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this);
    
-      this.node.on(Node.EventType.TOUCH_END, () => {
-        // 禁止点击穿透
+      this.node.on(Node.EventType.TOUCH_END, (event: EventTouch) => {
+        event.propagationStopped = true;
       }, this);
     }
 
@@ -104,20 +106,25 @@ export class SelectDateView extends Component {
      * @param selectDateType  选择日期类型 SelectDateType.Single 当天，SelectDateType.Designated 指定的N-M天
      * @param optionalDays 今天到过去第N 天
      */
-    public show(date: Date, onComplete: Function, selectDateType = SelectDateType.Single, optionalDays = 30){
+    public show(date: Date, onComplete: Function, selectDateType = SelectDateType.Single, optionalDays = 30,
+      highlightedDate?: Date, onMonthRendered?: (date: Date) => void){
       this.node.active = true;
+      this.unschedule(this.hide);
 
       if (!date) {
         date = new Date();
       }
 
-      this._currentDate = date;
+      this._currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       this._onSelectComplete = onComplete;
-      this._minSelectDate = this.getDates(date, -optionalDays);
+      this._onMonthRendered = onMonthRendered;
+      this._minSelectDate = this.getDates(this._currentDate, -optionalDays);
+      const highlight = highlightedDate && new Date(highlightedDate.getFullYear(), highlightedDate.getMonth(), highlightedDate.getDate());
+      this._highlightedDate = highlight >= this._minSelectDate && highlight <= this._currentDate ? highlight : undefined;
       this._selectDateType = selectDateType;
       this._selectDateList = [];
       this.initSelectYearList();
-      this.updateUI(date);
+      this.updateUI(this._highlightedDate ?? date);
     }
 
     /** 隐藏日期 */
@@ -166,11 +173,6 @@ export class SelectDateView extends Component {
 
           const everyDayDate = new Date(date.getFullYear(), date.getMonth() - 1, lastMonthDay);
 
-          if (everyDayDate > this._minSelectDate && everyDayDate < this._currentDate) {
-            textLabel.color = this.normalColor;
-            item.getComponent(Button).interactable = true;
-          }
-
           this._dateList.push(everyDayDate);
           this.updateSelectDate(everyDayDate, item);
         }
@@ -181,12 +183,6 @@ export class SelectDateView extends Component {
           textLabel.string = day.toString();
           textLabel.color = this.normalColor;
           item.getComponent(Button).interactable = true;
-
-          if (this.isSameDay(date, this._currentDate) && day == this._currentDate.getDate()) {
-            console.log(this.todayColor);
-                    
-            textLabel.color = this.todayColor;
-          }
 
           const everyDayDate = new Date(date.getFullYear(), date.getMonth(), day);
 
@@ -211,32 +207,30 @@ export class SelectDateView extends Component {
         // 下一个月显示
         if (i >= currentMaxDay + weekIndex ) {
           let nextMonthDay = i - currentMaxDay - weekIndex + 1;
-          textLabel.getComponent(Label).string = (nextMonthDay).toString(); 
+          textLabel.string = nextMonthDay.toString();
           textLabel.color = this.ashColor;
           item.getComponent(Button).interactable = false;
           // item.getChildByName("Disable").active = true;
 
           const everyDayDate = new Date(date.getFullYear(), date.getMonth() + 1, nextMonthDay);
 
-          if (everyDayDate > this._minSelectDate && everyDayDate < this._currentDate) {
-            textLabel.color = this.normalColor;
-            item.getComponent(Button).interactable = true;
-            // item.getChildByName("Disable").active = false;
-          }
-          if (this.isSameDay(everyDayDate, this._currentDate)) {
-            textLabel.color = this.todayColor;
-          }
-
           this._dateList.push(everyDayDate);
           this.updateSelectDate(everyDayDate, item);
         }
       }
+
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      this.leftButton.interactable = new Date(year, month, 1) > this._minSelectDate;
+      this.rightButton.interactable = new Date(year, month + 1, 1) <= this._currentDate;
+      this._onMonthRendered?.(date);
     }
 
     /** 更新选中天数显示 */
     private updateSelectDate(everyDayDate: Date, item: Node){
-      this._selectDateList.forEach(selectDate => {
-        if (this.isSameDay(everyDayDate, selectDate)) {
+      const dates = this._selectDateList.length ? this._selectDateList : [this._highlightedDate ?? this._currentDate];
+      dates.forEach(selectDate => {
+        if (selectDate && item.getComponent(Button).interactable && this.isSameDay(everyDayDate, selectDate)) {
           item.getChildByName('Select').active = true; 
           item.getChildByName('Text').getComponent(Label).color = color(255, 255, 255);
         }
@@ -245,6 +239,7 @@ export class SelectDateView extends Component {
 
     /** 天数点击 */
     private onDayClick(event: any){
+      if (!event.target.getComponent(Button).interactable) return;
       // eslint-disable-next-line max-len
       if (this._selectDateType == SelectDateType.Single && this._selectDateList.length >= 1 || this._selectDateType == SelectDateType.Designated && this._selectDateList.length >= 2) {
         return;
@@ -272,25 +267,18 @@ export class SelectDateView extends Component {
 
     /** 上一个月按钮点击 */
     private onLeftButtonClick(){
+      if (!this.leftButton.interactable) return;
       let lastMonth = new Date(
         this._selectMonthDate.getFullYear(),  this._selectMonthDate.getMonth() - 1, 1);
       this.updateUI(lastMonth);
-      this.rightButton.interactable = true;
-      this.rightButton.node.getChildByName('Icon').getComponent(Sprite).grayscale = false;
     }
 
     /** 下一个月按钮点击 */
     private onRightButtonClick(){
+      if (!this.rightButton.interactable) return;
       let nextMonth = new Date(
         this._selectMonthDate.getFullYear(), this._selectMonthDate.getMonth() + 1, 1);
-      console.log(nextMonth);
-            
       this.updateUI(nextMonth);
-
-      if (this.isSameMonth(this._currentDate, nextMonth)) {
-        this.rightButton.interactable = false;
-        this.rightButton.node.getChildByName('Icon').getComponent(Sprite).grayscale = true;
-      }
     }
 
     /**                ----------------------------------选中年份滚动事件处理-------------------------------                  */

@@ -7869,11 +7869,11 @@
       "__id__": 323
     },
     "SelectIconOn": {
-      "__uuid__": "93c7a063-18bf-5aca-9d9e-29db3c3c18e4@f9941",
+      "__uuid__": "cbbd669c-5389-5d79-9196-c65fb1b29753@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "SelectIconOff": {
-      "__uuid__": "f4dd0ae9-6757-5d74-880d-568d2ea2f561@f9941",
+      "__uuid__": "a6d783dc-dd71-5495-92b7-b2ba7c468076@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_id": ""

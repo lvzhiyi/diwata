@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, Label, Node, Sprite, SpriteFrame, UITransform } from 'cc';
+import { _decorator, Color, Component, Label, Layout, Node, Sprite, SpriteFrame, UITransform } from 'cc';
 import dayjs from 'dayjs';
 import { app } from 'db://assets/app/app';
 import { ToastView } from 'db://assets/basePlate/middleWare/commonUI/ToastView';
@@ -12,6 +12,7 @@ import {
   getP,
 } from 'db://assets/common/script/extra/Utils/common';
 import { CopyUtils } from 'db://assets/common/script/extra/Utils/CopyUtils';
+import { BET_RECORD_CARD } from './styleBetRecordCalendar';
 
 const { ccclass, property } = _decorator;
 
@@ -47,8 +48,33 @@ export class RecordCard extends Component {
   private RoundNumber: string;
 
   protected onLoad(): void {
-    // // 注册点击复制时间
-    // this.CopyIconNode.on(Node.EventType.TOUCH_END, this.copy, this);
+    const { width, height } = BET_RECORD_CARD;
+    this.node.getComponent(UITransform).setContentSize(width, height);
+    const content = this.node.getChildByName('Content');
+    content.getComponent(UITransform).setContentSize(width + 28, height + 28);
+    content.getComponent(Layout).enabled = false;
+    this.node.getChildByName('GridImageView').active = false;
+    for (const [i, row] of content.children.entries()) {
+      row.getComponent(Layout).enabled = false;
+      row.setPosition(0, 111 - 74 * i);
+      const [caption, values] = row.children;
+      caption.setPosition(-218, 0);
+      const label = caption.children[0].getComponent(Label);
+      label.node.setPosition(-95, 0);
+      label.fontSize = 26;
+      label.lineHeight = 31;
+      label.color = new Color().fromHEX('#69809E');
+      values.setPosition(121, 0);
+      const value = values.children[0].getComponent(Label);
+      value.fontSize = i < 2 ? 34 : 30;
+      value.lineHeight = i < 2 ? 41 : 36;
+      // initValue sets the Net/Special color before the card enters the scene.
+      if (i !== 0) value.color = new Color().fromHEX('#13295E');
+      if (i === 2) {
+        values.getComponent(Layout).enabled = false;
+        this.CopyIconNode.setPosition(175, 0);
+      }
+    }
   }
 
   public initValue(dataInfo: BetRecordListModel) {
@@ -61,7 +87,7 @@ export class RecordCard extends Component {
       NetSpecialValueLabel.color = new Color().fromHEX('#ff0000');
     } else{
       // 赢钱
-      NetSpecialValueLabel.color = new Color().fromHEX('#00b862');
+      NetSpecialValueLabel.color = new Color().fromHEX('#10A66C');
     }
 
     const multiBetAmount = app.manager.global.multiBetAmount;
@@ -89,7 +115,7 @@ export class RecordCard extends Component {
 
     NetSpecialValueLabel.string = netSpecialValue;
     // eslint-disable-next-line max-len
-    this.BetWinValue.getComponent(Label).string = `${getP()} ${numberToMoney(dataInfo.payAmount / multiBetAmount)}/${getP()} ${numberToMoney(dataInfo.payOutAmount / multiBetAmount)}`;
+    this.BetWinValue.getComponent(Label).string = `${getP()} ${numberToMoney(dataInfo.payAmount / multiBetAmount)} / ${getP()} ${numberToMoney(dataInfo.payOutAmount / multiBetAmount)}`;
     this.RoundNumberValue.getComponent(Label).string = dataInfo.id;
     this.TimeValue.getComponent(Label).string = dayjs(dataInfo.createTime).format('YYYY-MM-DD HH:mm:ss');
 
