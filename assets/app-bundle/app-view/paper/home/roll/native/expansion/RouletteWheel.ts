@@ -190,16 +190,16 @@ export class RouletteWheel extends Component {
     this.animateBgToRotation(targetRotation);
   }
 
-  /** 复用起始档的固定角度补间，是否播放音效由本次倍率变更的用途决定。 */
-  private jumpToOriginalPosition(index: number, playMultiplierSound: boolean): void {
-    if (playMultiplierSound) EffectManager.inst.playEffect(AudioPath.GAME.SPINE_ROTATE);
+  /** 复用起始档的固定角度补间，仅实际升倍播放声光特效。 */
+  private jumpToOriginalPosition(index: number, playMultiplierEffects: boolean): void {
+    if (playMultiplierEffects) EffectManager.inst.playEffect(AudioPath.GAME.SPINE_ROTATE);
 
     const targetRotation = this.DATA_ANGLE_STEP * index;
     tween(this.bgSpineNode)
       .timeScale(app.manager.global.gameSpeed)
       .to(0.5, { eulerAngles: new Vec3(0, 0, targetRotation) }, { easing: this.bgEasingType })
       .call(() => {
-        this.finishBgAnimation(targetRotation, playMultiplierSound);
+        this.finishBgAnimation(targetRotation, playMultiplierEffects);
       })
       .start();
   }
@@ -315,7 +315,7 @@ export class RouletteWheel extends Component {
     }
   }
 
-  updateSelectedItem(): void {
+  updateSelectedItem(playMultiplierEffects: boolean = true): void {
     const totalItems = this.items.length;
     const selectedIndex = this.currentIndex;
 
@@ -325,13 +325,18 @@ export class RouletteWheel extends Component {
 
       if (i === selectedIndex) {
         const item = this.items[i];
+        item.getChildByName('text').getComponent(Label).isBold = true;
+        if (this.chooseSprite) sprite.spriteFrame = this.chooseSprite;
+        if (!playMultiplierEffects) {
+          item.setScale(1.2, 1.2, 1);
+          continue;
+        }
+
         tween(item)
           .timeScale(app.manager.global.gameSpeed)
           .to(0.2, { scale: new Vec3(1.2, 1.2, 1) }, { easing: 'bounceOut' })
           .start();
-        item.getChildByName('text').getComponent(Label).isBold = true;
         const textString = item.getChildByName('text').getComponent(Label).string;
-        if (this.chooseSprite) sprite.spriteFrame = this.chooseSprite;
         // 选中的倍率圆盘播一次 win，结束后回到当前模式的循环动画
         const diskSpine = this.getDiskSkeleton(item);
         diskSpine.setAnimation(0, 'win', false);
@@ -394,14 +399,14 @@ export class RouletteWheel extends Component {
   /**
    * 完成背景动画
    * @param targetRotation 目标旋转角度
-   * @param playMultiplierSound 是否为需要音效的实际升倍
+   * @param playMultiplierEffects 是否为需要声光特效的实际升倍
    */
-  private finishBgAnimation(targetRotation: number, playMultiplierSound: boolean): void {
+  private finishBgAnimation(targetRotation: number, playMultiplierEffects: boolean): void {
     this.isBgAnimating = false;
     this.bgCurrentRotation = targetRotation;
-    // 复位仍更新选中项；升倍音效与发光动画同在补间完成时触发，兼容倍速模式。
-    this.updateSelectedItem();
-    if (playMultiplierSound) EffectManager.inst.playEffect(AudioPath.GAME.MULTIPLE_GLOW);
+    // 复位只更新选中样式；升倍音效与发光动画同在补间完成时触发，兼容倍速模式。
+    this.updateSelectedItem(playMultiplierEffects);
+    if (playMultiplierEffects) EffectManager.inst.playEffect(AudioPath.GAME.MULTIPLE_GLOW);
   }
 
   /**

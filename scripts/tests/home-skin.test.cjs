@@ -70,6 +70,51 @@ test('multiplier disks follow the resized arc without changing its 15 values', (
  assert.deepEqual(Array.from(visible()),[1,2,3,4,5]);
 });
 
+test('multiplier resets to 1x or 8x without effects, while an upgrade to 8x still plays them', () => {
+ const ts=require('typescript'),vm=require('node:vm'),exports={};
+ class Vec3 { constructor(x,y,z){Object.assign(this,{x,y,z});} }
+ const events=[],pending=[];
+ const tween=target=>({
+  timeScale(){return this;},
+  to(_,props){this.props=props;events.push(Object.keys(props)[0]);return this;},
+  call(callback){this.callback=callback;return this;},
+  start(){pending.push(()=>{Object.assign(target,this.props);this.callback?.();});},
+ });
+ const cc={Component:class {},Vec3,tween,sp:{Skeleton:class {}},_decorator:{ccclass:()=>x=>x,property:()=>()=>{}}};
+ const pathToWheel=path.join(root,pop+'roll/native/expansion/RouletteWheel.ts');
+ const source=ts.transpileModule(fs.readFileSync(pathToWheel,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020,experimentalDecorators:true}}).outputText;
+ vm.runInNewContext(source,{exports,console,require:id=>{
+  if(id==='cc') return cc;
+  if(id.endsWith('/app')) return {app:{manager:{global:{gameSpeed:1}}}};
+  if(id.endsWith('/EffectManager')) return {EffectManager:{inst:{playEffect:sound=>events.push(sound)}}};
+  if(id.endsWith('/AudioConfig')) return {AudioPath:{GAME:{SPINE_ROTATE:'rotate',MULTIPLE_GLOW:'glow'}}};
+  return {};
+ }});
+ const view=new exports.RouletteWheel();view.initData();
+ const skeleton={setAnimation:(_,name)=>events.push(name),addAnimation:()=>{},setCompleteListener:()=>{}};
+ const spineNode={getComponent:()=>skeleton};
+ view.bgSpineNode={...spineNode};view.bg2SpineNode=spineNode;view.textSpineNode={...spineNode,active:false};
+ view.getDiskSkeleton=()=>skeleton;
+ view.items=view.dataList.map(value=>{
+  const label={string:`${value}x`};
+  return {label,getComponent:()=>({}),getChildByName:()=>({getComponent:()=>label}),setScale(x){this.scale=x;}};
+ });
+ for(const index of [0,3]){
+  view.currentIndex=5;
+  view.multipleIndexChange(index);
+  pending.shift()();
+  assert.deepEqual(events.splice(0),['eulerAngles']);
+  assert.equal(view.bgSpineNode.eulerAngles.z,24*index);
+  assert.equal(view.items[index].label.isBold,true);
+  assert.equal(view.items[index].scale,1.2);
+  assert.equal(view.textSpineNode.active,false);
+ }
+ view.currentIndex=2;
+ view.multipleIndexChange(3,false);
+ pending.shift()();
+ assert.deepEqual(events,['zhuanpan','gunzhoudi','rotate','eulerAngles','scale','win','beilvshuzishanguang','glow']);
+});
+
 test('winning symbol stays visible until the clear phase and then hides', async () => {
  const ts=require('typescript'),vm=require('node:vm'),exports={};
  class Vec3 { constructor(x=0,y=0,z=0){Object.assign(this,{x,y,z});} }
