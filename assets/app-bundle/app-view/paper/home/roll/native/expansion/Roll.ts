@@ -691,8 +691,8 @@ export class Roll extends Component {
      */
     fallDownSymbol() {
       return new Promise<ISymbolAnimationData[]>(resolve => {
-        // 筛选需要下坠的节点
-        const fallDownItems = this.symbolAnimationData.filter(item => item.fallDownCount > 0);
+        // 待消除节点留在原位，避免它们在消除动画收尾时跟着保留元素下落。
+        const fallDownItems = this.symbolAnimationData.filter(item => !item.isNeedRemove && item.fallDownCount > 0);
   
         // 如果没有需要下坠的节点，则直接返回 false
         if (fallDownItems.length === 0) {
