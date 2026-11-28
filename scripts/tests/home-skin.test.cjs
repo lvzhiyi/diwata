@@ -180,7 +180,7 @@ test('mobile controls use the available width and the win amount is readable', (
  assert.ok(reward._lpos.y-117*reward._lscale.y/2 > bottom._lpos.y+buttons._lpos.y+75*bottom._lscale.y*spin._lscale.y);
 });
 
-test('the board waits for every win animation before clearing any symbol', async () => {
+test('the board waits for every win, then starts refill and fall during clear', async () => {
  const ts=require('typescript'),vm=require('node:vm'),exports={};
  const cc={Color:class {constructor(...rgba){this.rgba=rgba;}},_decorator:{ccclass:()=>x=>x,property:()=>()=>{}},sp:{Skeleton:class {}}};
  const events=[];
@@ -191,22 +191,89 @@ test('the board waits for every win animation before clearing any symbol', async
   if(id.includes('BaseCommonUtil')) return {preventRapidClickDecorator:()=>()=>{}};
   if(id.includes('EffectManager')) return {EffectManager:{inst:{playEffect:sound=>events.push(sound)}}};
   if(id.includes('AudioConfig')) return {AudioPath:{GAME:{SYMBOL_WIN:'win sound',SYMBOL_CLEAR:'clear sound'}}};
-  if(id.includes('/Utils/common')) return {delay:async()=>{}};
+  if(id.includes('/Utils/common')) return {delay:()=>assert.fail('clear to fall should have no fixed delay')};
   return {};
  }});
  const view=new exports.PaperHomeRoll();
  view.dimNonWinningSymbols=(_,dim)=>events.push(dim?'dim':'restore');
- let completeWin;
+ view.roundIndex=0;
+ view.resultList=[{}, {wheel:[['new first','new second']]}];
+ let completeWin,completeClear,completeFall;
  const rolls=[
-  {playWinningSymbols:async()=>events.push('first win'),clearWinningSymbols:async()=>events.push('first clear')},
+  {playWinningSymbols:async()=>events.push('first win'),clearWinningSymbols:()=>{
+   events.push('first clear');
+   return new Promise(resolve=>{completeClear=resolve;});
+  }},
   {playWinningSymbols:()=>new Promise(resolve=>{completeWin=resolve;}),clearWinningSymbols:async()=>events.push('second clear')},
  ];
- for(const roll of rolls) roll.getRollRemoveData=()=>[{}];
- const playing=view.playWinAndClear(rolls);
+ for(const [index,roll] of rolls.entries()) {
+  roll.getRollRemoveData=()=>[{}];
+  roll.getCurrentIndex=()=>index;
+  roll.addNewSymbolToTop=async symbols=>events.push(...symbols);
+  roll.fallDownSymbol=()=>{
+   events.push(`fall ${index}`);
+   return index===0?new Promise(resolve=>{completeFall=resolve;}):Promise.resolve();
+  };
+  roll.removeSymbol=async()=>events.push(`recycle ${index}`);
+ }
+ const playing=view.startWinAndClear(rolls).then(({finished})=>view.refillAndFall(rolls,finished));
  assert.deepEqual(events,['dim','win sound','first win']);
  completeWin();
+ await new Promise(setImmediate);
+ assert.deepEqual(events,['dim','win sound','first win','clear sound','first clear','second clear','new first','new second','fall 0','fall 1']);
+ completeFall();
+ await new Promise(setImmediate);
+ assert.equal(events.at(-1),'fall 1','finishing the fall must not recycle symbols that are still clearing');
+ completeClear();
  await playing;
- assert.deepEqual(events,['dim','win sound','first win','clear sound','first clear','second clear','restore']);
+ assert.deepEqual(events.slice(-3),['restore','recycle 0','recycle 1']);
+});
+
+test('cascade fills gaps without moving or reusing the clearing symbols', async () => {
+ const ts=require('typescript'),vm=require('node:vm'),exports={};
+ class Vec3 { constructor(x=0,y=0,z=0){Object.assign(this,{x,y,z});} }
+ const falls=[],recycled=[];
+ const cc={Component:class {},Vec3,NodePool:class {put(n){recycled.push(n);}},
+  _decorator:{ccclass:()=>x=>x,property:()=>()=>{}},tween:n=>({
+   to(duration,props){this.duration=duration;this.target=props.position;return this;},
+   call(done){this.done=done;return this;},start(){falls.push([n,this.duration]);n.position=this.target;this.done();}
+  })};
+ const source=ts.transpileModule(fs.readFileSync(path.join(root,pop+'roll/native/expansion/Roll.ts'),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020,experimentalDecorators:true}}).outputText;
+ vm.runInNewContext(source,{exports,require:id=>{
+  if(id==='cc') return cc;
+  if(id.endsWith('/app')) return {app:{manager:{global:{quikeMode:0}}}};
+  if(id.endsWith('/GlobalManager')) return {IQuickMode:{nomal:0}};
+  return {};
+ }});
+ const roll=new exports.Roll();
+ const makeSymbol=(id,y)=>({id,name:'Symbol',position:new Vec3(0,y,0),getComponent:()=>null,
+  setPosition(x,y,z){this.position=new Vec3(x,y,z);}});
+ const top=makeSymbol('top',0),bottom=makeSymbol('bottom',-300);
+ const clearing=makeSymbol('clear',-100),otherClearing=makeSymbol('other clear',-200);
+ roll.itemHeight=100;
+ roll.firstSymbolY=100; // 滚轴停下时，移除顶部缓冲符号前记录的位置。
+ roll.node={children:[top,clearing,otherClearing,bottom],insertChild(n,i){this.children.splice(i,0,n);},
+  removeChild(n){this.children.splice(this.children.indexOf(n),1);}};
+ roll.symbolAnimationData=[
+  {symbolNode:top,isNeedRemove:false,fallDownCount:2},
+  {symbolNode:clearing,isNeedRemove:true,fallDownCount:0},
+  {symbolNode:otherClearing,isNeedRemove:true,fallDownCount:0},
+  {symbolNode:bottom,isNeedRemove:false,fallDownCount:0},
+ ];
+ roll.createSymbol=({symbolId})=>makeSymbol(symbolId,0);
+ await roll.addNewSymbolToTop([{symbolId:'new'},{symbolId:'new 2'},{symbolId:'top'},{symbolId:'bottom'}]);
+ await roll.fallDownSymbol();
+ assert.deepEqual(falls.map(([n])=>[n.id,n.position.y]),[['new',0],['new 2',-100],['top',-200]]);
+ assert.equal(new Set(falls.map(([,duration])=>duration)).size,1);
+ assert.equal(clearing.position.y,-100);
+ assert.deepEqual(recycled,[]);
+ await roll.removeSymbol();
+ assert.deepEqual(recycled,[clearing,otherClearing]);
+ assert.deepEqual(roll.node.children.map(n=>n.id),['new','new 2','top','bottom']);
+ roll.itemCount=5;
+ roll.createSymbol=()=>clearing;
+ roll.addTopExcessSymbol();
+ assert.deepEqual(roll.node.children.map(n=>n.position.y),[100,0,-100,-200,-300]);
 });
 
 test('anticipation shades neighboring columns without leaving bright seams', () => {

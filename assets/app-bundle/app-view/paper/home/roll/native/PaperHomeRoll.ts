@@ -29,7 +29,6 @@ import { SpineTool } from 'db://assets/res-native/script/SpineTool';
 const { ccclass, property } = _decorator;
 
 const ANTICIPATION_FRAME_DURATION = 2;
-const CLEAR_TO_FALL_DELAY_MS = 500;
 
 function getReelStopDelay(rollIndex: number) {
   return 350 - rollIndex * 50;
@@ -709,8 +708,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
      * 开始执行闪烁和消除动画
      */
     console.log('开始执行闪烁消除动画');
-    const clear = await this.startWinAndClear(rollsScript);
-    const clearFinished = (clear?.finished ?? Promise.resolve()).then(() => {
+    const { finished } = await this.startWinAndClear(rollsScript);
+    const clearFinished = finished.then(() => {
       const currentRoundTotalRewardAmount = this.resultList[this.roundIndex].totalRewardAmount;
 
       if (currentRoundTotalRewardAmount > 0) {
@@ -719,20 +718,11 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
       }
     });
 
-    await this.addToTopThenFallDowmOrRunRollFrameAnimationThenFallDownThenAddToTopThenFallDown(
-      rollsScript,
-      symbolAnimationData,
-      clear?.readyToFall ?? Promise.resolve(),
-      clearFinished
-    );
+    await this.refillAndFall(rollsScript, clearFinished);
 
     symbolAnimationData = rollsScript.map(roll => roll.symbolAnimationData);
     console.log('下落后数据', symbolAnimationData);
     console.table(symbolAnimationData[2].map((_, index) => symbolAnimationData.map((item: any) => item[index]?.symbolId || '')));
-
-    if (this.needPlayRollsFrameSpine.some(item => item)) {  
-      await delay(1000 / app.manager.global.gameSpeed);
-    }
 
     /**
      * 是否命中免费轮
@@ -758,7 +748,9 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
   }
 
   private async startWinAndClear(rollsScript: Roll[]) {
-    if (!rollsScript.some(roll => roll.getRollRemoveData().length > 0)) return null;
+    if (!rollsScript.some(roll => roll.getRollRemoveData().length > 0)) {
+      return { finished: Promise.resolve() };
+    }
 
     this.dimNonWinningSymbols(rollsScript, true);
 
@@ -770,8 +762,8 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
         this.dimNonWinningSymbols(rollsScript, false);
       });
 
-      // 从消除起播计时，保留元素可以与消除动画的尾段同时播放。
-      return { finished, readyToFall: delay(CLEAR_TO_FALL_DELAY_MS) };
+      // 单独返回收尾 Promise，让下落在消除起播后立即开始。
+      return { finished };
     } catch (error) {
       this.dimNonWinningSymbols(rollsScript, false);
       throw error;
@@ -987,83 +979,18 @@ export class PaperHomeRoll extends BaseView.BindController(SlotsController) {
     app.controller.home.endGame();
   }
 
-  /**
-   * 添加到顶部然后下落 或者 播放Roll边框停牌动画然后落下然后添加到顶部最后下落
-   */
-  private async addToTopThenFallDowmOrRunRollFrameAnimationThenFallDownThenAddToTopThenFallDown(
-    rollsScript: Roll[],
-    symbolAnimationData: ISymbolAnimationData[][],
-    readyToFall: Promise<unknown>,
-    clearFinished: Promise<void>
-  ) {
-    /**
-     * 处理this.needPlayRollsFrameSpine哪些roll需要播放滚轮动画的数据
-     */
-    // this.currentNormalRoundHasMoreThanOneScatter();
-    // this.needPlayRollsFrameSpine = this.needPlayRollsFrameSpine.map((needPlayRollsFrameSpine, index) => {
-    //   return !!(needPlayRollsFrameSpine && symbolAnimationData[index].find(item => item.isNeedRemove));
-    // });
+  private async refillAndFall(rollsScript: Roll[], clearFinished: Promise<void>) {
+    // 连消补位不触发听牌框。
     this.needPlayRollsFrameSpine.fill(false);
 
-    /**
-     * 处理仅下落的Roll和播放Roll边框动画后再下落的Roll的数据
-     * fallDownScript： 仅下落的Roll
-     * rollFrameAnimationScript： 播放Roll边框动画后再下落的Roll
-     */
-    const fallDownScript: Roll[] = [];
-    const rollFrameAnimationScript: Roll[] = [];
-    rollsScript.forEach((script, index) => {
-      if (this.needPlayRollsFrameSpine[index] === false) {
-        fallDownScript.push(script);
-      } else {
-        rollFrameAnimationScript.push(script);
-      }
-    });
-
     const nextRoundList = this.resultList[this.roundIndex + 1];
-    
-    const firstFallFinished = readyToFall.then(() => Promise.all(fallDownScript.map(roll => roll.fallDownSymbol())));
-
-    // 等消除收尾和第一段下落都完成再回收节点，防止旧动画清理到已复用的节点。
-    await Promise.all([clearFinished, firstFallFinished]);
-
-    if (fallDownScript.length > 0) {
-      await Promise.all(rollsScript.map(roll => roll.removeSymbol()));
-      await Promise.all(fallDownScript.map((roll) =>
-        roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[roll.getCurrentIndex()]) || [])
-      ));
-    }
-
-    /**
-     * 仅Symbol下落
-     */
-    await Promise.all([...fallDownScript.map(async roll => {
-      const falldown = roll.fallDownSymbol();
-
-      return falldown;
-    }), ...rollFrameAnimationScript.map(roll => {
+    const fallFinished = Promise.all(rollsScript.map(async roll => {
+      await roll.addNewSymbolToTop(nextRoundList?.wheel.map((row: SymbolItem[]) => row[roll.getCurrentIndex()]) ?? []);
       return roll.fallDownSymbol();
-    })]);
-
-    /**
-     * Roll边框动画 之后 再Symbol下落
-     */
-    if (rollFrameAnimationScript.length > 0) {
-      for (const roll of rollFrameAnimationScript) {
-        // await roll.showRollFrameSpine(this.rollFrameSkeleton);
-        /**
-       * 添加Roll边框动画后下落，然后再添加到顶部下落
-       * -- 传入下一回合roll的数据
-       */
-        await roll.addNewSymbolToTop(nextRoundList?.wheel.map((item: any) => item[roll.getCurrentIndex()]) || []);
-        await roll.fallDownSymbol();
-  
-        if (this.rollFrameSkeleton.node.active) {
-          this.rollFrameSkeleton.node.active = false;
-          this.rollFrameSkeleton.clearAnimation();
-        }
-      }
-    }
+    }));
+    // 消除中的节点留在原位播完；等两段动画都完成再回收，避免提前复用。
+    await Promise.all([clearFinished, fallFinished]);
+    await Promise.all(rollsScript.map(roll => roll.removeSymbol()));
   }
 
   /**

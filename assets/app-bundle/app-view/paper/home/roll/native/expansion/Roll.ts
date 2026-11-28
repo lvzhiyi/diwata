@@ -659,8 +659,9 @@ export class Roll extends Component {
      */
     async addNewSymbolToTop(nextRoundList: SymbolItem[]) {
       let  nextRoundNewList = nextRoundList.filter(item => (item !== null && item !== undefined));
-      // nextRoundList是新一轮的数据，symbolAnimationData是当前回合的剩余数据 相减就是需要添加的数据
-      const length = nextRoundNewList.length - this.symbolAnimationData.length;
+      // 正在播放消除的节点还在列内，补位只按保留下来的符号计数。
+      const remainingCount = this.symbolAnimationData.filter(item => !item.isNeedRemove).length;
+      const length = nextRoundNewList.length - remainingCount;
 
       for (let i = length - 1; i >= 0; i--) {
         const {
@@ -691,7 +692,6 @@ export class Roll extends Component {
      */
     fallDownSymbol() {
       return new Promise<ISymbolAnimationData[]>(resolve => {
-        // 待消除节点留在原位，避免它们在消除动画收尾时跟着保留元素下落。
         const fallDownItems = this.symbolAnimationData.filter(item => !item.isNeedRemove && item.fallDownCount > 0);
   
         // 如果没有需要下坠的节点，则直接返回 false
@@ -701,30 +701,18 @@ export class Roll extends Component {
           return;
         }
   
-        // 收集所有动画的 Promise
-        const animationPromises = fallDownItems.map((item, index) => {
+        // 同列共用下落进度，保证起点和终点之间不会挤到同一格。
+        const maxFallCount = Math.max(...fallDownItems.map(item => item.fallDownCount));
+        const baseDuration = app.manager.global.quikeMode !== IQuickMode.nomal ? 0.1 : 0.2;
+        const animationDuration = baseDuration + Math.min(maxFallCount / 2, 1) * 0.1;
+        const animationPromises = fallDownItems.map(item => {
           return new Promise<void>(innerResolve => {
             const { fallDownCount, symbolNode } = item;
             const wildNode = symbolNode.getComponent(Symbol)?.getWildNode();
             const targetY = symbolNode.position.y - this.itemHeight * fallDownCount;
             item.fallDownCount = 0;
   
-            // 根据下落距离调整动画时长，让动画更自然
-            const fallDistance = Math.abs(fallDownCount * this.itemHeight);
-            // 基础时长
-            const baseDuration = app.manager.global.quikeMode !== IQuickMode.nomal ? 0.1 : 0.2;
-            // 距离因子，最大为1
-            const distanceFactor = Math.min(fallDistance / (this.itemHeight * 2), 1);
-            // 0.3-0.5秒之间
-            const animationDuration = baseDuration + distanceFactor * 0.1;
-            
-            // 添加轻微的延迟，让不同高度的元素有层次感
-            // 每个元素延迟20ms
-            const delayTime = index * 0.01;
-            
-            // 主节点动画 - 使用更平滑的缓动
             const symbolTween = tween(symbolNode)
-              .delay(delayTime)
               .to(animationDuration, { position: new Vec3(0, targetY, 0) }, {
                 // 使用cubicOut让动画更丝滑
                 easing: 'cubicOut'
@@ -733,7 +721,6 @@ export class Roll extends Component {
             // 如果有 wildNode，也添加动画
             if (wildNode) {
               const wildTween = tween(wildNode)
-                .delay(delayTime)
                 .to(animationDuration, { position: new Vec3(wildNode.position.x, targetY, 0) }, { easing: 'cubicOut' });
                       
               tween(this.node)
@@ -773,10 +760,12 @@ export class Roll extends Component {
      */
     addTopExcessSymbol() {
       if (this.node.children.length === this.itemCount - 1) {
-        const node = this.nodePool.get();
-        node.getComponent(Symbol).initSymbol({
-          symbolId: this.randomSymbolId(), symbolType: 'NORMAL', main: false 
+        const topY = this.node.children[0].position.y;
+        const node = this.createSymbol({
+          symbolId: this.randomSymbolId(), symbolType: 'NORMAL', main: false
         });
+        // 池里的节点仍保留旧坐标，补回的缓冲符号必须放到可见区上方。
+        node.setPosition(0, topY + this.itemHeight, 0);
         this.node.insertChild(node, 0);
       }
     }
